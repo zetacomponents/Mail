@@ -1,0 +1,51 @@
+1.0.1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- fixed bug: #7805: Remove double linebreak in ezcMailTransportMta::send
+- fixed bug: #7813: MultipartRelated with non-file parts may throw exception 
+	if you did not set a content-id	
+- implemented suggesion: #7804: New suggestion: Add getParts() to ezcMailMultipart
+  - Added getParts() to ezcMailMultipartMixed and MultipartAlternative.
+  - Added getMainPart() and getRelatedParts to ezcMultipartRelated.
+	
+1.0 - Monday 30 January 2006
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Changed ezcMailException to inherit from ezcBaseException instead of
+  Exception.
+- Fixed bug #7716: ezcMail needs support for Reply-To. We simply don't set it
+  anymore now. Users can set the header themselves if they need to.
+  (ezcMailPart::setHeader())
+- Fixed issue with double To and Subject headers when using the MTA transport.
+
+
+1.0rc1 - Monday 16 January 2006
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Added feature enhancement #7582: Adding multiple parts as an array.	
+- Changed ezcMailText::characterSet property to charset.
+- Changed ezcMailSmtpTransport and made all protected methods private. They
+  exposed an interface that most likely never will have to be changed.
+- Changed exception behavior. All errors will now throw a different exception
+  class.
+- Fixed bug #7637: "ezcMailComposer doesn't encode headers".
+
+
+1.0beta2 - Wednesday 21 December 2005
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Completely revised documentation.
+- Replaced the mail_address array with the ezcMailAddress 'struct'.
+- Renamed ezcMailTextPart to ezcMailText
+- Renamed ezcMailFilePart to ezcMailFile
+- Fixed problem with sending mail with cc and bcc recipients.
+
+- Fixed bug #7576: RFC 2606 compliance
+- Fixed bug #7577: unable to run example_general.php
+- Fixed bug #7578: mail example errors
+
+
+1.0beta1 - Thursday 24 November 2005
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Initial release of this package.

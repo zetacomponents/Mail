@@ -1,0 +1,21 @@
+Content-Type: multipart/Test; boundary="pirate"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Look behind you, a three headed monkey!.
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Ask me about Loom(tm)
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Whew, a rubber tree
+--pirate--

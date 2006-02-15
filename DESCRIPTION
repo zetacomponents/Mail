@@ -1,0 +1,3 @@
+The components allows you construct Mail messages conforming to the RFCs. It
+has support for attachments, multipart messages and HTML mail. It also
+interfaces with SMTP to send the e-mail.

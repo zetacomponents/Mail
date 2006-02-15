@@ -1,0 +1,143 @@
+eZ components - Mail
+~~~~~~~~~~~~~~~~~~~~~
+
+.. contents:: Table of Contents
+
+Introduction
+============
+
+The mail component provides functionality to send mail. The easiest way is to
+use the ezcMailComposer class. This class allows you to send HTML mail with
+images, attachments and an optional text part.
+If you require more advanced email messages you can build the complete message
+yourself using the ezcMailPart derived classes.
+
+Class overview
+==============
+
+This section gives you an overview of the main classes of in the Mail
+component.
+
+ezcMailComposer
+   The mail composer is a convenience class that allows you to send plain or
+   HTML messages with attachments without the need to construct the parts of
+   the message yourself. Most users want to use this class.
+
+ezcMail
+   If ezcMailComposer does not have the functionality you require you can use
+   the ezcMail class to build MIME structured mail from scratch. This requires 
+   basic knowledge about how a mail is structured.
+
+ezcMailAddress
+  This small class represents a mail address with an optional name. It is used
+  by both ezcMailComposer and ezcMail to set recipient addresses.
+
+Usage
+=====
+
+Transport protocols
+-------------------
+
+The mail component provides two different transport
+classes. ezcMailTransportSmtp makes it possible to send mail over the SMTP
+protocol. If you prefer using a local mail agent you can use
+ezcMailTransportMta which wraps over the PHP mail function..
+
+Send a mail with the composer
+-----------------------------
+
+Sending a mail using the composer is very straightforward. This small example
+displays how to send a normal text message.
+
+.. include:: tutorial_example_01.php
+   :literal:
+
+Send a mail with HTML, inline images and attachments
+----------------------------------------------------
+
+An example with HTML text, images and attachments can be found in the
+ezcMailComposer class description.
+
+Building a mail from scratch
+-----------------------------
+
+The class structure of the mail component follows that of the mail MIME. This
+means that you can build advanced MIME messages part by part.
+
+The first example displays how to build a similar message to the one above.
+
+.. include:: tutorial_example_02.php
+   :literal:
+
+As you can see there is not much difference compared to the composer version. 
+In the next example we will add an attachment to our manually built mail:
+
+.. include:: tutorial_example_03.php
+   :literal:
+
+The file 'myfile.jpg' must of course exist in order for this example to work.
+
+Extending the mail component
+----------------------------
+
+Even though the mail component supports a lot it does not support
+everything. There is no reason to dispair however, since it is very simple to
+extend. The following example shows how you can insert mail digests as
+attachments to your mail.
+
+The mail system already supports sending attachments through the
+ezcMailMultipartMixed type. Unfortunately directly inserting an ezcMail object
+as a part does not work. This is because mail digests are a special case: they
+require to extra headers that are separated by the normal headers in the
+e-mail.
+
+To make it work we will create the class RFC822Digest that adds these headers:
+
+.. include:: tutorial_example_04.php
+   :literal:
+
+Our new class extends the ezcMailPart class. This is required for all parts of
+a mail. ezcMailPart provides two important methods that we can override:
+ezcMailPart::generateHeaders() and ezcMailPart::generateBody(). These two
+methods are called in succession by the parent part and should return the
+headers and the body text of the part.
+We don't need to override generateHeaders() since we can simply set the headers
+we want directly on the object. We do need to override generateBody() however,
+since we want to include the full text of the mail digest.
+
+The new class can be used directly when building an email. The example assumes
+that a valid ezcMail object is available in the $digest variable.
+
+.. include:: tutorial_example_05.php
+   :literal:
+
+
+Character encoding
+------------------
+
+Most of the world does not speak and write US ascii and require more advanced
+character encoding to display their mail correctly.
+
+The following example shows how to send a mail entirely encoded with
+iso-8859-1:
+
+.. include:: tutorial_example_06.php
+   :literal:
+
+You can of course choose and combine any available character set. Make sure
+that the input text is in the encoding specified or you may get unexpected
+results.
+
+References
+==========
+1. A list of mail related RFCs_.
+
+.. _RFCs: http://www.imc.org/rfcs.html
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End: 
+   vim: et syn=rst tw=79
