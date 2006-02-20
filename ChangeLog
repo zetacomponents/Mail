@@ -1,13 +1,16 @@
-1.0.1 - [RELEASEDATE]
+1.0.1 - Monday 20 February 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- fixed bug: #7805: Remove double linebreak in ezcMailTransportMta::send
-- fixed bug: #7813: MultipartRelated with non-file parts may throw exception 
-	if you did not set a content-id	
-- implemented suggesion: #7804: New suggestion: Add getParts() to ezcMailMultipart
-  - Added getParts() to ezcMailMultipartMixed and MultipartAlternative.
-  - Added getMainPart() and getRelatedParts to ezcMultipartRelated.
-	
+- Fixed bug #7805: Removed double linebreak in ezcMailTransportMta::send().
+- Fixed bug #7813: MultipartRelated with non-file parts may throw exception 
+  if you did not set a Content-ID.
+- Implemented suggesion #7804:
+
+  * Added getParts() to ezcMailMultipart.
+  * Added getParts() to ezcMailMultipartMixed and MultipartAlternative.
+  * Added getMainPart() and getRelatedParts to ezcMultipartRelated.
+
+
 1.0 - Monday 30 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
