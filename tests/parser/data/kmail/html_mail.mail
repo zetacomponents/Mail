@@ -1,0 +1,53 @@
+Return-Path: <fh@ez.no>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from smtp.ez.no (blackboy.ez.no [194.248.150.22])
+	by mta.ez.no (Postfix) with ESMTP id ADCC448C0D4
+	for <fh@ez.no>; Mon,  6 Feb 2006 05:24:34 +0100 (CET)
+Received: from dhcp180.ez.no (popeye.ez.no [80.239.98.162])
+	by smtp.ez.no (Postfix) with ESMTP id 7001FAB576
+	for <fh@ez.no>; Mon,  6 Feb 2006 15:38:10 +0100 (CET)
+From: Frederik Holljen <fh@ez.no>
+Organization: eZ systems
+To: fh@ez.no
+Subject: HTML mail
+Date: Mon, 6 Feb 2006 15:38:16 +0100
+User-Agent: KMail/1.8.1
+X-Face: ":$k,}fBadt&RxvERE"kBd#2IUNG4g{QKE%c>=?utf-8?q?V=24T=5CKaFrft3GTXG=27dPpWk9UD=7CDI=5C=27G=7C0s=0A=09EdPNOdZI=3B?=
+ =?utf-8?q?C=3BX9X!LJN7?=(LAi`,*\$;$]l`DVkB}=y}|P[)4TcKh">"f]m-C+[KgFdE)~,M>
+ =?utf-8?q?=0A=09s=5BhNDFf-8=5F=7EcR=5D=26=7CYaWF=25E?=
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+  boundary="Boundary-00=_Y915DC8XDbd0oDv"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <200602061538.16305.fh@ez.no>
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.8 required=2.0 tests=FORGED_RCVD_HELO,
+	HTML_90_100,HTML_MESSAGE,USER_IN_WHITELIST autolearn=no version=3.0.4
+Status: RO
+X-UID: 20740
+Content-Length: 465
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+--Boundary-00=_Y915DC8XDbd0oDv
+Content-Type: text/plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+This is the body
+--Boundary-00=_Y915DC8XDbd0oDv
+Content-Type: text/html;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+<html><head><meta name="qrichtext" content="1" /></head><body style="font-size:12pt;font-family:Bitstream Vera Sans">
+<p><span style="font-weight:600">This is the body</span></p>
+</body></html>
+--Boundary-00=_Y915DC8XDbd0oDv--
+
