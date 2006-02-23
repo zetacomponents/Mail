@@ -8,15 +8,60 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+/**
+ * Base class for all parser parts.
+ *
+ * Parse process
+ * 1. Figure out the headers of the next part.
+ * 2. Based on the headers, create the parser for the bodyPart corresponding to
+ *    the headers.
+ * 3. Parse the body line by line. In the case of a multipart or a digest recursively
+ *    start this process. Note that in the case of RFC822 messages the body contains
+ *    headers.
+ * 4. call finish() on the partParser and retrieve the ezcMailPart
+ *
+ * Each parser part gets the header for that part through the constructor
+ * and is responsible for parsing the body of that part.
+ * Parsing of the body is done on a push basis trough the parseBody() method
+ * which is called repeatedly by the parent part for each line in the message.
+ *
+ * When there are no more lines the parent part will call finish() and the mail
+ * part corresponding to the part you are parsing should be returned.
+ *
+ * @access private
+ */
 abstract class ezcMailParserState
 {
+    /**
+     * Parse the body of a message line by line.
+     *
+     * This method is called by the parent part on a push basis. When there
+     * are no more lines the parent part will call finish() to retrieve the
+     * mailPart.
+     *
+     * @param string $line
+     * @return void
+     */
     abstract public function parseBody( $line );
 
-    // return the correct type of ezcMailPart
+    /**
+     * Return the result of the parsed part.
+     *
+     * This method is called when all the lines of this part have been parsed.
+     *
+     * @return ezcMailPart
+     */
     abstract public function finish();
 
+    /**
+     * Returns a part parser corresponding to the given $headers.
+     *
+     * @todo rename to createPartParser
+     * @return ezcMailParserState
+     */
     static public function createPartForHeaders( array $headers )
     {
+        // default as specified by RFC2045 - 5.2
         $mainType = 'text';
         $subType = 'plain';
 
@@ -24,6 +69,7 @@ abstract class ezcMailParserState
         if( isset( $headers['Content-Type'] ) )
         {
             $matches = array();
+            // matches "type/subtype; blahblahblah"
             preg_match_all( '/^(\S+)\/(\S+);(.+)*/',
                             $headers['Content-Type'], $matches, PREG_SET_ORDER );
             if( count( $matches ) > 2 )
@@ -33,12 +79,38 @@ abstract class ezcMailParserState
             }
         }
         $bodyParser = null;
+
+        // create the correct type parser for this the detected type of part
         switch( $mainType )
         {
+            /* RFC 2045 defined types */
+            case 'image':
+            case 'audio':
+            case 'video':
+            case 'application':
+//                $bodyParser = new ezcMailFileParser( $headers );
+                break;
+
+            case 'message':
+                $bodyParser = new ezcRfc822Parser( $headers );
+                break;
+
             case 'text':
                 $bodyParser = new ezcMailTextParser( $headers );
                 break;
 
+            case 'multipart':
+                switch( $subType )
+                {
+                    case 'mixed':
+                    case 'alternative':
+                    case 'related':
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                /* extensions */
             default:
                 // todo: treat as plain text?
                 break;
@@ -47,17 +119,50 @@ abstract class ezcMailParserState
     }
 }
 
-// State idea:
-// 1. Read headers
-// 2. Decide on the content type found in the headers
-// 3. Choose the correct parser for the body part, give the part the headers
-//    except for the first part.
-// 4. Push body lines into that part.
+/**
+ * Parses RFC822 messages.
+ *
+ * @todo split header parsing into separate class? This could also be used by the MultiPart parsers.
+ * @access private
+ */
 class ezcRfc822Parser extends ezcMailParserState
 {
+    /**
+     * The name of the last header parsed.
+     *
+     * This variable is used when glueing together multi-line headers.
+     *
+     * @var string $lastParsedHeader
+     */
     private $lastParsedHeader = null;
+
+    /**
+     * Holds the headers parsed.
+     *
+     * The format of the array is array(name=>value)
+     *
+     * @var array(string=>string)
+     */
     private $headers = array();
+
+    /**
+     * Stores the state of the parser.
+     *
+     * Valid states are:
+     * - headers - it is currently parsing headers
+     * - body - it is currently parsing the body part.
+     *
+     * @var string
+     */
     private $parserState = 'headers'; // todo: change to const
+
+    /**
+     * The parser of the body.
+     *
+     * This will be set after the headers have been parsed.
+     *
+     * @var ezcMailParserState
+     */
     private $bodyParser = null;
 
     public function parseBody( $line )
@@ -87,8 +192,16 @@ class ezcRfc822Parser extends ezcMailParserState
         }
     }
 
+    /**
+     * Returns an ezcMail corresponding to the parsed message.
+     *
+     * @return ezcMail
+     */
     public function finish()
     {
+        // todo: what do we do if finish is called an there is no body?
+        // I propose empty body part and write an error.
+
         $mail = new ezcMail();
         $mail->setHeaders( $this->headers );
 
@@ -102,8 +215,13 @@ class ezcRfc822Parser extends ezcMailParserState
         return $mail;
     }
 
-    // todo: deal with headers that are listed several times
-    public function parseHeader( $line )
+    /**
+     * Parses the header given by $line and adds it to $this->headers
+     *
+     * @todo: deal with headers that are listed several times
+     * @return void
+     */
+    private function parseHeader( $line )
     {
         $matches = array();
         preg_match_all( "/^([\w-_]*): (.*)/", $line, $matches, PREG_SET_ORDER );
@@ -119,16 +237,46 @@ class ezcRfc822Parser extends ezcMailParserState
     }
 }
 
+/**
+ * Parses mail parts of type "text".
+ *
+ * @access private
+ */
 class ezcMailTextParser extends ezcMailParserState
 {
+    /**
+     * Stores the parsed text of this part.
+     *
+     * @var string $text
+     */
     private $text = null;
+
+
+    /**
+     * Holds the headers of this text part.
+     *
+     * The format of the array is array(name=>value)
+     *
+     * @var array(string=>string)
+     */
     private $headers = null;
 
+    /**
+     * Constructs a new ezcMailTextParser with the headers $headers.
+     *
+     * @param array(string=>string) $headers
+     */
     public function __construct( array $headers )
     {
         $this->headers = $headers;
     }
 
+    /**
+     * Adds each line to the body of the text part.
+     *
+     * @param string $line
+     * @return void
+     */
     public function parseBody( $line )
     {
         if( $this->text === null )
@@ -141,6 +289,11 @@ class ezcMailTextParser extends ezcMailParserState
         }
     }
 
+    /**
+     * Returns the ezcMailText part corresponding to the parsed message.
+     *
+     * @return ezcMailText
+     */
     public function finish()
     {
         $parameters = array();
