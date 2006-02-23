@@ -94,6 +94,39 @@ class ezcMailTools
         return implode( ', ', $textElements );
     }
 
+    /**
+     * Returns an ezcMailAddress objects parsed from the
+     * RFC822 compatible address string $address.
+     *
+     * Example:
+     * <code>
+     * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
+     * </code>
+     *
+     * @todo handle charactersets properly
+     * @param string $addresse
+     * @return ezcMailAddress
+     */
+    public static function parseEmailAddress( $address )
+    {
+    }
+
+    /**
+     * Returns an array of ezcMailAddress objects parsed from the
+     * RFC822 compatible address string $addresses.
+     *
+     * Example:
+     * <code>
+     * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
+     * </code>
+     *
+     * @todo handle charactersets properly
+     * @param string $addresses
+     * @return array(ezcMailAddress)
+     */
+    public static function parseEmailAddresses( $addresses )
+    {
+    }
 
     /**
      * Returns an unique message ID to be used for a mail message.

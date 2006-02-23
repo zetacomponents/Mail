@@ -20,6 +20,7 @@ require_once( "parts/file_part_test.php" );
 require_once( "tools_test.php" );
 require_once( "transports/transport_smtp_test.php" );
 require_once( "tutorial_examples.php" );
+require_once( "parser/parser_test.php" );
 
 /**
  * @package Mail
@@ -41,6 +42,7 @@ class ezcMailSuite extends ezcTestSuite
         $this->addTest( ezcMailToolsTest::suite() );
         $this->addTest( ezcMailTransportSmtpTest::suite() );
         $this->addTest( ezcMailTutorialExamples::suite() );
+        $this->addTest( ezcMailParserTest::suite() );
 	}
 
     public static function suite()

@@ -69,6 +69,21 @@ abstract class ezcMailPart
     }
 
     /**
+     * Adds the headers $headers.
+     *
+     * The headers specified in the associative array of the
+     * form array(headername=>value) will overwrite any existing
+     * header values..
+     *
+     * @param array(string=>string) $headers
+     * @return void
+     */
+    public function setHeaders( array $headers )
+    {
+        $this->headers = array_merge( $this->headers, $headers );
+    }
+
+    /**
      * Returns the headers set for this part as a RFC 822 string.
      *
      * Each header is separated by a line break.

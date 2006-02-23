@@ -42,6 +42,14 @@ class ezcMailToolsTest extends ezcTestCase
                              ezcMailTools::composeEmailAddresses( $addresses ) );
     }
 
+    public function testParseEmailAddresses()
+    {
+        $addresses = array( new ezcMailAddress( 'john@doe.com', 'John Doe' ),
+                            new ezcMailAddress( 'debra@doe.com' ) );
+        $this->assertEquals( $addresses,
+                             ezcMailTools::parseEmailAddresses('John Doe <john@doe.com>, debra@doe.com' ) );
+    }
+
     /**
      * Tests if generateContentId works as it should.
      * Somewhat hard to test since it is supposed to return a unique string.

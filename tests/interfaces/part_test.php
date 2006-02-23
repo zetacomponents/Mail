@@ -55,6 +55,18 @@ class ezcMailPartTest extends ezcTestCase
         $this->assertEquals( "pkej@ez.no", $this->part->getHeader( "From" ) );
     }
 
+    public function testSetHeaders()
+    {
+        // check that it is empty before we start
+        $this->assertEquals( "", $this->part->generateHeaders() );
+        $this->part->setHeader( "To", "info@ez.no" );
+
+        $this->part->setHeaders( array( "To" => "test@example.com",
+                                        "Cc" => "test@example.com" ) );
+        $expectedResult = "To: test@example.com" . ezcMailTools::lineBreak() .
+                          "Cc: test@example.com". ezcMailTools::lineBreak();
+    }
+
     /**
      * Tests that generateHeaders is generating headers according to
      * rfc822.
