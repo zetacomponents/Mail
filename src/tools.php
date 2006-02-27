@@ -98,17 +98,42 @@ class ezcMailTools
      * Returns an ezcMailAddress objects parsed from the
      * RFC822 compatible address string $address.
      *
+     * This method does not perform validation. It will also accept slightly
+     * malformed addresses.
+     *
+     * If the mail address given can not be decoded null is returned.
+     *
      * Example:
      * <code>
      * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
      * </code>
      *
-     * @todo handle charactersets properly
      * @param string $addresse
      * @return ezcMailAddress
      */
     public static function parseEmailAddress( $address )
     {
+        // we don't care about the "group" part of the address since this is not used anywhere
+
+        $matches = array();
+        $pattern = '/<?\"?[a-zA-Z0-9!#\$\%\&\'\*\+\-\/=\?\^_`{\|}~\.]+\"?@[a-zA-Z0-9!#\$\%\&\'\*\+\-\/=\?\^_`{\|}~\.]+>?$/';
+        if( preg_match( trim( $pattern ), $address, $matches, PREG_OFFSET_CAPTURE ) != 1 )
+        {
+            return null;
+        }
+        $name = substr( $address, 0, $matches[0][1] );
+
+        // trim <> from the address and "" from the name
+        $name = trim( $name, '" ' );
+        $mail = trim( $matches[0][0], '<>' );
+        // remove any quotes found in mail addresses like "bah,"@example.com
+        $mail = str_replace( '"', '', $mail );
+
+        // the name may contain interesting character encoding. We need to convert it.
+        $name = iconv_mime_decode( $name, 0, 'utf-8' );
+
+        $address = new ezcMailAddress( $mail, $name, 'utf-8' );
+        return $address;
     }
 
     /**
@@ -126,6 +151,36 @@ class ezcMailTools
      */
     public static function parseEmailAddresses( $addresses )
     {
+        $addressesArray = array();
+        $inQuote = false;
+        $last = 0; // last hit
+        for( $i = 0; $i < strlen( $addresses ); $i++ )
+        {
+            if( $addresses[$i] == '"' )
+            {
+                $inQuote = !$inQuote;
+            }
+            else if( $addresses[$i] == ',' && !$inQuote )
+            {
+                $addressesArray[] = substr( $addresses, $last, $i - $last );
+                $last = $i + 1; // eat comma
+            }
+        }
+
+        // fetch the last one
+        $addressesArray[] = substr( $addresses, $last );
+
+        $addressObjects = array();
+        foreach( $addressesArray as $address )
+        {
+            $addressObject = self::parseEmailAddress( $address );
+            if( $addressObject !== null )
+            {
+                $addressObjects[] = $addressObject;
+            }
+        }
+
+        return $addressObjects;
     }
 
     /**

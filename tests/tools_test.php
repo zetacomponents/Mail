@@ -42,12 +42,51 @@ class ezcMailToolsTest extends ezcTestCase
                              ezcMailTools::composeEmailAddresses( $addresses ) );
     }
 
+
+    public function testParseEmailAddressGood()
+    {
+        $add = ezcMailTools::parseEmailAddress( '"John Doe" <john@doe.com>' );
+        $this->assertEquals( 'John Doe', $add->name );
+        $this->assertEquals( 'john@doe.com', $add->email );
+
+        $add = ezcMailTools::parseEmailAddress( '"John Doe" <john.doe@doe.com>' );
+        $this->assertEquals( 'John Doe', $add->name );
+        $this->assertEquals( 'john.doe@doe.com', $add->email );
+
+        $add = ezcMailTools::parseEmailAddress( '"John Doe" <"john.doe"@doe.com>' );
+        $this->assertEquals( 'John Doe', $add->name );
+        $this->assertEquals( 'john.doe@doe.com', $add->email );
+
+        $add = ezcMailTools::parseEmailAddress( 'john@doe.com' );
+        $this->assertEquals( '', $add->name );
+        $this->assertEquals( 'john@doe.com', $add->email );
+
+        $add = ezcMailTools::parseEmailAddress( '<john@doe.com>' );
+        $this->assertEquals( '', $add->name );
+        $this->assertEquals( 'john@doe.com', $add->email );
+
+        $add = ezcMailTools::parseEmailAddress( '"!#%&/()" <jo-_!#%&+hn@doe.com>' );
+        $this->assertEquals( '!#%&/()', $add->name );
+        $this->assertEquals( 'jo-_!#%&+hn@doe.com', $add->email );
+    }
+
+    public function testParseEmailAddressWrong()
+    {
+        $add = ezcMailTools::parseEmailAddress( "No address in this place @ here" );
+        $this->assertEquals( null, $add );
+    }
+
     public function testParseEmailAddresses()
     {
-        $addresses = array( new ezcMailAddress( 'john@doe.com', 'John Doe' ),
-                            new ezcMailAddress( 'debra@doe.com' ) );
-        $this->assertEquals( $addresses,
-                             ezcMailTools::parseEmailAddresses('John Doe <john@doe.com>, debra@doe.com' ) );
+        $add = ezcMailTools::parseEmailAddresses( '"John Doe" <john@doe.com>, "my, name" <my@example.com>' );
+        $this->assertEquals( 'John Doe', $add[0]->name );
+        $this->assertEquals( 'john@doe.com', $add[0]->email );
+        $this->assertEquals( 'my, name', $add[1]->name );
+        $this->assertEquals( 'my@example.com', $add[1]->email );
+
+        $add = ezcMailTools::parseEmailAddresses( '<john@doe.com>' );
+        $this->assertEquals( '', $add[0]->name );
+        $this->assertEquals( 'john@doe.com', $add[0]->email );
     }
 
     /**
