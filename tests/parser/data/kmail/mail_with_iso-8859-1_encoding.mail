@@ -10,7 +10,7 @@ Received: from dhcp180.ez.no (popeye.ez.no [80.239.98.162])
 From: Frederik Holljen <fh@ez.no>
 Organization: eZ systems
 To: fh@ez.no
-Subject: Mail with special characterset for norwegian characters =?iso-8859-1?q?=E6=F8=E5?=
+Subject: Mail with special characterset for norwegian characters =?iso-8859-1?Q?=E6=F8=E5?=
 Date: Mon, 6 Feb 2006 15:37:45 +0100
 User-Agent: KMail/1.8.1
 X-Face: ":$k,}fBadt&RxvERE"kBd#2IUNG4g{QKE%c>=?utf-8?q?V=24T=5CKaFrft3GTXG=27dPpWk9UD=7CDI=5C=27G=7C0s=0A=09EdPNOdZI=3B?=

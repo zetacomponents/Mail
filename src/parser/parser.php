@@ -317,16 +317,20 @@ class ezcMailTextParser extends ezcMailParserState
      */
     public function finish()
     {
-        $parameters = array();
+        $charset = "us-ascii"; // RFC 2822 default
         if( isset( $this->headers['Content-Type'] ) )
         {
-            preg_match_all( '/\s*(\S+)=([^;\s]*);?/',
+//            preg_match_all( '/\s*(\S+)=([^;\s]*);?/', // matches all headers
+            preg_match( '/\s*charset=([^;\s]*);?/',
                             $this->headers['Content-Type'],
-                            $parameters, PREG_SET_ORDER );
+                            $parameters );
+            if( count( $parameters ) > 0 )
+            {
+                $charset = trim( $parameters[1], '"' );
+            }
         }
 
-        // todo: fetch encoding and character set from the parameters
-        $part = new ezcMailText( $this->text );
+        $part = new ezcMailText( $this->text, $charset );
         return $part;
     }
 }
@@ -340,22 +344,33 @@ class ezcMailParser
 {
     private $state = null;
 
+    /**
+     * Constructs a new ezcMailParser.
+     */
     public function __construct()
     {
-        $this->state = new ezcRfc822Parser();
     }
 
     /**
+     * Returns an array of ezcMail objects parsed from the mail set $set.
      *
+     * @param ezcMailParserSet
+     * @returns array(ezcMail)
      */
     public function parseMail( ezcMailParserSet $set )
     {
-        $data = "";
-        while( ($data = $set->getNextLine()) !== null )
+        $mail = array();
+        do
         {
-            $this->state->parseBody( $data );
-        }
-        return $this->state->finish();
+            $this->state = new ezcRfc822Parser();
+            $data = "";
+            while( ($data = $set->getNextLine()) !== null )
+            {
+                $this->state->parseBody( $data );
+            }
+            $mail[] = $this->state->finish();
+        }while( $set->nextMail() );
+        return $mail;
     }
 }
 ?>

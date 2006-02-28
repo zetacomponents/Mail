@@ -70,6 +70,8 @@ class ezcMailParserTest extends ezcTestCase
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
         $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
         $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
         $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
         $this->assertEquals( array(), $mail->cc );
@@ -79,6 +81,26 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This is the body\n", $mail->body->text );
         $this->assertEquals( "us-ascii", $mail->body->charset );
+        $this->assertEquals( 'plain', $mail->body->subType );
+    }
+
+    public function testKmail2()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/mail_with_iso-8859-1_encoding.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+//        var_dump( $mail->subject );
+//        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
+        $this->assertEquals( 'utf-8', $mail->subjectCharset );
+        $this->assertEquals( true, $mail->body instanceof ezcMailText );
+        $this->assertEquals( "This is the body: זרו\n", $mail->body->text );
+        $this->assertEquals( "iso-8859-1", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 }
