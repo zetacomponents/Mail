@@ -28,6 +28,7 @@
  * When there are no more lines the parent part will call finish() and the mail
  * part corresponding to the part you are parsing should be returned.
  *
+ * @todo case on headers
  * @access private
  */
 abstract class ezcMailParserState
@@ -205,11 +206,31 @@ class ezcRfc822Parser extends ezcMailParserState
         $mail = new ezcMail();
         $mail->setHeaders( $this->headers );
 
+        // from
+        if( isset( $this->headers['From'] ) )
+        {
+            $mail->from = ezcMailTools::parseEmailAddress( $this->headers['From'] );
+        }
         // to
+        if( isset( $this->headers['To'] ) )
+        {
+            $mail->to = ezcMailTools::parseEmailAddresses( $this->headers['To'] );
+        }
         // cc
+        if( isset( $this->headers['Cc'] ) )
+        {
+            $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Cc'] );
+        }
         // bcc
-        // subject
-        // subject encoding
+        if( isset( $this->headers['Bcc'] ) )
+        {
+            $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Bcc'] );
+        }
+        if( isset( $this->headers['Subject'] ) )
+        {
+            $mail->subject = iconv_mime_decode( $this->headers['Subject'], 0, 'utf-8' );
+            $mail->subjectCharset = 'utf-8';
+        }
 
         $mail->body = $this->bodyParser->finish();
         return $mail;

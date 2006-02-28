@@ -36,7 +36,7 @@
  * - <b>cc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
  * - <b>bcc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
  * - <b>subject</b> <i>string</i>, contains the subject of the e-mail. Use setSubject if you require a special encoding.
- * - <b>subjectEncoding</b> <i>string</i> The encoding of the subject.
+ * - <b>subjectCharset</b> <i>string</i> The encoding of the subject.
  * - <b>body</b> <i>ezcMailPart</i> the body part of the message.
  *
  * There are several headers you can set on the mail object to achieve various effects:
