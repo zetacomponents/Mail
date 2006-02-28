@@ -26,6 +26,9 @@ return array(
     'ezcMailTransportSmtpException' => 'Mail/exceptions/transport_smtp_exception.php',
     'ezcMailTools'                  => 'Mail/tools.php',
     'ezcMailParser'                 => 'Mail/parser/parser.php',
+    'ezcMailPartParser'             => 'Mail/parser/interfaces/part_parser.php',
+    'ezcMailRfc822Parser'           => 'Mail/parser/parts/rfc822_parser.php',
+    'ezcMailTextParser'             => 'Mail/parser/parts/text_parser.php',
     'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php'
 );
 ?>
