@@ -8,7 +8,6 @@
  * @subpackage Tests
  */
 
-
 /**
  * @package Mail
  * @subpackage Tests
@@ -17,7 +16,7 @@ class ezcMailHeadersHolderTest extends ezcTestCase
 {
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailHeadersHolderTest" );
+        return new ezcTestSuite( "ezcMailHeadersHolderTest" );
     }
 
     public function testSet()

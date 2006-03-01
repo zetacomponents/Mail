@@ -29,6 +29,7 @@ return array(
     'ezcMailPartParser'             => 'Mail/parser/interfaces/part_parser.php',
     'ezcMailRfc822Parser'           => 'Mail/parser/parts/rfc822_parser.php',
     'ezcMailTextParser'             => 'Mail/parser/parts/text_parser.php',
+    'ezcMailMultipartParser'        => 'Mail/parser/parts/multipart_parser.php',
     'ezcMailHeadersHolder'          => 'Mail/parser/headers_holder.php',
     'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php'
 );

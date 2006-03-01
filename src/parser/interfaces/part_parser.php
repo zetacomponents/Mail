@@ -34,6 +34,15 @@
 abstract class ezcMailPartParser
 {
     /**
+     * The name of the last header parsed.
+     *
+     * This variable is used when glueing together multi-line headers.
+     *
+     * @var string $lastParsedHeader
+     */
+    private $lastParsedHeader = null;
+
+    /**
      * Parse the body of a message line by line.
      *
      * This method is called by the parent part on a push basis. When there
@@ -60,7 +69,7 @@ abstract class ezcMailPartParser
      * @todo rename to createPartParser
      * @return ezcMailPartParser
      */
-    static public function createPartForHeaders( ezcMailHeadersHolder $headers )
+    static public function createPartParserForHeaders( ezcMailHeadersHolder $headers )
     {
         // default as specified by RFC2045 - 5.2
         $mainType = 'text';
@@ -118,6 +127,29 @@ abstract class ezcMailPartParser
         }
         return $bodyParser;
     }
+
+    /**
+     * Parses the header given by $line and adds it to $this->headers
+     *
+     * @todo: deal with headers that are listed several times
+     * @return void
+     */
+    protected function parseHeader( $line, ezcMailHeadersHolder $headers )
+    {
+        $matches = array();
+        preg_match_all( "/^([\w-_]*): (.*)/", $line, $matches, PREG_SET_ORDER );
+        if( count( $matches ) > 0 )
+        {
+            $headers[$matches[0][1]] = trim( $matches[0][2] );
+            $this->lastParsedHeader = $matches[0][1];
+        }
+        else if( $this->lastParsedHeader !== null ) // take care of folding
+        {
+            $headers[$this->lastParsedHeader] .= $line;
+        }
+        // else -invalid syntax, this should never happen.
+    }
+
 }
 
 ?>

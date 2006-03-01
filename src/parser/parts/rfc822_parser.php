@@ -11,20 +11,10 @@
 /**
  * Parses RFC822 messages.
  *
- * @todo split header parsing into separate class? This could also be used by the MultiPart parsers.
  * @access private
  */
 class ezcMailRfc822Parser extends ezcMailPartParser
 {
-    /**
-     * The name of the last header parsed.
-     *
-     * This variable is used when glueing together multi-line headers.
-     *
-     * @var string $lastParsedHeader
-     */
-    private $lastParsedHeader = null;
-
     /**
      * Holds the headers parsed.
      *
@@ -45,11 +35,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     /**
      * Stores the state of the parser.
      *
-     * Valid states are:
-     * - headers - it is currently parsing headers
-     * - body - it is currently parsing the body part.
-     *
-     * @var string
+     * @var int
      */
     private $parserState = self::PARSE_STATE_HEADERS;
 
@@ -62,6 +48,9 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     private $bodyParser = null;
 
+    /**
+     * Constructs a new ezcMailRfc822Parser.
+     */
     public function __construct()
     {
         $this->headers = new ezcMailHeadersHolder();
@@ -75,7 +64,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        if( $this->parserState == self::PARSE_STATE_HEADERS && $line == "" )
+        if( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
         {
             $this->parserState = self::PARSE_STATE_BODY;
 
@@ -88,11 +77,11 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             $headers['Content-Disposition'] = $this->headers['Content-Disposition'];
 
             // get the correct body type
-            $this->bodyParser = self::createPartForHeaders( $headers );
+            $this->bodyParser = self::createPartParserForHeaders( $headers );
         }
         else if( $this->parserState == self::PARSE_STATE_HEADERS )
         {
-            $this->parseHeader( $line );
+            $this->parseHeader( $line, $this->headers );
         }
         else // we are parsing headers
         {
@@ -141,28 +130,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             $mail->body = $this->bodyParser->finish();
         }
         return $mail;
-    }
-
-    /**
-     * Parses the header given by $line and adds it to $this->headers
-     *
-     * @todo: deal with headers that are listed several times
-     * @return void
-     */
-    private function parseHeader( $line )
-    {
-        $matches = array();
-        preg_match_all( "/^([\w-_]*): (.*)/", $line, $matches, PREG_SET_ORDER );
-        if( count( $matches ) > 0 )
-        {
-            $this->headers[$matches[0][1]] = trim( $matches[0][2] );
-            $this->lastParsedHeader = $matches[0][1];
-        }
-        else if( $this->lastParsedHeader !== null ) // take care of folding
-        {
-            $this->headers[$this->lastParsedHeader] .= $line;
-        }
-        // else -invalid syntax, this should never happen.
     }
 }
 
