@@ -28,7 +28,7 @@ class ezcMailTextParser extends ezcMailPartParser
      *
      * The format of the array is array(name=>value)
      *
-     * @var array(string=>string)
+     * @var ezcMailHeadersHolder
      */
     private $headers = null;
 
@@ -37,7 +37,7 @@ class ezcMailTextParser extends ezcMailPartParser
      *
      * @param array(string=>string) $headers
      */
-    public function __construct( array $headers )
+    public function __construct( ezcMailHeadersHolder $headers )
     {
         $this->headers = $headers;
     }

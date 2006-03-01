@@ -28,11 +28,9 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     /**
      * Holds the headers parsed.
      *
-     * The format of the array is array(name=>value)
-     *
-     * @var array(string=>string)
+     * @var ezcMailHeadersHolder
      */
-    private $headers = array();
+    private $headers = null;
 
     /**
      * Stores the state of the parser.
@@ -54,6 +52,17 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     private $bodyParser = null;
 
+    public function __construct()
+    {
+        $this->headers = new ezcMailHeadersHolder();
+    }
+
+    /**
+     * Parses the body of an rfc 2822 message.
+     *
+     * @param string $line
+     * @return void
+     */
     public function parseBody( $line )
     {
         if( $this->parserState == 'headers' && $line == "" )
@@ -63,7 +72,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             // clean up headers for the part
             // the rest of the headers should be set on the mail object.
             // TODO: Change this to Content* ?
-            $headers = array();
+            $headers = new ezcMailHeadersHolder();
             $headers['Content-Type'] = $this->headers['Content-Type'];
             $headers['Content-Transfer-Encoding'] = $this->headers['Content-Transfer-Encoding'];
             $headers['Content-Disposition'] = $this->headers['Content-Disposition'];
@@ -92,7 +101,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         // I propose empty body part and write an error.
 
         $mail = new ezcMail();
-        $mail->setHeaders( $this->headers );
+        $mail->setHeaders( $this->headers->getCaseSensitiveArray() );
 
         // from
         if( isset( $this->headers['From'] ) )
@@ -139,7 +148,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             $this->headers[$matches[0][1]] = trim( $matches[0][2] );
             $this->lastParsedHeader = $matches[0][1];
         }
-        else if( $this->lastParsedHeader !== null )
+        else if( $this->lastParsedHeader !== null ) // take care of folding
         {
             $this->headers[$this->lastParsedHeader] .= $line;
         }

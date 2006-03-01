@@ -21,6 +21,7 @@ require_once( "tools_test.php" );
 require_once( "transports/transport_smtp_test.php" );
 require_once( "tutorial_examples.php" );
 require_once( "parser/parser_test.php" );
+require_once( "parser/headers_holder_test.php" );
 
 /**
  * @package Mail
@@ -43,6 +44,7 @@ class ezcMailSuite extends ezcTestSuite
         $this->addTest( ezcMailTransportSmtpTest::suite() );
         $this->addTest( ezcMailTutorialExamples::suite() );
         $this->addTest( ezcMailParserTest::suite() );
+        $this->addTest( ezcMailHeadersHolderTest::suite() );
 	}
 
     public static function suite()

@@ -60,7 +60,7 @@ abstract class ezcMailPartParser
      * @todo rename to createPartParser
      * @return ezcMailPartParser
      */
-    static public function createPartForHeaders( array $headers )
+    static public function createPartForHeaders( ezcMailHeadersHolder $headers )
     {
         // default as specified by RFC2045 - 5.2
         $mainType = 'text';
