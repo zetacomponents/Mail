@@ -15,7 +15,7 @@
  */
 class ezcMailParser
 {
-    private $state = null;
+    private $partParser = null;
 
     /**
      * Constructs a new ezcMailParser.
@@ -35,13 +35,13 @@ class ezcMailParser
         $mail = array();
         do
         {
-            $this->state = new ezcMailRfc822Parser();
+            $this->partParser = new ezcMailRfc822Parser();
             $data = "";
             while( ($data = $set->getNextLine()) !== null )
             {
-                $this->state->parseBody( $data );
+                $this->partParser->parseBody( $data );
             }
-            $mail[] = $this->state->finish();
+            $mail[] = $this->partParser->finish();
         }while( $set->nextMail() );
         return $mail;
     }

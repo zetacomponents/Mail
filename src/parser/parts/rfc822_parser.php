@@ -33,6 +33,16 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     private $headers = null;
 
     /**
+     * This state is used when the parser is parsing headers.
+     */
+    const PARSE_STATE_HEADERS = 1;
+
+    /**
+     * This state is used when the parser is parsing the body.
+     */
+    const PARSE_STATE_BODY = 2;
+
+    /**
      * Stores the state of the parser.
      *
      * Valid states are:
@@ -41,7 +51,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      *
      * @var string
      */
-    private $parserState = 'headers'; // todo: change to const
+    private $parserState = self::PARSE_STATE_HEADERS;
 
     /**
      * The parser of the body.
@@ -65,9 +75,9 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        if( $this->parserState == 'headers' && $line == "" )
+        if( $this->parserState == self::PARSE_STATE_HEADERS && $line == "" )
         {
-            $this->parserState = "body";
+            $this->parserState = self::PARSE_STATE_BODY;
 
             // clean up headers for the part
             // the rest of the headers should be set on the mail object.
@@ -80,7 +90,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             // get the correct body type
             $this->bodyParser = self::createPartForHeaders( $headers );
         }
-        else if( $this->parserState == 'headers' )
+        else if( $this->parserState == self::PARSE_STATE_HEADERS )
         {
             $this->parseHeader( $line );
         }
@@ -97,9 +107,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     public function finish()
     {
-        // todo: what do we do if finish is called an there is no body?
-        // I propose empty body part and write an error.
-
         $mail = new ezcMail();
         $mail->setHeaders( $this->headers->getCaseSensitiveArray() );
 
@@ -129,7 +136,10 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             $mail->subjectCharset = 'utf-8';
         }
 
-        $mail->body = $this->bodyParser->finish();
+        if( $this->bodyParser !== null )
+        {
+            $mail->body = $this->bodyParser->finish();
+        }
         return $mail;
     }
 
@@ -152,6 +162,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         {
             $this->headers[$this->lastParsedHeader] .= $line;
         }
+        // else -invalid syntax, this should never happen.
     }
 }
 
