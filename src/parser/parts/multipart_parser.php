@@ -62,7 +62,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
      *
      * @var int
      */
-    private $parserState = self::PARSE_STATE_HEADERS;
+    private $parserState = self::PARSE_STATE_PRE_FIRST;
 
     /**
      * Constructs a new Multipart parser.
@@ -94,16 +94,21 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
+        if( $this->parserState == self::PARSE_STATE_POST_LAST )
+        {
+            return;
+        }
+
         // check if we hit any of the boundaries
         $newPart = false;
         $endOfMultipart = false;
-        if( $line[0] == "-" )
+        if( strlen( $line ) > 0 && $line[0] == "-" )
         {
-            if( strcmp( trim( $line ), '--' . $this->boundary ) )
+            if( strcmp( trim( $line ), '--' . $this->boundary ) === 0 )
             {
                 $newPart = true;
             }
-            else if( strcmp( trim( $line ), '--' . $this->boundary ) )
+            else if( strcmp( trim( $line ), '--' . $this->boundary . '--' ) === 0 )
             {
                 $endOfMultipart = true;
             }
@@ -114,8 +119,11 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         {
             if( $this->parserState != self::PARSE_STATE_BODY )
             {
-                // something is b0rked, the body is gone
+                // something is b0rked, we got a new separator before getting a body
                 // we'll skip this part and continue to the next if any
+                $this->currentPartParser = null;
+                $this->currentPartHeaders = new ezcMailHeadersHolder();
+                $this->parserState = $newPart ? self::PARSE_STATE_HEADERS : self::PARSE_STATE_POST_LAST;
             }
             else
             {
@@ -139,7 +147,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
             if( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
             {
                 $this->parserState = self::PARSE_STATE_BODY;
-                $this->currentPartParser = self::createPartParserForHeaders( $this->headers );
+                $this->currentPartParser = self::createPartParserForHeaders( $this->currentPartHeaders );
             }
             else if( $this->parserState == self::PARSE_STATE_HEADERS )
             {

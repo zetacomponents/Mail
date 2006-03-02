@@ -82,10 +82,10 @@ abstract class ezcMailPartParser
             // matches "type/subtype; blahblahblah"
             preg_match_all( '/^(\S+)\/(\S+);(.+)*/',
                             $headers['Content-Type'], $matches, PREG_SET_ORDER );
-            if( count( $matches ) > 2 )
+            if( count( $matches ) > 0 )
             {
-                $mainType = $matches[0][1];
-                $subType = $matches[0][2];
+                $mainType = strtolower( $matches[0][1] );
+                $subType = strtolower( $matches[0][2] );
             }
         }
         $bodyParser = null;
@@ -99,6 +99,7 @@ abstract class ezcMailPartParser
             case 'video':
             case 'application':
 //                $bodyParser = new ezcMailFileParser( $headers );
+                $bodyParser = new ezcMailTextParser( $headers ); //tmp
                 break;
 
             case 'message':
@@ -113,6 +114,8 @@ abstract class ezcMailPartParser
                 switch( $subType )
                 {
                     case 'mixed':
+                        $bodyParser = new ezcMailMultipartMixedParser( $headers );
+                        break;
                     case 'alternative':
                     case 'related':
                         break;
@@ -122,7 +125,9 @@ abstract class ezcMailPartParser
                 break;
                 /* extensions */
             default:
-                // todo: treat as plain text?
+                // we treat the body as text if no main content type is set
+                // or if it is unknown
+                $bodyParser = new ezcMailTextParser( $headers );
                 break;
         }
         return $bodyParser;
