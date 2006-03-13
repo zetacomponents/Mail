@@ -103,6 +103,33 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "iso-8859-1", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
+
+    public function testKmail3()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/mail_with_attachment.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'Mail with attachment', $mail->subject );
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartMixed );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+
+        // check the body
+        $this->assertEquals( "This is the body\n", $parts[0]->text );
+
+        // check the file
+        $this->assertEquals( 'tur.jpg', strstr( $parts[1]->fileName, 'tur.jpg' ) );
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $parts[1]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
+        $this->assertEquals( 'jpeg', $parts[1]->mimeType );
+    }
 }
 
 ?>

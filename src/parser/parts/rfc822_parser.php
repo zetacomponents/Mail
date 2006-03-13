@@ -59,6 +59,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     /**
      * Parses the body of an rfc 2822 message.
      *
+     * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
      * @param string $line
      * @return void
      */

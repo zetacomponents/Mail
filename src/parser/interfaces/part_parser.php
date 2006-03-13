@@ -67,11 +67,12 @@ abstract class ezcMailPartParser
      * Returns a part parser corresponding to the given $headers.
      *
      * @todo rename to createPartParser
+     * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
      * @return ezcMailPartParser
      */
     static public function createPartParserForHeaders( ezcMailHeadersHolder $headers )
     {
-        // default as specified by RFC2045 - 5.2
+        // default as specified by RFC2045 - #5.2
         $mainType = 'text';
         $subType = 'plain';
 
@@ -98,8 +99,7 @@ abstract class ezcMailPartParser
             case 'audio':
             case 'video':
             case 'application':
-//                $bodyParser = new ezcMailFileParser( $headers );
-                $bodyParser = new ezcMailTextParser( $headers ); //tmp
+                $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
                 break;
 
             case 'message':

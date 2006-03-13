@@ -89,6 +89,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
     /**
      * Parses a multipart body.
      *
+     * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
      * @param string $line
      * @return void
      */
@@ -129,10 +130,13 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
             {
                 // complete the work on the current part
                 $part = $this->currentPartParser->finish();
-                $this->partDone( $part );
-                $this->currentPartParser = null;
+                if( $part !== null )
+                {
+                    $this->partDone( $part );
+                }
 
                 // prepare for a new part if any
+                $this->currentPartParser = null;
                 $this->parserState =self::PARSE_STATE_POST_LAST;
                 if( $newPart )
                 {

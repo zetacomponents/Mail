@@ -33,6 +33,7 @@ return array(
     'ezcMailMultipartMixedParser'   => 'Mail/parser/parts/multipart_mixed_parser.php',
     'ezcMailFileParser'             => 'Mail/parser/parts/file_parser.php',
     'ezcMailHeadersHolder'          => 'Mail/parser/headers_holder.php',
-    'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php'
-);
+    'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php',
+    'ezcMailParserShutdownHandler'  => 'Mail/parser/shutdown_handler.php'
+    );
 ?>
