@@ -13,6 +13,9 @@
  *
  * This class is used to insert mail into mail.
  *
+ * The ezcMailFile class has the following properties:
+ * - String <B>mail</B>, the mail object to digest.
+ *
  * This example assumes that the mail object to digest is availble in the $digest variable:
  * <code>
  * $mail = new ezcMail();
@@ -33,11 +36,11 @@
 class ezcMailRfc822Digest extends ezcMailPart
 {
     /**
-     * The mail to insert into the digest.
+     * Holds the properties of this class.
      *
-     * @var ezcMail
+     * @var array(string=>mixed)
      */
-    private $mail = null;
+    private $properties = array();
 
     /**
      * Constructs a new ezcMailDigest with the mail $mail.
@@ -50,6 +53,50 @@ class ezcMailRfc822Digest extends ezcMailPart
         $this->setHeader( 'Content-Type', 'message/rfc822' );
         $this->setHeader( 'Content-Disposition', 'inline' );
     }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBaseFileNotFoundException when setting the property with an invalid filename.
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'mail':
+                $this->properties[$name] = $value;
+                break;
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+                break;
+        }
+    }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'mail':
+                return $this->properties[$name];
+                break;
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+                break;
+        }
+    }
+
 
     /**
      * Returns the body part of this mail consisting of the digested mail.

@@ -103,7 +103,7 @@ abstract class ezcMailPartParser
                 break;
 
             case 'message':
-                $bodyParser = new ezcRfc822Parser( $headers );
+                $bodyParser = new ezcMailRfc822DigestParser( $headers );
                 break;
 
             case 'text':

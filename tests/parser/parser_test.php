@@ -138,7 +138,6 @@ class ezcMailParserTest extends ezcTestCase
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 1, count( $mail ) );
         $mail = $mail[0];
-        var_dump( $mail );
         $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
         $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
         $this->assertEquals( array(), $mail->cc );
@@ -153,6 +152,25 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body\n", $parts[0]->text );
 
         // continue checking the contents of the mail here.. it should be the same as for testKmail3()
+        $mail = $parts[1]->mail;
+        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'Mail with attachment', $mail->subject );
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartMixed );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+
+        // check the body
+        $this->assertEquals( "This is the body\n", $parts[0]->text );
+
+        // check the file
+        $this->assertEquals( 'tur.jpg', strstr( $parts[1]->fileName, 'tur.jpg' ) );
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $parts[1]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
+        $this->assertEquals( 'jpeg', $parts[1]->mimeType );
 
     }
 }
