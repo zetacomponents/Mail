@@ -14,6 +14,7 @@ return array(
     'ezcMail'                       => 'Mail/mail.php',
     'ezcMailComposer'               => 'Mail/composer.php',
     'ezcMailFile'                   => 'Mail/parts/file.php',
+    'ezcMailRfc822Digest'           => 'Mail/parts/rfc822_digest.php',
     'ezcMailText'                   => 'Mail/parts/text.php',
     'ezcMailMultipart'              => 'Mail/parts/multipart.php',
     'ezcMailMultipartAlternative'   => 'Mail/parts/multiparts/multipart_alternative.php',

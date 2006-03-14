@@ -11,6 +11,9 @@
 /**
  * Parses RFC822 messages.
  *
+ * Note that this class does not parse RFC822 digest messages containing of an extra header block.
+ * Use the RFC822DigestParser to these.
+ *
  * @access private
  */
 class ezcMailRfc822Parser extends ezcMailPartParser
