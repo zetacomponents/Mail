@@ -1,9 +1,12 @@
+
 1.1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - added method ezcMailPart::setHeaders to set multiple headers	
 - added method ezcMailTools::parseEmailAddress and parseEmailAddresses that parse
 	RFC 2822 email addresses.
+- added class ezcMailRfc822Digest inheriting ezcMailPart. This part can be used to
+	create mail digest messages.
 	
 1.0.1 - Monday 20 February 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
