@@ -107,7 +107,7 @@ abstract class ezcMailPartParser
                 break;
 
             case 'text':
-                $bodyParser = new ezcMailTextParser( $headers );
+                $bodyParser = new ezcMailTextParser( $subType, $headers );
                 break;
 
             case 'multipart':
@@ -117,12 +117,16 @@ abstract class ezcMailPartParser
                         $bodyParser = new ezcMailMultipartMixedParser( $headers );
                         break;
                     case 'alternative':
+                        $bodyParser = new ezcMailMultipartAlternativeParser( $headers );
+                        break;
                     case 'related':
+                        throw new Exception( "TODO: Not implemented" );
                         break;
                     default:
                         break;
                 }
                 break;
+
                 /* extensions */
             default:
                 // we treat the body as text if no main content type is set

@@ -33,12 +33,22 @@ class ezcMailTextParser extends ezcMailPartParser
     private $headers = null;
 
     /**
-     * Constructs a new ezcMailTextParser with the headers $headers.
+     * Holds the subtype of the parsed part.
      *
+     * @var string
+     */
+    private $subType = null;
+
+    /**
+     * Constructs a new ezcMailTextParser of the subtype $subType and
+     * additional headers $headers.
+     *
+     * @param string $subType
      * @param array(string=>string) $headers
      */
-    public function __construct( ezcMailHeadersHolder $headers )
+    public function __construct( $subType, ezcMailHeadersHolder $headers )
     {
+        $this->subType = $subType;
         $this->headers = $headers;
     }
 
@@ -81,6 +91,7 @@ class ezcMailTextParser extends ezcMailPartParser
         }
 
         $part = new ezcMailText( $this->text, $charset );
+        $part->subType = $this->subType;
         return $part;
     }
 }

@@ -32,8 +32,9 @@ return array(
     'ezcMailTextParser'             => 'Mail/parser/parts/text_parser.php',
     'ezcMailMultipartParser'        => 'Mail/parser/parts/multipart_parser.php',
     'ezcMailMultipartMixedParser'   => 'Mail/parser/parts/multipart_mixed_parser.php',
+    'ezcMailMultipartAlternativeParser'   => 'Mail/parser/parts/multipart_alternative_parser.php',
     'ezcMailFileParser'             => 'Mail/parser/parts/file_parser.php',
-    'ezcMailRfc822DigestParser'             => 'Mail/parser/parts/rfc822_digest_parser.php',
+    'ezcMailRfc822DigestParser'     => 'Mail/parser/parts/rfc822_digest_parser.php',
     'ezcMailHeadersHolder'          => 'Mail/parser/headers_holder.php',
     'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php',
     'ezcMailParserShutdownHandler'  => 'Mail/parser/shutdown_handler.php'

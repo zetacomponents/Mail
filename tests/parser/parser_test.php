@@ -173,6 +173,31 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
 
     }
+
+    public function testKmail5()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/html_mail.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'HTML mail', $mail->subject );
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartAlternative );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailText );
+
+        // text part
+        $this->assertEquals( 'plain', $parts[0]->subType );
+        $this->assertEquals( "This is the body", $parts[0]->text );
+
+        $this->assertEquals( 'html', $parts[1]->subType );
+        $this->assertEquals( '<html>', substr( $parts[1]->text, 0, 6 ) );
+    }
 }
 
 ?>
