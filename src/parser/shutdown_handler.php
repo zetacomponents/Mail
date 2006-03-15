@@ -41,7 +41,7 @@ class ezcMailParserShutdownHandler
     {
         if( self::$isRegistered === false )
         {
-            register_shutdown_function( "ezcMailParserShutdownHandler::shutdownCallback" );
+            register_shutdown_function( array( "ezcMailParserShutdownHandler", "shutdownCallback" ) );
             self::$isRegistered = true;
         }
         self::$directories[] = $dir;
