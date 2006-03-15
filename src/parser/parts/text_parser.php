@@ -86,12 +86,23 @@ class ezcMailTextParser extends ezcMailPartParser
                             $parameters );
             if( count( $parameters ) > 0 )
             {
-                $charset = trim( $parameters[1], '"' );
+                $charset = strtolower( trim( $parameters[1], '"' ) );
             }
         }
 
+        if( strtolower( $this->headers['Content-Transfer-Encoding'] ) == 'quoted-printable' )
+        {
+            $this->text = quoted_printable_decode( $this->text );
+        }
+        else if( strtolower( $this->headers['Content-Transfer-Encoding'] ) == 'base64' )
+        {
+            $this->text = base64_decode( $this->text );
+        }
+
+
         $part = new ezcMailText( $this->text, $charset );
         $part->subType = $this->subType;
+        $part->setHeaders( $this->headers->getCaseSensitiveArray() );
         return $part;
     }
 }

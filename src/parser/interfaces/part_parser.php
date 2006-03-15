@@ -120,7 +120,7 @@ abstract class ezcMailPartParser
                         $bodyParser = new ezcMailMultipartAlternativeParser( $headers );
                         break;
                     case 'related':
-                        throw new Exception( "TODO: Not implemented" );
+                        $bodyParser = new ezcMailMultipartRelatedParser( $headers );
                         break;
                     default:
                         break;

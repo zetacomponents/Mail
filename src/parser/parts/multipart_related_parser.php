@@ -1,0 +1,65 @@
+<?php
+/**
+ * File containing the ezcMailMultipartRelatedParser class
+ *
+ * @package Mail
+ * @version //autogen//
+ * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @license http://ez.no/licenses/new_bsd New BSD License
+ */
+
+/**
+ * Parses multipart/related mail parts.
+ *
+ * @access private
+ */
+class ezcMailMultipartRelatedParser extends ezcMailMultipartParser
+{
+    /**
+     * Holds the ezcMailMultipartRelated part corresponding to the data parsed with this parser.
+     *
+     * @var ezcMailMultipartRelated
+     */
+    private $part = null;
+
+    /**
+     * Constructs a new ezcMailMultipartRelatedParser.
+     */
+    public function __construct( ezcMailHeadersHolder $headers )
+    {
+        parent::__construct( $headers );
+        $this->part = new ezcMailMultipartRelated();
+    }
+
+    /**
+     * Adds the part $part to the list of multipart messages.
+     *
+     * This method is called automatically by ezcMailMultipartParser
+     * each time a part is parsed.
+     *
+     * @param ezcMailPart $part
+     * @return void
+     */
+    public function partDone( ezcMailPart $part )
+    {
+        // TODO: support Content-Type: start= as specified by RFC 2387
+        if( !$this->part->getMainPart() )
+        {
+            $this->part->setMainPart( $part );
+            return;
+        }
+        $this->part->addRelatedPart( $part );
+    }
+
+    /**
+     * Returns the parts parsed for this multipart.
+     *
+     * @return ezcMailMultipartRelated
+     */
+    public function finishMultipart()
+    {
+        return $this->part;
+    }
+}
+
+?>

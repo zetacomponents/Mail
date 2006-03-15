@@ -65,6 +65,10 @@ class ezcMailParserTest extends ezcTestCase
          return new ezcTestSuite( "ezcMailParserTest" );
     }
 
+    /*
+     * Kmail
+     */
+
     public function testKmail1()
     {
         $parser = new ezcMailParser();
@@ -197,6 +201,48 @@ class ezcMailParserTest extends ezcTestCase
 
         $this->assertEquals( 'html', $parts[1]->subType );
         $this->assertEquals( '<html>', substr( $parts[1]->text, 0, 6 ) );
+    }
+
+    /*
+     * Mail.app
+     */
+
+    public function testMailApp1()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'mail.app/html_mail_with_image.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'oms@ez.no', 'Ole Marius Smestad', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'HTML mail with inline image Mail.app', $mail->subject );
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartAlternative );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailMultipartRelated );
+
+        // check the text
+        $this->assertEquals( 'utf-8', $parts[0]->charset );
+        $this->assertEquals( 'plain', $parts[0]->subType );
+
+        // check the multipart related
+        $mainPart = $parts[1]->getMainPart();
+        $this->assertEquals( true, $mainPart instanceof ezcMailText );
+        $this->assertEquals( 'iso-8859-1', $mainPart->charset );
+        $this->assertEquals( 'html', $mainPart->subType );
+
+        $this->assertEquals( 1, count( $parts[1]->getRelatedParts() ) );
+        // chech the multipart related file
+        $filePart = $parts[1]->getRelatedParts();
+        $filePart = $filePart[0]; // only one
+        $this->assertEquals( true, $filePart instanceof ezcMailFile );
+        $this->assertEquals( 'tur.jpg', strstr( $filePart->fileName, 'tur.jpg' ) );
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $filePart->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_INLINE, $filePart->dispositionType );
+        $this->assertEquals( 'jpeg', $filePart->mimeType );
     }
 }
 
