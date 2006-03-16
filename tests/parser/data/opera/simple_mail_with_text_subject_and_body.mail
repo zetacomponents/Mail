@@ -1,0 +1,35 @@
+Return-Path: <sender@example.com>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from smtp.ez.no (blackboy.ez.no [194.248.150.22])
+	by mta.ez.no (Postfix) with ESMTP id 239DA48C030
+	for <fh@ez.no>; Thu, 16 Mar 2006 05:01:15 +0100 (CET)
+Received: from mail.online.no (unknown [85.19.74.66])
+	by smtp.ez.no (Postfix) with ESMTP id 25D20AB56E
+	for <fh@ez.no>; Thu, 16 Mar 2006 11:16:51 +0100 (CET)
+To: "fh@ez.no" <fh@ez.no>
+Subject: Opera: Simple mail with text subject and body
+Date: Thu, 16 Mar 2006 11:17:53 +0100
+From: "Terje Gunrell-Kaste" <sender@example.com>
+Content-Type: text/plain;
+  format=flowed;
+  delsp=yes;
+  charset=iso-8859-15
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Message-ID: <op.s6h373q7w2mxg4@mail.online.no>
+User-Agent: Opera M2/8.51 (Win32, build 7712)
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.5 required=2.0 tests=TO_ADDRESS_EQ_REAL,
+	USER_IN_WHITELIST autolearn=no version=3.0.4
+Status: RO
+X-UID: 28278
+Content-Length: 14
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+This the body

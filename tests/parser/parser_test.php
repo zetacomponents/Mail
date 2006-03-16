@@ -342,6 +342,71 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<span', substr( $parts[1]->text, 0, 5 ) );
     }
 
+    public function testOpera()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'opera/simple_mail_with_text_subject_and_body.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'sender@example.com', 'Terje Gunrell-Kaste', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'fh@ez.no', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'Opera: Simple mail with text subject and body', $mail->subject );
+        $this->assertEquals( 'utf-8', $mail->subjectCharset );
+        $this->assertEquals( true, $mail->body instanceof ezcMailText );
+        $this->assertEquals( "This the body", $mail->body->text );
+        $this->assertEquals( "iso-8859-15", $mail->body->charset );
+        $this->assertEquals( 'plain', $mail->body->subType );
+    }
+
+    public function testOpera2()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'opera/mail_with_norwegian_characters.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'sender@example.com', 'Terje Gunrell-Kaste', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'fh@ez.no', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+//        var_dump( $mail->subject );
+//        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
+        $this->assertEquals( 'utf-8', $mail->subjectCharset );
+        $this->assertEquals( true, $mail->body instanceof ezcMailText );
+        $this->assertEquals( "This is the body: זרו", $mail->body->text );
+        $this->assertEquals( "iso-8859-15", $mail->body->charset );
+        $this->assertEquals( 'plain', $mail->body->subType );
+    }
+
+    public function testOpera3()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'opera/mail_with_attachment.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'sender@example.com', 'Terje Gunrell-Kaste', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'fh@ez.no', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( array(), $mail->bcc );
+        $this->assertEquals( 'Opera: Mail with attachment', $mail->subject );
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartMixed );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+
+        // check the body
+        $this->assertEquals( "This is the body", $parts[0]->text );
+
+        // check the file
+        $this->assertEquals( 'tur.jpg', strstr( $parts[1]->fileName, 'tur.jpg' ) );
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $parts[1]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
+        $this->assertEquals( 'jpeg', $parts[1]->mimeType );
+    }
 
 }
 
