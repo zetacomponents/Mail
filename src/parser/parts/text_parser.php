@@ -90,11 +90,12 @@ class ezcMailTextParser extends ezcMailPartParser
             }
         }
 
-        if( strtolower( $this->headers['Content-Transfer-Encoding'] ) == 'quoted-printable' )
+        $encoding = strtolower( $this->headers['Content-Transfer-Encoding'] );
+        if( $encoding == 'quoted-printable' )
         {
             $this->text = quoted_printable_decode( $this->text );
         }
-        else if( strtolower( $this->headers['Content-Transfer-Encoding'] ) == 'base64' )
+        else if( $encoding == 'base64' )
         {
             $this->text = base64_decode( $this->text );
         }
