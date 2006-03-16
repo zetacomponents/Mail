@@ -133,5 +133,23 @@ class ezcMailMultipartRelated extends ezcMailMultipart
     {
         return "related";
     }
+
+    /**
+     * Substitutes links in all ezcMailText parts with the subType HTML in this multipart/alternative.
+     *
+     * This method will perform substitution of CID's and absolute and relative links as specified by
+     * RFC 2557 for links that resolve to files. Links to other message parts must be resolved when
+     * displaying the message.
+     *
+     * - provide methods for substitution of these as well (inclusive listing of which they are)
+     * @todo Move to separate class.
+     */
+    public function resolveHtmlLinks()
+    {
+        // 1. Check that the main part is a html part
+        // 2. Go through the related parts and build up a structure of available
+        //    CIDS and locations
+        // 3. Substitute in this message.
+    }
 }
 ?>

@@ -1,0 +1,51 @@
+Return-Path: <sender@gmail.com>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from zproxy.gmail.com (zproxy.gmail.com [64.233.162.193])
+	by mta.ez.no (Postfix) with ESMTP id 7709848C019
+	for <fh@ez.no>; Thu, 16 Mar 2006 04:26:47 +0100 (CET)
+Received: by zproxy.gmail.com with SMTP id 12so324957nzp
+        for <fh@ez.no>; Thu, 16 Mar 2006 01:43:29 -0800 (PST)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
+        s=beta; d=gmail.com;
+        h=received:message-id:date:from:to:subject:mime-version:content-type;
+        b=CdH13wReFqTxFTYNDryxniTSi1+PWmFmtdd0O0YjeB52CQzO3vFUecrXqJNou9bqH01dE9cMHY5I/wjc2/Kv+uruPUANv7DUGxrR/m2Q0+m9LI4DjzcYn6TW+fEyy5o5RTkAyU+SwQRjpYDU5bv0Cd5xO3adWG9GK1+zYDOR9RU=
+Received: by 10.36.220.5 with SMTP id s5mr1953324nzg;
+        Thu, 16 Mar 2006 01:43:28 -0800 (PST)
+Received: by 10.36.71.9 with HTTP; Thu, 16 Mar 2006 01:43:28 -0800 (PST)
+Message-ID: <30b849c70603160143j45126b8av@mail.gmail.com>
+Date: Thu, 16 Mar 2006 10:43:28 +0100
+From: "Frederik Holljen" <sender@gmail.com>
+To: fh@ez.no
+Subject: =?ISO-8859-1?Q?Gmail:_Mail_with_special_characte?= =?ISO-8859-1?Q?rset_for_norwegian_characters_=E6=F8=E5?=
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+  boundary="----=_Part_2023_18999040.1142502208872"
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=0.9 required=2.0 tests=HTML_00_10,HTML_MESSAGE,
+	HTML_SHORT_LENGTH,RCVD_BY_IP autolearn=no version=3.0.4
+Status: RO
+X-UID: 28258
+Content-Length: 418
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+------=_Part_2023_18999040.1142502208872
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+This is the body: =E6=F8=E5
+
+------=_Part_2023_18999040.1142502208872
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+This is the body: =E6=F8=E5
+
+------=_Part_2023_18999040.1142502208872--

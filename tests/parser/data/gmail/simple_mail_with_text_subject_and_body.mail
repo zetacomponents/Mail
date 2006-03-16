@@ -1,0 +1,39 @@
+Return-Path: <sender@gmail.com>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from zproxy.gmail.com (zproxy.gmail.com [64.233.162.202])
+	by mta.ez.no (Postfix) with ESMTP id DFD4548C032
+	for <fh@ez.no>; Thu, 16 Mar 2006 04:32:52 +0100 (CET)
+Received: by zproxy.gmail.com with SMTP id 12so325850nzp
+        for <fh@ez.no>; Thu, 16 Mar 2006 01:49:34 -0800 (PST)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
+        s=beta; d=gmail.com;
+        h=received:message-id:date:from:to:subject:mime-version:content-type:content-transfer-encoding:content-disposition;
+        b=M+PWdZidfhi/nBDSOfj+b1uqx2v0XPprmMz5WWPDqzUFXL4Tugt3dY/DxN70IjhVPgdmuBP394OM7SJTpwJOGt9k8AGjvVn+MNbPf2yxhZ+Xvh8PLTSl/wRVGsAvWbs8354qyY2lGzE39ZuC216h2NIQ/QwdAReC2TEFysOVEpQ=
+Received: by 10.36.250.71 with SMTP id x71mr2187862nzh;
+        Thu, 16 Mar 2006 01:49:34 -0800 (PST)
+Received: by 10.36.71.9 with HTTP; Thu, 16 Mar 2006 01:49:34 -0800 (PST)
+Message-ID: <30b849c70603160149t1b913201r@mail.gmail.com>
+Date: Thu, 16 Mar 2006 10:49:34 +0100
+From: "Frederik Holljen" <sender@gmail.com>
+To: fh@ez.no
+Subject: Gmail: Simple mail with text subject and body
+MIME-Version: 1.0
+Content-Type: text/plain;
+  charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=0.0 required=2.0 tests=RCVD_BY_IP 
+	autolearn=unavailable version=3.0.4
+Status: RO
+X-UID: 28263
+Content-Length: 17
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+This is the body
