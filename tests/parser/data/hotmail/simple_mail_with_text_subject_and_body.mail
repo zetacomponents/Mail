@@ -1,0 +1,37 @@
+Return-Path: <example@hotmail.com>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from hotmail.com (bay14-f9.bay14.hotmail.com [64.4.49.9])
+	by mta.ez.no (Postfix) with ESMTP id 87E0548C028
+	for <fh@ez.no>; Thu, 16 Mar 2006 03:26:53 +0100 (CET)
+Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC;
+	 Thu, 16 Mar 2006 00:43:31 -0800
+Message-ID: <BAY14-F9152A0C2C190280EEC1BFB6E70@phx.gbl>
+Received: from 209.170.95.148 by by14fd.bay14.hotmail.msn.com with HTTP;
+	Thu, 16 Mar 2006 08:43:26 GMT
+X-Originating-IP: [85.19.74.66]
+X-Originating-Email: [example@hotmail.com]
+X-Sender: example@hotmail.com
+From: "Kristian Hole" <example@hotmail.com>
+To: fh@ez.no
+Subject: Simple mail with text subject and body
+Date: Thu, 16 Mar 2006 09:43:26 +0100
+Mime-Version: 1.0
+Content-Type: text/plain;
+  charset=iso-8859-1;
+  format=flowed
+X-OriginalArrivalTime: 16 Mar 2006 08:43:31.0280 (UTC) FILETIME=[B40FB500:01C648D5]
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: X
+X-Spam-Status: No, score=1.8 required=2.0 tests=DNS_FROM_RFC_ABUSE,
+	DNS_FROM_RFC_POST,MSGID_FROM_MTA_HEADER autolearn=no version=3.0.4
+Status: RO
+X-UID: 28235
+Content-Length: 174
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+This is the body
