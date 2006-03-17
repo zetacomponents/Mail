@@ -1,0 +1,33 @@
+Return-Path: <dr@ez.no>
+X-Original-To: fh@ez.no
+Delivered-To: fh@mta.ez.no
+Received: from jdi.jdi-ict.nl (jdi.jdi-ict.nl [82.94.239.5])
+	by mta.ez.no (Postfix) with ESMTP id 4C06D48C030
+	for <fh@ez.no>; Thu, 16 Mar 2006 03:13:10 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.jdi-ict.nl (8.12.11/8.12.11) with ESMTP id k2G8TqQZ024000
+	for <fh@ez.no>; Thu, 16 Mar 2006 09:29:52 +0100
+Date: Thu, 16 Mar 2006 09:29:38 +0100 (CET)
+From: Derick Rethans <dr@ez.no>
+X-X-Sender: derick@localhost
+To: Frederik Holljen <fh@ez.no>
+Subject: pine: Simple mail with text subject and body
+Message-ID: <Pine.LNX.4.62.0603160928590.13229@localhost>
+X-Face: "L'&?Ah3MYF@FB4hU'XhNhLB]222(Lbr2Y@F:GE[OO;"F5p>qtFBl|yVVA&D{A(g3[C}mG:199P+5C'v.M/u@Z\![0b:Mv.[l6[uWl'
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN;
+  charset=US-ASCII
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=2.0 tests=USER_IN_WHITELIST 
+	autolearn=unavailable version=3.0.4
+Status: RO
+X-UID: 28224
+Content-Length: 15
+X-Keywords:                                                                                                    
+X-Status: RC
+X-KMail-EncryptionState: N
+X-KMail-SignatureState: N
+X-KMail-MDN-Sent:  
+
+this is a body

@@ -72,7 +72,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         $this->headers = $headers;
 
         // get the boundary
-        preg_match( '/\s*boundary=([^;\s]*);?/',
+        preg_match( '/\s*boundary=([^;\s]*);?/i',
                     $this->headers['Content-Type'],
                     $parameters );
         if( count( $parameters ) > 0 )
@@ -121,18 +121,21 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
             if( $this->parserState != self::PARSE_STATE_BODY )
             {
                 // something is b0rked, we got a new separator before getting a body
-                // we'll skip this part and continue to the next if any
+                // we'll skip this part and continue to the next
                 $this->currentPartParser = null;
                 $this->currentPartHeaders = new ezcMailHeadersHolder();
                 $this->parserState = $newPart ? self::PARSE_STATE_HEADERS : self::PARSE_STATE_POST_LAST;
             }
             else
             {
-                // complete the work on the current part
-                $part = $this->currentPartParser->finish();
-                if( $part !== null )
+                // complete the work on the current part if there was any
+                if( $this->currentPartParser !== null )
                 {
-                    $this->partDone( $part );
+                    $part = $this->currentPartParser->finish();
+                    if( $part !== null ) // parsing failed
+                    {
+                        $this->partDone( $part );
+                    }
                 }
 
                 // prepare for a new part if any
@@ -150,8 +153,8 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         {
             if( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
             {
-                $this->parserState = self::PARSE_STATE_BODY;
                 $this->currentPartParser = self::createPartParserForHeaders( $this->currentPartHeaders );
+                $this->parserState = self::PARSE_STATE_BODY;
             }
             else if( $this->parserState == self::PARSE_STATE_HEADERS )
             {
@@ -159,10 +162,13 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
             }
             else if( $this->parserState == self::PARSE_STATE_BODY )
             {
-                // send body data to the part
-                $this->currentPartParser->parseBody( $line );
+                if( $this->currentPartParser ) // we may have none if the part type was unknown
+                {
+                    // send body data to the part
+                    $this->currentPartParser->parseBody( $line );
+                }
             }
-            // we are done, ignore the rest.
+            // we are done parsing the multipart, ignore anything else pushed to us.
         }
     }
 

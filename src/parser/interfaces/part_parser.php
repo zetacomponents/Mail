@@ -122,7 +122,11 @@ abstract class ezcMailPartParser
                     case 'related':
                         $bodyParser = new ezcMailMultipartRelatedParser( $headers );
                         break;
+                    case 'digest':
+                        $bodyParser = new ezcMailMultipartDigestParser( $headers );
+                            break;
                     default:
+                        $bodyParser = new ezcMailMultipartMixedParser( $headers );
                         break;
                 }
                 break;
