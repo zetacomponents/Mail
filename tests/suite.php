@@ -20,6 +20,7 @@ require_once( "parts/file_part_test.php" );
 require_once( "parts/rfc822_digest_test.php" );
 require_once( "tools_test.php" );
 require_once( "transports/transport_smtp_test.php" );
+require_once( "transports/transport_pop3_test.php" );
 require_once( "tutorial_examples.php" );
 require_once( "parser/parser_test.php" );
 require_once( "parser/headers_holder_test.php" );
@@ -45,6 +46,7 @@ class ezcMailSuite extends ezcTestSuite
         $this->addTest( ezcMailRfc822DigestTest::suite() );
         $this->addTest( ezcMailToolsTest::suite() );
         $this->addTest( ezcMailTransportSmtpTest::suite() );
+        $this->addTest( ezcMailTransportPop3Test::suite() );
         $this->addTest( ezcMailTutorialExamples::suite() );
         $this->addTest( ezcMailParserTest::suite() );
         $this->addTest( ezcMailHeadersHolderTest::suite() );

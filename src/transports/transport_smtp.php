@@ -458,7 +458,7 @@ class ezcMailTransportSmtp implements ezcMailTransport
      *
      * This method appends one line-break at the end of $data.
      *
-     * @throws ezcMailTransportException if there is no valid connection.
+     * @throws ezcMailTransportSmtpException if there is no valid connection.
      * @param string $data
      * @return void
      */
