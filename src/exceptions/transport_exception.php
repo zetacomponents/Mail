@@ -9,8 +9,8 @@
  */
 
 /**
- * Transport exceptions are thrown by implementors of the ezcMailTransport
- * interface when mail sending fails.
+ * Transport exceptions are thrown when either sending or receiving
+ * mail transports fail to do their job properly.
  *
  * @package Mail
  * @version //autogen//
@@ -25,7 +25,7 @@ class ezcMailTransportException extends ezcBaseException
      */
     public function __construct( $driverInfo = '' )
     {
-        parent::__construct( 'The mail could not be sent. ' . $driverInfo , 0 );
+        parent::__construct( 'An error occured while sending or receiving mail. ' . $driverInfo , 0 );
     }
 }
 ?>

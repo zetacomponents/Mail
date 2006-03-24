@@ -1,48 +1,108 @@
 <?php
-// http://www.faqs.org/rfcs/rfc1939.html
-// http://www.faqs.org/rfc/rfc1734.txt - auth
-
-// ignore messages of a certain size?
-// add support for SSL?
-// support for signing?
+/**
+ * File containing the ezcMailPop3Transport class
+ *
+ * @package Mail
+ * @version //autogen//
+ * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @license http://ez.no/licenses/new_bsd New BSD License
+ */
+/**
+ * ezcMailPop3Transport implements POP3 for mail retrieval.
+ *
+ * The implementation supports most of the basic commands specified in
+ * http://www.faqs.org/rfcs/rfc1939.html
+ *
+ * The implementation also supports the following authentication
+ * methods:
+ * http://www.faqs.org/rfc/rfc1734.txt - auth
+ *
+ * @todo ignore messages of a certain size?
+ * @todo // add support for SSL?
+ * @todo // support for signing?
+ * @package Mail
+ * @version //autogen//
+ */
 class ezcMailPop3Transport
 {
+    /**
+     * Internal state set when the pop3 transport is not connected to a server.
+     */
     const STATE_NOT_CONNECTED = 1;
+
+    /**
+     * Internal state set when the the pop3 transport is connected to the server
+     * but no successfull authentication has been performed.
+     */
     const STATE_AUTHORIZATION = 2;
+
+    /**
+     * Internal state set when the pop3 transport is connected to the server
+     * and authenticated.
+     */
     const STATE_TRANSACTION = 3;
+
+    /**
+     * Internal state set when the QUIT command has been issued to the pop3 server
+     * but before the disconnect has taken place.
+     */
     const STATE_UPDATE = 4;
 
+    /**
+     * Holds the connection state.
+     *
+     * $var int {@link STATE_NOT_CONNECTED}, {@link STATE_AUTHORIZATION}, {@link STATE_TRANSACTION} or {@link STATE_UPDATE}.
+     */
     private $state = self::STATE_NOT_CONNECTED;
+
+    /**
+     * The connection to the POP3 server.
+     *
+     * @var ezcMailTransportConnection
+     */
     private $connection = null;
 
-    // throws if it could not connect
+    /**
+     * Connects to the $server and tries to log in with $user and $password.
+     *
+     * You can specify the $port if the pop3 server is not on the default port
+     * 110.
+     *
+     * @throws ezcMailTransportException if it was not possible to connect to the server or if the provided username/password
+     *         combination did not work.
+     */
     public function __construct( $server, $user, $password, $port = 110 )
     {
+        // open the connection
         $this->connection = new ezcMailTransportConnection( $server, $port );
         $response = $this->connection->getData();
         if( !$this->isPositiveResponse( $response ) )
         {
-            throw new Exception( "Connection ok, but negative response from server before login." );
+            throw new ezcMailTransportException( "The connection to the POP3 server is ok, but a negative response from server was received. Try again later." );
         }
         $this->state = self::STATE_AUTHORIZATION;
 
-        // authenticate
+        // authenticate ourselves
         $this->connection->sendData( "USER {$user}" );
         $response = $this->connection->getData();
         if( !$this->isPositiveResponse( $response ) )
         {
-            throw new Exception( "Server did not accept the username." );
+            throw new ezcMailTransportException( "The POP3 server did not accept the username." );
         }
         $this->connection->sendData( "PASS {$password}" );
         $response = $this->connection->getData();
         if( !$this->isPositiveResponse( $response ) )
         {
-            throw new Exception( "Server did not accept the username." );
+            throw new ezcMailTransportException( "The POP3 server did not accept the password." );
         }
         $this->state = self::STATE_TRANSACTION;
     }
 
-    // close connection if needed
+    /**
+     * Destructs the pop3 transport.
+     *
+     * If there is an open connection to the pop3 server it is closed.
+     */
     public function __destruct()
     {
         if ( $this->state != self::STATE_NOT_CONNECTED )
@@ -57,17 +117,27 @@ class ezcMailPop3Transport
     {
     }
 
+    /**
+     * Returns a list of the messages on the server and the size of the messages
+     * in bytes.
+     *
+     * The format of the returned array is array(message_id => message_size)
+     *
+     * @throws Exception if there was no connection to the server or if the server
+     *         sent a negative response.
+     * @return array(int=>int)
+     */
     public function listMessages()
     {
         if( $this->state != self::STATE_TRANSACTION )
         {
-            throw new Exception( "Can't call list when not in the transaction state" );
+            throw new ezcMailTransportException( "Can't call listMessages() on the POP3 transport when not successfully logged in." );
         }
         $this->connection->sendData( "LIST" );
         $response = $this->connection->getData();
         if( !$this->isPositiveResponse( $response ) )
         {
-            throw new Exception( "Server did want to send a list." );
+            throw new ezcMailTransportException( "The POP3 server responded negatative to the LIST command." );
         }
         $messages = array();
         while( ( $response = $this->connection->getData() ) !== "." )
@@ -79,12 +149,26 @@ class ezcMailPop3Transport
     }
 
     // returns a ezcMailParserSet
+    /**
+     * Returns a parserset with all the messages on the server.
+     *
+     * If $leaveOnServer is set to true the mail will be left on server after
+     * retrieval. If not it will be removed.
+     *
+     * @param bool $leaveOnServer
+     * @return ezcMailParserSet
+     */
     public function fetchAll( $leaveOnServer = false )
     {
         $messages = $this->listMessages();
         return new ezcMailPop3Set( $this->connection, array_keys( $messages ) );
     }
 
+    /**
+     * Disconnects the transport from the pop3 server.
+     *
+     * @return void
+     */
     public function disconnect()
     {
         if ( $this->state != self::STATE_NOT_CONNECTED )
@@ -93,12 +177,18 @@ class ezcMailPop3Transport
             $this->connection->getData(); // discard
             $this->state = self::STATE_UPDATE;
 
-            fclose( $this->connection );
+            $this->connection->close();
             $this->connection = null;
             $this->state = self::STATE_NOT_CONNECTED;
         }
     }
 
+    /**
+     * Returns true if the response from the server is a positive one.
+     *
+     * @param string $line
+     * @return bool
+     */
     private function isPositiveResponse( $line )
     {
         if( strpos( $line, "+OK" ) === 0 )
@@ -106,183 +196,6 @@ class ezcMailPop3Transport
             return true;
         }
         return false;
-    }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// private class
-class ezcMailPop3Set implements ezcMailParserSet
-{
-    private $messages;
-    // false if beyond the last one
-    private $currentMessage = null;
-    private $hasMoreMailData = false;
-    /**
-     * Constructs a new pop3 parser set that will fetch the messages with the
-     * id's in $messages.
-     *
-     * $connection must hold a valid connection to a pop3 server that is ready to retrieve
-     * the messages.
-     */
-    public function __construct( ezcMailTransportConnection $connection, array $messages )
-    {
-        $this->connection = $connection;
-        $this->messages = $messages;
-        $this->nextMail();
-    }
-
-    /**
-     * Returns true if all the data has been fetched from this set.
-     */
-    public function isFinished()
-    {
-        return $this->currentMessage === false ? true : false;
-    }
-
-    /**
-     * Returns one line of data from the current mail in the set
-     * excluding the ending linebreak.
-     *
-     * Null is returned if there is no current mail in the set or
-     * the end of the mail is reached,
-     *
-     * @return string
-     */
-    public function getNextLine()
-    {
-        if( $this->hasMoreMailData )
-        {
-            $data = $this->connection->getData();
-            if( $data === "." )
-            {
-                $this->hasMoreMailData = false;
-                return null;
-            }
-            return $data;
-        }
-        return null;
-    }
-
-    /**
-     * Moves the set to the next mail and returns true upon success.
-     *
-     * False is returned if there are no more mail in the set.
-     *
-     * @return bool
-     */
-    public function nextMail()
-    {
-        if( $this->currentMessage === null )
-        {
-            $this->currentMessage = reset( $this->messages );
-        }
-        else
-        {
-            $this->currentMessage = next( $this->messages );
-        }
-
-        if( is_integer( $this->currentMessage ) )
-        {
-            $this->connection->sendData( "RETR {$this->currentMessage}" );
-            $response = $this->connection->getData();
-            if( strpos( $response, "+OK" ) === 0 )
-            {
-                $this->hasMoreMailData = true;
-                return true;
-            }
-        }
-        return false;
-    }
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class ezcMailTransportConnection
-{
-    private $connection = null;
-
-    /**
-     * The line-break characters to use.
-     */
-    const CRLF = "\r\n";
-
-    public function __construct( $server, $port, $timeout = 5 )
-    {
-        $errno = null;
-        $errstr = null;
-
-        // FIXME: The @ should be removed when PHP doesn't throw warnings for connect problems
-        $this->connection = @stream_socket_client( "tcp://{$server}:{$port}",
-                                                   $errno, $errstr, $timeout );
-
-        if ( is_resource( $this->connection ) )
-        {
-            stream_set_timeout( $this->connection, $timeout );
-        }
-        else
-        {
-            throw new ezcMailTransportSmtpException( "Failed to connect to the server: {$server}:{$port}." );
-        }
-    }
-
-    /**
-     * Send $data to the server through the connection.
-     *
-     * This method appends one line-break at the end of $data.
-     *
-     * @throws ezcMailTransportSmtpException if there is no valid connection.
-     * @param string $data
-     * @return void
-     */
-    public function sendData( $data )
-    {
-        if ( is_resource( $this->connection ) )
-        {
-            if ( fwrite( $this->connection, $data . self::CRLF,
-                        strlen( $data ) + strlen( self::CRLF  ) ) === false )
-            {
-                throw new ezcMailTransportSmtpException( 'Could not write to SMTP stream. It was probably terminated by the host.' );
-            }
-        }
-    }
-
-    /**
-     * Returns data received from the connection stream.
-     *
-     * @throws ezcMailTransportSmtpConnection if there is no valid connection.
-     * @return string
-     */
-    public function getData()
-    {
-        $data = '';
-        $line   = '';
-        $loops  = 0;
-
-        if ( is_resource( $this->connection ) )
-        {
-            while ( ( strpos( $line, self::CRLF ) === false ) && $loops < 100 )
-            {
-                $line = fgets( $this->connection, 512 );
-                $data .= $line;
-                $loops++;
-            }
-            return trim( $data );
-        }
-        throw new ezcMailTransportSmtpException( 'Could not read from SMTP stream. It was probably terminated by the host.' );
-    }
-
-    public function close()
-    {
-        if( is_resource( $this->connection ) )
-        {
-            fclose( $this->connection );
-            $this->connection = null;
-        }
     }
 }
 

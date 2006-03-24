@@ -23,6 +23,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no", "ezcomponents", "ezcomponents" );
         $set = $pop3->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
     }
 
     public static function suite()
