@@ -84,7 +84,7 @@ class ezcMailTransportConnection
      * @throws ezcMailTransportSmtpConnection if there is no valid connection.
      * @return string
      */
-    public function getData()
+    public function getLine()
     {
         $data = '';
         $line   = '';

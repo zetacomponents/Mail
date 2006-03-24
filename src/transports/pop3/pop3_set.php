@@ -51,17 +51,26 @@ class ezcMailPop3Set implements ezcMailParserSet
     private $hasMoreMailData = false;
 
     /**
+     * Holds if mail should be deleted from the server after retrieval.
+     */
+    private $leaveOnServer = false;
+
+    /**
      * Constructs a new pop3 parser set that will fetch the messages with the
-     * id's in $messages.
+     * id's.
      *
      * $connection must hold a valid connection to a pop3 server that is ready to retrieve
      * the messages.
+     *
+     * If $leaveOnServer is set to true the messages will not be deleted after retrieval.
+     *
      * @throws ezcMailTransportException if the server sent a negative reply when requesting the first mail.
      */
-    public function __construct( ezcMailTransportConnection $connection, array $messages )
+    public function __construct( ezcMailTransportConnection $connection, array $messages, $leaveOnServer = false )
     {
         $this->connection = $connection;
         $this->messages = $messages;
+        $this->leaveOnServer = $leaveOnServer;
         $this->nextMail();
     }
 
@@ -88,10 +97,17 @@ class ezcMailPop3Set implements ezcMailParserSet
     {
         if( $this->hasMoreMailData )
         {
-            $data = $this->connection->getData();
+            $data = $this->connection->getLine();
             if( $data === "." )
             {
                 $this->hasMoreMailData = false;
+                // remove the mail if required by the user.
+                if( $this->leaveOnServer == false )
+                {
+                    $this->connection->sendData( "DELE {$this->currentMessage}" );
+                    $response = $this->connection->getLine(); // ignore response
+                }
+
                 return null;
             }
             return $data;
@@ -121,7 +137,7 @@ class ezcMailPop3Set implements ezcMailParserSet
         if( is_integer( $this->currentMessage ) )
         {
             $this->connection->sendData( "RETR {$this->currentMessage}" );
-            $response = $this->connection->getData();
+            $response = $this->connection->getLine();
             if( strpos( $response, "+OK" ) === 0 )
             {
                 $this->hasMoreMailData = true;
