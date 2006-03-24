@@ -49,6 +49,16 @@ class ezcMailPop3Transport
     const STATE_UPDATE = 4;
 
     /**
+     * Plain text authorization.
+     */
+    const AUTH_PLAIN_TEXT = 1;
+
+    /**
+     * APOP authorization
+     */
+    const AUTH_APOP = 2;
+
+    /**
      * Holds the connection state.
      *
      * $var int {@link STATE_NOT_CONNECTED}, {@link STATE_AUTHORIZATION}, {@link STATE_TRANSACTION} or {@link STATE_UPDATE}.
@@ -63,39 +73,30 @@ class ezcMailPop3Transport
     private $connection = null;
 
     /**
-     * Connects to the $server and tries to log in with $user and $password.
+     * Holds the initial greeting from the POP3 server when connecting.
+     */
+    private $greeting = null;
+
+    /**
+     * Creates a new pop3 transport and connects to the $server.
      *
      * You can specify the $port if the pop3 server is not on the default port
      * 110.
      *
-     * @throws ezcMailTransportException if it was not possible to connect to the server or if the provided username/password
-     *         combination did not work.
+     * @throws ezcMailTransportException if it was not possible to connect to the server.
+     * @param string $server
+     * @param int $port
      */
-    public function __construct( $server, $user, $password, $port = 110 )
+    public function __construct( $server, $port = 110 )
     {
         // open the connection
         $this->connection = new ezcMailTransportConnection( $server, $port );
-        $response = $this->connection->getLine();
-        if( !$this->isPositiveResponse( $response ) )
+        $this->greeting = $this->connection->getLine();
+        if( !$this->isPositiveResponse( $this->greeting ) )
         {
             throw new ezcMailTransportException( "The connection to the POP3 server is ok, but a negative response from server was received. Try again later." );
         }
         $this->state = self::STATE_AUTHORIZATION;
-
-        // authenticate ourselves
-        $this->connection->sendData( "USER {$user}" );
-        $response = $this->connection->getLine();
-        if( !$this->isPositiveResponse( $response ) )
-        {
-            throw new ezcMailTransportException( "The POP3 server did not accept the username." );
-        }
-        $this->connection->sendData( "PASS {$password}" );
-        $response = $this->connection->getLine();
-        if( !$this->isPositiveResponse( $response ) )
-        {
-            throw new ezcMailTransportException( "The POP3 server did not accept the password." );
-        }
-        $this->state = self::STATE_TRANSACTION;
     }
 
     /**
@@ -113,8 +114,67 @@ class ezcMailPop3Transport
         }
     }
 
-    public function setAuthenticationMethod( $method  )
+    /**
+     * Authenticates the user to the POP3 server with the user $user and the password $password.
+     *
+     * You can choose the authentication method with the $method parameter. The default is to use
+     * plaintext username and password.
+     *
+     * This method should be called directly after the construction of this object.
+     *
+     * @throws ezcMailTransportException if the provided username/password combination did not work.
+     * @param string $user
+     * @param string $password
+     * @param int method
+     */
+    public function authenticate( $user, $password, $method = self::AUTH_PLAIN_TEXT )
     {
+        if( $this->state != self::STATE_AUTHORIZATION )
+        {
+            throw new ezcMailTransportException( "Tried to authenticate when there was no connection or when already authenticated." );
+        }
+        if( $method == self::AUTH_PLAIN_TEXT ) // normal plain text login
+        {
+            // authenticate ourselves
+            $this->connection->sendData( "USER {$user}" );
+            $response = $this->connection->getLine();
+            if( !$this->isPositiveResponse( $response ) )
+            {
+                throw new ezcMailTransportException( "The POP3 server did not accept the username." );
+            }
+            $this->connection->sendData( "PASS {$password}" );
+            $response = $this->connection->getLine();
+            if( !$this->isPositiveResponse( $response ) )
+            {
+                throw new ezcMailTransportException( "The POP3 server did not accept the password." );
+            }
+        }
+        else if( $method == self::AUTH_APOP ) // APOP login
+        {
+            // fetch the timestamp from the greeting
+            $timestamp = '';
+            preg_match( '/.*(<.*>).*/',
+                        $this->greeting,
+                        $timestamp );
+            // check if there was a greeting. If not, apop is not supported
+            if( count( $timestamp ) < 2 )
+            {
+                throw new ezcMailTransportException( "The POP3 server did not accept the APOP login." );
+            }
+
+            $hash = md5( $timestamp[1] . $password );
+            $this->connection->sendData( "APOP {$user} {$hash}" );
+            $response = $this->connection->getLine();
+            if( !$this->isPositiveResponse( $response ) )
+            {
+                throw new ezcMailTransportException( "The POP3 server did not accept the APOP login." );
+            }
+        }
+        else
+        {
+            throw new ezcMailTransportException( "Invalid authentication method provided." );
+        }
+        $this->state = self::STATE_TRANSACTION;
     }
 
     /**
@@ -202,6 +262,37 @@ class ezcMailPop3Transport
             }
         }
         return $result;
+    }
+
+    /**
+     * Returns the number of messages on the server and the combined
+     * size of the messages through the input variables $numMessages and
+     * $sizeMessages.
+     *
+     * @param int &$numMessages
+     * @param int &$sizeMessages
+     * @return void
+     */
+    public function status( &$numMessages, &$sizeMessages )
+    {
+        if( $this->state != self::STATE_TRANSACTION )
+        {
+            throw new ezcMailTransportException( "Can't call status() on the POP3 transport when not successfully logged in." );
+        }
+
+        $this->connection->sendData( "STAT" );
+        $response = $this->connection->getLine();
+        if( $this->isPositiveResponse( $response ) )
+        {
+            // get the single response line from the server
+            list( $dummy, $numMessages, $sizeMessages ) = explode( ' ', $response );
+            $numMessages = (int)$numMessages;
+            $sizeMessages = (int)$sizeMessages;
+        }
+        else
+        {
+            throw new ezcMailTransportException( "The POP3 server did not respond with a status message: {$response}" );
+        }
     }
 
     /**
