@@ -7,6 +7,7 @@
  * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
+
 /**
  * Implementation of the mail transport interface using the system MTA.
  *
@@ -15,7 +16,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailTransportMta implements ezcMailTransport
+class ezcMailMtaTransport implements ezcMailTransport
 {
     /**
      * Constructs a new ezcMailTransportMta.
@@ -46,5 +47,13 @@ class ezcMailTransportMta implements ezcMailTransport
             throw new ezcMailTransportException();
         }
     }
+}
+
+/**
+ * This class is depricated. Use ezcMailMtaTransport instead.
+ * @package Mail
+ */
+class ezcMailTransportMta extends ezcMailMtaTransport
+{
 }
 ?>

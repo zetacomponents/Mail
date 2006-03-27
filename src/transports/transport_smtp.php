@@ -30,7 +30,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailTransportSmtp implements ezcMailTransport
+class ezcMailSmtpTransport implements ezcMailTransport
 {
     /**
      * The line-break characters to use.
@@ -512,6 +512,19 @@ class ezcMailTransportSmtp implements ezcMailTransport
     private function getReplyCode( &$line )
     {
         return substr( trim( $line = $this->getData() ), 0, 3 );
+    }
+}
+
+
+/**
+ * This class is depricated. Use ezcMailSmtpTransport instead.
+ * @package Mail
+ */
+class ezcMailTransportSmtp extends ezcMailSmtpTransport
+{
+    public function __construct( $host, $user = '', $password = '', $port = 25  )
+    {
+        parent::__construct( $host, $user, $password, $port );
     }
 }
 ?>

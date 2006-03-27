@@ -8,6 +8,8 @@
 - added class ezcMailRfc822Digest inheriting ezcMailPart. This part can be used to
 	create mail digest messages.
 - added class ezcMailMultipartDigest which represents multipart/digest parts.
+- renamed ezcMailTransportMta and ezcMailTransportSmtp to ezcMailMtaTransport
+	and ezcMailSmtpTransport. The old classes still exist but are depricated.
 	
 1.0.1 - Monday 20 February 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

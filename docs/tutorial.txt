@@ -39,9 +39,9 @@ Transport protocols
 -------------------
 
 The mail component provides two different transport
-classes. ezcMailTransportSmtp makes it possible to send mail over the SMTP
+classes. ezcMailSmtpTransport makes it possible to send mail over the SMTP
 protocol. If you prefer using a local mail agent you can use
-ezcMailTransportMta which wraps over the PHP mail function..
+ezcMailMtaTransport which wraps over the PHP mail function..
 
 Send a mail with the composer
 -----------------------------

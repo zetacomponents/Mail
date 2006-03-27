@@ -9,7 +9,7 @@ $mail->subjectCharset = 'iso-8859-1';
 
 $mail->body = new ezcMailText( 'Oslo be grunnlagt rundt 1048 av Harald Hardråde.', 'iso-8859-1' );
 
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 $transport->send( $mail );
 
 ?>

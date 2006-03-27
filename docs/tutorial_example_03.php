@@ -9,7 +9,7 @@ $textPart = new ezcMailText( "This is the body of the example mail." );
 $fileAttachment = new ezcMailFile( "~/myfile.jpg" );
 $mail->body = new ezcMailMultipartMixed( $textPart, $fileAttachment );
 
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 $transport->send( $mail );
 
 ?>

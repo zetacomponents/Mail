@@ -9,7 +9,7 @@ $textPart = new ezcMailText( "This is the body of the mail with a mail digest." 
 
 $mail->body = new ezcMailMultipartMixed( $textPart, new RFC822Digest( $digest ) );
 
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 $transport->send( $mail );
 
 ?>

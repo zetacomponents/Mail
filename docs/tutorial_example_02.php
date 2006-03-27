@@ -7,7 +7,7 @@ $mail->addTo( new ezcMailAddress( 'receiver@example.com', 'Maggie Robbins' ) );
 $mail->subject = "This is the subject of the example mail";
 $mail->body = new ezcMailText( "This is the body of the example mail." );
 
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 $transport->send( $mail );
 
 ?>

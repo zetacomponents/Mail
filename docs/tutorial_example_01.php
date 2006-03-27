@@ -9,7 +9,7 @@ $mail->plainText = "This is the body of the example mail.";
 
 $mail->build();
 
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 $transport->send( $mail );
 
 ?>

@@ -23,6 +23,8 @@ return array(
     'ezcMailMultipartDigest'        => 'Mail/parts/multiparts/multipart_digest.php',
     'ezcMailTransportMta'           => 'Mail/transports/transport_mta.php',
     'ezcMailTransportSmtp'          => 'Mail/transports/transport_smtp.php',
+    'ezcMailMtaTransport'           => 'Mail/transports/transport_mta.php',
+    'ezcMailSmtpTransport'          => 'Mail/transports/transport_smtp.php',
     'ezcMailTransportConnection'    => 'Mail/transports/transport_connection.php',
     'ezcMailPop3Transport'          => 'Mail/transports/pop3/pop3_transport.php',
     'ezcMailPop3Set'                => 'Mail/transports/pop3/pop3_set.php',
