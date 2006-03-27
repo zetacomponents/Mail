@@ -6,7 +6,8 @@ eZ components - Mail
 Introduction
 ============
 
-The mail component provides functionality to send mail. The easiest way is to
+The mail component provides functionality to both send, retrieve and parse
+mail messages. 
 use the ezcMailComposer class. This class allows you to send HTML mail with
 images, attachments and an optional text part.
 If you require more advanced email messages you can build the complete message
@@ -32,16 +33,30 @@ ezcMailAddress
   This small class represents a mail address with an optional name. It is used
   by both ezcMailComposer and ezcMail to set recipient addresses.
 
+ezcMailParser
+  This class parses mail messages from text into ezcMail structures. You can
+  use it together with the mail retrieval transport classes.
+
 Usage
 =====
 
 Transport protocols
 -------------------
 
-The mail component provides two different transport
-classes. ezcMailSmtpTransport makes it possible to send mail over the SMTP
+The mail component provides transport protocols both for sending and retrieving
+mail.
+For sending mail we support:
+
+- SMTP through the class ezMailSmtpTransport
+- MTA through the class ezcMailMtaTransport
+
+ezcMailSmtpTransport makes it possible to send mail over the SMTP
 protocol. If you prefer using a local mail agent you can use
 ezcMailMtaTransport which wraps over the PHP mail function..
+
+For mail retrieval we currently support:
+
+- POP3 through the class ezcMailPop3Transport
 
 Send a mail with the composer
 -----------------------------
@@ -127,6 +142,24 @@ iso-8859-1:
 You can of course choose and combine any available character set. Make sure
 that the input text is in the encoding specified or you may get unexpected
 results.
+
+
+Mail retrieval and parsing
+--------------------------
+
+Many applications have a need to interact with an email address. The mail
+component makes this easy through the class ezcMailParser and the mail
+retreival transport classes. Mail is fetched, parsed and returned to you in the
+same structure that is used to send mail.
+
+The following example shows how to fetch all messages from a POP3 account and
+parse them for usage.
+
+.. include:: tutorial_example_07.php
+   :literal:
+
+The parser returns an array of ezcMail messages with parts organized as the
+MIME structure of the mail.
 
 References
 ==========
