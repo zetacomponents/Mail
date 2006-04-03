@@ -249,7 +249,7 @@ class ezcMailPop3Transport
         }
         else
         {
-            $this->connection->sendData( "UIDL {$msgNum}" );
+            $this->connection->sendData( "UIDL" );
             $response = $this->connection->getLine();
             if( $this->isPositiveResponse( $response ) )
             {
