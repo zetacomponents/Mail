@@ -50,7 +50,7 @@ class ezcMailMtaTransport implements ezcMailTransport
 }
 
 /**
- * This class is depricated. Use ezcMailMtaTransport instead.
+ * This class is deprecated. Use ezcMailMtaTransport instead.
  * @package Mail
  */
 class ezcMailTransportMta extends ezcMailMtaTransport

@@ -1,16 +1,19 @@
-
-1.1 - [RELEASEDATE]
+1.1alpha1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- added method ezcMailPart::setHeaders to set multiple headers	
-- added method ezcMailTools::parseEmailAddress and parseEmailAddresses that parse
-	RFC 2822 email addresses.
-- added class ezcMailRfc822Digest inheriting ezcMailPart. This part can be used to
-	create mail digest messages.
-- added class ezcMailMultipartDigest which represents multipart/digest parts.
-- renamed ezcMailTransportMta and ezcMailTransportSmtp to ezcMailMtaTransport
-	and ezcMailSmtpTransport. The old classes still exist but are depricated.
-	
+- Added functionality for parsing mail messages. The main class is
+  ezcMailParser.
+- Added the POP 3 mail retrieving transport for use with the ezcMailParser.
+- Added method ezcMailPart::setHeaders to set multiple headers at once.
+- Added method ezcMailTools::parseEmailAddress and parseEmailAddresses that
+  parse RFC 2822 email addresses.
+- Added class ezcMailRfc822Digest inheriting ezcMailPart. This part can be
+  used to create mail digest messages.
+- Added class ezcMailMultipartDigest which represents multipart/digest parts.
+- Renamed ezcMailTransportMta and ezcMailTransportSmtp to ezcMailMtaTransport
+  and ezcMailSmtpTransport. The old classes still exist but are deprecated.
+
+
 1.0.1 - Monday 20 February 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -38,7 +41,7 @@
 1.0rc1 - Monday 16 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Added feature enhancement #7582: Adding multiple parts as an array.	
+- Added feature enhancement #7582: Adding multiple parts as an array.
 - Changed ezcMailText::characterSet property to charset.
 - Changed ezcMailSmtpTransport and made all protected methods private. They
   exposed an interface that most likely never will have to be changed.

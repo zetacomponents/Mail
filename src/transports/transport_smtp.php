@@ -517,14 +517,10 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
 
 /**
- * This class is depricated. Use ezcMailSmtpTransport instead.
+ * This class is deprecated. Use ezcMailSmtpTransport instead.
  * @package Mail
  */
 class ezcMailTransportSmtp extends ezcMailSmtpTransport
 {
-    public function __construct( $host, $user = '', $password = '', $port = 25  )
-    {
-        parent::__construct( $host, $user, $password, $port );
-    }
 }
 ?>
