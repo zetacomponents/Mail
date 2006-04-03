@@ -16,7 +16,7 @@ class SingleFileSetMP implements ezcMailParserSet
     public function __construct( $file )
     {
         $fp = fopen( dirname( __FILE__ ).'/..' .'/data/' . $file, 'r' );
-        if( $fp == false )
+        if ( $fp == false )
         {
             throw new Exception( "Could not open file $file for testing." );
         }
@@ -30,9 +30,9 @@ class SingleFileSetMP implements ezcMailParserSet
 
     public function getNextLine()
     {
-        if( feof( $this->fp ) )
+        if ( feof( $this->fp ) )
         {
-            if( $this->fp != null )
+            if ( $this->fp != null )
             {
                 fclose( $this->fp );
                 $this->fp = null;
@@ -40,7 +40,7 @@ class SingleFileSetMP implements ezcMailParserSet
             return null;
         }
         $next =  rtrim( fgets( $this->fp ), "\r\n" );
-        if( $next == "" && feof( $this->fp ) ) // eat last linebreak
+        if ( $next == "" && feof( $this->fp ) ) // eat last linebreak
         {
             return null;
         }
