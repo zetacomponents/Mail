@@ -39,7 +39,7 @@ class ezcMailParserShutdownHandler
      */
     public static function registerForRemoval( $dir )
     {
-        if( self::$isRegistered === false )
+        if ( self::$isRegistered === false )
         {
             register_shutdown_function( array( "ezcMailParserShutdownHandler", "shutdownCallback" ) );
             self::$isRegistered = true;
@@ -57,7 +57,7 @@ class ezcMailParserShutdownHandler
      */
     public static function shutdownCallback()
     {
-        foreach( self::$directories as $directory )
+        foreach ( self::$directories as $directory )
         {
             self::remove( $directory );
         }
@@ -74,7 +74,7 @@ class ezcMailParserShutdownHandler
     public static function remove( $itemName )
     {
         $returnVar = true;
-        if( !is_dir( $itemName ) && file_exists( $itemName ) )
+        if ( !is_dir( $itemName ) && file_exists( $itemName ) )
         {
             unlink( $itemName );
             return;
@@ -82,9 +82,9 @@ class ezcMailParserShutdownHandler
 
         $dir = dir( $itemName );
         $item = $dir->read();
-        while( $item !== false )
+        while ( $item !== false )
         {
-            if( $item != '.' && $item != '..' )
+            if ( $item != '.' && $item != '..' )
             {
                 self::remove( $dir->path . DIRECTORY_SEPARATOR . $item );
                 $returnVar = false;

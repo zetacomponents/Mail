@@ -60,7 +60,7 @@ class ezcMailTextParser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        if( $this->text === null )
+        if ( $this->text === null )
         {
             $this->text = $line;
         }
@@ -78,24 +78,24 @@ class ezcMailTextParser extends ezcMailPartParser
     public function finish()
     {
         $charset = "us-ascii"; // RFC 2822 default
-        if( isset( $this->headers['Content-Type'] ) )
+        if ( isset( $this->headers['Content-Type'] ) )
         {
 //            preg_match_all( '/\s*(\S+)=([^;\s]*);?/', // matches all headers
             preg_match( '/\s*charset=([^;\s]*);?/',
                             $this->headers['Content-Type'],
                             $parameters );
-            if( count( $parameters ) > 0 )
+            if ( count( $parameters ) > 0 )
             {
                 $charset = strtolower( trim( $parameters[1], '"' ) );
             }
         }
 
         $encoding = strtolower( $this->headers['Content-Transfer-Encoding'] );
-        if( $encoding == 'quoted-printable' )
+        if ( $encoding == 'quoted-printable' )
         {
             $this->text = quoted_printable_decode( $this->text );
         }
-        else if( $encoding == 'base64' )
+        else if ( $encoding == 'base64' )
         {
             $this->text = base64_decode( $this->text );
         }

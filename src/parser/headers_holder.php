@@ -40,7 +40,7 @@ class ezcMailHeadersHolder implements ArrayAccess
     public function __construct( array $map = array() )
     {
         $this->map = $map;
-        foreach( $map as $key => $value )
+        foreach ( $map as $key => $value )
         {
             $this->lookup[strtolower( $key )] = $key;
         }
@@ -66,7 +66,7 @@ class ezcMailHeadersHolder implements ArrayAccess
     public function offsetGet( $key )
     {
         $key = strtolower( $key );
-        if( !array_key_exists( $key, $this->lookup ) )
+        if ( !array_key_exists( $key, $this->lookup ) )
         {
             return null;
         }
@@ -86,7 +86,7 @@ class ezcMailHeadersHolder implements ArrayAccess
     public function offsetSet( $key, $value )
     {
         $lowerKey = strtolower( $key );
-        if( !array_key_exists( $lowerKey, $this->lookup ) )
+        if ( !array_key_exists( $lowerKey, $this->lookup ) )
         {
             $this->map[$key] = $value;
             $this->lookup[$lowerKey] = $key;
@@ -105,8 +105,8 @@ class ezcMailHeadersHolder implements ArrayAccess
      */
     public function offsetUnset( $key )
     {
-        $key = strtolower($key);
-        if( array_key_exists( $key, $this->lookup ) )
+        $key = strtolower( $key );
+        if ( array_key_exists( $key, $this->lookup ) )
         {
             unset( $this->map[$this->lookup[$key]] );
             unset( $this->lookup[$key] );

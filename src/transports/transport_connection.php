@@ -110,7 +110,7 @@ class ezcMailTransportConnection
      */
     public function close()
     {
-        if( is_resource( $this->connection ) )
+        if ( is_resource( $this->connection ) )
         {
             fclose( $this->connection );
             $this->connection = null;

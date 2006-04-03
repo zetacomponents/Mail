@@ -56,7 +56,7 @@ class ezcMailParser
         {
             $this->partParser = new ezcMailRfc822Parser();
             $data = "";
-            while( ($data = $set->getNextLine()) !== null )
+            while ( ( $data = $set->getNextLine() ) !== null )
             {
                 $this->partParser->parseBody( $data );
             }
@@ -90,7 +90,7 @@ class ezcMailParser
      */
     public static function getTmpDir()
     {
-        if( self::$tmpDir === null )
+        if ( self::$tmpDir === null )
         {
             $uname = php_uname();
             if ( strtoupper( substr( $uname, 0, 3 ) == "WIN" ) )

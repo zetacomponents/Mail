@@ -43,7 +43,7 @@ class ezcMailMultipartRelatedParser extends ezcMailMultipartParser
     public function partDone( ezcMailPart $part )
     {
         // TODO: support Content-Type: start= as specified by RFC 2387
-        if( !$this->part->getMainPart() )
+        if ( !$this->part->getMainPart() )
         {
             $this->part->setMainPart( $part );
             return;

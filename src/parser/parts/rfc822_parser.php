@@ -68,7 +68,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        if( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
+        if ( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
         {
             $this->parserState = self::PARSE_STATE_BODY;
 
@@ -83,7 +83,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             // get the correct body type
             $this->bodyParser = self::createPartParserForHeaders( $headers );
         }
-        else if( $this->parserState == self::PARSE_STATE_HEADERS )
+        else if ( $this->parserState == self::PARSE_STATE_HEADERS )
         {
             $this->parseHeader( $line, $this->headers );
         }
@@ -104,32 +104,32 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         $mail->setHeaders( $this->headers->getCaseSensitiveArray() );
 
         // from
-        if( isset( $this->headers['From'] ) )
+        if ( isset( $this->headers['From'] ) )
         {
             $mail->from = ezcMailTools::parseEmailAddress( $this->headers['From'] );
         }
         // to
-        if( isset( $this->headers['To'] ) )
+        if ( isset( $this->headers['To'] ) )
         {
             $mail->to = ezcMailTools::parseEmailAddresses( $this->headers['To'] );
         }
         // cc
-        if( isset( $this->headers['Cc'] ) )
+        if ( isset( $this->headers['Cc'] ) )
         {
             $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Cc'] );
         }
         // bcc
-        if( isset( $this->headers['Bcc'] ) )
+        if ( isset( $this->headers['Bcc'] ) )
         {
             $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Bcc'] );
         }
-        if( isset( $this->headers['Subject'] ) )
+        if ( isset( $this->headers['Subject'] ) )
         {
             $mail->subject = iconv_mime_decode( $this->headers['Subject'], 0, 'utf-8' );
             $mail->subjectCharset = 'utf-8';
         }
 
-        if( $this->bodyParser !== null )
+        if ( $this->bodyParser !== null )
         {
             $mail->body = $this->bodyParser->finish();
         }

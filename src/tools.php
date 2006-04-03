@@ -117,7 +117,7 @@ class ezcMailTools
 
         $matches = array();
         $pattern = '/<?\"?[a-zA-Z0-9!#\$\%\&\'\*\+\-\/=\?\^_`{\|}~\.]+\"?@[a-zA-Z0-9!#\$\%\&\'\*\+\-\/=\?\^_`{\|}~\.]+>?$/';
-        if( preg_match( trim( $pattern ), $address, $matches, PREG_OFFSET_CAPTURE ) != 1 )
+        if ( preg_match( trim( $pattern ), $address, $matches, PREG_OFFSET_CAPTURE ) != 1 )
         {
             return null;
         }
@@ -156,11 +156,11 @@ class ezcMailTools
         $last = 0; // last hit
         for( $i = 0; $i < strlen( $addresses ); $i++ )
         {
-            if( $addresses[$i] == '"' )
+            if ( $addresses[$i] == '"' )
             {
                 $inQuote = !$inQuote;
             }
-            else if( $addresses[$i] == ',' && !$inQuote )
+            else if ( $addresses[$i] == ',' && !$inQuote )
             {
                 $addressesArray[] = substr( $addresses, $last, $i - $last );
                 $last = $i + 1; // eat comma
@@ -171,10 +171,10 @@ class ezcMailTools
         $addressesArray[] = substr( $addresses, $last );
 
         $addressObjects = array();
-        foreach( $addressesArray as $address )
+        foreach ( $addressesArray as $address )
         {
             $addressObject = self::parseEmailAddress( $address );
-            if( $addressObject !== null )
+            if ( $addressObject !== null )
             {
                 $addressObjects[] = $addressObject;
             }

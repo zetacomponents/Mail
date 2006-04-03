@@ -75,13 +75,13 @@ class ezcMailFileParser extends ezcMailPartParser
         // figure out the base filename
         // search Content-Disposition first as specified by RFC 2183
         $matches = array();
-        if( preg_match( '/\s*filename=([^;\s]*);?/i',
+        if ( preg_match( '/\s*filename=([^;\s]*);?/i',
                         $this->headers['Content-Disposition'], $matches ) )
         {
             $fileName = trim( $matches[1], '"' );
         }
         // fallback to the name parameter in Content-Type as specified by RFC 2046 4.5.1
-        else if( preg_match( '/\s*name=([^;\s]*);?/i',
+        else if ( preg_match( '/\s*name=([^;\s]*);?/i',
                              $this->headers['Content-Type'], $matches ) )
         {
             $fileName = trim( $matches[1], '"' );
@@ -94,10 +94,10 @@ class ezcMailFileParser extends ezcMailPartParser
         $this->fp = $this->openFile( $fileName ); // propagate exception
 
         // append the correct decoding filter
-        switch( strtolower( $headers['Content-Transfer-Encoding'] ) )
+        switch ( strtolower( $headers['Content-Transfer-Encoding'] ) )
         {
             case 'base64':
-                stream_filter_append( $this->fp, 'convert.base64-decode');
+                stream_filter_append( $this->fp, 'convert.base64-decode' );
                 break;
             case 'quoted-printable':
                 stream_filter_append( $this->fp, 'convert.quoted-printable-decode' );
@@ -105,7 +105,7 @@ class ezcMailFileParser extends ezcMailPartParser
             default:
                 // the mail is bad, it has no encoding style
                 // we'll just go with base64 since that is the most common type
-                stream_filter_append( $this->fp, 'convert.base64-decode');
+                stream_filter_append( $this->fp, 'convert.base64-decode' );
                 break;
         }
     }
@@ -131,8 +131,8 @@ class ezcMailFileParser extends ezcMailPartParser
         ezcMailParserShutdownHandler::registerForRemoval( $dirName );
         $this->fileName = $dirName . $fileName;
 
-        $fp = fopen( $this->fileName, 'w');
-        if( $this->fp === false )
+        $fp = fopen( $this->fileName, 'w' );
+        if ( $this->fp === false )
         {
             throw new ezcBaseFileNotFoundException( $this->fileName );
         }
@@ -148,11 +148,11 @@ class ezcMailFileParser extends ezcMailPartParser
     {
         // finish() was not called. The mail is completely broken.
         // we will clean up the mess
-        if( $this->fp !== null )
+        if ( $this->fp !== null )
         {
             fclose( $this->fp );
             $this->fp = null;
-            if( $this->fileName !== null && file_exists( $this->fileName ) )
+            if ( $this->fileName !== null && file_exists( $this->fileName ) )
             {
                 unlink( $this->fileName );
             }
@@ -174,7 +174,7 @@ class ezcMailFileParser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        if( $line !== '' )
+        if ( $line !== '' )
         {
             fwrite( $this->fp, $line );
         }
@@ -195,7 +195,7 @@ class ezcMailFileParser extends ezcMailPartParser
 
         // set content type
         $filePart->setHeaders( $this->headers->getCaseSensitiveArray() );
-        switch( strtolower( $this->mainType ) )
+        switch ( strtolower( $this->mainType ) )
         {
             case 'image':
                 $filePart->contentType = ezcMailFile::CONTENT_TYPE_IMAGE;
@@ -216,7 +216,7 @@ class ezcMailFileParser extends ezcMailPartParser
 
         // set inline disposition mode if set.
         $matches = array();
-        if( preg_match( '/^\s*inline;?/i',
+        if ( preg_match( '/^\s*inline;?/i',
                         $this->headers['Content-Disposition'], $matches ) )
         {
             $filePart->dispositionType = ezcMailFile::DISPLAY_INLINE;

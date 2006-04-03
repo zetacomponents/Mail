@@ -77,13 +77,13 @@ abstract class ezcMailPartParser
         $subType = 'plain';
 
         // parse the Content-Type header
-        if( isset( $headers['Content-Type'] ) )
+        if ( isset( $headers['Content-Type'] ) )
         {
             $matches = array();
             // matches "type/subtype; blahblahblah"
             preg_match_all( '/^(\S+)\/([^;]+);(.+)*/',
                             $headers['Content-Type'], $matches, PREG_SET_ORDER );
-            if( count( $matches ) > 0 )
+            if ( count( $matches ) > 0 )
             {
                 $mainType = strtolower( $matches[0][1] );
                 $subType = strtolower( $matches[0][2] );
@@ -92,7 +92,7 @@ abstract class ezcMailPartParser
         $bodyParser = null;
 
         // create the correct type parser for this the detected type of part
-        switch( $mainType )
+        switch ( $mainType )
         {
             /* RFC 2045 defined types */
             case 'image':
@@ -111,7 +111,7 @@ abstract class ezcMailPartParser
                 break;
 
             case 'multipart':
-                switch( $subType )
+                switch ( $subType )
                 {
                     case 'mixed':
                         $bodyParser = new ezcMailMultipartMixedParser( $headers );
@@ -151,12 +151,12 @@ abstract class ezcMailPartParser
     {
         $matches = array();
         preg_match_all( "/^([\w-_]*): (.*)/", $line, $matches, PREG_SET_ORDER );
-        if( count( $matches ) > 0 )
+        if ( count( $matches ) > 0 )
         {
             $headers[$matches[0][1]] = trim( $matches[0][2] );
             $this->lastParsedHeader = $matches[0][1];
         }
-        else if( $this->lastParsedHeader !== null ) // take care of folding
+        else if ( $this->lastParsedHeader !== null ) // take care of folding
         {
             $headers[$this->lastParsedHeader] .= $line;
         }

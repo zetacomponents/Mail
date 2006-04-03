@@ -95,14 +95,14 @@ class ezcMailPop3Set implements ezcMailParserSet
      */
     public function getNextLine()
     {
-        if( $this->hasMoreMailData )
+        if ( $this->hasMoreMailData )
         {
             $data = $this->connection->getLine();
-            if( $data === "." )
+            if ( $data === "." )
             {
                 $this->hasMoreMailData = false;
                 // remove the mail if required by the user.
-                if( $this->leaveOnServer == false )
+                if ( $this->leaveOnServer == false )
                 {
                     $this->connection->sendData( "DELE {$this->currentMessage}" );
                     $response = $this->connection->getLine(); // ignore response
@@ -125,7 +125,7 @@ class ezcMailPop3Set implements ezcMailParserSet
      */
     public function nextMail()
     {
-        if( $this->currentMessage === null )
+        if ( $this->currentMessage === null )
         {
             $this->currentMessage = reset( $this->messages );
         }
@@ -134,11 +134,11 @@ class ezcMailPop3Set implements ezcMailParserSet
             $this->currentMessage = next( $this->messages );
         }
 
-        if( is_integer( $this->currentMessage ) )
+        if ( is_integer( $this->currentMessage ) )
         {
             $this->connection->sendData( "RETR {$this->currentMessage}" );
             $response = $this->connection->getLine();
-            if( strpos( $response, "+OK" ) === 0 )
+            if ( strpos( $response, "+OK" ) === 0 )
             {
                 $this->hasMoreMailData = true;
                 return true;
