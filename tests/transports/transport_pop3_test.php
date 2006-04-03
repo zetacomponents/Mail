@@ -14,18 +14,16 @@
  */
 class ezcMailTransportPop3Test extends ezcTestCase
 {
-
-	public function setUp()
-	{
-	}
-
     public function testInvalidServer()
     {
         try
         {
             $pop3 = new ezcMailPop3Transport( "no.such.server.example.com" );
-        } catch( ezcMailTransportException $e ) { return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function testInvalidUsername()
@@ -34,8 +32,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         {
             $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
             $pop3->authenticate( "no_such_user", "ezcomponents" );
-        } catch( ezcMailTransportException $e ) { return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e ) 
+        { 
+        }
     }
 
     public function testInvalidPassword()
@@ -44,8 +45,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         {
             $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
             $pop3->authenticate( "ezcomponents", "no_such_password" );
-        } catch( ezcMailTransportException $e ) { return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e ) 
+        { 
+        }
     }
 
 
@@ -56,8 +60,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         try
         {
             $pop3->listMessages();
-        } catch( ezcMailTransportException $e ) {return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function testInvalidCallTop()
@@ -67,8 +74,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         try
         {
             $pop3->top( 1, 1 );
-        } catch( ezcMailTransportException $e ) {return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function testInvalidCallStatus()
@@ -78,8 +88,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         try
         {
             $pop3->status( $a, $b );
-        } catch( ezcMailTransportException $e ) {return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
 
@@ -90,8 +103,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         try
         {
             $pop3->listUniqueIdentifiers();
-        } catch( ezcMailTransportException $e ) {return; }
-        $this->fail( "Didn't get exception when expected" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
 
@@ -152,8 +168,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
         {
             $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
             $pop3->authenticate( "ezcomponents", "ezcomponents", ezcMailPop3Transport::AUTH_APOP );
-        }catch( ezcMailTransportException $e ){return;}
-        $this->fail( "Did not get excepted exception" );
+            $this->fail( "Did not get excepted exception" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function testDisconnect()
