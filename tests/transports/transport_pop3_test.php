@@ -110,7 +110,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1=> "1416", 2 => "2431" ), $list );
+        $this->assertEquals( array( 1=> "1439", 2 => "2416" ), $list );
     }
 
     public function testStatus()
@@ -119,7 +119,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $pop3->status( $num, $size );
         $this->assertEquals( 2, $num );
-        $this->assertEquals( 3847, $size );
+        $this->assertEquals( 3855, $size );
     }
 
     public function testTop()
@@ -135,15 +135,15 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.1" ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => "1143007546.3" ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.1",
-                                    2 => "1143007546.2"), $pop3->listUniqueIdentifiers() );
+        $this->assertEquals( array( 1 => "1143007546.3",
+                                    2 => "1143007546.4"), $pop3->listUniqueIdentifiers() );
     }
 
     public function testApop()
