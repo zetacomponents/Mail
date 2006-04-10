@@ -9,7 +9,16 @@
  */
 
 /**
- * Removes temporary files and directories when PHP shuts down.
+ * ezcMailParserShutDownHandler removes temporary files 
+ * and directories when PHP shuts down.
+ *
+ * Example:
+ * <code>
+ * ezcMailParserShutdownHandler::registerForRemoval( "/tmp/file.txt" ); 
+ * </code>
+ *
+ * The code above will result in file.txt being removed from the system
+ * (if it still exists) when PHP shuts down.
  *
  * @access private
  */
