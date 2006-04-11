@@ -605,7 +605,98 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
+
+    public function testVarious1()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-mime-encoded-string' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( array( new ezcMailAddress( 'xx@ez.no', 'Bård Farsted', 'utf-8' ) ), $mail->cc );
+    }
+
+    public function testVarious2()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-filename-with-space' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        // check the file
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_APPLICATION, $parts[1]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
+        $this->assertEquals( 'vnd.oasis.opendocument.text', $parts[1]->mimeType );
+        $this->assertEquals( 'bildemanipulering med php.odt', strstr( $parts[1]->fileName, 'bildemanipulering med php.odt' ) );
+    }
+
+    public function testVarious3()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-lowercase-hex-chars-in-mime-encoding' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( "[Flickr] You are xxxx's newest contact!", $mail->subject );
+    }
+
+    public function testVarious4()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-mime-header-x-unknown' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( array( new ezcMailAddress( 'foobar@example.hu', 'FOO Bár', 'utf-8' ) ), $mail->from );
+    }
+
+    public function testVarious5()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-text-lineendings' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        // check the file
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_APPLICATION, $parts[2]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[2]->dispositionType );
+        $this->assertEquals( 'octet-stream', $parts[2]->mimeType );
+        $this->assertEquals( 'gimme.jl', strstr( $parts[2]->fileName, 'gimme.jl' ) );
+        $expected = <<<END
+;; gimme.jl -- fast window access keyboard accelerators -*- lisp -*-
+;; $Id: gimme.jl,v 1.1 2002/04/15 08:38:57 ssb Exp $
+END;
+        $this->assertEquals( $expected, substr( file_get_contents( $parts[2]->fileName ), 0, strlen( $expected ) ) );
+    }
+
+    public function testVarious6()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-soft-lineending' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        // check the file
+        $this->assertEquals( ezcMailFile::CONTENT_TYPE_APPLICATION, $parts[1]->contentType );
+        $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
+        $this->assertEquals( 'octet-stream', $parts[1]->mimeType );
+        $this->assertEquals( 'SPOOFING.INI', strstr( $parts[1]->fileName, 'SPOOFING.INI' ) );
+        $expected = <<<END
+[ language.ini ]
+config language=en
+
+[ script.ini ]
+add name=autopvc_add_qos index=0 command="qosbook add name rx_peakrate $4 rx_sustrate $5 rx_maxburst $6 dynamic yes"
+
+
+END;
+        $this->assertEquals( $expected, file_get_contents( $parts[1]->fileName ) );
+    }
 }
-
-
 ?>

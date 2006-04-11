@@ -1,0 +1,54 @@
+From foobar@example.hu  Mon Jan 12 11:54:37 2004
+Return-Path: <foobar@example.hu>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.derickrethans.nl (8.12.11.Beta0/8.12.11.Beta0/Debian-1) with ESMTP id i0CAsaDU017898
+	for <derick@localhost>; Mon, 12 Jan 2004 11:54:37 +0100
+Received: from mail.jdimedia.nl [212.204.192.51]
+	by localhost with POP3 (fetchmail-6.2.4)
+	for derick@localhost (single-drop); Mon, 12 Jan 2004 11:54:37 +0100 (CET)
+Received: from php.net (pb2.pair.com [216.92.131.5])
+	by jdi.jdimedia.nl (8.12.10/8.12.10) with SMTP id i0CAr1EG012514
+	for <php@derickrethans.nl>; Mon, 12 Jan 2004 11:53:01 +0100
+Received: (qmail 55707 invoked by alias); 12 Jan 2004 10:53:01 -0000
+Delivered-To: derick@pair2.php.net
+Received: (qmail 55699 invoked by alias); 12 Jan 2004 10:53:00 -0000
+Delivered-To: alias-scan-derick@php.net
+Delivered-To: derick@php.net
+Received: (qmail 55630 invoked from network); 12 Jan 2004 10:52:59 -0000
+Received: from unknown (HELO server.barthazi.hu) (195.56.44.236)
+  by pb2.pair.com with SMTP; 12 Jan 2004 10:52:59 -0000
+Received: by server.barthazi.hu (Postfix, from userid 1018)
+	id 6B0C923EEC; Mon, 12 Jan 2004 11:53:00 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by server.barthazi.hu (Postfix) with ESMTP id 586AC15EA1F
+	for <derick@php.net>; Mon, 12 Jan 2004 11:53:00 +0100 (CET)
+Date: Mon, 12 Jan 2004 11:53:00 +0100 (CET)
+From: =?X-UNKNOWN?Q?FOO_B=E1r?= <foobar@example.hu>
+To: Derick Rethans <derick@php.net>
+Subject: Re: question for Php4 function
+In-Reply-To: <Pine.LNX.4.58.0401121138020.13166@localhost>
+Message-ID: <Pine.LNX.4.58.0401121148350.20357@example.hu>
+References: <20040112102202.4E86923EEC@server.barthazi.hu>
+ <Pine.LNX.4.58.0401121138020.13166@localhost>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Spam-Level: 
+X-Spam-Checker-Version: SpamAssassin 2.60 (1.212-2003-09-23-exp) on 
+	pb12.pair.com
+X-Spam-Status: No, hits=0.0 required=9.0 tests=none autolearn=no version=2.60
+X-Bogosity: No, tests=bogofilter, spamicity=0.449016, version=0.9.1.2
+Status: RO
+X-Status: A
+X-Keywords:                
+X-UID: 15648
+
+> can you please just use Mozilla mail and not that NeoMail thingy... it
+> messes up references and does makes a mess of the threads in mail
+> clients who support it :I
+
+I would be very much happy to use a working mail client, but I needed to
+use several different clients in the last days... Since my regular machine
+is under service, I have used Neomal, OpenWebmail, news clients and now
+pine :) It always depends on what machine and service I have access to at
+the place I can read and write my mails.
+

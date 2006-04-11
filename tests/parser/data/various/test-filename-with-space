@@ -1,0 +1,83 @@
+From SRS0=r4/u=3H=ez.no=xx@php.net  Wed Jan 11 13:47:17 2006
+Return-Path: <SRS0=r4/u=3H=ez.no=xx@php.net>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.derickrethans.nl (8.13.5/8.13.5/Debian-3) with ESMTP id k0BClHHZ029643
+	for <derick@localhost>; Wed, 11 Jan 2006 13:47:17 +0100
+Received: from 127.0.0.1 [127.0.0.1]
+	by localhost with POP3 (fetchmail-6.2.5.4)
+	for derick@localhost (single-drop); Wed, 11 Jan 2006 13:47:17 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.jdi-ict.nl (8.12.11/8.12.11) with ESMTP id k0BCgOCv019597
+	for <derick@[127.0.0.1]>; Wed, 11 Jan 2006 13:42:24 +0100
+Received: from osu1.php.net (osu1.php.net [140.211.166.39])
+	by jdi.jdi-ict.nl (8.12.11/8.12.11) with ESMTP id k0BCgKmb019565
+	for <php@derickrethans.nl>; Wed, 11 Jan 2006 13:42:21 +0100
+X-Host-Fingerprint: 194.248.150.25 dolly.ez.no Linux 2.4/2.6
+Received: from ([194.248.150.25:53626] helo=mta.ez.no)
+	by osu1.php.net (ecelerity 2.0 r(6416M)) with SMTP
+	id A1/E4-04918-59DF4C34 for <derick@php.net>; Wed, 11 Jan 2006 04:44:06 -0800
+Received: from smtp.ez.no (blackboy.ez.no [194.248.150.22])
+	by mta.ez.no (Postfix) with ESMTP id 7871F48C011
+	for <yy@ez.no>; Wed, 11 Jan 2006 12:41:15 +0100 (CET)
+Received: from dhcp164.ez.no (popeye.ez.no [80.239.98.162])
+	by smtp.ez.no (Postfix) with ESMTP id 61582AB661
+	for <yy@ez.no>; Wed, 11 Jan 2006 13:41:05 +0100 (CET)
+From: =?iso-8859-1?q?B=E5rd_Farstad?= <xx@ez.no>
+Organization: eZ systems
+To: Derick Rethans <yy@ez.no>
+Subject: Article yyaft
+Date: Wed, 11 Jan 2006 13:42:12 +0100
+User-Agent: KMail/1.9.1
+MIME-Version: 1.0
+Content-Type: Multipart/Mixed;
+	boundary="Boundary-00=_k0PxDI/6xtHodX+"
+Message-Id: <200601111342.12974.xx@ez.no>
+X-Virus-Scanned: by amavisd-new at jdi-ict.nl
+X-Bogosity: No, tests=bogofilter, spamicity=0.021721, version=0.96.0
+Status: RO
+X-Status: A
+X-Keywords:                
+X-UID: 32349
+
+--Boundary-00=_k0PxDI/6xtHodX+
+Content-Type: text/plain;
+  charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+Attached is a draft of the article. I will just add a short summary and I'm=
+=20
+done. No time to make more ;)
+
+=2D-b=E5rd
+
+--Boundary-00=_k0PxDI/6xtHodX+
+Content-Type: application/vnd.oasis.opendocument.text;
+  name="bildemanipulering med php.odt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename="bildemanipulering med php.odt"
+
+UEsDBBQAAAAAACRlKzRexjIMJwAAACcAAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi92bmQub2Fz
+aXMub3BlbmRvY3VtZW50LnRleHRQSwMEFAAAAAAAJGUrNAAAAAAAAAAAAAAAABAAAABDb25maWd1
+cmF0aW9uczIvUEsDBBQAAAAAACRlKzTLdjToiJUAAIiVAAAtAAAAUGljdHVyZXMvMTAwMDAwMDAw
+MDAwMDI5MTAwMDAwMjVCMkI3QzM0QkMuanBn/9j/4AAQSkZJRgABAQIAAAAAAAD/2wBDAAgGBgcG
+hTA5KPR/6/19GKOecwYnMgPXCqu6EQDEkrtYlxAQXpaZFBxtEthWxfTgRZsWFGGH5Hw7MVnmlhzX
+AWGE3WSmjaI2AGokFYVKZGqqw2G7W9iUaO9ac5nzFNimhLQdv5ACTQWaDfqN4b38LL3HiTd5Cu8f
+JiHdlOmV3n843pDGlVS8qtv5Ga8Lg67gYg1XWuxrzmxp2sG2WLjvjL2gS67GOgPdOTYH5P+AtsOi
+tclXistMMzxOaam66YgGvNvEAqL9106pHbKLn2f0DVBLBwgiiIuJbAEAABEFAABQSwECFAAUAAAA
+AAAkZSs0XsYyDCcAAAAnAAAACAAAAAAAAAAAAAAAAAAAAAAAbWltZXR5cGVQSwECFAAUAAAAAAAk
+ZSs0AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAABNAAAAQ29uZmlndXJhdGlvbnMyL1BLAQIUABQA
+AAAAACRlKzTLdjToiJUAAIiVAAAtAAAAAAAAAAAAAAAAAHsAAABQaWN0dXJlcy8xMDAwMDAwMDAw
+MDAwMjkxMDAwMDAyNUIyQjdDMzRCQy5qcGdQSwECFAAUAAgACAAkZSs04zOrFC8AAAA/AAAADAAA
+AAAAAAAAAAAAAABOlgAAbGF5b3V0LWNhY2hlUEsBAhQAFAAIAAgAJGUrNMXn8vU+DgAALkEAAAsA
+AAAAAAAAAAAAAAAAt5YAAGNvbnRlbnQueG1sUEsBAhQAFAAIAAgAJGUrNC8bpCVpBwAAOCQAAAoA
+AAAAAAAAAAAAAAAALqUAAHN0eWxlcy54bWxQSwECFAAUAAAAAAAkZSs0goukgyYEAAAmBAAACAAA
+AAAAAAAAAAAAAADPrAAAbWV0YS54bWxQSwECFAAUAAgACAAkZSs0b0iSHfkjAAAQJAAAGAAAAAAA
+AAAAAAAAAAAbsQAAVGh1bWJuYWlscy90aHVtYm5haWwucG5nUEsBAhQAFAAIAAgAJGUrNPrV1Jc9
+BAAA2RkAAAwAAAAAAAAAAAAAAAAAWtUAAHNldHRpbmdzLnhtbFBLAQIUABQACAAIACRlKzQiiIuJ
+bAEAABEFAAAVAAAAAAAAAAAAAAAAANHZAABNRVRBLUlORi9tYW5pZmVzdC54bWxQSwUGAAAAAAoA
+CgBzAgAAgNsAAAAA
+
+--Boundary-00=_k0PxDI/6xtHodX+--
+

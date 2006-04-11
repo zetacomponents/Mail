@@ -102,6 +102,10 @@ class ezcMailFileParser extends ezcMailPartParser
             case 'quoted-printable':
                 stream_filter_append( $this->fp, 'convert.quoted-printable-decode' );
                 break;
+            case '7bit':
+            case '8bit':
+                // do nothing here, file is already just binary
+                break;
             default:
                 // the mail is bad, it has no encoding style
                 // we'll just go with base64 since that is the most common type

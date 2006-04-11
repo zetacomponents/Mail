@@ -1,0 +1,70 @@
+From marko@example.com  Thu Feb 12 11:25:19 2004
+Return-Path: <marko@example.com>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.foobarrethans.nl (8.12.11/8.12.11/Debian-1) with ESMTP id i1CAPITs003541
+	for <foobar@localhost>; Thu, 12 Feb 2004 11:25:19 +0100
+Received: from mail.jdimedia.nl [215.204.192.51]
+	by localhost with POP3 (fetchmail-6.2.4)
+	for foobar@localhost (single-drop); Thu, 12 Feb 2004 11:25:19 +0100 (CET)
+Received: from amsfep20-int.xxx.nl (amsfep12-int.xxx.nl [215.46.243.18])
+	by jdi.jdimedia.nl (8.12.10/8.12.10) with ESMTP id i1CAFjf6025503
+	for <foobar@foobarrethans.nl>; Thu, 12 Feb 2004 11:15:45 +0100
+Received: from passat ([215.93.60.17]) by amsfep20-int.xxx.nl
+          (InterMail vM.6.00.05.02 201-2115-109-103-20031105) with ESMTP
+          id <20040215101543.LSWH1492.amsfep20-int.xxx.nl@passat>
+          for <foobar@foobarrethans.nl>; Thu, 12 Feb 2004 11:15:43 +0100
+From: "Marko" <marko@example.com>
+To: "'Derick'" <foobar@foobarrethans.nl>
+Subject: RE: fout in de firmware?
+Date: Thu, 12 Feb 2004 11:15:39 +0100
+Message-ID: <002d01c3f151$2ce7a750$2001010a@passat>
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_002E_01C3F159.8EAC0F50"
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook, Build 10.0.2627
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
+In-Reply-To: <Pine.LNX.4.58.0402102113310.17788@localhost>
+Importance: Normal
+X-Bogosity: No, tests=bogofilter, spamicity=0.438009, version=0.9.1.2
+Status: RO
+X-Status: A
+X-Keywords:                
+X-UID: 16372
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_002E_01C3F159.8EAC0F50
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+
+Weet je inmiddels al iets meer?
+
+-----Oorspronkelijk bericht-----
+Van: Derick [mailto:foobar@foobarrethans.nl] 
+Verzonden: dinsdag 10 februari 2004 21:14
+Aan: Marko 
+Onderwerp: Re: fout in de firmware?
+
+
+Crap, daar lijkt het inderdaad op. Nu vraag ik me af of ik mijn firmware
+
+------=_NextPart_000_002E_01C3F159.8EAC0F50
+Content-Type: application/octet-stream;
+	name="SPOOFING.INI"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="SPOOFING.INI"
+
+[ language.ini ]
+config language=3Den
+
+[ script.ini ]
+add name=3Dautopvc_add_qos index=3D0 command=3D"qosbook add name =
+rx_peakrate $4 rx_sustrate $5 rx_maxburst $6 dynamic yes"
+
+------=_NextPart_000_002E_01C3F159.8EAC0F50--
+
