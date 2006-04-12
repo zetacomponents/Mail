@@ -144,7 +144,7 @@ abstract class ezcMailPartParser
     /**
      * Parses the header given by $line and adds it to $this->headers
      *
-     * @todo: deal with headers that are listed several times
+     * @todo deal with headers that are listed several times
      * @return void
      */
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
