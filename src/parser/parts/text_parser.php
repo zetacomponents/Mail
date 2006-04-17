@@ -81,7 +81,7 @@ class ezcMailTextParser extends ezcMailPartParser
         if ( isset( $this->headers['Content-Type'] ) )
         {
 //            preg_match_all( '/\s*(\S+)=([^;\s]*);?/', // matches all headers
-            preg_match( '/\s*charset=([^;\s]*);?/',
+            preg_match( '/\s*charset="?([^;"\s]*);?/',
                             $this->headers['Content-Type'],
                             $parameters );
             if ( count( $parameters ) > 0 )

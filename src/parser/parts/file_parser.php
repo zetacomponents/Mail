@@ -75,13 +75,13 @@ class ezcMailFileParser extends ezcMailPartParser
         // figure out the base filename
         // search Content-Disposition first as specified by RFC 2183
         $matches = array();
-        if ( preg_match( '/\s*filename=([^;\s]*);?/i',
+        if ( preg_match( '/\s*filename="?([^;"]*);?/i',
                         $this->headers['Content-Disposition'], $matches ) )
         {
             $fileName = trim( $matches[1], '"' );
         }
         // fallback to the name parameter in Content-Type as specified by RFC 2046 4.5.1
-        else if ( preg_match( '/\s*name=([^;\s]*);?/i',
+        else if ( preg_match( '/\s*name="?([^;"]*);?/i',
                              $this->headers['Content-Type'], $matches ) )
         {
             $fileName = trim( $matches[1], '"' );

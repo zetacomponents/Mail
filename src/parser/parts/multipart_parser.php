@@ -72,7 +72,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         $this->headers = $headers;
 
         // get the boundary
-        preg_match( '/\s*boundary=([^;\s]*);?/i',
+        preg_match( '/\s*boundary="?([^;"]*);?/i',
                     $this->headers['Content-Type'],
                     $parameters );
         if ( count( $parameters ) > 0 )
