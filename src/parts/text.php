@@ -77,7 +77,7 @@ class ezcMailText extends ezcMailPart
                 $this->properties['encoding'] = $value;
                 break;
             case 'text':
-                $this->properties['text'] = preg_replace( "/\r\n|\r|\n/", ezcMailTools::lineBreak(), $value );
+                $this->properties['text'] = $value;
                 break;
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
@@ -138,7 +138,8 @@ class ezcMailText extends ezcMailPart
      */
     public function generateBody()
     {
-        return $this->text;
+        // convert linebreaks to the correct type.
+        return preg_replace( "/\r\n|\r|\n/", ezcMailTools::lineBreak(), $this->text );
     }
 }
 ?>
