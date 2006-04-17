@@ -66,8 +66,9 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      * @param string $line
      * @return void
      */
-    public function parseBody( $line )
+    public function parseBody( $origLine )
     {
+        $line = rtrim( $origLine, "\r\n" );
         if ( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
         {
             $this->parserState = self::PARSE_STATE_BODY;
@@ -89,7 +90,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         }
         else // we are parsing headers
         {
-            $this->bodyParser->parseBody( $line );
+            $this->bodyParser->parseBody( $origLine );
         }
     }
 

@@ -60,6 +60,7 @@ class ezcMailTextParser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
+        $line = rtrim( $line, "\r\n" );
         if ( $this->text === null )
         {
             $this->text = $line;

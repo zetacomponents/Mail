@@ -98,7 +98,7 @@ class ezcMailTransportConnection
                 $data .= $line;
                 $loops++;
             }
-            return trim( $data );
+            return $data;
         }
         throw new ezcMailTransportSmtpException( 'Could not read from the stream. It was probably terminated by the host.' );
     }

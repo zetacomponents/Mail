@@ -93,12 +93,14 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
      * @param string $line
      * @return void
      */
-    public function parseBody( $line )
+    public function parseBody( $origLine )
     {
         if ( $this->parserState == self::PARSE_STATE_POST_LAST )
         {
             return;
         }
+
+        $line = rtrim( $origLine, "\r\n" );
 
         // check if we hit any of the boundaries
         $newPart = false;
@@ -165,7 +167,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
                 if ( $this->currentPartParser ) // we may have none if the part type was unknown
                 {
                     // send body data to the part
-                    $this->currentPartParser->parseBody( $line );
+                    $this->currentPartParser->parseBody( $origLine );
                 }
             }
             // we are done parsing the multipart, ignore anything else pushed to us.

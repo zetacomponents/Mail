@@ -142,9 +142,14 @@ abstract class ezcMailPartParser
     }
 
     /**
-     * Parses the header given by $line and adds it to $this->headers
+     * Parses the header given by $line and adds it to $this->headers.
+     *
+     * This method is usually used to parse the headers for a subpart. The
+     * only exception is RFC822 parts since you know the type in advance.
      *
      * @todo deal with headers that are listed several times
+     * @param string $line
+     * @param ezcMailHeadersHolder $headers
      * @return void
      */
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
