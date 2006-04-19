@@ -178,7 +178,6 @@ class ezcMailFileParser extends ezcMailPartParser
      */
     public function parseBody( $line )
     {
-        echo "\nGot line: $line";
         if ( $line !== '' )
         {
             fwrite( $this->fp, $line );
