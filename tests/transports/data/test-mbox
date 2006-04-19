@@ -1,0 +1,345 @@
+From MAILER-DAEMON Sun Apr  9 20:44:23 2006
+Date: 09 Apr 2006 20:44:23 +0200
+From: Mail System Internal Data <MAILER-DAEMON@ez.no>
+Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
+X-IMAP: 1144608263 0000000000
+Status: RO
+
+This text is part of the internal format of your mail folder, and is not
+a real message.  It is created automatically by the mail system software.
+If deleted, important folder data will be lost, and it will be re-created
+with the data reset to initial values.
+
+From php-cvs-return-37634-d.foobar=jdimedia.nl@lists.example.com  Mon Apr  3 11:17:04 2006
+Return-Path: <php-cvs-return-37634-d.foobar=jdimedia.nl@lists.example.com>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.derickfoobar.nl (8.13.5/8.13.5/Debian-3) with ESMTP id k339H4bI005437
+	for <derick@localhost>; Mon, 3 Apr 2006 11:17:04 +0200
+Received: from 127.0.0.1 [127.0.0.1]
+	by localhost with POP3 (fetchmail-6.2.5.4)
+	for derick@localhost (single-drop); Mon, 03 Apr 2006 11:17:04 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.jdi-ict.nl (8.13.6/8.12.11) with ESMTP id k339F5Oo030774
+	for <derick@[127.0.0.1]>; Mon, 3 Apr 2006 11:15:05 +0200
+Received: from lists.example.com (lists.example.com [216.92.131.4])
+	by jdi.jdi-ict.nl (8.13.6/8.12.11) with ESMTP id k339F1mv027854
+	for <d.foobar@jdimedia.nl>; Mon, 3 Apr 2006 11:15:02 +0200
+X-Host-Fingerprint: 216.92.131.4 lists.example.com  
+Received: from ([216.92.131.4:17257] helo=lists.example.com)
+	by pb1.pair.com (ecelerity 2.0 beta r(6323M)) with SMTP
+	id 92/9D-09123-497E0344 for <d.foobar@jdimedia.nl>; Mon, 03 Apr 2006 05:15:00 -0400
+Received: (qmail 68583 invoked by uid 1010); 3 Apr 2006 09:14:54 -0000
+Mailing-List: contact php-cvs-help@lists.example.com; run by ezmlm
+Precedence: bulk
+list-help: <mailto:php-cvs-help@lists.example.com>
+list-unsubscribe: <mailto:php-cvs-unsubscribe@lists.example.com>
+list-post: <mailto:php-cvs@lists.example.com>
+Delivered-To: mailing list php-cvs@lists.example.com
+Received: (qmail 68574 invoked by uid 1010); 3 Apr 2006 09:14:54 -0000
+Delivered-To: ezmlm-scan-php-cvs@lists.example.com
+Delivered-To: ezmlm-php-cvs@lists.example.com
+X-Host-Fingerprint: 66.163.161.116 y1.example.com  
+From: "Tony" <tony@example.com>
+To: php-cvs@lists.example.com
+Message-ID: <cvstony1144055690@cvsserver>
+Date: Mon, 03 Apr 2006 09:14:50 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="tony1144055690"
+Subject: [PHP-CVS] cvs: php-src /ext/ftp ftp.c  /ext/mhash mhash.c  /ext/soap php_encoding.c  /ext/standard basic_functions.c streamsfuncs.c string.c  
+X-Virus-Scanned: by amavisd-new at jdi-ict.nl
+X-Bogosity: No, tests=bogofilter, spamicity=0.000000, version=0.96.0
+Status: R
+X-Status: 
+X-Keywords:                  
+
+--tony1144055690
+Content-Type: text/plain
+
+tony		Mon Apr  3 09:14:50 2006 UTC
+
+  Modified files:              
+    /php-src/ext/ftp	ftp.c 
+    /php-src/ext/mhash	mhash.c 
+    /php-src/ext/soap	php_encoding.c 
+    /php-src/ext/standard	streamsfuncs.c string.c basic_functions.c 
+  Log:
+  fix spelling in error messages:
+  greater/less thEn -> greater/less thAn
+  
+  
+--tony1144055690
+Content-Type: text/plain
+Content-Disposition: attachment; filename="tony-20060403091450.txt"
+
+http://cvs.example.com/viewcvs.cgi/php-src/ext/ftp/ftp.c?r1=1.115&r2=1.116&diff_format=u
+Index: php-src/ext/ftp/ftp.c
+diff -u php-src/ext/ftp/ftp.c:1.115 php-src/ext/ftp/ftp.c:1.116
+--- php-src/ext/ftp/ftp.c:1.115	Sun Jan  1 13:09:50 2006
++++ php-src/ext/ftp/ftp.c	Mon Apr  3 09:14:50 2006
+@@ -17,7 +17,7 @@
+    +----------------------------------------------------------------------+
+  */
+ 
+-/* $Id: ftp.c,v 1.115 2006/01/01 13:09:50 sniper Exp $ */
++/* $Id: ftp.c,v 1.116 2006/04/03 09:14:50 tony Exp $ */
+ 
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+@@ -810,7 +810,7 @@
+ 
+ 	if (resumepos > 0) {
+ 		if (resumepos > 2147483647) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files greater then 2147483647 bytes.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files greater than 2147483647 bytes.");
+ 			goto bail;
+ 		}
+ 		sprintf(arg, "%u", resumepos);
+@@ -907,7 +907,7 @@
+ 
+ 	if (startpos > 0) {
+ 		if (startpos > 2147483647) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files with a size greater then 2147483647 bytes.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files with a size greater than 2147483647 bytes.");
+ 			goto bail;
+ 		}
+ 		sprintf(arg, "%u", startpos);
+@@ -1706,7 +1706,7 @@
+ 		 * since php is 32 bit by design, we bail out with warning
+ 		 */
+ 		if (resumepos > 2147483647) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files greater then 2147483648 bytes.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files greater than 2147483648 bytes.");
+ 			goto bail;
+ 		}
+ 		sprintf(arg, "%u", resumepos);
+@@ -1824,7 +1824,7 @@
+ 	}
+ 	if (startpos > 0) {
+ 		if (startpos > 2147483647) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files with a size greater then 2147483647 bytes.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "PHP cannot handle files with a size greater than 2147483647 bytes.");
+ 			goto bail;
+ 		}
+ 		sprintf(arg, "%u", startpos);
+http://cvs.example.com/viewcvs.cgi/php-src/ext/mhash/mhash.c?r1=1.50&r2=1.51&diff_format=u
+Index: php-src/ext/mhash/mhash.c
+diff -u php-src/ext/mhash/mhash.c:1.50 php-src/ext/mhash/mhash.c:1.51
+--- php-src/ext/mhash/mhash.c:1.50	Sun Jan  1 13:09:51 2006
++++ php-src/ext/mhash/mhash.c	Mon Apr  3 09:14:50 2006
+@@ -16,7 +16,7 @@
+    |          Nikos Mavroyanopoulos <nmav@hellug.gr> (HMAC, KEYGEN)       |
+    +----------------------------------------------------------------------+
+  */
+-/* $Id: mhash.c,v 1.50 2006/01/01 13:09:51 sniper Exp $ */
++/* $Id: mhash.c,v 1.51 2006/04/03 09:14:50 tony Exp $ */
+ 
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+@@ -205,7 +205,7 @@
+ 		WRONG_PARAM_COUNT;
+ 	}
+ 	if (bytes <= 0){
+-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "the byte parameter must be greater then 0");
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "the byte parameter must be greater than 0");
+ 		RETURN_FALSE;
+ 	}
+ 	
+http://cvs.example.com/viewcvs.cgi/php-src/ext/soap/php_encoding.c?r1=1.122&r2=1.123&diff_format=u
+Index: php-src/ext/soap/php_encoding.c
+diff -u php-src/ext/soap/php_encoding.c:1.122 php-src/ext/soap/php_encoding.c:1.123
+--- php-src/ext/soap/php_encoding.c:1.122	Fri Mar  3 09:20:51 2006
++++ php-src/ext/soap/php_encoding.c	Mon Apr  3 09:14:50 2006
+@@ -17,7 +17,7 @@
+   |          Dmitry Stogov <dmitry@zend.com>                             |
+   +----------------------------------------------------------------------+
+ */
+-/* $Id: php_encoding.c,v 1.122 2006/03/03 09:20:51 dmitry Exp $ */
++/* $Id: php_encoding.c,v 1.123 2006/04/03 09:14:50 tony Exp $ */
+ 
+ #include <time.h>
+ 
+@@ -2879,11 +2879,11 @@
+ 		}
+ 		if (type->restrictions->minLength &&
+ 		    strlen(data->children->content) < type->restrictions->minLength->value) {
+-		  soap_error0(E_WARNING, "Encoding: Restriction: length less then 'minLength'");
++		  soap_error0(E_WARNING, "Encoding: Restriction: length less than 'minLength'");
+ 		}
+ 		if (type->restrictions->maxLength &&
+ 		    strlen(data->children->content) > type->restrictions->maxLength->value) {
+-		  soap_error0(E_WARNING, "Encoding: Restriction: length greater then 'maxLength'");
++		  soap_error0(E_WARNING, "Encoding: Restriction: length greater than 'maxLength'");
+ 		}
+ 		if (type->restrictions->length &&
+ 		    strlen(data->children->content) != type->restrictions->length->value) {
+@@ -2942,11 +2942,11 @@
+ 			}
+ 			if (type->restrictions->minLength &&
+ 			    Z_STRLEN_P(data) < type->restrictions->minLength->value) {
+-		  	soap_error0(E_WARNING, "Encoding: Restriction: length less then 'minLength'");
++		  	soap_error0(E_WARNING, "Encoding: Restriction: length less than 'minLength'");
+ 			}
+ 			if (type->restrictions->maxLength &&
+ 			    Z_STRLEN_P(data) > type->restrictions->maxLength->value) {
+-		  	soap_error0(E_WARNING, "Encoding: Restriction: length greater then 'maxLength'");
++		  	soap_error0(E_WARNING, "Encoding: Restriction: length greater than 'maxLength'");
+ 			}
+ 			if (type->restrictions->length &&
+ 			    Z_STRLEN_P(data) != type->restrictions->length->value) {
+http://cvs.example.com/viewcvs.cgi/php-src/ext/standard/streamsfuncs.c?r1=1.73&r2=1.74&diff_format=u
+Index: php-src/ext/standard/streamsfuncs.c
+diff -u php-src/ext/standard/streamsfuncs.c:1.73 php-src/ext/standard/streamsfuncs.c:1.74
+--- php-src/ext/standard/streamsfuncs.c:1.73	Wed Mar 29 01:20:42 2006
++++ php-src/ext/standard/streamsfuncs.c	Mon Apr  3 09:14:50 2006
+@@ -17,7 +17,7 @@
+   +----------------------------------------------------------------------+
+ */
+ 
+-/* $Id: streamsfuncs.c,v 1.73 2006/03/29 01:20:42 pollita Exp $ */
++/* $Id: streamsfuncs.c,v 1.74 2006/04/03 09:14:50 tony Exp $ */
+ 
+ #include "php.h"
+ #include "php_globals.h"
+@@ -758,10 +758,10 @@
+ 		convert_to_long(sec);
+ 
+ 		if (sec < 0) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "The seconds parameter must be greater then 0.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "The seconds parameter must be greater than 0.");
+ 			RETURN_FALSE;
+ 		} else if (usec < 0) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "The microseconds parameter must be greater then 0.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "The microseconds parameter must be greater than 0.");
+ 			RETURN_FALSE;
+ 		}
+ 
+@@ -1266,7 +1266,7 @@
+ 	}
+ 
+ 	if (max_length < 0) {
+-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "The maximum allowed length must be greater then or equal to zero.");
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "The maximum allowed length must be greater than or equal to zero.");
+ 		RETURN_FALSE;
+ 	}
+ 	if (!max_length) {
+http://cvs.example.com/viewcvs.cgi/php-src/ext/standard/string.c?r1=1.537&r2=1.538&diff_format=u
+Index: php-src/ext/standard/string.c
+diff -u php-src/ext/standard/string.c:1.537 php-src/ext/standard/string.c:1.538
+--- php-src/ext/standard/string.c:1.537	Wed Mar 29 05:56:06 2006
++++ php-src/ext/standard/string.c	Mon Apr  3 09:14:50 2006
+@@ -18,7 +18,7 @@
+    +----------------------------------------------------------------------+
+  */
+ 
+-/* $Id: string.c,v 1.537 2006/03/29 05:56:06 andrei Exp $ */
++/* $Id: string.c,v 1.538 2006/04/03 09:14:50 tony Exp $ */
+ 
+ /* Synced with php 3.0 revision 1.193 1999-06-16 [ssb] */
+ 
+@@ -6310,7 +6310,7 @@
+ 
+ 	if (ac > 2) {
+ 		if (offset < 0) {
+-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "Offset should be greater then or equal to 0.");
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "Offset should be greater than or equal to 0.");
+ 			RETURN_FALSE;
+ 		}
+ 		if (haystack_type == IS_UNICODE) {
+http://cvs.example.com/viewcvs.cgi/php-src/ext/standard/basic_functions.c?r1=1.767&r2=1.768&diff_format=u
+Index: php-src/ext/standard/basic_functions.c
+diff -u php-src/ext/standard/basic_functions.c:1.767 php-src/ext/standard/basic_functions.c:1.768
+--- php-src/ext/standard/basic_functions.c:1.767	Wed Mar 29 01:20:42 2006
++++ php-src/ext/standard/basic_functions.c	Mon Apr  3 09:14:50 2006
+@@ -17,7 +17,7 @@
+    +----------------------------------------------------------------------+
+  */
+ 
+-/* $Id: basic_functions.c,v 1.767 2006/03/29 01:20:42 pollita Exp $ */
++/* $Id: basic_functions.c,v 1.768 2006/04/03 09:14:50 tony Exp $ */
+ 
+ #include "php.h"
+ #include "php_streams.h"
+@@ -1766,7 +1766,7 @@
+ 
+ 	c_ts = (double)(d_ts - tm.tv_sec - tm.tv_usec / 1000000.00);
+ 	if (c_ts < 0) {
+-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Sleep until to time is less then current time.");
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Sleep until to time is less than current time.");
+ 		RETURN_FALSE;
+ 	}
+ 
+
+
+--tony1144055690
+Content-Type: text/plain; charset=us-ascii
+
+-- 
+PHP CVS Mailing List (http://www.example.com/)
+To unsubscribe, visit: http://www.example.com/unsub.php
+--tony1144055690--
+
+From internals-return-22620-d.foobar=jdimedia.nl@lists.example.com  Thu Mar 30 14:42:28 2006
+Return-Path: <internals-return-22620-d.foobar=jdimedia.nl@lists.example.com>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.derickfoobar.nl (8.13.5/8.13.5/Debian-3) with ESMTP id k2UJgSxT007897
+	for <derick@localhost>; Thu, 30 Mar 2006 14:42:28 -0500
+Received: from 127.0.0.1 [127.0.0.1]
+	by localhost with POP3 (fetchmail-6.2.5.4)
+	for derick@localhost (single-drop); Thu, 30 Mar 2006 14:42:28 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.jdi-ict.nl (8.13.6/8.12.11) with ESMTP id k2UJc90Q005656
+	for <derick@[127.0.0.1]>; Thu, 30 Mar 2006 21:38:09 +0200
+Received: from lists.example.com (lists.example.com [216.92.131.4])
+	by jdi.jdi-ict.nl (8.13.6/8.12.11) with ESMTP id k2UJc4m7011816
+	for <d.foobar@jdimedia.nl>; Thu, 30 Mar 2006 21:38:04 +0200
+X-Host-Fingerprint: 216.92.131.4 lists.example.com  
+Received: from ([216.92.131.4:3417] helo=lists.example.com)
+	by pb1.pair.com (ecelerity 2.0 beta r(6323M)) with SMTP
+	id 2D/36-28679-C933C244 for <d.foobar@jdimedia.nl>; Thu, 30 Mar 2006 14:38:04 -0500
+Received: (qmail 36922 invoked by uid 1010); 30 Mar 2006 19:37:49 -0000
+Mailing-List: contact internals-help@lists.example.com; run by ezmlm
+Precedence: bulk
+list-help: <mailto:internals-help@lists.example.com>
+list-unsubscribe: <mailto:internals-unsubscribe@lists.example.com>
+list-post: <mailto:internals@lists.example.com>
+Delivered-To: mailing list internals@lists.example.com
+Received: (qmail 36915 invoked by uid 1010); 30 Mar 2006 19:37:49 -0000
+Delivered-To: ezmlm-scan-internals@lists.example.com
+Delivered-To: ezmlm-internals@lists.example.com
+X-Host-Fingerprint: 70.85.46.36 unknown  
+Message-ID: <442C3388.3000603@example.org>
+Date: Thu, 30 Mar 2006 14:37:44 -0500
+From: Ilaa <ilaa@example.org>
+User-Agent: Thunderbird 1.5 (Windows/20051201)
+MIME-Version: 1.0
+To: PHP Internals List <internals@lists.example.com>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Subject: [PHP-DEV] PHP 5.1.3RC2 Released
+X-Virus-Scanned: by amavisd-new at jdi-ict.nl
+X-Bogosity: No, tests=bogofilter, spamicity=0.000000, version=0.96.0
+Status: R
+X-Status: 
+X-Keywords:                  
+
+PHP 5.1.3RC2 has just been released, about a week late, but better late 
+then never ;-). Please test this RC as much as possible, if it proves to 
+be stable, this release will be published as final next week Thursday.
+
+The source packages can be found here:
+
+http://downloads.example.com/ilaa/php-5.1.3RC2.tar.bz2
+MD5: 8ad7bddc9a3b4dbcd2ecb1d6f5446970
+
+http://downloads.example.com/ilaa/php-5.1.3RC2.tar.gz
+MD5: 1e66780413580bc4a0742fa302735c99
+
+Win32 binaries will be available for download shortly.
+
+Ilia
+5.1 Release Master
+
+-- 
+PHP Internals - PHP Runtime Development Mailing List
+To unsubscribe, visit: http://www.example.com/unsub.php
+
