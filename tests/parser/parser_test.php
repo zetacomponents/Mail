@@ -39,7 +39,7 @@ class SingleFileSet implements ezcMailParserSet
             }
             return null;
         }
-        $next =  rtrim( fgets( $this->fp ), "\r\n" );
+        $next =  fgets( $this->fp );
         if ( $next == "" && feof( $this->fp ) ) // eat last linebreak
         {
             return null;
@@ -66,10 +66,9 @@ class ezcMailParserTest extends ezcTestCase
          return new ezcTestSuite( "ezcMailParserTest" );
     }
 
-    /*
-     * Kmail
-     */
-
+    //
+    // Kmail
+    //
     public function testKmail1()
     {
         $parser = new ezcMailParser();
@@ -204,9 +203,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<html>', substr( $parts[1]->text, 0, 6 ) );
     }
 
-    /*
-     * Mail.app
-     */
+    //
+    // Mail.app
+    //
 
     public function testMailApp1()
     {
@@ -246,9 +245,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $filePart->mimeType );
     }
 
-    /**
-     * Gmail
-     */
+    //
+    // Gmail
+    //
     public function testGmail1()
     {
         $parser = new ezcMailParser();
@@ -343,9 +342,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<span', substr( $parts[1]->text, 0, 5 ) );
     }
 
-    /*
-     * Opera
-     */
+    //
+    // Opera
+    //
 
     public function testOpera()
     {
@@ -413,9 +412,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
-    /*
-     * Pine
-     */
+    //
+    // Pine
+    //
     public function testPine1()
     {
         $parser = new ezcMailParser();
@@ -537,9 +536,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body with זרו", $parts[0]->text );
     }
 
-    /*
-     * Hotmail
-     */
+    //
+    // Hotmail
+    //
     public function testHotmail1()
     {
         $parser = new ezcMailParser();
@@ -606,6 +605,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
+    // Comment: The CC string is in iso-8859-1 not in UTF-8 as it says it is. Is this our
+    // problem or not?!? Anyway, we need to check for false return everywhere we use the iconv method.
     public function testVarious1()
     {
         $parser = new ezcMailParser();
@@ -632,6 +633,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'bildemanipulering med php.odt', strstr( $parts[1]->fileName, 'bildemanipulering med php.odt' ) );
     }
 
+    // this should be fixed in iconv and not in our code.
     public function testVarious3()
     {
         $parser = new ezcMailParser();
@@ -642,6 +644,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "[Flickr] You are xxxx's newest contact!", $mail->subject );
     }
 
+    // same as above.. but how to fix?
     public function testVarious4()
     {
         $parser = new ezcMailParser();
@@ -666,13 +669,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[2]->dispositionType );
         $this->assertEquals( 'octet-stream', $parts[2]->mimeType );
         $this->assertEquals( 'gimme.jl', strstr( $parts[2]->fileName, 'gimme.jl' ) );
-        $expected = <<<END
-;; gimme.jl -- fast window access keyboard accelerators -*- lisp -*-
-;; $Id: gimme.jl,v 1.1 2002/04/15 08:38:57 ssb Exp $
-END;
+        $expected = ";; gimme.jl -- fast window access keyboard accelerators -*- lisp -*-\n;; \$Id: gimme.jl,v 1.1 2002/04/15 08:38:57 ssb Exp \$\n";
         $this->assertEquals( $expected, substr( file_get_contents( $parts[2]->fileName ), 0, strlen( $expected ) ) );
     }
-
     public function testVarious6()
     {
         $parser = new ezcMailParser();
@@ -697,6 +696,7 @@ add name=autopvc_add_qos index=0 command="qosbook add name rx_peakrate $4 rx_sus
 
 END;
         $this->assertEquals( $expected, file_get_contents( $parts[1]->fileName ) );
+
     }
 }
 ?>
