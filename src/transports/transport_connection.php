@@ -81,10 +81,13 @@ class ezcMailTransportConnection
     /**
      * Returns one line of data from the stream.
      *
+     * The returned lined will have linebreaks removed if the $trim option is set.
+     *
+     * @param bool $trim
      * @throws ezcMailTransportSmtpConnection if there is no valid connection.
      * @return string
      */
-    public function getLine()
+    public function getLine( $trim = false )
     {
         $data = '';
         $line   = '';
@@ -98,7 +101,15 @@ class ezcMailTransportConnection
                 $data .= $line;
                 $loops++;
             }
-            return $data;
+
+            if( $trim == false )
+            {
+                return $data;
+            }
+            else
+            {
+                return rtrim( $data, "\r\n" );
+            }
         }
         throw new ezcMailTransportSmtpException( 'Could not read from the stream. It was probably terminated by the host.' );
     }

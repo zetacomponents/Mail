@@ -204,7 +204,7 @@ class ezcMailPop3Transport
 
         // fetch the data from the server and prepare it to be returned.
         $messages = array();
-        while ( rtrim( $response = $this->connection->getLine() ) !== "." )
+        while ( ( $response = $this->connection->getLine( true ) ) !== "." )
         {
             list( $num, $size ) = split( ' ', $response );
             $messages[$num] = $size;
@@ -216,6 +216,9 @@ class ezcMailPop3Transport
      * Returns the unique identifiers for each message on the POP3 server or for the
      * specified message $msgNum if provided.
      *
+     * You can fetch the unique identifier for a specific message only by providing the
+     * $msgNum parameter.
+     *
      * The unique identifier can be used to recognize mail from servers between requests.
      * In contrast to the message numbers the unique numbers assigned to an email never
      * changes.
@@ -225,6 +228,7 @@ class ezcMailPop3Transport
      * Note: POP3 servers are not required to support this command and it may fail.
      *
      * @throws Exception if there was no connection to the server.
+     * @param int $msgNum The message number
      * @return array(int=>string)
      */
     public function listUniqueIdentifiers( $msgNum = null )
@@ -239,7 +243,7 @@ class ezcMailPop3Transport
         if ( $msgNum !== null )
         {
             $this->connection->sendData( "UIDL {$msgNum}" );
-            $response = $this->connection->getLine();
+            $response = $this->connection->getLine( true );
             if ( $this->isPositiveResponse( $response ) )
             {
                 // get the single response line from the server
@@ -254,7 +258,7 @@ class ezcMailPop3Transport
             if ( $this->isPositiveResponse( $response ) )
             {
                 // fetch each of the result lines and add it to the result
-                while ( rtrim( $response = $this->connection->getLine() ) !== "." )
+                while ( ( $response = $this->connection->getLine( true ) ) !== "." )
                 {
                     list( $num, $id ) = explode( ' ', $response );
                     $result[(int)$num] = $id;
@@ -352,7 +356,7 @@ class ezcMailPop3Transport
 
         // fetch the data from the server and prepare it to be returned.
         $message = "";
-        while ( rtrim( $response = $this->connection->getLine() ) !== "." )
+        while ( $response = $this->connection->getLine( true ) !== "." )
         {
             $message .= $response . "\n";
         }
