@@ -50,10 +50,13 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     public function __construct( $fh )
     {
+        if ( !is_resource( $fh ) || get_resource_type( $fh ) != 'stream' )
+        {
+            throw new ezcBaseFileIoException( 'filepointer', ezcBaseFileException::READ, "The passed filepointer is not a stream resource." );
+        }
         $this->fh = $fh;
         $this->initialized = false;
         $this->hasMoreMailData = true;
-        xdebug_break();
         $this->nextMail();
     }
 

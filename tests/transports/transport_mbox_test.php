@@ -30,6 +30,19 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $this->assertEquals( 2, count( $mail ) );
     }
 
+    public function testBrokenFilePointer()
+    {
+        try
+        {
+            $set = new ezcMailMboxSet( false );
+            self::fail( "Expected exception not thrown" );
+        }
+        catch ( ezcBaseFileIoException $e )
+        {
+            self::assertEquals( "An error occurred while reading from <filepointer>. (The passed filepointer is not a stream resource.)", $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailTransportMboxTest" );
