@@ -1,3 +1,13 @@
+1.1beta1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Added the mbox transport for reading mbox files to use with the
+  ezcMailParser.
+- Fixed a bug that caused filenames with spaces to appear mangled.
+- Fixed a bug where the encodings 7bit and 8bit were not handled correctly.
+- Fixed a bug where text attachments missed line breaks when saved to disk.
+
+
 1.1alpha1 - Monday 03 April 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
