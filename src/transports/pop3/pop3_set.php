@@ -98,7 +98,7 @@ class ezcMailPop3Set implements ezcMailParserSet
         if ( $this->hasMoreMailData )
         {
             $data = $this->connection->getLine();
-            if ( $data === "." )
+            if ( rtrim( $data ) === "." )
             {
                 $this->hasMoreMailData = false;
                 // remove the mail if required by the user.

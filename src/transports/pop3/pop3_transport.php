@@ -204,7 +204,7 @@ class ezcMailPop3Transport
 
         // fetch the data from the server and prepare it to be returned.
         $messages = array();
-        while ( ( $response = $this->connection->getLine() ) !== "." )
+        while ( rtrim( $response = $this->connection->getLine() ) !== "." )
         {
             list( $num, $size ) = split( ' ', $response );
             $messages[$num] = $size;
@@ -254,7 +254,7 @@ class ezcMailPop3Transport
             if ( $this->isPositiveResponse( $response ) )
             {
                 // fetch each of the result lines and add it to the result
-                while ( ( $response = $this->connection->getLine() ) !== "." )
+                while ( rtrim( $response = $this->connection->getLine() ) !== "." )
                 {
                     list( $num, $id ) = explode( ' ', $response );
                     $result[(int)$num] = $id;
@@ -352,7 +352,7 @@ class ezcMailPop3Transport
 
         // fetch the data from the server and prepare it to be returned.
         $message = "";
-        while ( ( $response = $this->connection->getLine() ) !== "." )
+        while ( rtrim( $response = $this->connection->getLine() ) !== "." )
         {
             $message .= $response . "\n";
         }
