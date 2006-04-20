@@ -28,6 +28,8 @@
  * When there are no more lines the parent part will call finish() and the mail
  * part corresponding to the part you are parsing should be returned.
  *
+ * @package Mail
+ * @version //autogen//
  * @todo case on headers
  * @access private
  */

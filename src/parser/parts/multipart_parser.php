@@ -11,6 +11,8 @@
 /**
  * Base class for Multipart parsers.
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 abstract class ezcMailMultipartParser extends ezcMailPartParser

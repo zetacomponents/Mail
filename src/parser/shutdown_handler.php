@@ -20,6 +20,8 @@
  * The code above will result in file.txt being removed from the system
  * (if it still exists) when PHP shuts down.
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 class ezcMailParserShutdownHandler

@@ -11,6 +11,8 @@
 /**
  * Parses mail parts of type "text".
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 class ezcMailTextParser extends ezcMailPartParser

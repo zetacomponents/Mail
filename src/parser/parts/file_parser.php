@@ -11,6 +11,8 @@
 /**
  * Parses application/image/video and audio parts.
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 class ezcMailFileParser extends ezcMailPartParser

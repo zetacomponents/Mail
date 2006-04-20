@@ -11,6 +11,8 @@
 /**
  * Parses multipart/mixed mail parts.
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 class ezcMailMultipartAlternativeParser extends ezcMailMultipartParser

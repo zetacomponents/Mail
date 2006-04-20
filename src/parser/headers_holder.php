@@ -11,6 +11,8 @@
 /**
  * Holds the headers of a mail during parsing and allows case insensitive lookup.
  *
+ * @package Mail
+ * @version //autogen//
  * @access private
  */
 class ezcMailHeadersHolder implements ArrayAccess
