@@ -1,5 +1,5 @@
 <?php
-include( "tutorial_autoload.php" );
+require_once 'tutorial_autoload.php';
 
 $pop3 = new ezcMailPop3Transport( "pop3.example.com" );
 $pop3->authenticate( "user", "password" );

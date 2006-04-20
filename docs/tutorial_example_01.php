@@ -1,5 +1,5 @@
 <?php
-include( "tutorial_autoload.php" );
+require_once 'tutorial_autoload.php';
 
 $mail = new ezcMailComposer();
 $mail->from = new ezcMailAddress( 'sender@example.com', 'Adrian Ripburger' );
