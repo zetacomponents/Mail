@@ -123,6 +123,24 @@ class ezcMailMultipartRelated extends ezcMailMultipart
         return array_slice( $this->parts, 1 );
     }
 
+    /**
+     * Returns the part associated with the passed Content-ID.
+     *
+     * @param string $cid
+     * @return ezcMailPart
+     */
+    public function getRelatedPartByID( $cid )
+    {
+        foreach ( array_slice( $this->parts, 1 ) as $part )
+        {
+            if ( ( $part->getHeader( 'Content-ID' ) !== '' ) &&
+                ( $part->getHeader( 'Content-ID' ) == "<$cid>" ) )
+            {
+                return $part;
+            }
+        }
+        return false;
+    }
 
     /**
      * Returns "related".

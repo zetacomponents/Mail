@@ -1,3 +1,10 @@
+1.1beta2 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Added the getRelatedPartByID() method to ezcMailMultipartRelated that
+  returns a mail part by looking for it's Content-ID.
+
+
 1.1beta1 - Wednesday 19 April 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
