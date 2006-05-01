@@ -3,6 +3,8 @@
 
 - Added the getRelatedPartByID() method to ezcMailMultipartRelated that
   returns a mail part by looking for it's Content-ID.
+- Added the class ezcMailFileSet that can be used to parse mail messages
+  on files directly from disk.
 
 
 1.1beta1 - Wednesday 19 April 2006

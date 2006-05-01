@@ -85,8 +85,7 @@ class ezcMailPop3Set implements ezcMailParserSet
     }
 
     /**
-     * Returns one line of data from the current mail in the set
-     * excluding the ending linebreak.
+     * Returns one line of data from the current mail in the set.
      *
      * Null is returned if there is no current mail in the set or
      * the end of the mail is reached,

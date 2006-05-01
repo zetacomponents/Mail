@@ -29,6 +29,7 @@ return array(
     'ezcMailPop3Transport'          => 'Mail/transports/pop3/pop3_transport.php',
     'ezcMailPop3Set'                => 'Mail/transports/pop3/pop3_set.php',
     'ezcMailMboxSet'                => 'Mail/transports/mbox/mbox_set.php',
+    'ezcMailFileSet'                => 'Mail/transports/file/file_set.php',
 
     'ezcMailException'              => 'Mail/exceptions/mail_exception.php',
     'ezcMailTransportException'     => 'Mail/exceptions/transport_exception.php',
