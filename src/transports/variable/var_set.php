@@ -16,9 +16,17 @@ declare(encoding="latin1");
  *
  * The variable should contain the complete mail message in RFC822 format.
  *
+ * Example:
+ *
+ * <code>
+ * $mail = "To: user@example.com\r\nSubject: Test mail    .....";
+ * $set = new ezcMailVariableSet( $mail ) );
+ * $parser = new ezcMailParser();
+ * $mail = $parser->parseMail( $set );
+ * <code>
+ *
  * @package Mail
  * @version //autogen//
- * @access private
  */
 class ezcMailVariableSet implements ezcMailParserSet
 {

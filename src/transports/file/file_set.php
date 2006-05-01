@@ -17,9 +17,16 @@ declare(encoding="latin1");
  * Each file should contain only one mail message in RFC822 format. Bad files or
  * non-existing files are ignored.
  *
+ * Example:
+ *
+ * <code>
+ * $set = new ezcMailFileSet( array( 'path/to/mail/rfc822message.mail' ) );
+ * $parser = new ezcMailParser();
+ * $mail = $parser->parseMail( $set );
+ * <code>
+ *
  * @package Mail
  * @version //autogen//
- * @access private
  */
 class ezcMailFileSet implements ezcMailParserSet
 {

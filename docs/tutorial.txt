@@ -152,6 +152,11 @@ component makes this easy through the class ezcMailParser and the mail
 retreival transport classes. Mail is fetched, parsed and returned to you in the
 same structure that is used to send mail.
 
+The mail components currently allows you to fetch and parse mail messages from
+POP3, mbox files, single mail files and from variables. The parser fully
+supports mail in all character sets, multipart mail (attachments), HTML mail, HTML mail with
+images and digest messages.
+
 The following example shows how to fetch all messages from a POP3 account and
 parse them for usage.
 
@@ -160,6 +165,13 @@ parse them for usage.
 
 The parser returns an array of ezcMail messages with parts organized as the
 MIME structure of the mail.
+
+If the mail contains attachments they will be saved to disk in temporary
+files. If you want to keep the files they must be moved to a temporary place as
+shown in the next example.
+
+.. include:: tutorial_example_08.php
+   :literal:
 
 References
 ==========
