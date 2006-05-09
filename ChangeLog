@@ -7,6 +7,8 @@
   on files directly from disk.
 - Added the class ezcMailVaraibleSet that can be used to parse mail messages
   directly from a variable.
+- The pop3 classes now default to leave the mail on the server. You need to
+  actively set $deleteFromServer in order to have it removed.
 
 1.1beta1 - Wednesday 19 April 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -53,7 +53,7 @@ class ezcMailPop3Set implements ezcMailParserSet
     /**
      * Holds if mail should be deleted from the server after retrieval.
      */
-    private $leaveOnServer = false;
+    private $deleteFromServer = false;
 
     /**
      * Constructs a new pop3 parser set that will fetch the messages with the
@@ -62,15 +62,18 @@ class ezcMailPop3Set implements ezcMailParserSet
      * $connection must hold a valid connection to a pop3 server that is ready to retrieve
      * the messages.
      *
-     * If $leaveOnServer is set to true the messages will not be deleted after retrieval.
+     * If $deleteFromServer is set to true the messages will be deleted after retrieval.
      *
      * @throws ezcMailTransportException if the server sent a negative reply when requesting the first mail.
+     * @param ezcMailTransportConnection $connection
+     * @param array(ezcMail) $messages
+     * @param bool $deleteFromServer
      */
-    public function __construct( ezcMailTransportConnection $connection, array $messages, $leaveOnServer = false )
+    public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false )
     {
         $this->connection = $connection;
         $this->messages = $messages;
-        $this->leaveOnServer = $leaveOnServer;
+        $this->deleteFromServer = $deleteFromServer;
         $this->nextMail();
     }
 
@@ -101,7 +104,7 @@ class ezcMailPop3Set implements ezcMailParserSet
             {
                 $this->hasMoreMailData = false;
                 // remove the mail if required by the user.
-                if ( $this->leaveOnServer == false )
+                if ( $this->deleteFromServer == true )
                 {
                     $this->connection->sendData( "DELE {$this->currentMessage}" );
                     $response = $this->connection->getLine(); // ignore response

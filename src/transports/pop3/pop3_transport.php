@@ -366,17 +366,17 @@ class ezcMailPop3Transport
     /**
      * Returns a parserset with all the messages on the server.
      *
-     * If $leaveOnServer is set to true the mail will be left on server after
-     * retrieval. If not it will be removed.
+     * If $deleteFromServer is set to true the mail will be removed from the server after
+     * retrieval. If not it will be left.
      *
      * @throws ezcMailTransportException if the mail could not be retrieved.
-     * @param bool $leaveOnServer
+     * @param bool $deleteFromServer
      * @return ezcMailParserSet
      */
-    public function fetchAll( $leaveOnServer = false )
+    public function fetchAll( $deleteFromServer = false )
     {
         $messages = $this->listMessages();
-        return new ezcMailPop3Set( $this->connection, array_keys( $messages ), $leaveOnServer );
+        return new ezcMailPop3Set( $this->connection, array_keys( $messages ), $deleteFromServer );
     }
 
     /**
