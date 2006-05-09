@@ -183,8 +183,8 @@ class ezcMailPop3Transport
      *
      * The format of the returned array is array(message_id => message_size)
      *
-     * @throws Exception if there was no connection to the server or if the server
-     *         sent a negative response.
+     * @throws ezcMailTransportException if there was no connection to the
+     *         server or if the server sent a negative response.
      * @return array(int=>int)
      */
     public function listMessages()
@@ -227,7 +227,7 @@ class ezcMailPop3Transport
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
-     * @throws Exception if there was no connection to the server.
+     * @throws ezcMailTransportException if there was no connection to the server.
      * @param int $msgNum The message number
      * @return array(int=>string)
      */
@@ -306,7 +306,8 @@ class ezcMailPop3Transport
      * Any future reference to the message-number associated with the message
      * in a command generates an error.
      *
-     * @throws ezcMailTransportException if the mail could not be deleted or if there is no connection to the server.
+     * @throws ezcMailTransportException if the mail could not be deleted or if
+     *         there is no connection to the server.
      * @return void
      */
     public function delete( $msgNum )
@@ -333,8 +334,8 @@ class ezcMailPop3Transport
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
-     * @throws Exception if there was no connection to the server or if the server
-     *         sent a negative response.
+     * @throws ezcMailTransportException if there was no connection to the
+     *         server or if the server sent a negative response.
      * @param int $msgNum
      * @param int $numLines
      * @return string
