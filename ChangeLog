@@ -4,11 +4,12 @@
 - Added the getRelatedPartByID() method to ezcMailMultipartRelated that
   returns a mail part by looking for it's Content-ID.
 - Added the class ezcMailFileSet that can be used to parse mail messages
-  on files directly from disk.
-- Added the class ezcMailVaraibleSet that can be used to parse mail messages
+  in a file directly from disk.
+- Added the class ezcMailVariableSet that can be used to parse mail messages
   directly from a variable.
-- The pop3 classes now default to leave the mail on the server. You need to
-  actively set $deleteFromServer in order to have it removed.
+- Changed the POP3 classes to leave the mail on the server by default. You
+  need to actively set $deleteFromServer in order to have it removed.
+
 
 1.1beta1 - Wednesday 19 April 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
