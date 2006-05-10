@@ -1,7 +1,11 @@
-1.1RC1 - [RELEASEDATE]
+1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- added the function keepConnection() in the smtp transport. This allows keeping
-  the connection when sending several mail.
+
+- Added the keepConnection() method to the SMTP transport. This allows keeping
+  the connection open when sending several mails.
+- Changed mime string decoding to be more robust by trying to work around
+  common mistakes by MUAs.
+
 	
 1.1beta2 - Tuesday 09 May 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

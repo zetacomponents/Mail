@@ -652,7 +652,7 @@ class ezcMailParserTest extends ezcTestCase
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 1, count( $mail ) );
         $mail = $mail[0];
-        $this->assertEquals( array( new ezcMailAddress( 'foobar@example.hu', 'FOO Bár', 'utf-8' ) ), $mail->from );
+        $this->assertEquals( new ezcMailAddress( 'foobar@example.hu', 'FOO Bár', 'utf-8' ), $mail->from );
     }
 
     public function testVarious5()

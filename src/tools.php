@@ -130,7 +130,7 @@ class ezcMailTools
         $mail = str_replace( '"', '', $mail );
 
         // the name may contain interesting character encoding. We need to convert it.
-        $name = iconv_mime_decode( $name, 0, 'utf-8' );
+        $name = ezcMailTools::mimeDecode( $name );
 
         $address = new ezcMailAddress( $mail, $name, 'utf-8' );
         return $address;
@@ -247,6 +247,45 @@ class ezcMailTools
         // Note, this function does deliberately not
         // have a $count parameter because of speed issues.
         return self::$lineBreak;
+    }
+
+    /**
+     * Decodes mime encoded fields and tries to recover from errors.
+     *
+     * Decodes the $text encoded as a MIME string to the $charset. In case the
+     * strict conversion fails this method tries to workaround the issues by
+     * trying to "fix" the original $text before trying to convert it.
+     *
+     * @param string $text
+     * @return string
+     */
+    public static function mimeDecode( $text, $charset = 'utf-8' )
+    {
+        $origtext = $text;
+        $text = @iconv_mime_decode( $text, 0, $charset );
+        if ( $text !== false )
+        {
+            return $text;
+        }
+
+        // something went wrong while decoding, let's see if we can fix it
+        // Try to fix lower case hex digits
+        $text = preg_replace_callback(
+            '/=(([a-f][a-f0-9])|([a-f0-9][a-f]))/',
+            create_function( '$matches', 'return strtoupper($matches[0]);' ),
+            $origtext
+        );
+        $text = @iconv_mime_decode( $text, 0, 'utf8' );
+        if ( $text !== false )
+        {
+            return $text;
+        }
+
+        // Try it as latin 1 string
+        $text = preg_replace( '/=\?([^?]+)\?/', '=?iso-8859-1?', $origtext );
+        $text = iconv_mime_decode( $text, 0, 'utf8' );
+
+        return $text;
     }
 }
 ?>

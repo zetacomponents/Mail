@@ -128,7 +128,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         }
         if ( isset( $this->headers['Subject'] ) )
         {
-            $mail->subject = iconv_mime_decode( $this->headers['Subject'], 0, 'utf-8' );
+            $mail->subject = ezcMailTools::mimeDecode( $this->headers['Subject'] );
             $mail->subjectCharset = 'utf-8';
         }
 
