@@ -23,7 +23,7 @@ declare(encoding="latin1");
  * $set = new ezcMailFileSet( array( 'path/to/mail/rfc822message.mail' ) );
  * $parser = new ezcMailParser();
  * $mail = $parser->parseMail( $set );
- * <code>
+ * </code>
  *
  * @package Mail
  * @version //autogen//

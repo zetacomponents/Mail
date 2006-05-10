@@ -23,7 +23,7 @@ declare(encoding="latin1");
  * $set = new ezcMailVariableSet( $mail ) );
  * $parser = new ezcMailParser();
  * $mail = $parser->parseMail( $set );
- * <code>
+ * </code>
  *
  * @package Mail
  * @version //autogen//
