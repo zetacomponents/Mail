@@ -43,6 +43,39 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     }
 
     /**
+     * Tests sending several complete mail messages.
+     */
+    public function testFullMailMultiple()
+    {
+        try
+        {
+            $this->transport->send( $this->mail );
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    /**
+     * Tests sending several complete mail messages with keep connection.
+     */
+    public function testFullMailMultipleKeepConnection()
+    {
+        try
+        {
+            $this->transport->keepConnection();
+            $this->transport->send( $this->mail );
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    /**
      * Tests sending a mail to an invalid host.
      */
     public function testInvalidHost()

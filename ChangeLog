@@ -1,3 +1,8 @@
+1.1RC1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- added the function keepConnection() in the smtp transport. This allows keeping
+  the connection when sending several mail.
+	
 1.1beta2 - Tuesday 09 May 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

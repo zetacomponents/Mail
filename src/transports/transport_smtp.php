@@ -79,6 +79,13 @@ class ezcMailSmtpTransport implements ezcMailTransport
     private $doAuthenticate;
 
     /**
+     * Holds if the connection should be kept open after sending a mail.
+     *
+     * @var bool
+     */
+    private $keepConnection = false;
+
+    /**
      * Holds the properties of this class.
      *
      * @var array(string=>mixed)
@@ -204,7 +211,27 @@ class ezcMailSmtpTransport implements ezcMailTransport
     }
 
     /**
+     * Sets if the connection should be kept open after sending an email.
+     *
+     * This method should be called prior to the first call to send().
+     *
+     * Keeping the connection open is useful if you are sending a lot of mail.
+     * It removes the overhead of opening the connection after each mail is sent.
+     *
+     * Use disconnect() to close the connection if you have requested to keep it open.
+     *
+     * @return void
+     */
+    public function keepConnection()
+    {
+        $this->keepConnection = true;
+    }
+
+    /**
      * Sends the ezcMail $mail using the SMTP protocol.
+     *
+     * If you want to send several email use keepConnection() to leave the connection
+     * to the server open between each mail.
      *
      * @throws ezcMailTransportException if the mail could not be sent.
      * @param ezcMail $mail
@@ -221,7 +248,11 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
         try
         {
-            $this->connect();
+            // open connection unless we are connected already.
+            if ( $this->status != self::STATUS_AUTHENTICATED )
+            {
+                $this->connect();
+            }
 
             $this->cmdMail( $mail->from->email );
             // each recepient must be listed here.
@@ -263,14 +294,20 @@ class ezcMailSmtpTransport implements ezcMailTransport
         catch ( ezcMailTransportSmtpException $e )
         {
             throw new ezcMailTransportException( $e->getMessage() );
+            // TODO: reset connection here.pin
         }
-        try
+
+        // close connection unless we should keep it
+        if( $this->keepConnection === false )
         {
-            $this->disconnect();
-        }
-        catch ( Exception $e )
-        {
-            // Eat! We don't care anyway since we are aborting the connection
+            try
+            {
+                $this->disconnect();
+            }
+            catch ( Exception $e )
+            {
+                // Eat! We don't care anyway since we are aborting the connection
+            }
         }
     }
 
