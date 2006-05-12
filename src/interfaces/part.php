@@ -36,7 +36,7 @@ abstract class ezcMailPart
     private $excludeHeaders = array();
 
     /**
-     * Returns the value of the header $name.
+     * Returns the RAW value of the header $name.
      *
      * Returns an empty string if the header is not found.
      *
