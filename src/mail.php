@@ -37,6 +37,7 @@
  * - <b>bcc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
  * - <b>subject</b> <i>string</i>, contains the subject of the e-mail. Use setSubject if you require a special encoding.
  * - <b>subjectCharset</b> <i>string</i> The encoding of the subject.
+ * - <b>messageID</b> <i>string</i> the message ID of the message. Treat as read-only unless you're 100% sure what you're doing.
  * - <b>body</b> <i>ezcMailPart</i> the body part of the message.
  *
  * There are several headers you can set on the mail object to achieve various effects:
@@ -93,6 +94,7 @@ class ezcMail extends ezcMailPart
         $this->properties['subject'] = null;
         $this->properties['subjectCharset'] = 'us-ascii';
         $this->properties['body'] = null;
+        $this->properties['messageID'] = null;
     }
 
     /**
@@ -133,6 +135,10 @@ class ezcMail extends ezcMailPart
 
             case 'body':
                 $this->properties['body'] = $value;
+                break;
+
+            case 'messageID':
+                $this->properties['messageID'] = $value;
                 break;
 
             default:
@@ -178,6 +184,10 @@ class ezcMail extends ezcMailPart
 
             case 'body':
                 return $this->properties['body'];
+                break;
+
+            case 'messageID':
+                return $this->properties['messageID'];
                 break;
 
             default:
@@ -280,7 +290,14 @@ class ezcMail extends ezcMailPart
         $this->setHeader( 'User-Agent', 'eZ components' );
         $this->setHeader( 'Date', date( 'r' ) );
         $idhost = $this->from->email != '' ? $this->from->email : 'localhost';
-        $this->setHeader( 'Message-Id', '<' . ezcMailTools::generateMessageId( $idhost ) . '>' );
+        if ( is_null( $this->messageID ) )
+        {
+            $this->setHeader( 'Message-Id', '<' . ezcMailTools::generateMessageId( $idhost ) . '>' );
+        }
+        else
+        {
+            $this->setHeader( 'Message-Id', $this->messageID );
+        }
 
         // if we have a body part, include the headers of the body
         if ( is_subclass_of( $this->body, "ezcMailPart" ) )

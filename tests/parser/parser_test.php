@@ -86,6 +86,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body\n", $mail->body->text );
         $this->assertEquals( "us-ascii", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+        $this->assertEquals( '<200602061533.27600.fh@ez.no>', $mail->messageID );
     }
 
     public function testKmail2()
@@ -106,6 +107,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body: זרו\n", $mail->body->text );
         $this->assertEquals( "iso-8859-1", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+        $this->assertEquals( '<200602061537.45162.fh@ez.no>', $mail->messageID );
     }
 
     public function testKmail3()
@@ -133,6 +135,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $parts[1]->contentType );
         $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
+        $this->assertEquals( '<200602061535.56671.fh@ez.no>', $mail->messageID );
     }
 
     public function testKmail4()
@@ -175,6 +178,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $parts[1]->contentType );
         $this->assertEquals( ezcMailFile::DISPLAY_ATTACHMENT, $parts[1]->dispositionType );
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
+        $this->assertEquals( '<200602061535.56671.fh@ez.no>', $mail->messageID );
 
     }
 
@@ -201,6 +205,7 @@ class ezcMailParserTest extends ezcTestCase
 
         $this->assertEquals( 'html', $parts[1]->subType );
         $this->assertEquals( '<html>', substr( $parts[1]->text, 0, 6 ) );
+        $this->assertEquals( '<200602061538.16305.fh@ez.no>', $mail->messageID );
     }
 
     //

@@ -126,10 +126,16 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         {
             $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Bcc'] );
         }
+        // subject
         if ( isset( $this->headers['Subject'] ) )
         {
             $mail->subject = ezcMailTools::mimeDecode( $this->headers['Subject'] );
             $mail->subjectCharset = 'utf-8';
+        }
+        // message ID
+        if ( isset( $this->headers['Message-Id'] ) )
+        {
+            $mail->messageID = $this->headers['Message-Id'];
         }
 
         if ( $this->bodyParser !== null )

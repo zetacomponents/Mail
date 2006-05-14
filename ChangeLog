@@ -3,6 +3,8 @@
 
 - Added the keepConnection() method to the SMTP transport. This allows keeping
   the connection open when sending several mails.
+- Added the messageID property to the ezcMail class which represents the ID of
+  a mail message.
 - Changed mime string decoding to be more robust by trying to work around
   common mistakes by MUAs.
 

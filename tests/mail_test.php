@@ -228,6 +228,30 @@ class ezcMailTest extends ezcTestCase
 //        $transport->send( $this->mail );
     }
 
+    public function testMessageID1()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "זרו";
+        $this->mail->body = new ezcMailText( "Dette er body ßßזרווו" );
+
+        $this->mail->generateHeaders();
+        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.5@ez.no>';
+        $this->assertEquals( $expected, $this->mail->getHeader( 'Message-Id' ) );
+    }
+
+    public function testMessageID2()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "זרו";
+        $this->mail->body = new ezcMailText( "Dette er body ßßזרווו" );
+
+        $this->mail->messageID = "<test-ezc-message-id@ezc.ez.no>";
+        $this->mail->generateHeaders();
+        $this->assertEquals( '<test-ezc-message-id@ezc.ez.no>', $this->mail->getHeader( 'Message-Id' ) );
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailTest" );
