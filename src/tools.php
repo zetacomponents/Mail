@@ -275,7 +275,7 @@ class ezcMailTools
             create_function( '$matches', 'return strtoupper($matches[0]);' ),
             $origtext
         );
-        $text = @iconv_mime_decode( $text, 0, 'utf8' );
+        $text = @iconv_mime_decode( $text, 0, $charset );
         if ( $text !== false )
         {
             return $text;
@@ -283,9 +283,21 @@ class ezcMailTools
 
         // Try it as latin 1 string
         $text = preg_replace( '/=\?([^?]+)\?/', '=?iso-8859-1?', $origtext );
-        $text = iconv_mime_decode( $text, 0, 'utf8' );
+        $text = iconv_mime_decode( $text, 0, $charset );
 
         return $text;
+    }
+
+    /**
+     * Converts the $text with the charset $originalCharset to UTF-8
+     *
+     * @param string $text
+     * @param string $originalCharset
+     * @return string
+     */
+    public static function convertToUTF8( $text, $originalCharset )
+    {
+        return iconv( $originalCharset, 'utf-8', $text );
     }
 }
 ?>

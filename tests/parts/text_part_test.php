@@ -49,6 +49,43 @@ class ezcMailTextTest extends ezcTestCase
         $this->assertEquals( $expectedResult, $this->part->generateHeaders() );
     }
 
+    /**
+     * Tests for properties
+     */
+    public function testGetProperties()
+    {
+        $temp = new ezcMailText( 'dummy', 'utf-8', ezcMail::EIGHT_BIT, 'iso-8859-2' );
+        $this->assertEquals( 'utf-8', $temp->charset );
+        $this->assertEquals( 'iso-8859-2', $temp->originalCharset );
+        $this->assertEquals( ezcMail::EIGHT_BIT, $temp->encoding );
+        $this->assertEquals( 'plain', $temp->subType );
+        $this->assertEquals( 'dummy', $temp->text );
+    }
+
+    public function testSetProperties()
+    {
+        $temp = new ezcMailText( 'dummy', 'bogus', -1, 'iso-8859-2' );
+        $temp->charset = 'utf-8';
+        $temp->encoding = ezcMail::EIGHT_BIT;
+        $temp->subType = 'html';
+        $temp->text = 'new dummy';
+        try
+        {
+            $temp->originalCharset = 'iso-8859-5';
+            $this->fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBasePropertyPermissionException $e )
+        {
+            $this->assertEquals( 'The property <originalCharset> is read-only.', $e->getMessage() );
+        }
+
+        $this->assertEquals( 'utf-8', $temp->charset );
+        $this->assertEquals( 'iso-8859-2', $temp->originalCharset );
+        $this->assertEquals( ezcMail::EIGHT_BIT, $temp->encoding );
+        $this->assertEquals( 'html', $temp->subType );
+        $this->assertEquals( 'new dummy', $temp->text );
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailTextTest" );

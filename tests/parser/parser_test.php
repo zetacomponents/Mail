@@ -84,7 +84,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This is the body\n", $mail->body->text );
-        $this->assertEquals( "us-ascii", $mail->body->charset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
+        $this->assertEquals( "us-ascii", $mail->body->originalCharset );
         $this->assertEquals( 'plain', $mail->body->subType );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $mail->messageID );
     }
@@ -104,8 +105,9 @@ class ezcMailParserTest extends ezcTestCase
 //        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
-        $this->assertEquals( "This is the body: æøå\n", $mail->body->text );
-        $this->assertEquals( "iso-8859-1", $mail->body->charset );
+        $this->assertEquals( "This is the body: Ã¦Ã¸Ã¥\n", $mail->body->text );
+        $this->assertEquals( "utf-8", $mail->body->charset );
+        $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
         $this->assertEquals( 'plain', $mail->body->subType );
         $this->assertEquals( '<200602061537.45162.fh@ez.no>', $mail->messageID );
     }
@@ -236,7 +238,8 @@ class ezcMailParserTest extends ezcTestCase
         // check the multipart related
         $mainPart = $parts[1]->getMainPart();
         $this->assertEquals( true, $mainPart instanceof ezcMailText );
-        $this->assertEquals( 'iso-8859-1', $mainPart->charset );
+        $this->assertEquals( 'iso-8859-1', $mainPart->originalCharset );
+        $this->assertEquals( 'utf-8', $mainPart->charset );
         $this->assertEquals( 'html', $mainPart->subType );
 
         $this->assertEquals( 1, count( $parts[1]->getRelatedParts() ) );
@@ -268,7 +271,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This is the body", $mail->body->text );
-        $this->assertEquals( "iso-8859-1", $mail->body->charset );
+        $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 
@@ -289,8 +293,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( true, $mail->body instanceof ezcMailMultipartAlternative );
         $parts = $mail->body->getParts();
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
-        $this->assertEquals( "This is the body: æøå\n", $parts[0]->text );
-        $this->assertEquals( "iso-8859-1", $parts[0]->charset );
+        $this->assertEquals( "This is the body: Ã¦Ã¸Ã¥\n", $parts[0]->text );
+        $this->assertEquals( "iso-8859-1", $parts[0]->originalCharset );
+        $this->assertEquals( "utf-8", $parts[0]->charset );
         $this->assertEquals( 'plain', $parts[0]->subType );
     }
 
@@ -366,7 +371,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This the body", $mail->body->text );
-        $this->assertEquals( "iso-8859-15", $mail->body->charset );
+        $this->assertEquals( "iso-8859-15", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 
@@ -385,8 +391,9 @@ class ezcMailParserTest extends ezcTestCase
 //        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
-        $this->assertEquals( "This is the body: æøå", $mail->body->text );
-        $this->assertEquals( "iso-8859-15", $mail->body->charset );
+        $this->assertEquals( "This is the body: Ã¦Ã¸Ã¥", $mail->body->text );
+        $this->assertEquals( "iso-8859-15", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 
@@ -435,7 +442,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "this is a body", $mail->body->text );
-        $this->assertEquals( "us-ascii", $mail->body->charset );
+        $this->assertEquals( "us-ascii", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 
@@ -456,8 +464,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( true, $mail->body instanceof ezcMailMultipartMixed );
         $parts = $mail->body->getParts();
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
-        $this->assertEquals( "This is the body with æøå", $parts[0]->text );
-        $this->assertEquals( "iso-8859-15", $parts[0]->charset );
+        $this->assertEquals( "This is the body with Ã¦Ã¸Ã¥", $parts[0]->text );
+        $this->assertEquals( "iso-8859-15", $parts[0]->originalCharset );
+        $this->assertEquals( "utf-8", $parts[0]->charset );
         $this->assertEquals( 'plain', $parts[0]->subType );
     }
 
@@ -538,7 +547,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
 
         // check the body
-        $this->assertEquals( "This is the body with æøå", $parts[0]->text );
+        $this->assertEquals( "This is the body with Ã¦Ã¸Ã¥", $parts[0]->text );
     }
 
     //
@@ -559,7 +568,8 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This is the body", $mail->body->text );
-        $this->assertEquals( "iso-8859-1", $mail->body->charset );
+        $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 
@@ -578,8 +588,9 @@ class ezcMailParserTest extends ezcTestCase
 //        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
-        $this->assertEquals( "This is the body: æøå", $mail->body->text );
-        $this->assertEquals( "iso-8859-1", $mail->body->charset );
+        $this->assertEquals( "This is the body: Ã¦Ã¸Ã¥", $mail->body->text );
+        $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
     }
 

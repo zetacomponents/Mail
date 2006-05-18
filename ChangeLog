@@ -7,6 +7,10 @@
   a mail message.
 - Changed mime string decoding to be more robust by trying to work around
   common mistakes by MUAs.
+- Changed the way how character sets are handled. From now on all text parts
+  will automatically be converted to UTF-8. The original character set
+  belonging to the e-mail is stored in the originalCharset property, while the
+  charset property will now always return "UTF-8" for text parts.
 
 	
 1.1beta2 - Tuesday 09 May 2006

@@ -118,7 +118,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $this->assertEquals( 2, count( $mail ) );
+        $this->assertEquals( 5, count( $mail ) );
     }
 
     public function testListMessages()
@@ -126,7 +126,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1=> "1439", 2 => "2416" ), $list );
+        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070', 5 => '1500' ), $list );
     }
 
     public function testStatus()
@@ -134,8 +134,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $pop3->status( $num, $size );
-        $this->assertEquals( 2, $num );
-        $this->assertEquals( 3855, $size );
+        $this->assertEquals( 5, $num );
+        $this->assertEquals( 70524, $size );
     }
 
     public function testTop()
@@ -151,15 +151,23 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.3" ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => "1143007546.5" ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.3",
-                                    2 => "1143007546.4"), $pop3->listUniqueIdentifiers() );
+        $this->assertEquals(
+            array(
+                1 => '1143007546.5',
+                2 => '1143007546.6',
+                3 => '1143007546.7',
+                4 => '1143007546.8',
+                5 => '1143007546.9'
+            ),
+            $pop3->listUniqueIdentifiers()
+        );
     }
 
     public function testApop()

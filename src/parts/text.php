@@ -22,7 +22,12 @@
  * $textPart->subType = 'html';
  * </code>
  *
- * property charset The characterset used for this text part. Defaults to 'us-ascii'.
+ * property charset The characterset used for this text part. Defaults to
+ *                  'us-ascii' while creating mail, and is always 'utf-8' while
+ *                  parsing mail.
+ * property originalCharset
+ *                  The characterset in which a text part originally was before
+ *                  the conversion to UTF-8. (readonly)
  * property subType The subtype of this text part. Defaults to 'plain' for plain text.
  *                  Use 'html' for HTML messages.
  * property encoding The encoding of the text. Defaults to eight bit.
@@ -47,12 +52,14 @@ class ezcMailText extends ezcMailPart
      * @param string $charset
      * @param int $encoding
      */
-    public function __construct( $text, $charset = "us-ascii", $encoding = ezcMail::EIGHT_BIT )
+    public function __construct( $text, $charset = "us-ascii", $encoding = ezcMail::EIGHT_BIT, $originalCharset = 'us-ascii' )
     {
         $this->text = $text;
         $this->charset = $charset;
         $this->encoding = $encoding;
         $this->subType = 'plain';
+        // We need to set this directly in the array as it's a read-only property.
+        $this->properties['originalCharset'] = $originalCharset;
     }
 
     /**
@@ -79,6 +86,9 @@ class ezcMailText extends ezcMailPart
             case 'text':
                 $this->properties['text'] = $value;
                 break;
+            case 'originalCharset':
+                throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
+                break;
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
                 break;
@@ -99,6 +109,9 @@ class ezcMailText extends ezcMailPart
         {
             case 'charset':
                 return $this->properties['charset'];
+                break;
+            case 'originalCharset':
+                return $this->properties['originalCharset'];
                 break;
             case 'subType':
                 return $this->properties['subType'];

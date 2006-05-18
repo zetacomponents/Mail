@@ -103,8 +103,9 @@ class ezcMailTextParser extends ezcMailPartParser
             $this->text = base64_decode( $this->text );
         }
 
+        $this->text = ezcMailTools::convertToUTF8( $this->text, $charset );
 
-        $part = new ezcMailText( $this->text, $charset );
+        $part = new ezcMailText( $this->text, 'utf-8', ezcMail::EIGHT_BIT, $charset );
         $part->subType = $this->subType;
         $part->setHeaders( $this->headers->getCaseSensitiveArray() );
         return $part;
