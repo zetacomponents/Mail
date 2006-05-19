@@ -30,6 +30,29 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $this->assertEquals( 2, count( $mail ) );
     }
 
+    public function testFetchMail2()
+    {
+        $set = new ezcMailMboxSet( fopen( dirname( __FILE__ ) . "/data/test-mbox-PGP", "rt" ) );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+    }
+
+    public function testFetchMail3()
+    {
+        $set = new ezcMailMboxSet( fopen( dirname( __FILE__ ) . "/data/test-mbox-russian", "rt" ) );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+
+        $this->assertEquals( 1, count( $mail ) );
+
+        //subject string should be the same as in email (with line break)
+        $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?="."\n".
+                   "    =?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
+
+        $this->assertEquals( $subject, $mail[0]->getHeader('Subject' ) );
+    }
+
     public function testBrokenFilePointer()
     {
         try

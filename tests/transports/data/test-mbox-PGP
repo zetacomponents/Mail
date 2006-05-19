@@ -1,0 +1,112 @@
+From MAILER-DAEMON Sun Apr  9 20:44:23 2006
+Date: 09 Apr 2006 20:44:23 +0200
+From: Mail System Internal Data <MAILER-DAEMON@ez.no>
+Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
+X-IMAP: 1144608263 0000000000
+Status: RO
+
+This text is part of the internal format of your mail folder, and is not
+a real message.  It is created automatically by the mail system software.
+If deleted, important folder data will be lost, and it will be re-created
+with the data reset to initial values.
+
+From svn-components-admin@lists.ez.no Mon May  8 16:40:15 2006
+Return-Path: <svn-components-admin@lists.ez.no>
+Received: from mta.ez.no (dolly.ez.no [194.248.150.25]) by ns.ez.od.ua
+	(8.12.10/8.12.10) with ESMTP id k48DeEm3017746; Mon, 8 May 2006 16:40:15
+	+0300
+Received: from zap.ez.no (zap.ez.no [194.248.150.21]) by mta.ez.no
+	(Postfix) with ESMTP id CCBBE48C029; Mon,  8 May 2006 15:40:14 +0200 (CEST)
+Received: from zap.ez.no (localhost [127.0.0.1]) by zap.ez.no
+	(8.11.6/8.11.0) with ESMTP id k48De6009042; Mon, 8 May 2006 15:40:06 +0200
+Received: from smtp.ez.no (postfix@blackboy.ez.no [194.248.150.22]) by
+	zap.ez.no (8.11.6/8.11.0) with ESMTP id k48Dcp009003 for
+	<svn-components@lists.ez.no>; Mon, 8 May 2006 15:38:51 +0200
+Received: from [10.0.6.7] (F0-EZSYSTEMS.customer.getit.de [217.194.224.41])
+	by smtp.ez.no (Postfix) with ESMTP id CF13DAB574; Mon,  8 May 2006 15:36:31
+	+0200 (CEST)
+Subject: Re: [svn-components] 2704 - in trunk/Graph/src: . exceptions
+	interfaces [eZComponents: Trunk]
+From: Kore Nordmann <kn@ez.no>
+To: Derick Rethans <dr@ez.no>
+Cc: svn-components@lists.ez.no
+In-Reply-To: <Pine.LNX.4.62.0605081515010.3872@localhost>
+References: <E1Fd5BP-0005Ly-00@svn.ez.no>
+	 <Pine.LNX.4.62.0605081515010.3872@localhost>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-a8zIDwEamodhnaP3IsJF"
+Message-Id: <1147095616.12034.2.camel@kore.de.ez.no>
+Mime-Version: 1.0
+X-Mailer: Evolution 2.4.2.1 
+Sender: svn-components-admin@lists.ez.no
+Errors-To: svn-components-admin@lists.ez.no
+X-BeenThere: svn-components@lists.ez.no
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@lists.ez.no?subject=help>
+List-Post: <mailto:svn-components@lists.ez.no>
+List-Subscribe: <http://lists.ez.no/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.ez.no?subject=subscribe>
+List-Id: List for SVN commits for the Components project
+	<svn-components.lists.ez.no>
+List-Unsubscribe: <http://lists.ez.no/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.ez.no?subject=unsubscribe>
+List-Archive: <http://lists.ez.no/mailman/private/svn-components/>
+Date: Mon, 08 May 2006 15:40:16 +0200
+Status:   
+X-Evolution-Source: pop://sa@mail.ez.od.ua/
+
+
+--=-a8zIDwEamodhnaP3IsJF
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, 2006-05-08 at 15:16 +0200, Derick Rethans wrote:
+
+> You don't need to use @static or @access here, php doc sees that just=20
+> fine for PHP 5 and higher. Also, are you sure it's @throw and not=20
+> @throws?
+>=20
+
+[...]
+
+> We use the following syntax here:
+>=20
+> }
+> else
+> {
+>=20
+
+Fixed :-)
+
+--=20
+Best regards / Med vennlig hilsen / Mit freundlichen Gruessen
+
+Kore Nordmann
+=20
+system developer / utvikler / Entwickler
+eZ systems GmbH
+Emil-Figge-Str. 76-80
+44227 Dortmund
+Germany
+=20
+kn@ez.no | eZ systems | ez.no
+
+
+--=-a8zIDwEamodhnaP3IsJF
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2.2 (GNU/Linux)
+
+iD8DBQBEX0o/gIJx893HC7sRAiWnAJwPoc5+QKKT2iEvjf6irMweJP6tLACbB5Tk
+Knq21Zds4+drRg3j965j4fg=
+=ZD4o
+-----END PGP SIGNATURE-----
+
+--=-a8zIDwEamodhnaP3IsJF--
+
+-- 
+svn-components mailing list
+svn-components@lists.ez.no
+http://lists.ez.no/mailman/listinfo/svn-components
