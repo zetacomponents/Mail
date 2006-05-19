@@ -30,6 +30,16 @@ class ezcMailTest extends ezcTestCase
     {
         $this->assertSetPropertyFails( $this->mail, "does_not_exist", array( 42 ) );
         $this->assertSetProperty( $this->mail, "to", array( array( 'email' => 'fh@ez.no' ) ) );
+
+        try
+        {
+            $this->mail->timestamp = 0;
+            $this->fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBasePropertyPermissionException $e )
+        {
+            $this->assertEquals( 'The property <timestamp> is read-only.', $e->getMessage() );
+        }
     }
 
     public function testAddAddresses()

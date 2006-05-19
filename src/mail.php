@@ -37,8 +37,9 @@
  * - <b>bcc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
  * - <b>subject</b> <i>string</i>, contains the subject of the e-mail. Use setSubject if you require a special encoding.
  * - <b>subjectCharset</b> <i>string</i> The encoding of the subject.
- * - <b>messageID</b> <i>string</i> the message ID of the message. Treat as read-only unless you're 100% sure what you're doing.
- * - <b>body</b> <i>ezcMailPart</i> the body part of the message.
+ * - <b>messageID</b> <i>string</i> The message ID of the message. Treat as read-only unless you're 100% sure what you're doing.
+ * - <b>timestamp</b> <i>integer</i> The date/time of when the message was sent as Unix Timestamp. (read-only)
+ * - <b>body</b> <i>ezcMailPart</i> The body part of the message.
  *
  * There are several headers you can set on the mail object to achieve various effects:
  * - Reply-To - Set this to an email address if you want people to reply to an address
@@ -141,6 +142,10 @@ class ezcMail extends ezcMailPart
                 $this->properties['messageID'] = $value;
                 break;
 
+            case 'timestamp':
+                throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
+                break;
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
                 break;
@@ -188,6 +193,10 @@ class ezcMail extends ezcMailPart
 
             case 'messageID':
                 return $this->properties['messageID'];
+                break;
+
+            case 'timestamp':
+                return strtotime( $this->getHeader( "Date" ) );
                 break;
 
             default:

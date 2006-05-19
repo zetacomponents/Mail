@@ -88,6 +88,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "us-ascii", $mail->body->originalCharset );
         $this->assertEquals( 'plain', $mail->body->subType );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $mail->messageID );
+        $this->assertEquals( 1139236407, $mail->timestamp );
+        $this->assertEquals( 1139236407, strtotime( $mail->getHeader( 'Date' ) ) );
+        $this->assertEquals( strtotime( 'Mon, 06 Feb 2006 15:33:27 +0100' ), $mail->timestamp );
     }
 
     public function testKmail2()
@@ -251,6 +254,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $filePart->contentType );
         $this->assertEquals( ezcMailFile::DISPLAY_INLINE, $filePart->dispositionType );
         $this->assertEquals( 'jpeg', $filePart->mimeType );
+
+        $this->assertEquals( 1142414084, $mail->timestamp );
+        $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     //
@@ -274,6 +280,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
         $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+
+        $this->assertEquals( 1142502574, $mail->timestamp );
+        $this->assertEquals( 1142502574, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     public function testGmail2()
@@ -374,6 +383,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "iso-8859-15", $mail->body->originalCharset );
         $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+
+        $this->assertEquals( 1142504273, $mail->timestamp );
+        $this->assertEquals( 1142504273, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     public function testOpera2()
@@ -445,6 +457,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "us-ascii", $mail->body->originalCharset );
         $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+
+        $this->assertEquals( 1142497778, $mail->timestamp );
+        $this->assertEquals( 1142497778, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     public function testPine2()
@@ -571,6 +586,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "iso-8859-1", $mail->body->originalCharset );
         $this->assertEquals( "utf-8", $mail->body->charset );
         $this->assertEquals( 'plain', $mail->body->subType );
+
+        $this->assertEquals( 1142498606, $mail->timestamp );
+        $this->assertEquals( 1142498606, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     public function testHotmail2()
@@ -631,6 +649,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1, count( $mail ) );
         $mail = $mail[0];
         $this->assertEquals( array( new ezcMailAddress( 'xx@ez.no', 'Bård Farsted', 'utf-8' ) ), $mail->cc );
+
+        $this->assertEquals( 1101976145, $mail->timestamp );
+        $this->assertEquals( 1101976145, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
     public function testVarious2()

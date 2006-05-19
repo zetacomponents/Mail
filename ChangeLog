@@ -5,6 +5,8 @@
   the connection open when sending several mails.
 - Added the messageID property to the ezcMail class which represents the ID of
   a mail message.
+- Added the timestamp property to the ezcMail class which is generated from
+  the Date header.
 - Changed mime string decoding to be more robust by trying to work around
   common mistakes by MUAs.
 - Changed the way how character sets are handled. From now on all text parts
