@@ -103,7 +103,7 @@ attachments to your mail.
 The mail system already supports sending attachments through the
 ezcMailMultipartMixed type. Unfortunately directly inserting an ezcMail object
 as a part does not work. This is because mail digests are a special case: they
-require to extra headers that are separated by the normal headers in the
+require two extra headers that are separated by the normal headers in the
 e-mail.
 
 To make it work we will create the class RFC822Digest that adds these headers:
