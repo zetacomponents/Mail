@@ -764,5 +764,29 @@ END;
         $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
         $this->assertEquals( 'mail.php', basename( $parts[1]->fileName ) );
     }
+
+    public function testVarious8()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-mbox-PGP' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+    }
+
+    public function testVarious9()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-mbox-russian' );
+        $mail = $parser->parseMail( $set );
+
+        $this->assertEquals( 1, count( $mail ) );
+
+        //subject string should be the same as in email (with line break)
+        $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?="."\n".
+                   "    =?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
+
+        $this->assertEquals( $subject, $mail[0]->getHeader('Subject' ) );
+    }
+
 }
 ?>

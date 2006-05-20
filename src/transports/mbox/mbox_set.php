@@ -45,10 +45,14 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     private $initialized = false;
 
+    private $messagePositions = array();
+
+    private $currentMesssagePosition = 0;
+
     /**
      * Constructs a new mbox parser set
      */
-    public function __construct( $fh )
+    public function __construct( $fh, array $messages )
     {
         if ( !is_resource( $fh ) || get_resource_type( $fh ) != 'stream' )
         {
@@ -57,6 +61,8 @@ class ezcMailMboxSet implements ezcMailParserSet
         $this->fh = $fh;
         $this->initialized = false;
         $this->hasMoreMailData = true;
+        $this->messagePositions = $messages;
+        $this->currentMessagePosition = 0;
         $this->nextMail();
     }
 
@@ -104,30 +110,17 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     public function nextMail()
     {
-        if ( $this->initialized === false )
-        {
-            /* We need to skip over the header in the mbox, which is basically
-             * skipping the first mail. The first loop reads up until the first
-             * "From " marker, which *should* be the first line in the file.
-             * The second loop then progresses to the next "From " marker where
-             * the first email message starts. */
-            while ( ( $data = $this->getNextLine() ) !== null ) {
-            }
-            $this->hasMoreMailData = true;
-            while ( ( $data = $this->getNextLine() ) !== null ) {
-            }
-            $this->hasMoreMailData = true;
-            $this->initialized = true;
-        }
-        if ( feof( $this->fh ) )
+        // seek to next message if available
+        if ( $this->currentMessagePosition > count( $this->messagePositions ) - 1 )
         {
             $this->hasMoreMailData = false;
             return false;
         }
+        fseek( $this->fh, $this->messagePositions[$this->currentMessagePosition] );
+        $this->currentMessagePosition++;
         $this->hasMoreMailData = true;
 
         return true;
     }
-
 }
 ?>

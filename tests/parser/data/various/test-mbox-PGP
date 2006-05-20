@@ -1,15 +1,3 @@
-From MAILER-DAEMON Sun Apr  9 20:44:23 2006
-Date: 09 Apr 2006 20:44:23 +0200
-From: Mail System Internal Data <MAILER-DAEMON@ez.no>
-Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
-X-IMAP: 1144608263 0000000000
-Status: RO
-
-This text is part of the internal format of your mail folder, and is not
-a real message.  It is created automatically by the mail system software.
-If deleted, important folder data will be lost, and it will be re-created
-with the data reset to initial values.
-
 From svn-components-admin@lists.ez.no Mon May  8 16:40:15 2006
 Return-Path: <svn-components-admin@lists.ez.no>
 Received: from mta.ez.no (dolly.ez.no [194.248.150.25]) by ns.ez.od.ua

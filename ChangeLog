@@ -13,6 +13,8 @@
   will automatically be converted to UTF-8. The original character set
   belonging to the e-mail is stored in the originalCharset property, while the
   charset property will now always return "UTF-8" for text parts.
+- Added the ezcMailMboxTransport and changed ezcMailMboxSet to work together
+  with that one.
 
 	
 1.1beta2 - Tuesday 09 May 2006

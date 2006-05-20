@@ -28,6 +28,7 @@ return array(
     'ezcMailTransportConnection'    => 'Mail/transports/transport_connection.php',
     'ezcMailPop3Transport'          => 'Mail/transports/pop3/pop3_transport.php',
     'ezcMailPop3Set'                => 'Mail/transports/pop3/pop3_set.php',
+    'ezcMailMboxTransport'          => 'Mail/transports/mbox/mbox_transport.php',
     'ezcMailMboxSet'                => 'Mail/transports/mbox/mbox_set.php',
     'ezcMailFileSet'                => 'Mail/transports/file/file_set.php',
     'ezcMailVariableSet'            => 'Mail/transports/variable/var_set.php',
@@ -35,6 +36,8 @@ return array(
     'ezcMailException'              => 'Mail/exceptions/mail_exception.php',
     'ezcMailTransportException'     => 'Mail/exceptions/transport_exception.php',
     'ezcMailTransportSmtpException' => 'Mail/exceptions/transport_smtp_exception.php',
+    'ezcMailNoSuchMessageException' => 'Mail/exceptions/no_such_message.php',
+
     'ezcMailTools'                  => 'Mail/tools.php',
     'ezcMailParser'                 => 'Mail/parser/parser.php',
     'ezcMailPartParser'             => 'Mail/parser/interfaces/part_parser.php',
