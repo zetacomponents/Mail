@@ -95,7 +95,7 @@ class ezcMailTools
     }
 
     /**
-     * Returns an ezcMailAddress objects parsed from the
+     * Returns an ezcMailAddress object parsed from the
      * RFC822 compatible address string $address.
      *
      * This method does not perform validation. It will also accept slightly
