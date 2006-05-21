@@ -91,18 +91,18 @@ class ezcMailToolsTest extends ezcTestCase
 
     public function testParseEmailAddressLocalEncoding()
     {
-        $add = ezcMailTools::parseEmailAddress( 'Test äöää <foobar@example.com>', 'iso-8859-1' );
-        $this->assertEquals( 'Test Ã¤Ã¶Ã¤Ã¤', $add->name );
+        $add = ezcMailTools::parseEmailAddress( 'Test ���� <foobar@example.com>', 'iso-8859-1' );
+        $this->assertEquals( 'Test äöää', $add->name );
         $this->assertEquals( 'foobar@example.com', $add->email );
     }
 
     public function testParseEmailAddressesLocalEncoding()
     {
-        $add = ezcMailTools::parseEmailAddresses( 'Test äöää <foobar@example.com>, En Lømmel <test@example.com>',
+        $add = ezcMailTools::parseEmailAddresses( 'Test ����<foobar@example.com>, En L�mmel <test@example.com>',
                                                 'iso-8859-1' );
-        $this->assertEquals( 'Test Ã¤Ã¶Ã¤Ã¤', $add[0]->name );
+        $this->assertEquals( 'Test äöää', $add[0]->name );
         $this->assertEquals( 'foobar@example.com', $add[0]->email );
-        $this->assertEquals( 'En LÃ¸mmel', $add[1]->name );
+        $this->assertEquals( 'En Lømmel', $add[1]->name );
         $this->assertEquals( 'test@example.com', $add[1]->email );
     }
 
