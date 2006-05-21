@@ -15,6 +15,11 @@
   charset property will now always return "UTF-8" for text parts.
 - Added the ezcMailMboxTransport and changed ezcMailMboxSet to work together
   with that one.
+- Added $encoding parameter to ezcMailTools::parseMailAddress and
+  ezcMailTools::parseMailAddresses. This allows you to parse not only
+  RFC822 complient address strings but also address strings in local
+  encoding. This is useful when ezcMailAddress items directly from
+  user inserted address string (e.g from a composer window).
 
 	
 1.1beta2 - Tuesday 09 May 2006

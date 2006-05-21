@@ -95,8 +95,11 @@ class ezcMailTools
     }
 
     /**
-     * Returns an ezcMailAddress object parsed from the
-     * RFC822 compatible address string $address.
+     * Returns an ezcMailAddress object parsed from the address string $address.
+     *
+     * You can set the encoding of the name part with the $encoding parameter.
+     * If $encoding is omitted or set to "mime" parseEmailAddress will asume that
+     * the name part is mime encoded.
      *
      * This method does not perform validation. It will also accept slightly
      * malformed addresses.
@@ -108,10 +111,11 @@ class ezcMailTools
      * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
      * </code>
      *
-     * @param string $addresse
+     * @param string $address
+     * @param string $encoding
      * @return ezcMailAddress
      */
-    public static function parseEmailAddress( $address )
+    public static function parseEmailAddress( $address, $encoding = "mime" )
     {
         // we don't care about the "group" part of the address since this is not used anywhere
 
@@ -129,27 +133,37 @@ class ezcMailTools
         // remove any quotes found in mail addresses like "bah,"@example.com
         $mail = str_replace( '"', '', $mail );
 
-        // the name may contain interesting character encoding. We need to convert it.
-        $name = ezcMailTools::mimeDecode( $name );
+        if( $encoding == 'mime' )
+        {
+            // the name may contain interesting character encoding. We need to convert it.
+            $name = ezcMailTools::mimeDecode( $name );
+        }
+        else
+        {
+            $name = iconv( $encoding, 'utf-8', $name );
+        }
 
         $address = new ezcMailAddress( $mail, $name, 'utf-8' );
         return $address;
     }
 
     /**
-     * Returns an array of ezcMailAddress objects parsed from the
-     * RFC822 compatible address string $addresses.
+     * Returns an array of ezcMailAddress objects parsed from the address string $addresses.
+     *
+     * You can set the encoding of the name parts with the $encoding parameter.
+     * If $encoding is omitted or set to "mime" parseEmailAddresses will asume that
+     * the name parts are mime encoded.
      *
      * Example:
      * <code>
      * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
      * </code>
      *
-     * @todo handle charactersets properly
      * @param string $addresses
+     * @param string $encoding
      * @return array(ezcMailAddress)
      */
-    public static function parseEmailAddresses( $addresses )
+    public static function parseEmailAddresses( $addresses, $encoding = "mime" )
     {
         $addressesArray = array();
         $inQuote = false;
@@ -173,7 +187,7 @@ class ezcMailTools
         $addressObjects = array();
         foreach ( $addressesArray as $address )
         {
-            $addressObject = self::parseEmailAddress( $address );
+            $addressObject = self::parseEmailAddress( $address, $encoding );
             if ( $addressObject !== null )
             {
                 $addressObjects[] = $addressObject;

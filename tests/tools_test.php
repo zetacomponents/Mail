@@ -43,7 +43,7 @@ class ezcMailToolsTest extends ezcTestCase
     }
 
 
-    public function testParseEmailAddressGood()
+    public function testParseEmailAddressMimeGood()
     {
         $add = ezcMailTools::parseEmailAddress( '"John Doe" <john@doe.com>' );
         $this->assertEquals( 'John Doe', $add->name );
@@ -70,13 +70,13 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( 'jo-_!#%&+hn@doe.com', $add->email );
     }
 
-    public function testParseEmailAddressWrong()
+    public function testParseEmailAddressMimeWrong()
     {
         $add = ezcMailTools::parseEmailAddress( "No address in this place @ here" );
         $this->assertEquals( null, $add );
     }
 
-    public function testParseEmailAddresses()
+    public function testParseEmailMimeAddresses()
     {
         $add = ezcMailTools::parseEmailAddresses( '"John Doe" <john@doe.com>, "my, name" <my@example.com>' );
         $this->assertEquals( 'John Doe', $add[0]->name );
@@ -88,6 +88,24 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( '', $add[0]->name );
         $this->assertEquals( 'john@doe.com', $add[0]->email );
     }
+
+    public function testParseEmailAddressLocalEncoding()
+    {
+        $add = ezcMailTools::parseEmailAddress( 'Test äöää <foobar@example.com>', 'iso-8859-1' );
+        $this->assertEquals( 'Test Ã¤Ã¶Ã¤Ã¤', $add->name );
+        $this->assertEquals( 'foobar@example.com', $add->email );
+    }
+
+    public function testParseEmailAddressesLocalEncoding()
+    {
+        $add = ezcMailTools::parseEmailAddresses( 'Test äöää <foobar@example.com>, En Lømmel <test@example.com>',
+                                                'iso-8859-1' );
+        $this->assertEquals( 'Test Ã¤Ã¶Ã¤Ã¤', $add[0]->name );
+        $this->assertEquals( 'foobar@example.com', $add[0]->email );
+        $this->assertEquals( 'En LÃ¸mmel', $add[1]->name );
+        $this->assertEquals( 'test@example.com', $add[1]->email );
+    }
+
 
     /**
      * Tests if generateContentId works as it should.
