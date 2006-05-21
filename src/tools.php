@@ -295,6 +295,15 @@ class ezcMailTools
             return $text;
         }
 
+        // Workaround a bug in PHP 5.1.0-5.1.3 where the "b" and "q" methods
+        // are not understood (but only "B" and "Q")
+        $text = str_replace( array( '?b?', '?q?' ), array( '?B?', '?Q?' ), $origtext );
+        $text = @iconv_mime_decode( $text, 0, $charset );
+        if ( $text !== false )
+        {
+            return $text;
+        }
+
         // Try it as latin 1 string
         $text = preg_replace( '/=\?([^?]+)\?/', '=?iso-8859-1?', $origtext );
         $text = iconv_mime_decode( $text, 0, $charset );

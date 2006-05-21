@@ -20,6 +20,8 @@
   RFC822 complient address strings but also address strings in local
   encoding. This is useful when ezcMailAddress items directly from
   user inserted address string (e.g from a composer window).
+- Fixed an issue where mime decoding of headers failed because of a bug in
+  PHP.
 
 	
 1.1beta2 - Tuesday 09 May 2006
