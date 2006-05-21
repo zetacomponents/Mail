@@ -108,7 +108,7 @@ class ezcMailTools
      *
      * Example:
      * <code>
-     * ezcMailTools::parseEmailAddresses( 'John Doe <john@example.com>' );
+     * ezcMailTools::parseEmailAddress( 'John Doe <john@example.com>' );
      * </code>
      *
      * @param string $address
