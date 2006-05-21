@@ -140,7 +140,7 @@ class ezcMailTools
         }
         else
         {
-            $name = iconv( $encoding, 'utf-8', $name );
+            $name = ezcMailCharsetConverter::convertToUTF8( $name, $encoding );
         }
 
         $address = new ezcMailAddress( $mail, $name, 'utf-8' );
@@ -300,18 +300,6 @@ class ezcMailTools
         $text = iconv_mime_decode( $text, 0, $charset );
 
         return $text;
-    }
-
-    /**
-     * Converts the $text with the charset $originalCharset to UTF-8
-     *
-     * @param string $text
-     * @param string $originalCharset
-     * @return string
-     */
-    public static function convertToUTF8( $text, $originalCharset )
-    {
-        return iconv( $originalCharset, 'utf-8', $text );
     }
 }
 ?>
