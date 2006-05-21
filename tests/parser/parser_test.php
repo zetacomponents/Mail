@@ -773,6 +773,7 @@ END;
         $this->assertEquals( 1, count( $mail ) );
     }
 
+    // This test tests that folding works correctly
     public function testVarious9()
     {
         $parser = new ezcMailParser();
@@ -782,8 +783,8 @@ END;
         $this->assertEquals( 1, count( $mail ) );
 
         //subject string should be the same as in email (with line break)
-        $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?="."\n".
-                   "    =?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
+        $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?=" .
+            "\t=?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
 
         $this->assertEquals( $subject, $mail[0]->getHeader('Subject' ) );
     }
