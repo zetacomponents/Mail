@@ -71,7 +71,7 @@ class ezcMailRfc822Digest extends ezcMailPart
                 $this->properties[$name] = $value;
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__set( $name, $value );
                 break;
         }
     }
@@ -92,7 +92,7 @@ class ezcMailRfc822Digest extends ezcMailPart
                 return $this->properties[$name];
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__get( $name );
                 break;
         }
     }

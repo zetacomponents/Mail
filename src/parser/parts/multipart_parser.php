@@ -196,7 +196,9 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
                 $this->currentPartParser = null;
             }
         }
-        return $this->finishMultipart();
+        $multipart = $this->finishMultipart();
+        ezcMailPartParser::parsePartHeaders( $this->headers, $multipart );
+        return $multipart;
     }
 
     /**

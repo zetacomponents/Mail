@@ -90,7 +90,7 @@ class ezcMailText extends ezcMailPart
                 throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__set( $name, $value );
                 break;
         }
     }
@@ -123,7 +123,7 @@ class ezcMailText extends ezcMailPart
                 return $this->properties['text'];
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__get( $name );
                 break;
         }
     }

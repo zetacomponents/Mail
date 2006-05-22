@@ -16,6 +16,15 @@
  * parts themselves. They must also implement {@link generateBody()} which is
  * called when the message part is generated.
  *
+ * The ezcMailPart class has the following properties:
+ * - <b>contentDisposition</b> <i>ezcMailContentDispositionHeader</i>
+ *   contains the information from the Content-Disposition field of this mail.
+ *   This useful especially when you are investigating retrieved mail to see
+ *   if a part is an attachment or should be displayed inline.
+ *   However, it can also be used to set the same on outgoing mail. Note that the
+ *   ezcMailFile part sets the Content-Disposition field itself based on it's own
+ *   properties when sending mail.
+ *
  * @package Mail
  * @version //autogen//
  */
@@ -34,6 +43,57 @@ abstract class ezcMailPart
      * @var array(string)
      */
     private $excludeHeaders = array();
+
+    /**
+     * Holds the properties of this class.
+     *
+     * @var array(string=>mixed)
+     */
+    private $properties = array();
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'contentDisposition':
+                $this->properties[$name] = $value;
+                break;
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+                break;
+        }
+
+    }
+
+    /**
+     * Returns the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @param string $name
+     * @return mixed
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'contentDisposition':
+                return isset( $this->properties[$name] ) ? $this->properties[$name] : null;
+                break;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+                break;
+        }
+    }
+
 
     /**
      * Returns the RAW value of the header $name.
@@ -57,6 +117,9 @@ abstract class ezcMailPart
      *
      * If the header is already set it will override the old value.
      *
+     * Note: The header Content-Disposition will be overwritten by the
+     * contents of the contentsDisposition property if set.
+     *
      * @see generateHeaders()
      *
      * @param string $name
@@ -73,7 +136,7 @@ abstract class ezcMailPart
      *
      * The headers specified in the associative array of the
      * form array(headername=>value) will overwrite any existing
-     * header values..
+     * header values.
      *
      * @param array(string=>string) $headers
      * @return void
@@ -99,6 +162,46 @@ abstract class ezcMailPart
      */
     public function generateHeaders()
     {
+        // set content disposition header
+        if( $this->contentDisposition !== null &&
+            ( $this->contentDisposition instanceof ezcMailContentDispositionHeader ) )
+        {
+            $cdHeader = $this->contentDisposition;
+            $cd = "{$cdHeader->disposition}";
+            if( $cdHeader->fileName !== null )
+            {
+                $cd .= "; filename=\"{$cdHeader->fileName}\"";
+            }
+
+            if( $cdHeader->creationDate !== null )
+            {
+                $cd .= "; creation-date=\"{$cdHeader->creationDate}\"";
+            }
+
+            if( $cdHeader->modificationDate !== null )
+            {
+                $cd .= "; modification-date=\"{$cdHeader->modificationDate}\"";
+            }
+
+            if( $cdHeader->readDate !== null )
+            {
+                $cd .= "; read-date=\"{$cdHeader->readDate}\"";
+            }
+
+            if( $cdHeader->size !== null )
+            {
+                $cd .= "; size={$cdHeader->size}";
+            }
+
+            foreach( $cdHeader->additionalParameters as $addKey => $addValue )
+            {
+                $cd .="; {$addKey}=\"{$addValue}\"";
+            }
+
+            $this->setHeader( 'Content-Disposition', $cd );
+        }
+
+        // generate headers
         $text = "";
         foreach ( $this->headers as $header => $value )
         {
@@ -107,6 +210,7 @@ abstract class ezcMailPart
                 $text .= "$header: $value" . ezcMailTools::lineBreak();
             }
         }
+
         return $text;
     }
 

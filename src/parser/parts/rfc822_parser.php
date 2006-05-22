@@ -77,11 +77,18 @@ class ezcMailRfc822Parser extends ezcMailPartParser
 
             // clean up headers for the part
             // the rest of the headers should be set on the mail object.
-            // TODO: Change this to Content* ?
+
             $headers = new ezcMailHeadersHolder();
             $headers['Content-Type'] = $this->headers['Content-Type'];
-            $headers['Content-Transfer-Encoding'] = $this->headers['Content-Transfer-Encoding'];
-            $headers['Content-Disposition'] = $this->headers['Content-Disposition'];
+            if( isset( $this->headers['Content-Transfer-Encoding'] ) )
+            {
+                $headers['Content-Transfer-Encoding'] = $this->headers['Content-Transfer-Encoding'];
+            }
+
+            if( isset( $this->headers['Content-Disposition'] ) )
+            {
+                $headers['Content-Disposition'] = $this->headers['Content-Disposition'];
+            }
 
             // get the correct body type
             $this->bodyParser = self::createPartParserForHeaders( $headers );
@@ -105,6 +112,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     {
         $mail = new ezcMail();
         $mail->setHeaders( $this->headers->getCaseSensitiveArray() );
+        ezcMailPartParser::parsePartHeaders( $this->headers, $mail );
 
         // from
         if ( isset( $this->headers['From'] ) )

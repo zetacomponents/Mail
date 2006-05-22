@@ -235,6 +235,7 @@ class ezcMailFileParser extends ezcMailPartParser
 
         // set content type
         $filePart->setHeaders( $this->headers->getCaseSensitiveArray() );
+        ezcMailPartParser::parsePartHeaders( $this->headers, $filePart );
         switch ( strtolower( $this->mainType ) )
         {
             case 'image':

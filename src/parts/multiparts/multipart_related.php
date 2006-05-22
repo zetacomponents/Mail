@@ -162,7 +162,7 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      * - provide methods for substitution of these as well (inclusive listing of which they are)
      * @todo Move to separate class.
      */
-    public function resolveHtmlLinks()
+    private function resolveHtmlLinks()
     {
         // 1. Check that the main part is a html part
         // 2. Go through the related parts and build up a structure of available

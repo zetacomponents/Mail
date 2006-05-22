@@ -39,6 +39,7 @@ class ezcMailRfc822DigestParser extends ezcMailPartParser
      */
     public function __construct( ezcMailHeadersHolder $headers )
     {
+        $this->headers = $headers;
         $this->mailParser = new ezcMailRfc822Parser();
     }
 
@@ -62,7 +63,9 @@ class ezcMailRfc822DigestParser extends ezcMailPartParser
      */
     public function finish()
     {
-        return new ezcMailRfc822Digest( $this->mailParser->finish() );
+        $digest = new ezcMailRfc822Digest( $this->mailParser->finish() );
+        ezcMailPartParser::parsePartHeaders( $this->headers, $digest );
+        return $digest;
     }
 
 }

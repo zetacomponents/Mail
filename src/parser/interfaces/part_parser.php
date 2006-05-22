@@ -144,7 +144,7 @@ abstract class ezcMailPartParser
     }
 
     /**
-     * Parses the header given by $line and adds it to $this->headers.
+     * Parses the header given by $line and adds to $headers.
      *
      * This method is usually used to parse the headers for a subpart. The
      * only exception is RFC822 parts since you know the type in advance.
@@ -170,6 +170,59 @@ abstract class ezcMailPartParser
         // else -invalid syntax, this should never happen.
     }
 
+    /**
+     * Scans through $headers and sets any specific header properties on $part.
+     *
+     * Currently we only have Content-Disposition on the ezcMailPart level.
+     * All parser parts must call this method once.
+     *
+     * @param ezcMailHeadersHolder $headers
+     * @param ezcMailPart $part
+     * @return void
+     */
+    static public function parsePartHeaders( ezcMailHeadersHolder $headers, ezcMailPart $part )
+    {
+        if( isset( $headers['Content-Disposition'] ) )
+        {
+            $cd = new ezcMailContentDispositionHeader();
+            if ( preg_match( '/^\s*attachment;?/i',
+                             $headers['Content-Disposition'], $matches ) )
+            {
+                $cd->disposition = "attachment";
+            }
+
+            // parameters
+            if ( preg_match_all( '/\s*(\S*)="?([^;"]*);?/i',
+                             $headers['Content-Disposition'], $matches, PREG_SET_ORDER ) )
+            {
+                foreach( $matches as $param )
+                {
+                    switch( $param[1] )
+                    {
+                        case 'filename':
+                            $cd->fileName = trim( $param[2], '"' );
+                            break;
+                        case 'creation-date':
+                            $cd->creationDate = trim( $param[2], '"' );
+                            break;
+                        case 'modification-date':
+                            $cd->modificationDate = trim( $param[2], '"' );
+                            break;
+                        case 'read-date':
+                            $cd->readDate = trim( $param[2], '"' );
+                            break;
+                        case 'size':
+                            $cd->readDate = trim( $param[2], '"' );
+                            break;
+                        default:
+                            $cd->additionalParameters[$param[1]] = $param[2];
+                            break;
+                    }
+                }
+            }// end parameters
+            $part->contentDisposition = $cd;
+        }
+    }
 }
 
 ?>

@@ -147,7 +147,7 @@ class ezcMail extends ezcMailPart
                 break;
 
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                parent::__set( $name, $value );
                 break;
         }
     }
@@ -200,7 +200,7 @@ class ezcMail extends ezcMailPart
                 break;
 
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__get( $name );
                 break;
         }
     }

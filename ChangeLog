@@ -1,6 +1,8 @@
 1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Implemented #8266: New enhancement: property for the Content-Disposition stuff 
+  on the ezcMailPart level. Implemented for both parsing and sending.
 - Added the keepConnection() method to the SMTP transport. This allows keeping
   the connection open when sending several mails.
 - Added the messageID property to the ezcMail class which represents the ID of

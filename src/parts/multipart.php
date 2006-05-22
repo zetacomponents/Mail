@@ -101,7 +101,7 @@ abstract class ezcMailMultipart extends ezcMailPart
                                   'boundary="' . $this->boundary . '"' );
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__set( $name, $value );
                 break;
         }
     }
@@ -121,7 +121,7 @@ abstract class ezcMailMultipart extends ezcMailPart
                 return $this->properties['boundary'];
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__get( $name );
                 break;
         }
     }

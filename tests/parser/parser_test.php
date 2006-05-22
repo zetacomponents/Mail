@@ -789,5 +789,26 @@ END;
         $this->assertEquals( $subject, $mail[0]->getHeader('Subject' ) );
     }
 
+    public function testContentDisposition()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/mail_with_attachment.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( true, $mail->body instanceof ezcMailMultipartMixed );
+        $parts = $mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+        // check the mail, it should not have a Content-Disposition field
+        $this->assertEquals( null, $mail->contentDisposition );
+
+        // check the body, it should have a Content-Disposition field with 'inline' set to 1
+        $this->assertEquals( 'inline', $parts[0]->contentDisposition->disposition );
+
+        // check the file, it should have a content disposition
+        $this->assertEquals( 'attachment', $parts[1]->contentDisposition->disposition );
+        $this->assertEquals( 'tur.jpg', $parts[1]->contentDisposition->fileName );
+    }
 }
 ?>

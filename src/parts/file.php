@@ -148,7 +148,7 @@ class ezcMailFile extends ezcMailPart
                 $this->setHeader( 'Content-ID', '<' . $value . '>' );
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__set( $name, $value );
                 break;
         }
     }
@@ -184,7 +184,7 @@ class ezcMailFile extends ezcMailPart
                 return $this->properties['contentId'];
                 break;
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                return parent::__get( $name );
                 break;
         }
     }
@@ -217,8 +217,15 @@ class ezcMailFile extends ezcMailPart
      */
     private function setHeaderContentDisposition()
     {
-        $this->setHeader( 'Content-Disposition',
-                          $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
+        if( $this->contentDisposition == null )
+        {
+            $this->contentDisposition = new ezcMailContentDispositionHeader();
+        }
+        $this->contentDisposition->disposition = $this->dispositionType;
+        $this->contentDisposition->fileName = basename( $this->fileName );
+
+//        $this->setHeader( 'Content-Disposition',
+//                          $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
     }
 }
 ?>

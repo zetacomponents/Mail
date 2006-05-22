@@ -126,6 +126,50 @@ class ezcMailPartTest extends ezcTestCase
         $this->assertEquals( $expectedResult, $this->part->generate() );
     }
 
+    public function testGenerateHeadersContentDispositionNoAddParams()
+    {
+        $expectedResult = "Content-Disposition: inline; filename=\"paragliding_rocks.txt\";".
+            " creation-date=\"Sun, 21 May 2006 16:00:50 +0400\";" .
+            " modification-date=\"Sun, 21 May 2006 16:00:51 +0400\";" .
+            " read-date=\"Sun, 21 May 2006 16:00:52 +0400\";" .
+            " size=1024".
+            ezcMailTools::lineBreak();
+
+        $cd = new ezcMailContentDispositionHeader( 'inline',
+                                                   'paragliding_rocks.txt',
+                                                   'Sun, 21 May 2006 16:00:50 +0400',
+                                                   'Sun, 21 May 2006 16:00:51 +0400',
+                                                   'Sun, 21 May 2006 16:00:52 +0400',
+                                                   '1024'
+                                                   );
+        $this->part->contentDisposition = $cd;
+        $this->assertEquals( $expectedResult, $this->part->generateHeaders() );
+    }
+
+    public function testGenerateHeadersContentDispositionAddParams()
+    {
+        $expectedResult = "Content-Disposition: inline; filename=\"paragliding_rocks.txt\";".
+            " creation-date=\"Sun, 21 May 2006 16:00:50 +0400\";" .
+            " modification-date=\"Sun, 21 May 2006 16:00:51 +0400\";" .
+            " read-date=\"Sun, 21 May 2006 16:00:52 +0400\";" .
+            " size=1024;".
+            " x-glider=\"sport2\";".
+            " x-speed=\"52\"".
+            ezcMailTools::lineBreak();
+
+        $cd = new ezcMailContentDispositionHeader( 'inline',
+                                                   'paragliding_rocks.txt',
+                                                   'Sun, 21 May 2006 16:00:50 +0400',
+                                                   'Sun, 21 May 2006 16:00:51 +0400',
+                                                   'Sun, 21 May 2006 16:00:52 +0400',
+                                                   '1024',
+                                                   array( 'x-glider' => 'sport2',
+                                                          'x-speed' => '52' )
+                                                   );
+        $this->part->contentDisposition = $cd;
+        $this->assertEquals( $expectedResult, $this->part->generateHeaders() );
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailPartTest" );

@@ -60,6 +60,7 @@ class ezcMailHeadersHolderTest extends ezcTestCase
         $map = new ezcMailHeadersHolder();
         $map['Subject'] = 1;
         $this->assertEquals( false, isset( $map['Muha'] ) );
+        $this->assertEquals( false, isset( $map['Muha'] ) ); // check that checking for not-set does not set it
         $this->assertEquals( true, isset( $map['subject'] ) );
     }
 }
