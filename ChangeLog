@@ -1,6 +1,9 @@
 1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Added workaround for bug #8271: New bug: Mail parsing bug in email with PGP signature.
+  We don't support GPG at the moment, however we now recognize it and ignore keys
+  and signatures.
 - Implemented #8266: New enhancement: property for the Content-Disposition stuff 
   on the ezcMailPart level. Implemented for both parsing and sending.
 - Added the keepConnection() method to the SMTP transport. This allows keeping

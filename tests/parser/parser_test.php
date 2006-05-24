@@ -765,12 +765,19 @@ END;
         $this->assertEquals( 'mail.php', basename( $parts[1]->fileName ) );
     }
 
-    public function testVarious8()
+    // we currently don't have PGP support
+    // check that the signature does not show up in the multipart body
+    public function testPGPSignature()
     {
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'various/test-mbox-PGP' );
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( 1, count( $mail[0]->body->getParts() ) );
+    }
+
+    public function testPGPEncryptedMail()
+    {
     }
 
     // This test tests that folding works correctly
