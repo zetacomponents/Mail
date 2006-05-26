@@ -1,6 +1,8 @@
 1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Fixed a bug where parsing would fail because there was no trailing ';' in the Content-Type
+  field.
 - Added workaround for bug #8271: New bug: Mail parsing bug in email with PGP signature.
   We don't support GPG at the moment, however we now recognize it and ignore keys
   and signatures.

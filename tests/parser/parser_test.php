@@ -817,5 +817,23 @@ END;
         $this->assertEquals( 'attachment', $parts[1]->contentDisposition->disposition );
         $this->assertEquals( 'tur.jpg', $parts[1]->contentDisposition->fileName );
     }
+
+    public function testDigestInDigest()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-digest-in-digest' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+
+        $parts = $mail[0]->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
+
+        // check the digest
+        $parts = $parts[1]->mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
+
+    }
 }
 ?>

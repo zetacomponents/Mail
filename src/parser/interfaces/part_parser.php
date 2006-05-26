@@ -83,7 +83,7 @@ abstract class ezcMailPartParser
         {
             $matches = array();
             // matches "type/subtype; blahblahblah"
-            preg_match_all( '/^(\S+)\/([^;]+);(.+)*/',
+            preg_match_all( '/^(\S+)\/([^;]+);?(.+)*/',
                             $headers['Content-Type'], $matches, PREG_SET_ORDER );
             if ( count( $matches ) > 0 )
             {
