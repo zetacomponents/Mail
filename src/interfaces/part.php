@@ -33,9 +33,9 @@ abstract class ezcMailPart
     /**
      * An associative array containing all the headers set for this part.
      *
-     * @var array(string)
+     * @var ezcMailHeadersHolder
      */
-    private $headers = array();
+    private $headers = null;
 
     /**
      * An array of headers to exclude when generating the headers.
@@ -50,6 +50,14 @@ abstract class ezcMailPart
      * @var array(string=>mixed)
      */
     private $properties = array();
+
+    /**
+     * Constructs a new mail part.
+     */
+    public function __construct()
+    {
+        $this->headers = new ezcMailHeadersHolder();
+    }
 
     /**
      * Sets the property $name to $value.
@@ -99,13 +107,16 @@ abstract class ezcMailPart
      * Returns the RAW value of the header $name.
      *
      * Returns an empty string if the header is not found.
+     * Getting headers is case insensitive. Getting the header
+     * 'Message-Id' will match both 'Message-ID' and 'MESSAGE-ID'
+     * as well as 'Message-Id'.
      *
      * @param string $name
      * @return string
      */
     public function getHeader( $name )
     {
-        if ( array_key_exists( $name, $this->headers ) )
+        if ( isset( $this->headers ) )
         {
             return $this->headers[$name];
         }
@@ -143,7 +154,10 @@ abstract class ezcMailPart
      */
     public function setHeaders( array $headers )
     {
-        $this->headers = array_merge( $this->headers, $headers );
+        foreach( $headers as $key => $value )
+        {
+            $this->headers[$key] = $value;
+        }
     }
 
     /**
@@ -203,7 +217,7 @@ abstract class ezcMailPart
 
         // generate headers
         $text = "";
-        foreach ( $this->headers as $header => $value )
+        foreach ( $this->headers->getCaseSensitiveArray() as $header => $value )
         {
             if ( in_array( strtolower( $header ), $this->excludeHeaders ) === false )
             {

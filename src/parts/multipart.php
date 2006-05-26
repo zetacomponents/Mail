@@ -61,6 +61,8 @@ abstract class ezcMailMultipart extends ezcMailPart
      */
     public function __construct( array $parts )
     {
+        parent::__construct();
+
         $this->boundary = $this->generateBoundary();
         $this->setHeader( "Content-Type", 'multipart/' . $this->multipartType() . '; '
                                            . 'boundary="' . $this->boundary . '"' );

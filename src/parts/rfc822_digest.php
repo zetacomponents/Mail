@@ -49,6 +49,8 @@ class ezcMailRfc822Digest extends ezcMailPart
      */
     public function __construct( ezcMail $mail )
     {
+        parent::__construct();
+
         $this->mail = $mail;
         $this->setHeader( 'Content-Type', 'message/rfc822' );
         $this->setHeader( 'Content-Disposition', 'inline' );

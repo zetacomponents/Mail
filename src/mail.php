@@ -88,6 +88,8 @@ class ezcMail extends ezcMailPart
      */
     public function __construct( )
     {
+        parent::__construct();
+
         $this->properties['from'] = null;
         $this->properties['to'] = array();
         $this->properties['cc'] = array();

@@ -18,6 +18,16 @@
 class ezcMailTools
 {
     /**
+     * Reply to sender.
+     */
+    const REPLY_SENDER = 1;
+
+    /**
+     * Reply to all.
+     */
+    const REPLY_ALL = 1;
+
+    /**
      * Holds the unique ID's.
      *
      * @var int
@@ -309,6 +319,89 @@ class ezcMailTools
         $text = iconv_mime_decode( $text, 0, $charset );
 
         return $text;
+    }
+
+    /**
+     * Returns a new mail object that is a reply to the current object.
+     *
+     * The new mail will have the correct to, cc, bcc and reference headers set.
+     * It will not have any body set.
+     *
+     * By default the reply will only be sent to the sender of the original mail.
+     * If $type is set to REPLY_ALL, all the original recipients will be included
+     * in the reply.
+     *
+     * Use $subjectPrefix to set the prefix to the subject of the mail. The default
+     * is to prefix with 'Re: '.
+     *
+     * @param ezcMailAddress $from
+     * @param int
+     * @param int $type REPLY_SENDER or REPLY_ALL
+     * @param string $subjectPrefix
+     * @return ezcMail
+     */
+    static public function replyToMail( ezcMail $mail, ezcMailAddress $from,
+                                        $type = self::REPLY_SENDER, $subjectPrefix = "Re: " )
+    {
+        $reply = new ezcMail();
+        $reply->from = $from;
+
+        // To = Reply-To if set
+        if( $mail->getHeader( 'Reply-To' ) != '' )
+        {
+            $reply->to = ezcMailTools::parseEmailAddress( $mail->getHeader( 'Reply-To' ) );
+        }
+        else  // Else To = From
+
+        {
+            $reply->to = $mail->from;
+        }
+
+        if( $type == self::REPLY_ALL )
+        {
+            // Cc = Cc + To - your own address
+            $cc = array();
+            foreach( $mail->to as $address )
+            {
+                if( $address->email != $from->email )
+                {
+                    $cc[] = $address;
+                }
+            }
+            foreach( $mail->cc as $address )
+            {
+                if( $address->email != $from->email )
+                {
+                    $cc[] = $address;
+                }
+            }
+            $reply->cc = $cc;
+        }
+
+        $reply->subject = $subjectPrefix . $mail->subject;
+
+        if( $mail->getHeader( 'Message-Id' ) )
+        {
+            // In-Reply-To = Message-Id
+            $reply->setHeader( 'In-Reply-To', $mail->getHeader( 'Message-ID' ) );
+
+            // References = References . Message-Id
+            if( $mail->getHeader( 'References' ) != '' )
+            {
+                $reply->setHeader( 'References', $mail->getHeader( 'References' )
+                                   . ' ' . $mail->getHeader( 'Message-ID' ) );
+            }
+            else
+            {
+                $reply->setHeader( 'References', $mail->getHeader( 'Message-ID' ) );
+            }
+        }
+        else // original mail is borked. Let's support it anyway.
+        {
+            $reply->setHeader( 'References', $mail->getHeader( 'References' ) );
+        }
+
+        return $reply;
     }
 }
 ?>

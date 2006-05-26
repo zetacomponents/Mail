@@ -1,6 +1,12 @@
 1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+	
+- Added the method ezcMailTools::replyToMail that will create a reply message
+  with the correct headers set (from, to, cc, ,subject, references and in-reply-to) 
+  based on an existing mail message.
+- Headers are now stored case sensitive but retrieved case insensitive. This is
+  useful since headers are case insensitive, but do have a preferred case. When
+  fetching headers it is handy not to have to try all possible permutations.
 - Fixed a bug where parsing would fail because there was no trailing ';' in the Content-Type
   field.
 - Added workaround for bug #8271: New bug: Mail parsing bug in email with PGP signature.

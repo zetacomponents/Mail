@@ -83,6 +83,8 @@ class ezcMailFile extends ezcMailPart
      */
     public function __construct( $fileName /*,$encoding = ezcMail::BASE64*/ )
     {
+        parent::__construct();
+
         // initialize properties that may be touched automatically
         // this is to avoid notices
         $this->properties['contentType'] = null;
