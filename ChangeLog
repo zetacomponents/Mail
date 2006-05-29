@@ -1,38 +1,39 @@
 1.1rc1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	
-- Added the method ezcMailTools::replyToMail that will create a reply message
-  with the correct headers set (from, to, cc, ,subject, references and in-reply-to) 
-  based on an existing mail message.
-- Headers are now stored case sensitive but retrieved case insensitive. This is
-  useful since headers are case insensitive, but do have a preferred case. When
-  fetching headers it is handy not to have to try all possible permutations.
-- Fixed a bug where parsing would fail because there was no trailing ';' in the Content-Type
-  field.
-- Added workaround for bug #8271: New bug: Mail parsing bug in email with PGP signature.
+- Added the ezcMailTools::replyToMail() method that will create a reply
+  message with the correct headers set (from, to, cc, ,subject, references and
+  in-reply-to) based on an existing mail message.
+- Added workaround for bug #8271: Mail parsing bug in email with PGP signature.
   We don't support GPG at the moment, however we now recognize it and ignore keys
   and signatures.
-- Implemented #8266: New enhancement: property for the Content-Disposition stuff 
-  on the ezcMailPart level. Implemented for both parsing and sending.
-- Added the keepConnection() method to the SMTP transport. This allows keeping
+- Added the ezcMailSmtpTransport::keepConnection() method. This allows keeping
   the connection open when sending several mails.
-- Added the messageID property to the ezcMail class which represents the ID of
-  a mail message.
-- Added the timestamp property to the ezcMail class which is generated from
-  the Date header.
+- Added the ezcMail::messageID property which represents the ID of a mail
+  message.
+- Added the ezcMail::timestamp property which is generated from the Date
+  header.
+- Added the ezcMailMboxTransport and changed ezcMailMboxSet to work together
+  with that one.
+- Added $encoding parameter to ezcMailTools::parseMailAddress and
+  ezcMailTools::parseMailAddresses. This allows you to parse not only
+  RFC822 compliant address strings but also address strings in local
+  encoding. This is useful when ezcMailAddress items directly from
+  user inserted address string (e.g from a composer window).
+- Implemented feature request #8266: Property for the Content-Disposition
+  stuff on the ezcMailPart level. Implemented for both parsing and sending.
 - Changed mime string decoding to be more robust by trying to work around
   common mistakes by MUAs.
 - Changed the way how character sets are handled. From now on all text parts
   will automatically be converted to UTF-8. The original character set
   belonging to the e-mail is stored in the originalCharset property, while the
   charset property will now always return "UTF-8" for text parts.
-- Added the ezcMailMboxTransport and changed ezcMailMboxSet to work together
-  with that one.
-- Added $encoding parameter to ezcMailTools::parseMailAddress and
-  ezcMailTools::parseMailAddresses. This allows you to parse not only
-  RFC822 complient address strings but also address strings in local
-  encoding. This is useful when ezcMailAddress items directly from
-  user inserted address string (e.g from a composer window).
+- Changed header storage so that headers are now stored case sensitive but
+  retrieved case insensitive. This is useful since headers are case
+  insensitive, but do have a preferred case. When fetching headers it is handy
+  not to have to try all possible permutations.
+- Fixed a bug where parsing would fail because there was no trailing ';' in
+  the Content-Type field.
 - Fixed an issue where mime decoding of headers failed because of a bug in
   PHP.
 
