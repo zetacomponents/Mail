@@ -79,14 +79,15 @@ class ezcMailTransportMboxTest extends ezcTestCase
 
     public function testFetchMail5()
     {
+        $dirname = dirname( __FILE__ );
         try
         {
-            $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/not-here-at-all" );
+            $mbox = new ezcMailMboxTransport( $dirname . "/data/not-here-at-all" );
             $this->assertEquals( 'Expected exception was not thrown' );
         }
         catch ( ezcBaseFileNotFoundException $e )
         {
-            $this->assertEquals( 'The mbox file </dat/dev/ezcomponents/trunk/Mail/tests/transports/data/not-here-at-all> could not be found.', $e->getMessage() );
+            $this->assertEquals( "The mbox file <$dirname/data/not-here-at-all> could not be found.", $e->getMessage() );
         }
     }
 
