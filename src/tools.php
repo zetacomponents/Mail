@@ -143,7 +143,7 @@ class ezcMailTools
         // remove any quotes found in mail addresses like "bah,"@example.com
         $mail = str_replace( '"', '', $mail );
 
-        if( $encoding == 'mime' )
+        if ( $encoding == 'mime' )
         {
             // the name may contain interesting character encoding. We need to convert it.
             $name = ezcMailTools::mimeDecode( $name );
@@ -347,7 +347,7 @@ class ezcMailTools
         $reply->from = $from;
 
         // To = Reply-To if set
-        if( $mail->getHeader( 'Reply-To' ) != '' )
+        if ( $mail->getHeader( 'Reply-To' ) != '' )
         {
             $reply->to = ezcMailTools::parseEmailAddress( $mail->getHeader( 'Reply-To' ) );
         }
@@ -357,20 +357,20 @@ class ezcMailTools
             $reply->to = $mail->from;
         }
 
-        if( $type == self::REPLY_ALL )
+        if ( $type == self::REPLY_ALL )
         {
             // Cc = Cc + To - your own address
             $cc = array();
-            foreach( $mail->to as $address )
+            foreach ( $mail->to as $address )
             {
-                if( $address->email != $from->email )
+                if ( $address->email != $from->email )
                 {
                     $cc[] = $address;
                 }
             }
-            foreach( $mail->cc as $address )
+            foreach ( $mail->cc as $address )
             {
-                if( $address->email != $from->email )
+                if ( $address->email != $from->email )
                 {
                     $cc[] = $address;
                 }
@@ -380,13 +380,13 @@ class ezcMailTools
 
         $reply->subject = $subjectPrefix . $mail->subject;
 
-        if( $mail->getHeader( 'Message-Id' ) )
+        if ( $mail->getHeader( 'Message-Id' ) )
         {
             // In-Reply-To = Message-Id
             $reply->setHeader( 'In-Reply-To', $mail->getHeader( 'Message-ID' ) );
 
             // References = References . Message-Id
-            if( $mail->getHeader( 'References' ) != '' )
+            if ( $mail->getHeader( 'References' ) != '' )
             {
                 $reply->setHeader( 'References', $mail->getHeader( 'References' )
                                    . ' ' . $mail->getHeader( 'Message-ID' ) );

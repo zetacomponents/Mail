@@ -208,7 +208,7 @@ class ezcMailFileParser extends ezcMailPartParser
     {
         if ( $line !== '' )
         {
-            if( $this->dataWritten === false )
+            if ( $this->dataWritten === false )
             {
                 $this->appendStreamFilters( $line );
                 $this->dataWritten = true;
@@ -234,7 +234,7 @@ class ezcMailFileParser extends ezcMailPartParser
         // FIXME: DIRTY PGP HACK
         // When we have PGP support these lines should be removed. They are here now to hide
         // PGP parts since they will show up as file attachments if not.
-        if( $this->mainType == "application" &&
+        if ( $this->mainType == "application" &&
             ( $this->subType == 'pgp-signature'
               || $this->subType == 'pgp-keys'
               || $this->subType == 'pgp-encrypted' ) )

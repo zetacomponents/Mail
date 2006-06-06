@@ -298,7 +298,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         }
 
         // close connection unless we should keep it
-        if( $this->keepConnection === false )
+        if ( $this->keepConnection === false )
         {
             try
             {

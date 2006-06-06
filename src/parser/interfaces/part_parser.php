@@ -182,7 +182,7 @@ abstract class ezcMailPartParser
      */
     static public function parsePartHeaders( ezcMailHeadersHolder $headers, ezcMailPart $part )
     {
-        if( isset( $headers['Content-Disposition'] ) )
+        if ( isset( $headers['Content-Disposition'] ) )
         {
             $cd = new ezcMailContentDispositionHeader();
             if ( preg_match( '/^\s*attachment;?/i',
@@ -195,9 +195,9 @@ abstract class ezcMailPartParser
             if ( preg_match_all( '/\s*(\S*)="?([^;"]*);?/i',
                              $headers['Content-Disposition'], $matches, PREG_SET_ORDER ) )
             {
-                foreach( $matches as $param )
+                foreach ( $matches as $param )
                 {
-                    switch( $param[1] )
+                    switch ( $param[1] )
                     {
                         case 'filename':
                             $cd->fileName = trim( $param[2], '"' );

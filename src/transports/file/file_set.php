@@ -124,7 +124,7 @@ class ezcMailFileSet implements ezcMailParserSet
     private function openFile( $isFirst = false )
     {
         // cleanup file pointer if needed
-        if( $this->fp != null )
+        if ( $this->fp != null )
         {
             fclose( $this->fp );
             $this->fp = null;
@@ -134,9 +134,9 @@ class ezcMailFileSet implements ezcMailParserSet
         $file = $isFirst ? current( $this->files ) : next( $this->files );
 
         // loop until we can open a file.
-        while( $this->fp == null && $file !== false )
+        while ( $this->fp == null && $file !== false )
         {
-            if( file_exists( $file ) )
+            if ( file_exists( $file ) )
             {
                 $fp = fopen( $file, 'r' );
                 if ( $fp !== false )

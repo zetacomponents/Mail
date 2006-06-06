@@ -154,7 +154,7 @@ abstract class ezcMailPart
      */
     public function setHeaders( array $headers )
     {
-        foreach( $headers as $key => $value )
+        foreach ( $headers as $key => $value )
         {
             $this->headers[$key] = $value;
         }
@@ -177,37 +177,37 @@ abstract class ezcMailPart
     public function generateHeaders()
     {
         // set content disposition header
-        if( $this->contentDisposition !== null &&
+        if ( $this->contentDisposition !== null &&
             ( $this->contentDisposition instanceof ezcMailContentDispositionHeader ) )
         {
             $cdHeader = $this->contentDisposition;
             $cd = "{$cdHeader->disposition}";
-            if( $cdHeader->fileName !== null )
+            if ( $cdHeader->fileName !== null )
             {
                 $cd .= "; filename=\"{$cdHeader->fileName}\"";
             }
 
-            if( $cdHeader->creationDate !== null )
+            if ( $cdHeader->creationDate !== null )
             {
                 $cd .= "; creation-date=\"{$cdHeader->creationDate}\"";
             }
 
-            if( $cdHeader->modificationDate !== null )
+            if ( $cdHeader->modificationDate !== null )
             {
                 $cd .= "; modification-date=\"{$cdHeader->modificationDate}\"";
             }
 
-            if( $cdHeader->readDate !== null )
+            if ( $cdHeader->readDate !== null )
             {
                 $cd .= "; read-date=\"{$cdHeader->readDate}\"";
             }
 
-            if( $cdHeader->size !== null )
+            if ( $cdHeader->size !== null )
             {
                 $cd .= "; size={$cdHeader->size}";
             }
 
-            foreach( $cdHeader->additionalParameters as $addKey => $addValue )
+            foreach ( $cdHeader->additionalParameters as $addKey => $addValue )
             {
                 $cd .="; {$addKey}=\"{$addValue}\"";
             }

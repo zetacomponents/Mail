@@ -80,12 +80,12 @@ class ezcMailRfc822Parser extends ezcMailPartParser
 
             $headers = new ezcMailHeadersHolder();
             $headers['Content-Type'] = $this->headers['Content-Type'];
-            if( isset( $this->headers['Content-Transfer-Encoding'] ) )
+            if ( isset( $this->headers['Content-Transfer-Encoding'] ) )
             {
                 $headers['Content-Transfer-Encoding'] = $this->headers['Content-Transfer-Encoding'];
             }
 
-            if( isset( $this->headers['Content-Disposition'] ) )
+            if ( isset( $this->headers['Content-Disposition'] ) )
             {
                 $headers['Content-Disposition'] = $this->headers['Content-Disposition'];
             }

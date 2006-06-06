@@ -219,7 +219,7 @@ class ezcMailFile extends ezcMailPart
      */
     private function setHeaderContentDisposition()
     {
-        if( $this->contentDisposition == null )
+        if ( $this->contentDisposition == null )
         {
             $this->contentDisposition = new ezcMailContentDispositionHeader();
         }

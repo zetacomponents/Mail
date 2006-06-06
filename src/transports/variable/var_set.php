@@ -63,7 +63,7 @@ class ezcMailVariableSet implements ezcMailParserSet
         $line = current( $this->mail );
         next( $this->mail );
 
-        if( $line === false )
+        if ( $line === false )
         {
             return null;
         }

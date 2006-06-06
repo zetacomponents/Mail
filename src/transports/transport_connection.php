@@ -102,7 +102,7 @@ class ezcMailTransportConnection
                 $loops++;
             }
 
-            if( $trim == false )
+            if ( $trim == false )
             {
                 return $data;
             }
