@@ -85,3 +85,4 @@ class ezcMailMultipartDigest extends ezcMailMultipart
         return "digest";
     }
 }
+?>
