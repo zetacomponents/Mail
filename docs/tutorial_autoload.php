@@ -3,9 +3,9 @@ $dir = dirname( __FILE__ );
 $dirParts = split( '/', $dir );
 switch ( $dirParts[count( $dirParts ) - 3] )
 {
-	case 'doc': require_once 'ezc/Base/base.php'; break; // pear
-	case 'trunk': require_once "$dir/../../Base/src/base.php"; break; // svn
-	default: require_once "$dir/../../Base/src/base.php"; break; // bundle
+    case 'doc': require_once 'ezc/Base/base.php'; break; // pear
+    case 'trunk': require_once "$dir/../../Base/src/base.php"; break; // svn
+    default: require_once "$dir/../../Base/src/base.php"; break; // bundle
 }
 
 /**
@@ -15,6 +15,6 @@ switch ( $dirParts[count( $dirParts ) - 3] )
  */
 function __autoload( $className )
 {
-	ezcBase::autoload( $className );
+    ezcBase::autoload( $className );
 }
 ?>
