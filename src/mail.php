@@ -268,8 +268,15 @@ class ezcMail extends ezcMailPart
     public function generateHeaders()
     {
         // set our headers first.
-        $this->setHeader( "From", ezcMailTools::composeEmailAddress( $this->from ) );
-        $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to ) );
+        if( $this->from !== null )
+        {
+            $this->setHeader( "From", ezcMailTools::composeEmailAddress( $this->from ) );
+        }
+
+        if( $this->to !== null )
+        {
+            $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to ) );
+        }
         if ( count( $this->cc ) )
         {
             $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc ) );
@@ -300,7 +307,7 @@ class ezcMail extends ezcMailPart
         $this->setHeader( 'MIME-Version', '1.0' );
         $this->setHeader( 'User-Agent', 'eZ components' );
         $this->setHeader( 'Date', date( 'r' ) );
-        $idhost = $this->from->email != '' ? $this->from->email : 'localhost';
+        $idhost = $this->from != null && $this->from->email != '' ? $this->from->email : 'localhost';
         if ( is_null( $this->messageID ) )
         {
             $this->setHeader( 'Message-Id', '<' . ezcMailTools::generateMessageId( $idhost ) . '>' );

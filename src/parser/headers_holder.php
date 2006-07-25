@@ -9,7 +9,8 @@
  */
 
 /**
- * Holds the headers of a mail during parsing and allows case insensitive lookup.
+ * Holds the headers of a mail during parsing and allows case insensitive lookup
+ * but case sensitive storage.
  *
  * @package Mail
  * @version //autogen//

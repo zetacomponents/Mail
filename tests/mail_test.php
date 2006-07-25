@@ -262,6 +262,12 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( '<test-ezc-message-id@ezc.ez.no>', $this->mail->getHeader( 'Message-Id' ) );
     }
 
+    public function testGenerateEmpty()
+    {
+        $return = $this->mail->generate();
+    }
+
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailTest" );
