@@ -268,12 +268,12 @@ class ezcMail extends ezcMailPart
     public function generateHeaders()
     {
         // set our headers first.
-        if( $this->from !== null )
+        if ( $this->from !== null )
         {
             $this->setHeader( "From", ezcMailTools::composeEmailAddress( $this->from ) );
         }
 
-        if( $this->to !== null )
+        if ( $this->to !== null )
         {
             $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to ) );
         }
