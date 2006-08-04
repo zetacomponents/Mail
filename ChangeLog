@@ -1,9 +1,11 @@
 1.1.1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Don't crash when generating empty mail. Related to bug #8694.
-- Don't assume that message/ parts are actually rfc822 messages when parsing
-  mail. Related to bug #8694.
+- Partially fixed bug #8694:
+
+  * Don't crash when generating empty mail.
+  * Don't assume that message/ parts are actually rfc822 messages when parsing
+    mail.
 	
 	
 1.1 - Monday 12 June 2006
