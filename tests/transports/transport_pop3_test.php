@@ -110,7 +110,6 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
-
     public function testFetchMail()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
@@ -118,7 +117,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $this->assertEquals( 5, count( $mail ) );
+        $this->assertEquals( 4, count( $mail ) );
     }
 
     public function testListMessages()
@@ -126,16 +125,58 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070', 5 => '1500' ), $list );
+        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
     }
 
+    public function testFetchByMessageNr1()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $message = $pop3->fetchByMessageNr( -1 );
+            $this->assertEquals( 'Expected exception was not thrown' );
+        }
+        catch ( ezcMailNoSuchMessageException $e )
+        {
+            $this->assertEquals( 'The message with ID <-1> could not be found.', $e->getMessage() );
+        }
+    }
+
+    public function testFetchByMessageNr2()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $message = $pop3->fetchByMessageNr( 0 );
+            $this->assertEquals( 'Expected exception was not thrown' );
+        }
+        catch ( ezcMailNoSuchMessageException $e )
+        {
+            $this->assertEquals( 'The message with ID <0> could not be found.', $e->getMessage() );
+        }
+    }
+
+    public function testFetchByMessageNr3()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $message = $pop3->fetchByMessageNr( 1 );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $message );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( array( 0 => '1' ), $this->getAttribute( $message, 'messages' ) );
+        $this->assertEquals( 'ezcMailPop3Set', get_class( $message ) );
+    }
+    
     public function testStatus()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $pop3->status( $num, $size );
-        $this->assertEquals( 5, $num );
-        $this->assertEquals( 70524, $size );
+        $this->assertEquals( 4, $num );
+        $this->assertEquals( 69024, $size );
     }
 
     public function testTop()
@@ -151,7 +192,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.5" ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => "1143007546.15" ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -160,11 +201,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $this->assertEquals(
             array(
-                1 => '1143007546.5',
-                2 => '1143007546.6',
-                3 => '1143007546.7',
-                4 => '1143007546.8',
-                5 => '1143007546.9'
+                1 => '1143007546.15',
+                2 => '1143007546.16',
+                3 => '1143007546.17',
+                4 => '1143007546.18',
             ),
             $pop3->listUniqueIdentifiers()
         );

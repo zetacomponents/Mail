@@ -414,6 +414,30 @@ class ezcMailPop3Transport
         return false;
     }
 
+    /**
+     * Returns an ezcMailPop3Set containing only the $number -th message in
+     * the mailbox.
+     *
+     * If $deleteFromServer is set to true the mail will be removed from the
+     * server after retrieval. If not it will be left.
+     * Note: for POP3 the first message is 1 (so for $number = 0 the exception
+     * will be thrown).
+     * 
+     * @throws ezcMailNoSuchMessageException if the message $number is out
+     * of range.
+     *
+     * @param int $number
+     * @param bool $deleteFromServer
+     * @return ezcMailPop3Set
+     */
+    public function fetchByMessageNr( $number, $deleteFromServer = false )
+    {
+        $messages = $this->listMessages();
+        if ( !array_key_exists( $number, $messages ) )
+        {
+            throw new ezcMailNoSuchMessageException( $number );
+        }
+        return new ezcMailPop3Set( $this->connection, array( $number ), $deleteFromServer );
+    }
 }
-
 ?>

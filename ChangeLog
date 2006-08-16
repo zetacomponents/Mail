@@ -1,3 +1,10 @@
+1.1.2 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Added the ezcMailPop3Transport::fetchByMessageNr() method that returns an
+  ezcMailPop3Set containing the message with the specified number.
+
+
 1.1.1 - Monday 07 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
