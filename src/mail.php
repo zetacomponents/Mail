@@ -26,25 +26,37 @@
  * $transport->send( $mail );
  * </code>
  *
- * You can also derive your own mail classes from this class if you have special
- * requirements. An example of this is the ezcMailComposer class which is a convenience
- * class to send simple mail structures and HTML mail.
+ * You can also derive your own mail classes from this class if you have
+ * special requirements. An example of this is the ezcMailComposer class which
+ * is a convenience class to send simple mail structures and HTML mail.
  *
- * The ezcMail class has the following properties:
- * - <b>from</b> <i>ezcMailAddress</i>, contains the from address as an ezcMailaddress object.
- * - <b>to</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
- * - <b>cc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
- * - <b>bcc</b> <i>array(ezcMailAddress)</i>, contains an array of ezcMailAddress objects.
- * - <b>subject</b> <i>string</i>, contains the subject of the e-mail. Use setSubject if you require a special encoding.
- * - <b>subjectCharset</b> <i>string</i> The encoding of the subject.
- * - <b>messageID</b> <i>string</i> The message ID of the message. Treat as read-only unless you're 100% sure what you're doing.
- * - <b>timestamp</b> <i>integer</i> The date/time of when the message was sent as Unix Timestamp. (read-only)
- * - <b>body</b> <i>ezcMailPart</i> The body part of the message.
+ * There are several headers you can set on the mail object to achieve various
+ * effects:
+ * - Reply-To - Set this to an email address if you want people to reply to an
+ *              address other than the from address.
+ * - Errors-To - If the mail can not be delivered the error message will be
+ *               sent to this address.
  *
- * There are several headers you can set on the mail object to achieve various effects:
- * - Reply-To - Set this to an email address if you want people to reply to an address
- *              other than the from address.
- * - Errors-To - If the mail can not be delivered the error message will be sent to this address.
+ * @property ezcMailAddress        $from Contains the from address as an
+ *                                       ezcMailaddress object.
+ * @property array(ezcMailAddress) $to   Contains an array of ezcMailaddress objects.
+ * @property array(ezcMailAddress) $cc   Contains an array of ezcMailaddress objects.
+ * @property array(ezcMailAddress) $bcc  Contains an array of ezcMailaddress objects.
+ * @property string                $subject
+ *                                       Contains the subject of the e-mail.
+ *                                       Use setSubject if you require a
+ *                                       special encoding.
+ * @property string                $subjectCharset
+ *                                       The encoding of the subject.
+ * @property ezcMailPart           $body The body part of the message.
+ *
+ * @property-read string           $messageID
+ *                                       The message ID of the message. Treat
+ *                                       as read-only unless you're 100% sure
+ *                                       what you're doing.
+ * @property-read integer          $timestamp
+ *                                       The date/time of when the message was
+ *                                       sent as Unix Timestamp.
  *
  * @package Mail
  * @version //autogen//
@@ -174,11 +186,11 @@ class ezcMail extends ezcMailPart
                 break;
 
             case 'cc':
-                return $this->properties['cc'];
+                return (array) $this->properties['cc'];
                 break;
 
             case 'bcc':
-                return $this->properties['bcc'];
+                return (array) $this->properties['bcc'];
                 break;
 
             case 'subject':
