@@ -118,7 +118,7 @@ class ezcMail extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @ignore
+     * @return void
      */
     public function __set( $name, $value )
     {
@@ -172,7 +172,6 @@ class ezcMail extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @return mixed
-     * @ignore
      */
     public function __get( $name )
     {

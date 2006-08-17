@@ -12,25 +12,20 @@
  * This class implements the Simple Mail Transfer Protocol (SMTP)
  * with authentication support.
  *
+ * The ezcMailTransportSmtp class has the following properties:
+ * - string <B>serverHost</B>,  the SMTP server host to connect to.
+ * - int <B>serverPort</B>,  the port of the SMTP server. Defaults to 25.
+ * - string <B>username</B>,  the username used for authentication. The default
+ *                   is blank which means no authentication.
+ * - string <B>password</B>,  the password used for authentication.
+ * - int <B>timeout</B>, the timeout value of the connection in seconds.
+ *                  The default is five seconds.
+ * - string <B>senderHost</B>, the hostname of the computer that sends the mail.
+ *                     the default is 'localhost'.
+ *
  * See for further information the RFC's:
  * - {@link http://www.faqs.org/rfcs/rfc821.html}
  * - {@link http://www.faqs.org/rfcs/rfc2554.html}
- *
- * @property string $serverHost
- *           The SMTP server host to connect to.
- * @property int $serverPort
- *           The port of the SMTP server. Defaults to 25.
- * @property string $username
- *           The username used for authentication. The default is blank which
- *           means no authentication.
- * @property string $password
- *           The password used for authentication.
- * @property int $timeout
- *           The timeout value of the connection in seconds.  The default is
- *           five seconds.
- * @property string $senderHost
- *           The hostname of the computer that sends the mail.  the default is
- *           'localhost'.
  *
  * @package Mail
  * @version //autogen//
@@ -152,7 +147,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @ignore
+     * @return void
      */
     public function __set( $name, $value )
     {
@@ -187,7 +182,6 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @return mixed
-     * @ignore
      */
     public function __get( $name )
     {
@@ -264,7 +258,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             // each recepient must be listed here.
             // this controls where the mail is actually sent as SMTP does not
             // read the headers itself
-            foreach ( (array) $mail->to as $address )
+            foreach ( $mail->to as $address )
             {
                 $this->cmdRcpt( $address->email );
             }

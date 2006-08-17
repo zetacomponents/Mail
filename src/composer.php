@@ -39,19 +39,19 @@
  * $transport->send( $mail );
  * </code>
  *
+ * This class has the following properties:
+ * - string <B>plainText</B>, contains the message of the mail in plain text.
+ * - string <B>htmlText</B>, contains the message of the mail in HTML. You should
+ *          also provide the text of the HTML message in the
+ *          plainText property. Both will be sent and the receiver
+ *          will see the HTML message if his/her client supports HTML.
+ *          If the HTML message contains links to local images and/or
+ *          files these will be included into the mail when
+ *          generateBody is called. Links to local files must start
+ *          with "file://" in order to be recognized.
+ *
+ *
  * @todo What about character set for the textPart
- *
- * @property string $plainText
- *           Contains the message of the mail in plain text.
- * @property string $htmlText
- *           Contains the message of the mail in HTML. You should also provide
- *           the text of the HTML message in the plainText property. Both will
- *           be sent and the receiver will see the HTML message if his/her
- *           client supports HTML.  If the HTML message contains links to local
- *           images and/or files these will be included into the mail when
- *           generateBody is called. Links to local files must start with
- *           "file://" in order to be recognized.
- *
  * @package Mail
  * @version //autogen//
  */
@@ -89,7 +89,7 @@ class ezcMailComposer extends ezcMail
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @ignore
+     * @return void
      */
     public function __set( $name, $value )
     {
@@ -113,7 +113,6 @@ class ezcMailComposer extends ezcMail
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @return mixed
-     * @ignore
      */
     public function __get( $name )
     {

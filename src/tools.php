@@ -361,7 +361,7 @@ class ezcMailTools
         {
             // Cc = Cc + To - your own address
             $cc = array();
-            foreach ( (array) $mail->to as $address )
+            foreach ( $mail->to as $address )
             {
                 if ( $address->email != $from->email )
                 {
