@@ -15,9 +15,10 @@
  * types. Multiparts will be written to the mail in the order that they are set
  * to the $parts variable.
  *
- * property boundary The boundary string to use between parts. This string
- *                   is automatically generated and should only be changed
- *                   for special requirements.
+ * @property string $boundary
+ *           The boundary string to use between parts. This string is
+ *           automatically generated and should only be changed for special
+ *           requirements.
  *
  * @package Mail
  * @version //autogen//
@@ -91,7 +92,7 @@ abstract class ezcMailMultipart extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @ignore
      */
     public function __set( $name, $value )
     {
@@ -114,6 +115,7 @@ abstract class ezcMailMultipart extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @return mixed
+     * @ignore
      */
     public function __get( $name )
     {

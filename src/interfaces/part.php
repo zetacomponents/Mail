@@ -16,14 +16,14 @@
  * parts themselves. They must also implement {@link generateBody()} which is
  * called when the message part is generated.
  *
- * The ezcMailPart class has the following properties:
- * - <b>contentDisposition</b> <i>ezcMailContentDispositionHeader</i>
- *   contains the information from the Content-Disposition field of this mail.
- *   This useful especially when you are investigating retrieved mail to see
- *   if a part is an attachment or should be displayed inline.
- *   However, it can also be used to set the same on outgoing mail. Note that the
- *   ezcMailFile part sets the Content-Disposition field itself based on it's own
- *   properties when sending mail.
+ * @property ezcMailContentDispositionHeader $contentDisposition
+ *           Contains the information from the Content-Disposition field of
+ *           this mail.  This useful especially when you are investigating
+ *           retrieved mail to see if a part is an attachment or should be
+ *           displayed inline.  However, it can also be used to set the same on
+ *           outgoing mail. Note that the ezcMailFile part sets the
+ *           Content-Disposition field itself based on it's own properties when
+ *           sending mail.
  *
  * @package Mail
  * @version //autogen//
@@ -65,7 +65,7 @@ abstract class ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @ignore
      */
     public function __set( $name, $value )
     {
@@ -87,6 +87,7 @@ abstract class ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @return mixed
+     * @ignore
      */
     public function __get( $name )
     {

@@ -22,16 +22,19 @@
  * $textPart->subType = 'html';
  * </code>
  *
- * property charset The characterset used for this text part. Defaults to
- *                  'us-ascii' while creating mail, and is always 'utf-8' while
- *                  parsing mail.
- * property originalCharset
- *                  The characterset in which a text part originally was before
- *                  the conversion to UTF-8. (readonly)
- * property subType The subtype of this text part. Defaults to 'plain' for plain text.
- *                  Use 'html' for HTML messages.
- * property encoding The encoding of the text. Defaults to eight bit.
- * property text The main data of this text part.
+ * @property string $charset
+ *           The characterset used for this text part. Defaults to 'us-ascii'
+ *           while creating mail, and is always 'utf-8' while parsing mail.
+ * @property string $originalCharset
+ *           The characterset in which a text part originally was before the
+ *           conversion to UTF-8. (readonly)
+ * @property string $subType
+ *           The subtype of this text part. Defaults to 'plain' for plain text.
+ *           Use 'html' for HTML messages.
+ * @property string $encoding
+ *           The encoding of the text. Defaults to eight bit.
+ * @property string $text
+ *           The main data of this text part.
  *
  * @package Mail
  * @version //autogen//
@@ -70,7 +73,7 @@ class ezcMailText extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @ignore
      */
     public function __set( $name, $value )
     {
@@ -103,7 +106,8 @@ class ezcMailText extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @return mixed
+     * @ignore
      */
     public function __get( $name )
     {
