@@ -13,8 +13,6 @@
  *
  * This class is used to insert mail into mail.
  *
- * The ezcMailFile class has the following properties:
- * - String <B>mail</B>, the mail object to digest.
  *
  * This example assumes that the mail object to digest is availble in the $digest variable:
  * <code>
@@ -29,6 +27,9 @@
  * $transport = new ezcMailTransportMta();
  * $transport->send( $mail );
  * </code>
+ *
+ * @property string $mail
+ *           The mail object to digest.
  *
  * @package Mail
  * @version //autogen//

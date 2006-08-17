@@ -11,25 +11,26 @@
 /**
  * Mail part for all forms of binary data.
  *
- * The ezcMailFile class has the following properties:
- * - String <B>fileName</B>, the file on disk.
- * - String <B>mimeType</B>, the mimetype of the file. ezcMailFile tries to
- *                           extract this from the file, but you can override it
- *                           with this property.
- * - String <B>contentType</B>, the content type of the file. ezcMailFile tries to
- *                   extract this from the file, but you can override it
- *                   with this property. Possible values are:
- *                   * CONTENT_TYPE_IMAGE
- *                   * CONTENT_TYPE_VIDEO
- *                   * CONTENT_TYPE_APPLICATION
- * - String <B>dispositionType</B>, if the file should be shown inline in the mail
- *                          or as an attachment. Possible values are:
- *                          * DISPLAY_ATTACHMENT
- *                          * DISPLAY_INLINE
- * - int <B>contentId</B>,  the ID of this part. Used for internal links within an
- *                    email. Setting this also sets the header Content-ID.
- *
  * @todo MimeType recognition
+ *
+ * @property string $fileName
+ *           The file on disk.
+ * @property string $mimeType
+ *           The mimetype of the file. ezcMailFile tries to extract this from
+ *           the file, but you can override it with this property.
+ * @property string $contentType
+ *           The content type of the file. ezcMailFile tries to extract this
+ *           from the file, but you can override it with this property.
+ *           Possible values are: CONTENT_TYPE_IMAGE, CONTENT_TYPE_VIDEO and
+ *           CONTENT_TYPE_APPLICATION.
+ * @property string $dispositionType
+ *           If the file should be shown inline in the mail or as an
+ *           attachment. Possible values are: DISPLAY_ATTACHMENT and
+ *           DISPLAY_INLINE.
+ * @property int $contentId
+ *           The ID of this part. Used for internal links within an email.
+ *           Setting this also sets the header Content-ID.
+ *
  * @package Mail
  * @version //autogen//
  */
@@ -111,7 +112,7 @@ class ezcMailFile extends ezcMailPart
      * @throws ezcBaseFileNotFoundException when setting the property with an invalid filename.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @ignore
      */
     public function __set( $name, $value )
     {
@@ -161,7 +162,7 @@ class ezcMailFile extends ezcMailPart
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @ignore
      */
     public function __get( $name )
     {
