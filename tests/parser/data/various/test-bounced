@@ -1,0 +1,1507 @@
+Return-Path: <>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: by mta.example.com (Postfix)
+	id 7299548C01B; Thu, 17 Aug 2006 17:37:29 +0200 (CEST)
+Date: Thu, 17 Aug 2006 17:37:29 +0200 (CEST)
+From: MAILER-DAEMON@mta.example.com (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: as@example.com
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="C776248C018.1155829049/mta.example.com"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20060817153729.7299548C01B@mta.example.com>
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.8 required=15.0 tests=ALL_TRUSTED autolearn=ham 
+	version=3.0.4
+Status: O
+X-UID: 185
+Content-Length: 49912
+X-Keywords:                                                                                                    
+
+This is a MIME-encapsulated message.
+
+--C776248C018.1155829049/mta.example.com
+Content-Description: Notification
+Content-Type: text/plain
+
+This is the Postfix program at host mta.example.com.
+
+I'm sorry to have to inform you that your message could not be
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to <postmaster>
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+			The Postfix program
+
+<derick@php.net> (expanded from <dr@example.com>): host osu1.php.net[140.211.166.39]
+    said: 501 5.5.2 MAIL FROM syntax error (in reply to MAIL FROM command)
+
+--C776248C018.1155829049/mta.example.com
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; mta.example.com
+X-Postfix-Queue-ID: C776248C018
+X-Postfix-Sender: rfc822; as@example.com
+Arrival-Date: Thu, 17 Aug 2006 17:37:23 +0200 (CEST)
+
+Final-Recipient: rfc822; derick@php.net
+Original-Recipient: rfc822; dr@example.com
+Action: failed
+Status: 5.0.0
+Diagnostic-Code: X-Postfix; host osu1.php.net[140.211.166.39] said: 501 5.5.2
+    MAIL FROM syntax error (in reply to MAIL FROM command)
+
+--C776248C018.1155829049/mta.example.com
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 8bit
+
+Received: from smtp.example.com (blackboy.example.com [194.248.150.22])
+	by mta.example.com (Postfix) with ESMTP id C776248C018
+	for <dr@example.com>; Thu, 17 Aug 2006 17:37:23 +0200 (CEST)
+Received: from [10.0.2.184] (unknown [85.19.74.66])
+	by smtp.example.com (Postfix) with ESMTP id 86A55AB56F
+	for <dr@example.com>; Thu, 17 Aug 2006 17:36:25 +0200 (CEST)
+Message-ID: <44E48D60.1010604@example.com>
+Date: Thu, 17 Aug 2006 17:38:08 +0200
+From: Alexandru Stanoi <as@example.com>
+User-Agent: Thunderbird 1.5.0.5 (X11/20060728)
+MIME-Version: 1.0
+To: Derick Rethans <dr@example.com>
+Subject: [Fwd: [svn-components] 3312 - trunk/Graph/src/options [eZComponents:
+ Trunk]]
+Content-Type: multipart/mixed;
+ boundary="------------060903070604090504010206"
+
+This is a multi-part message in MIME format.
+--------------060903070604090504010206
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+
+-- 
+Alex Stanoi
+eZ components System Developer
+eZ systems | http://example.com
+
+--------------060903070604090504010206
+Content-Type: message/rfc822;
+ name*0="[svn-components] 3312 - trunk/Graph/src/options [eZComponents: T";
+ name*1="runk]"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename*0="[svn-components] 3312 - trunk/Graph/src/options [eZComponent";
+ filename*1="s: Trunk]"
+
+Return-Path: <svn-components-admin@lists.example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 8417048C018;
+	Thu, 17 Aug 2006 16:25:28 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7HEPIE32373;
+	Thu, 17 Aug 2006 16:25:18 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7HEO4E32334
+	for <svn-components@lists.example.com>; Thu, 17 Aug 2006 16:24:04 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GDinI-0000wN-00
+	for <svn-components@lists.example.com>; Thu, 17 Aug 2006 16:24:24 +0200
+To: svn-components@lists.example.com
+From: Derick Rethans <dr@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GDinI-0000wN-00@svn>
+Subject: [svn-components] 3312 - trunk/Graph/src/options [eZComponents: Trunk]
+Sender: svn-components-admin@lists.example.com
+Errors-To: svn-components-admin@lists.example.com
+X-BeenThere: svn-components@lists.example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@lists.example.com?subject=help>
+List-Post: <mailto:svn-components@lists.example.com>
+List-Subscribe: <http://lists.example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.lists.example.com>
+List-Unsubscribe: <http://lists.example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.example.com?subject=unsubscribe>
+List-Archive: <http://lists.example.com/pipermail/svn-components/>
+Date: Thu, 17 Aug 2006 16:24:24 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+X-UID: 182
+X-Keywords:                                                                                                    
+
+Author: Derick Rethans
+Date: 2006-08-17 16:24:24 +0200 (Thu, 17 Aug 2006)
+New Revision: 3312
+
+Log:
+- Updated to use new property mechanism.
+
+Modified:
+   trunk/Graph/src/options/chart.php
+
+Modified: trunk/Graph/src/options/chart.php
+===================================================================
+--- trunk/Graph/src/options/chart.php	2006-08-17 14:14:28 UTC (rev 3311)
++++ trunk/Graph/src/options/chart.php	2006-08-17 14:24:24 UTC (rev 3312)
+@@ -10,35 +10,20 @@
+ /**
+  * Class containing the basic options for charts
+  *
++ * @property int $width
++ *           Width of the chart.
++ * @property int $heigh
++ *           Height of the chart.
++ * @property int $font
++ *           Font used in the graph.
++ *
+  * @package Graph
+  */
+ class ezcGraphChartOptions extends ezcBaseOptions
+ {
+-    /**
+-     * Width of the chart
+-     * 
+-     * @var int
+-     */
+-    protected $width;
+-
+-    /**
+-     * Height of the chart
+-     * 
+-     * @var int
+-     * @access protected
+-     */
+-    protected $height;
+-
+-    /**
+-     * Font used in the graph 
+-     * 
+-     * @var int
+-     */
+-    protected $font;
+-    
+     public function __construct( array $options = array() )
+     {
+-        $this->font = new ezcGraphFontOptions();
++        $this->properties['font'] = new ezcGraphFontOptions();
+ 
+         parent::__construct( $options );
+     }
+@@ -50,20 +35,20 @@
+      * @param mixed $propertyValue 
+      * @throws ezcBasePropertyNotFoundException
+      *          If a property is not defined in this class
+-     * @return void
++     * @ignore
+      */
+     public function __set( $propertyName, $propertyValue )
+     {
+         switch ( $propertyName )
+         {
+             case 'width':
+-                $this->width = max( 1, (int) $propertyValue );
++                $this->properties['width'] = max( 1, (int) $propertyValue );
+                 break;
+             case 'height':
+-                $this->height = max( 1, (int) $propertyValue );
++                $this->properties['height'] = max( 1, (int) $propertyValue );
+                 break;
+             case 'font':
+-                $this->font->font = $propertyValue;
++                $this->properties['font']->font = $propertyValue;
+                 break;
+             default:
+                 throw new ezcBasePropertyNotFoundException( $propertyName );
+
+-- 
+svn-components mailing list
+svn-components@lists.example.com
+http://lists.example.com/mailman/listinfo/svn-components
+
+
+--------------060903070604090504010206
+Content-Type: message/rfc822;
+ name*0="[svn-components] 3311 - in trunk/ConsoleTools/src: . input optio";
+ name*1="ns structs table [eZComponents: Trunk]"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename*0="[svn-components] 3311 - in trunk/ConsoleTools/src: . input o";
+ filename*1="ptions structs table [eZComponents: Trunk]"
+
+Return-Path: <svn-components-admin@lists.example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 1ED0148C018;
+	Thu, 17 Aug 2006 16:17:03 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7HEGrE32171;
+	Thu, 17 Aug 2006 16:16:53 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7HEE9E31972
+	for <svn-components@lists.example.com>; Thu, 17 Aug 2006 16:14:09 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GDidh-0000pE-00
+	for <svn-components@lists.example.com>; Thu, 17 Aug 2006 16:14:29 +0200
+To: svn-components@lists.example.com
+From: Derick Rethans <dr@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GDidh-0000pE-00@svn>
+Subject: [svn-components] 3311 - in trunk/ConsoleTools/src: . input options structs table [eZComponents: Trunk]
+Sender: svn-components-admin@lists.example.com
+Errors-To: svn-components-admin@lists.example.com
+X-BeenThere: svn-components@lists.example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@lists.example.com?subject=help>
+List-Post: <mailto:svn-components@lists.example.com>
+List-Subscribe: <http://lists.example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.lists.example.com>
+List-Unsubscribe: <http://lists.example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@lists.example.com?subject=unsubscribe>
+List-Archive: <http://lists.example.com/pipermail/svn-components/>
+Date: Thu, 17 Aug 2006 16:14:29 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+X-UID: 181
+X-Keywords:                                                                                                    
+
+Author: Derick Rethans
+Date: 2006-08-17 16:14:28 +0200 (Thu, 17 Aug 2006)
+New Revision: 3311
+
+Log:
+- Fixed property usage and property documentation
+Modified:
+   trunk/ConsoleTools/src/input/option.php
+   trunk/ConsoleTools/src/options/output.php
+   trunk/ConsoleTools/src/options/progressbar.php
+   trunk/ConsoleTools/src/options/progressmonitor.php
+   trunk/ConsoleTools/src/options/statusbar.php
+   trunk/ConsoleTools/src/options/table.php
+   trunk/ConsoleTools/src/output.php
+   trunk/ConsoleTools/src/progressbar.php
+   trunk/ConsoleTools/src/statusbar.php
+   trunk/ConsoleTools/src/structs/output_format.php
+   trunk/ConsoleTools/src/table.php
+   trunk/ConsoleTools/src/table/cell.php
+   trunk/ConsoleTools/src/table/row.php
+
+Modified: trunk/ConsoleTools/src/input/option.php
+===================================================================
+--- trunk/ConsoleTools/src/input/option.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/input/option.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -17,22 +17,52 @@
+  * the parameter data, the handling of options and arguments is done by the
+  * class {@link ezcConsoleInput}.
+  * 
++ * @property-read string $short
++ *                Short name of the parameter without '-' (eg. 'f').
++ * @property-read string $long
++ *                Long name of the parameter without '--' (eg. 'file').
++ * @property int $type
++ *           Value type of this parameter, default is ezcConsoleInput::TYPE_NONE.
++ *           See {@link ezcConsoleInput::TYPE_NONE},
++ *           {@link ezcConsoleInput::TYPE_INT} and
++ *           {@link ezcConsoleInput::TYPE_STRING}.
++ * @property mixed $default
++ *           Default value if the parameter is submitted without value.  If a
++ *           parameter is eg. of type ezcConsoleInput::TYPE_STRING and
++ *           therefore expects a value when being submitted, it may be
++ *           submitted without a value and automatically get the default value
++ *           specified here.
++ * @property bool $multiple
++ *           Is the submission of multiple instances of this parameters
++ *           allowed? 
++ * @property string $shorthelp
++ *           Short help text. Usually displayed when showing parameter help
++ *           overview.
++ * @property string $longhelp
++ *           Long help text. Usually displayed when showing parameter detailed
++ *           help.
++ * @property bool $arguments
++ *           Whether arguments to the program are allowed, when this parameter
++ *           is submitted. 
++ * @property bool $mandatory
++ *           Whether a parameter is mandatory to be set.  If this flag is true,
++ *           the parameter must be submitted whenever the program is run.
++ * @property bool $isHelpOption
++ *           Whether a parameter is a help option.  If this flag is true, and
++ *           the parameter is set, all options marked as mandatory may be
++ *           skipped.
++ *
+  * @package ConsoleTools
+  * @version //autogen//
+  */
+-class ezcConsoleOption {
+-
++class ezcConsoleOption
++{
+     /**
+-     * Properties, which provide only read access.
+-     * Stores the short and long name of a parameter which are read-only after 
+-     * being set once during construction.
+-     * 
+-     * @var array(string)
++     * Container to hold the properties
++     *
++     * @var array(string=>mixed)
+      */
+-    protected $properties = array( 
+-        'short' => '',
+-        'long'  => '',
+-    );
++    protected $properties;
+ 
+     /**
+      * Value type of this parameter, default is ezcConsoleInput::TYPE_NONE.
+@@ -42,7 +72,7 @@
+      * 
+      * @var int
+      */
+-    private $type = ezcConsoleInput::TYPE_NONE;
++//    private $type = ezcConsoleInput::TYPE_NONE;
+ 
+     /**
+      * Default value if the parameter is submitted without value.
+@@ -52,28 +82,28 @@
+      * 
+      * @var mixed
+      */
+-    private $default;
++//    private $default;
+ 
+     /**
+      * Is the submition of multiple instances of this parameters allowed? 
+      * 
+      * @var bool
+      */
+-    private $multiple = false;
++//    private $multiple = false;
+     
+     /**
+      * Short help text. Usually displayed when showing parameter help overview.
+      * 
+      * @var string
+      */
+-    private $shorthelp = 'No help available.';
++//    private $shorthelp = 'No help available.';
+     
+     /**
+      * Long help text. Usually displayed when showing parameter detailed help.
+      * 
+      * @var string
+      */
+-    private $longhelp = 'Sorry, there is no help text available for this parameter.';
++//    private $longhelp = 'Sorry, there is no help text available for this parameter.';
+ 
+     /**
+      * Dependency rules of this parameter.
+@@ -106,7 +136,7 @@
+      * 
+      * @var bool
+      */
+-    private $arguments = true;
++//    private $arguments = true;
+ 
+     /**
+      * Wether a parameter is mandatory to be set.
+@@ -115,7 +145,7 @@
+      * 
+      * @var bool
+      */
+-    private $mandatory = false;
++//    private $mandatory = false;
+ 
+     /**
+      * Wether a parameter is a help option.
+@@ -124,7 +154,7 @@
+      *  
+      * @var bool
+      */
+-    private $isHelpOption = false;
++//    private $isHelpOption = false;
+ 
+     /**
+      * The value the parameter was assigned to when being submitted.
+@@ -196,6 +226,10 @@
+         $mandatory = false,
+         $isHelpOption = false
+     ) {
++        $this->properties['short'] = '';
++        $this->properties['long'] = '';
++        $this->properties['arguments'] = $arguments;
++
+         if ( !self::validateOptionName( $short ) )
+         {
+             throw new ezcConsoleInvalidOptionNameException( $short );
+@@ -456,11 +490,14 @@
+      * 
+      * @param string $key The name of the property.
+      * @return mixed The value if property exists and isset, otherwise null.
++     * @ignore
+      */
+     public function __get( $key )
+     {
+         switch ( $key  )
+         {
++            case 'short':
++            case 'long':
+             case 'type':
+             case 'default':
+             case 'multiple':
+@@ -469,12 +506,11 @@
+             case 'arguments':
+             case 'isHelpOption':
+             case 'mandatory':
+-                return $this->$key;
++                return $this->properties[$key];
++            case 'dependencies':
++            default:
++                throw new ezcBasePropertyNotFoundException( $key );
+         }
+-        if ( isset( $this->properties[$key] ) )
+-        {
+-            return $this->properties[$key];
+-        }
+     }
+ 
+     /**
+@@ -485,7 +521,7 @@
+      *
+      * @throws ezcBasePropertyPermissionException
+      *         If the property you try to access is read-only.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $key, $val )
+     {
+@@ -553,7 +589,7 @@
+                 throw new ezcBasePropertyNotFoundException( $key );
+                 break;
+         }
+-        $this->$key = $val;
++        $this->properties[$key] = $val;
+     }
+  
+     /**
+@@ -561,11 +597,14 @@
+      * 
+      * @param string $key Name of the property.
+      * @return bool True is the property is set, otherwise false.
++     * @ignore
+      */
+     public function __isset( $key )
+     {
+         switch ( $key  )
+         {
++            case 'short':
++            case 'long':
+             case 'type':
+             case 'default':
+             case 'multiple':
+@@ -574,9 +613,9 @@
+             case 'arguments':
+             case 'isHelpOption':
+             case 'mandatory':
+-                return ( $this->$key !== null );
++                return ( $this->properties[$key] !== null );
+         }
+-        return isset( $this->properties[$key] );
++        return false;
+     }
+ 
+     /**
+
+Modified: trunk/ConsoleTools/src/options/output.php
+===================================================================
+--- trunk/ConsoleTools/src/options/output.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/options/output.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -13,6 +13,15 @@
+  * Struct class to store the options of the ezcConsoleOutput class.
+  *
+  * This class stores the options for the {@link ezcConsoleOutput} class.
++ *
++ * @property int $verbosityLevel
++ *           Determines the level of verbosity.
++ * @property int $autobreak
++ *           Determines, whether text is automatically wrapped after a
++ *           specific amount of characters in a line. If set to 0
++ *           (default), lines will not be wrapped automatically.
++ * @property bool $useFormats
++ *           Whether to use formatting or not.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+@@ -20,33 +29,10 @@
+ class ezcConsoleOutputOptions extends ezcBaseOptions
+ {
+     /**
+-     * Determines the level of verbosity. 
+-     * 
+-     * @var int
+-     */
+-    protected $verbosityLevel = 1;
+-
+-    /**
+-     * Determines, whether text is automatically wrapped after a specific amount
+-     * of characters in a line. If set to 0 (default), lines will not be wrapped
+-     * automatically.
+-     * 
+-     * @var int
+-     */
+-    protected $autobreak = 0;
+-
+-    /**
+-     * Wether to use formatting or not. 
+-     * 
+-     * @var bool
+-     */
+-    protected $useFormats = true;
+-
+-    /**
+      * Construct a new options object.
+      *
+      * NOTE: For BC reasons the old method of instanciating this class is kept,
+-     * but the usage of the new versoion is highly incouraged.
++     * but the usage of the new version is highly encouraged.
+      * 
+      * @param array(string=>mixed) $options The initial options to set.
+      * @return void
+@@ -58,6 +44,9 @@
+      */
+     public function __construct()
+     {
++        $this->properties['verbosityLevel'] = 1;
++        $this->properties['autobreak'] = 0;
++        $this->properties['useFormats'] = true;
+         $args = func_get_args();
+         if ( func_num_args() === 1 && is_array( $args[0] ) )
+         {
+@@ -93,7 +82,7 @@
+      *
+      * @param string $propertyName Name of the property.
+      * @param mixed $val  The value for the property.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $propertyName, $val )
+     {
+@@ -115,7 +104,7 @@
+             default:
+                 throw new ezcBaseSettingNotFoundException( $propertyName );
+         }
+-        $this->$propertyName = $val;
++        $this->properties[$propertyName] = $val;
+     }
+ }
+ 
+
+Modified: trunk/ConsoleTools/src/options/progressbar.php
+===================================================================
+--- trunk/ConsoleTools/src/options/progressbar.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/options/progressbar.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -12,6 +12,27 @@
+ /**
+  * Struct class to store the options of the ezcConsoleOutput class.
+  * This class stores the options for the {@link ezcConsoleOutput} class.
++ *
++ * @property string $barChar
++ *           The character to fill the bar with, during progress indication.
++ * @property string $emptyChar
++ *           The character to pre-fill the bar, before indicating progress.
++ * @property string $formatString
++ *           The format string to describe the complete progressbar.
++ * @property string $fractionFormat
++ *           Format to display the fraction value.
++ * @property string $processChar
++ *           The character for the end of the progress area (the arrow!).
++ * @property int $redrawFrequency
++ *           How often to redraw the progressbar (on every Xth call to advance()).
++ * @property int $step
++ *           How many steps to advance the progressbar on each call to advance().
++ * @property int $width
++ *           The width of the bar itself.
++ * @property string $actFormat
++ *           The format to display the actual value with.
++ * @property string $maxFormat
++ *           The format to display the actual value with.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+@@ -19,76 +40,35 @@
+ class ezcConsoleProgressbarOptions extends ezcBaseOptions
+ {
+     /**
+-     * The character to fill the bar with, during progress indication. 
++     * Construct a new options object.
++     * Options are constructed from an option array by default. The constructor
++     * automatically passes the given options to the __set() method to set them 
++     * in the class.
+      * 
+-     * @var string
++     * @param array(string=>mixed) $options The initial options to set.
++     * @return void
++     *
++     * @throws ezcBasePropertyNotFoundException
++     *         If a the value for the property options is not an instance of
++     * @throws ezcBaseValueException
++     *         If a the value for a property is out of range.
+      */
++    public function __construct( array $options = array() )
++    {
++        $this->properties['barChar'] = "+";
++        $this->properties['emptyChar'] = "-";
++        $this->properties['formatString'] = "%act% / %max% [%bar%] %fraction%%";
++        $this->properties['fractionFormat'] = "%01.2f";
++        $this->properties['progressChar'] = ">";
++        $this->properties['redrawFrequency'] = 1;
++        $this->properties['step'] = 1;
++        $this->properties['width'] = 78;
++        $this->properties['actFormat'] = '%.0f';
++        $this->properties['maxFormat'] = '%.0f';
++        parent::__construct( $options );
++    }
+ 
+-    protected $barChar = "+";
+     /**
+-     * The character to pre-fill the bar, before indicating progress. 
+-     * 
+-     * @var string
+-     */
+-    protected $emptyChar = "-";
+-
+-    /**
+-     * The format string to describe the complete progressbar. 
+-     * 
+-     * @var string
+-     */
+-    protected $formatString = "%act% / %max% [%bar%] %fraction%%";
+-
+-    /**
+-     * Format to display the fraction value. 
+-     * 
+-     * @var string
+-     */
+-    protected $fractionFormat = "%01.2f";
+-
+-    /**
+-     * The character for the end of the progress area (the arrow!).
+-     * 
+-     * @var string
+-     */
+-    protected $progressChar = ">";
+-
+-    /**
+-     * How often to redraw the progressbar (on every Xth call to advance()).
+-     * 
+-     * @var int
+-     */
+-    protected $redrawFrequency = 1;
+-
+-    /**
+-     * How many steps to advance the progressbar on each call to advance().
+-     * 
+-     * @var int
+-     */
+-    protected $step = 1;
+-
+-    /**
+-     * The width of the bar itself. 
+-     * 
+-     * @var int
+-     */
+-    protected $width = 78;
+-
+-    /**
+-     * The format to display the actual value with. 
+-     * 
+-     * @var string
+-     */
+-    protected $actFormat = '%.0f';
+-
+-    /**
+-     * The format to display the actual value with. 
+-     * 
+-     * @var string
+-     */
+-    protected $maxFormat = '%.0f';
+-
+-    /**
+      * Option write access.
+      * 
+      * @throws ezcBasePropertyNotFoundException
+@@ -98,7 +78,7 @@
+      *
+      * @param string $key Name of the property.
+      * @param mixed $value  The value for the property.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $key, $value )
+     {
+@@ -132,7 +112,7 @@
+             default:
+                 throw new ezcBaseSettingNotFoundException( $key );
+         }
+-        $this->$key = $value;
++        $this->properties[$key] = $value;
+     }
+ }
+ 
+
+Modified: trunk/ConsoleTools/src/options/progressmonitor.php
+===================================================================
+--- trunk/ConsoleTools/src/options/progressmonitor.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/options/progressmonitor.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -12,19 +12,34 @@
+ /**
+  * Struct class to store the options of the ezcConsoleOutput class.
+  * This class stores the options for the {@link ezcConsoleOutput} class.
++ *
++ * @property string $formatString
++ *           The format string to describe the complete progress monitor.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+  */
+ class ezcConsoleProgressMonitorOptions extends ezcBaseOptions
+ {
+-
+     /**
+-     * The format string to describe the complete progressmonitor. 
++     * Construct a new options object.
++     * Options are constructed from an option array by default. The constructor
++     * automatically passes the given options to the __set() method to set them 
++     * in the class.
+      * 
+-     * @var string
++     * @param array(string=>mixed) $options The initial options to set.
++     * @return void
++     *
++     * @throws ezcBasePropertyNotFoundException
++     *         If a the value for the property options is not an instance of
++     * @throws ezcBaseValueException
++     *         If a the value for a property is out of range.
+      */
+-    protected $formatString = "%8.1f%% %s %s";
++    public function __construct( array $options = array() )
++    {
++        $this->properties['formatString'] = '%8.1f%% %s %s';
++        parent::__construct( $options );
++    }
+ 
+     /**
+      * Option write access.
+@@ -36,7 +51,7 @@
+      *
+      * @param string $key Name of the property.
+      * @param mixed $value  The value for the property.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $key, $value )
+     {
+@@ -51,7 +66,7 @@
+             default:
+                 throw new ezcBaseSettingNotFoundException( $key );
+         }
+-        $this->$key = $value;
++        $this->properties[$key] = $value;
+     }
+ }
+ 
+
+Modified: trunk/ConsoleTools/src/options/statusbar.php
+===================================================================
+--- trunk/ConsoleTools/src/options/statusbar.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/options/statusbar.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -12,28 +12,39 @@
+ /**
+  * Struct class to store the options of the ezcConsoleOutput class.
+  * This class stores the options for the {@link ezcConsoleOutput} class.
++ *
++ * @property string $successChar
++ *           The char shown for a succeeded status.
++ * @property string $failureChar
++ *           The char shown for a failed status.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+  */
+ class ezcConsoleStatusbarOptions extends ezcBaseOptions
+ {
+-
+     /**
+-     * The char shown for a succeded status. 
++     * Construct a new options object.
++     * Options are constructed from an option array by default. The constructor
++     * automatically passes the given options to the __set() method to set them 
++     * in the class.
+      * 
+-     * @var string
++     * @param array(string=>mixed) $options The initial options to set.
++     * @return void
++     *
++     * @throws ezcBasePropertyNotFoundException
++     *         If a the value for the property options is not an instance of
++     * @throws ezcBaseValueException
++     *         If a the value for a property is out of range.
+      */
+-    protected $successChar = "+";
++    public function __construct( array $options = array() )
++    {
++        $this->properties['successChar'] = "+";
++        $this->properties['failureChar'] = "-";
++        parent::__construct( $options );
++    }
+ 
+     /**
+-     * The char shown for a failed status. 
+-     * 
+-     * @var string
+-     */
+-    protected $failureChar = "-";
+-
+-    /**
+      * Option write access.
+      * 
+      * @throws ezcBasePropertyNotFoundException
+@@ -43,7 +54,7 @@
+      *
+      * @param string $key Name of the property.
+      * @param mixed $value  The value for the property.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $key, $value )
+     {
+@@ -59,7 +70,7 @@
+             default:
+                 throw new ezcBaseSettingNotFoundException( $key );
+         }
+-        $this->$key = $value;
++        $this->properties[$key] = $value;
+     }
+ }
+ 
+
+Modified: trunk/ConsoleTools/src/options/table.php
+===================================================================
+--- trunk/ConsoleTools/src/options/table.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/options/table.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -12,6 +12,36 @@
+ /**
+  * Struct class to store the options of the ezcConsoleTable class.
+  * This class stores the options for the {@link ezcConsoleTable} class.
++ *
++ * @property mixed $colWidth
++ *           Either 'auto' for automatic selection of column widths, or an
++ *           array of column widths like array( 10, 30, 10 ).
++ * @property int $colWrap
++ *           Wrap style of text contained in strings. See {@link
++ *           ezcConsoleTable::WRAP_AUTO}, {@link ezcConsoleTable::WRAP_NONE}
++ *           and {@link ezcConsoleTable::WRAP_CUT}.
++ * @property int $defaultAlign
++ *           Standard column alignment, applied to cells that have to explicit
++ *           alignment assigned. See {@link ezcConsoleTable::ALIGN_LEFT},
++ *           {@link ezcConsoleTable::ALIGN_RIGHT}, {@link
++ *           ezcConsoleTable::ALIGN_CENTER} and {@link
++ *           ezcConsoleTable::ALIGN_DEFAULT}.
++ * @property string $colPadding
++ *           Padding characters for side padding between data and lines.
++ * @property int $widthType
++ *           Type of the given table width (fixed or maximal value).
++ * @property string $lineVertical
++ *           Character to use for drawing vertical lines.
++ * @property string $lineHorizontal
++ *           Character to use for drawing horizontal lines.
++ * @property string $corner
++ *           Character to use for drawing line corners.
++ * @property string $defaultFormat
++ *           Standard column content format, applied to cells that have
++ *           "default" as the content format.
++ * @property string $defaultBorderFormat
++ *           Standard border format, applied to rows that have 'default' as the
++ *           border format.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+@@ -19,97 +49,6 @@
+ class ezcConsoleTableOptions extends ezcBaseOptions
+ {
+     /**
+-     * Column width: Either an array of column widths like:
+-     * <code>
+-     * array( 
+-     *      0 => 10,
+-     *      1 => 30,
+-     *      2 => 10,
+-     * )
+-     * </code>
+-     * To have the first column 10 characters wide, the second 30 and the 3rd 10.
+-     * Alternatively the string "auto" to have the columns widths automatically
+-     * calculated.
+-     * 
+-     * @var mixed
+-     */
+-    protected $colWidth = "auto";
+-
+-    /**
+-     * Wrap style of text contained in strings.
+-     * @see ezcConsoleTable::WRAP_AUTO
+-     * @see ezcConsoleTable::WRAP_NONE
+-     * @see ezcConsoleTable::WRAP_CUT
+-     * 
+-     * @var int
+-     */
+-    protected $colWrap = ezcConsoleTable::WRAP_AUTO;
+-
+-    /**
+-     * Standard column alignment, applied to cells that have to explicit
+-     * alignment assigned.
+-     *
+-     * @see ezcConsoleTable::ALIGN_LEFT
+-     * @see ezcConsoleTable::ALIGN_RIGHT
+-     * @see ezcConsoleTable::ALIGN_CENTER
+-     * @see ezcConsoleTable::ALIGN_DEFAULT
+-     * 
+-     * @var int
+-     */
+-    protected $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
+-
+-    /**
+-     * Padding characters for side padding between data and lines. 
+-     * 
+-     * @var string
+-     */
+-    protected $colPadding = " ";
+-
+-    /**
+-     * Type of the given table width (fixed or maximal value).
+-     * 
+-     * @var int
+-     */
+-    protected $widthType = ezcConsoleTable::WIDTH_MAX;
+-        
+-    /**
+-     * Character to use for drawing vertical lines. 
+-     * 
+-     * @var string
+-     */
+-    protected $lineVertical = "-";
+-
+-    /**
+-     * Character to use for drawing horizontal lines. 
+-     * 
+-     * @var string
+-     */
+-    protected $lineHorizontal = "|";
+-
+-    /**
+-     * Character to use for drawing line corners.
+-     * 
+-     * @var string
+-     */
+-    protected $corner = "+";
+-    
+-    /**
+-     * Standard column content format, applied to cells that have "default" as
+-     * the content format.
+-     * 
+-     * @var string
+-     */
+-    protected $defaultFormat = "default";
+-
+-    /**
+-     * Standard border format, applied to rows that have 'default' as the
+-     * border format.
+-     * 
+-     * @var string
+-     */
+-    protected $defaultBorderFormat = "default";
+-    
+-    /**
+      * Construct a new options object.
+      *
+      * NOTE: For backwards compatibility reasons the old method of instantiating this class is kept,
+@@ -125,6 +64,17 @@
+      */
+     public function __construct()
+     {
++        $this->properties['colWidth'] = 'auto';
++        $this->properties['colWrap'] = ezcConsoleTable::WRAP_AUTO;
++        $this->properties['defaultAlign'] = ezcConsoleTable::ALIGN_LEFT;
++        $this->properties['colPadding'] = ' ';
++        $this->properties['widthType'] = ezcConsoleTable::WIDTH_MAX;
++        $this->properties['lineVertical'] = '-';
++        $this->properties['lineHorizontal'] = '|';
++        $this->properties['corner'] = '+';
++        $this->properties['defaultFormat'] = 'default';
++        $this->properties['defaultBorderFormat'] = 'default';
++
+         $args = func_get_args();
+         if ( func_num_args() === 1 && is_array( $args[0] ) && !is_int( key( $args[0] ) ) )
+         {
+@@ -181,7 +131,7 @@
+      *
+      * @param string $propertyName Name of the property.
+      * @param mixed $val  The value for the property.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $propertyName, $val )
+     {
+@@ -240,7 +190,7 @@
+             default:
+                 throw new ezcBaseSettingNotFoundException( $propertyName );
+         }
+-        $this->$propertyName = $val;
++        $this->properties[$propertyName] = $val;
+     }
+ }
+ 
+
+Modified: trunk/ConsoleTools/src/output.php
+===================================================================
+--- trunk/ConsoleTools/src/output.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/output.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -62,26 +62,24 @@
+  * For a list of valid colors, style attributes and background colors, please 
+  * refer to {@link ezcConsoleOutputFormat}.
+  * 
++ * @property ezcConsoleOutputOptions $options
++ *           Contains the options for this class.
++ * @property ezcConsoleOutputFormats $formats
++ *           Contains the output formats.
++ *
+  * @package ConsoleTools
+  * @version //autogen//
+  */
+ class ezcConsoleOutput
+ {
+     /**
+-     * Options
+-     * 
+-     * @var ezcConsoleOutputOptions
++     * Container to hold the properties
++     *
++     * @var array(string=>mixed)
+      */
+-    protected $options;
++    protected $properties;
+ 
+     /**
+-     * Formats 
+-     * 
+-     * @var ezcConsoleOutputFormats
+-     */
+-    protected $formats;
+-
+-    /**
+      * Whether a position has been stored before, using the storePos() method.
+      *
+      * @see ezcConsoleOutput::storePos()
+@@ -177,8 +175,8 @@
+     {
+         $options = isset( $options ) ? $options : new ezcConsoleOutputOptions();
+         $formats = isset( $formats ) ? $formats : new ezcConsoleOutputFormats();
+-        $this->options = new ezcConsoleOutputOptions( $options );
+-        $this->formats = $formats;
++        $this->properties['options'] = new ezcConsoleOutputOptions( $options );
++        $this->properties['formats'] = $formats;
+     }
+     
+     /**
+@@ -199,11 +197,11 @@
+     {
+         if ( is_array( $options ) ) 
+         {
+-            $this->options->merge( $options );
++            $this->properties['options']->merge( $options );
+         } 
+         else if ( $options instanceof ezcConsoleOutputOptions ) 
+         {
+-            $this->options = $options;
++            $this->properties['options'] = $options;
+         }
+         else
+         {
+@@ -219,7 +217,7 @@
+      */
+     public function getOptions()
+     {
+-        return $this->options;
++        return $this->properties['options'];
+     }
+ 
+     /**
+@@ -230,15 +228,15 @@
+      * 
+      * @param string $propertyName Name of the property.
+      * @return mixed Value of the property or null.
++     * @ignore
+      */
+     public function __get( $propertyName )
+     {
+         switch ( $propertyName ) 
+         {
+             case 'options':
+-                return $this->options;
+             case 'formats':
+-                return $this->formats;
++                return $this->properties[$propertyName];
+             default:
+                 break;
+         }
+@@ -257,7 +255,7 @@
+      * @throws ezcBaseValueException 
+      *         If a the value for the property formats is not an instance of 
+      *         ezcConsoleOutputFormats. 
+-     * @return void
++     * @ignore
+      */
+     public function __set( $propertyName, $val )
+     {
+@@ -268,14 +266,14 @@
+                 {
+                     throw new ezcBaseValueException( $key, $val, 'ezcConsoleOutputOptions' );
+                 }
+-                $this->options = $val;
++                $this->properties['options'] = $val;
+                 return;
+             case 'formats':
+                 if ( !( $val instanceof ezcConsoleOutputFormats ) )
+                 {
+                     throw new ezcBaseValueException( $key, $val, 'ezcConsoleOutputFormats' );
+                 }
+-                $this->formats = $val;
++                $this->properties['formats'] = $val;
+                 return;
+             default:
+                 break;
+@@ -288,6 +286,7 @@
+      * 
+      * @param string $propertyName Name of the property.
+      * @return bool True is the property is set, otherwise false.
++     * @ignore
+      */
+     public function __isset( $propertyName )
+     {
+@@ -315,18 +314,18 @@
+      */
+     public function outputText( $text, $format = 'default', $verbosityLevel = 1 ) 
+     {
+-        if ( $this->options->verbosityLevel >= $verbosityLevel ) 
++        if ( $this->properties['options']->verbosityLevel >= $verbosityLevel ) 
+         {
+-            if ( is_int( $this->options->autobreak ) && $this->options->autobreak > 0 )
++            if ( is_int( $this->properties['options']->autobreak ) && $this->properties['options']->autobreak > 0 )
+             {
+                 $textLines = explode( "\n", $text );
+                 foreach ( $textLines as $id => $textLine )
+                 {
+-                    $textLines[$id] = wordwrap( $textLine, $this->options->autobreak, "\n", true );
++                    $textLines[$id] = wordwrap( $textLine, $this->properties['options']->autobreak, "\n", true );
+                 }
+                 $text = implode( "\n", $textLines );
+             }
+-            echo ( $this->options->useFormats == true ) ? $this->formatText( $text, $format ) : $text;
++            echo ( $this->properties['options']->useFormats == true ) ? $this->formatText( $text, $format ) : $text;
+         }
+     }
+ 
+
+Modified: trunk/ConsoleTools/src/progressbar.php
+===================================================================
+--- trunk/ConsoleTools/src/progressbar.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/progressbar.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -37,33 +37,25 @@
+  * 
+  * $out->outputText( "Successfully uploaded </tmp/foobar.tar.bz2>.\n", 'success' );
+  * </code>
+- *  
+  * 
++ * @property ezcConsoleProgressbarOptions $options
++ *           Contains the options for this class.
++ * @property int $max
++ *           The maximum progress value to reach.
++ *
+  * @package ConsoleTools
+  * @version //autogen//
+  */
+ class ezcConsoleProgressbar
+ {
+     /**
+-     * Settings for the progress bar.
+-     * Contains settings for the progress bar. Mandatory setting values are:
++     * Container to hold the properties
+      *
+-     * <code>
+-     * $progress->max;      // The maximum progress value to reach.
+-     * </code>
+-     * 
+-     * @var array(string=>int)
++     * @var array(string=>mixed)
+      */
+-    protected $settings;
++    protected $properties;
+ 
+     /**
+-     * Options
+-     *
+-     * @var ezcConsoleProgressbarOptions
+-     */
+-    protected $options;
+-
+-    /**
+      * Storage for actual values to be replaced in the format string.
+      * Actual values are stored here and will be inserted into the bar
+      * before printing it.
+@@ -132,14 +124,13 @@
+      *                                       reaches 100%.
+      * @param array(string=>string) $options Options
+      *
+-     * @see ezcConsoleProgressbar::$settings
+      * @see ezcConsoleProgressbar::$options
+      */
+     public function __construct( ezcConsoleOutput $outHandler, $max, array $options = array() )
+     {
+         $this->output = $outHandler;
+         $this->__set( 'max', $max );
+-        $this->options = new ezcConsoleProgressbarOptions( $options );
++        $this->properties['options'] = new ezcConsoleProgressbarOptions( $options );
+     }
+     
+     /**
+@@ -160,11 +151,11 @@
+     {
+         if ( is_array( $options ) ) 
+         {
+-            $this->options->merge( $options );
++            $this->properties['options']->merge( $options );
+         } 
+         else if ( $options instanceof ezcConsoleProgressbarOptions ) 
+         {
+-            $this->options = $options;
++            $this->properties['options'] = $options;
+         }
+         else
+         {
+@@ -180,7 +171,7 @@
+      */
+     public function getOptions()
+     {
+-        return $this->options;
++        return $this->properties['options'];
+     }
+ 
+     /**
+@@ -191,18 +182,19 @@
+      *
+      * @throws ezcBasePropertyNotFoundException
+      *         If the the desired property is not found.
++     * @ignore
+      */
+     public function __get( $key )
+     {
+         switch ( $key )
+         {
+             case 'options':
+-                return $this->options;
++                return $this->properties['options'];
+             case 'step':
+                 // Step is now an option
+-                return $this->options->step;
++                return $this->properties['options']->step;
+             case 'max':
+-                return $this->settings[$key];
++                return $this->properties[$key];
+             default:
+                 break;
+         }
+@@ -219,7 +211,7 @@
+      *         If a desired property could not be found.
+      * @throws ezcBaseValueException
+      *         If a desired property value is out of range.
+-     * @return void
++     * @ignore
+      */
+     public function __set( $key, $val )
+     {
+@@ -243,7 +235,7 @@
+                     throw new ezcBaseValueException( $key, $val, 'number >= 0' );
+                 }
+                 // Step is now an option.
+-                $this->options->step = $val;
++                $this->properties['options']->step = $val;
+                 return;
+             default:
+                 throw new ezcBasePropertyNotFoundException( $key );
+@@ -251,7 +243,7 @@
+         }
+         // Changes settings or options, need for recalculating measures
+         $this->started = false;
+-        $this->$key = $val;
++        $this->properties[$key] = $val;
+     }
+  
+     /**
+@@ -259,6 +251,7 @@
+      * 
+      * @param string $key Name of the property.
+      * @return bool True is the property is set, otherwise false.
++     * @ignore
+      */
+     public function __isset( $key )
+     {
+@@ -317,7 +310,7 @@
+     public function advance( $redraw = true, $step = 1 ) 
+     {
+         $this->currentStep += $step;
+-        if ( $redraw === true && $this->currentStep % $this->options->redrawFrequency === 0 )
++        if ( $redraw === true && $this->currentStep % $this->properties['options']->redrawFrequency === 0 )
+         {
+             $this->output();
+         }
+@@ -350,41 +343,41 @@
+         $barFilledSpace = $barFilledSpace > $this->measures['barSpace'] ? $this->measures['barSpace'] : $barFilledSpace;
+         $bar = str_pad( 
+             str_pad( 
+-                $this->options->progressChar, 
++                $this->properties['options']->progressChar, 
+                 $barFilledSpace, 
+-                $this->options->barChar, 
++                $this->properties['options']->barChar, 
+                 STR_PAD_LEFT
+             ), 
+             $this->measures['barSpace'], 
+-            $this->options->emptyChar, 
++            $this->properties['options']->emptyChar, 
+             STR_PAD_RIGHT 
+         );
+         $this->valueMap['bar'] = $bar;
+ 
+         // Fraction
+         $fractionVal = sprintf( 
+-            $this->options->fractionFormat,
+-            ( $fractionVal = ( $this->options->step * $this->currentStep ) / $this->max * 100 ) > 100 ? 100 : $fractionVal
++            $this->properties['options']->fractionFormat,
++            ( $fractionVal = ( $this->properties['options']->step * $this->currentStep ) / $this->max * 100 ) > 100 ? 100 : $fractionVal
+         );
+         $this->valueMap['fraction'] = str_pad( 
+             $fractionVal, 
+-            strlen( sprintf( $this->options->fractionFormat, 100 ) ),
++            strlen( sprintf( $this->properties['options']->fractionFormat, 100 ) ),
+             ' ',
+             STR_PAD_LEFT
+         );
+ 
+         // Act / max
+         $actVal = sprintf(
+-            $this->options->actFormat,
+-            ( $actVal = $this->currentStep * $this->options->step ) > $this->max ? $this->max : $actVal
++            $this->properties['options']->actFormat,
++            ( $actVal = $this->currentStep * $this->properties['options']->step ) > $this->max ? $this->max : $actVal
+         );
+         $this->valueMap['act'] = str_pad( 
+             $actVal, 
+-            strlen( sprintf( $this->options->actFormat, $this->max ) ),
++            strlen( sprintf( $this->properties['options']->actFormat, $this->max ) ),
+             ' ',
+             STR_PAD_LEFT
+         );
+-        $this->valueMap['max'] = sprintf( $this->options->maxFormat, $this->max );
++        $this->valueMap['max'] = sprintf( $this->properties['options']->maxFormat, $this->max );
+     }
+ 
+     /**
+@@ -394,7 +387,7 @@
+      */
+     protected function insertValues()
+     {
+-        $bar = $this->options->formatString;
++        $bar = $this->properties['options']->formatString;
+         foreach ( $this->valueMap as $name => $val )
+         {
+             $bar = str_replace( "%{$name}%", $val, $bar );
+@@ -410,23 +403,23 @@
+     protected function calculateMeasures()
+     {
+         // Calc number of steps bar goes through
+-        $this->numSteps = ( int ) round( $this->max / $this->options->step );
++        $this->numSteps = ( int ) round( $this->max / $this->properties['options']->step );
+         // Calculate measures
+         $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
+-        if ( strpos( $this->options->formatString,'%max%' ) !== false )
++        if ( strpos( $this->properties['options']->formatString,'%max%' ) !== false )
+         {
+-            $this->measures['maxSpace'] = strlen( sprintf( $this->options->maxFormat, $this->max ) );
++            $this->measures['maxSpace'] = strlen( sprintf( $this->properties['options']->maxFormat, $this->max ) );
+ 
+         }
+-        if ( strpos( $this->options->formatString, '%act%' ) !== false )
++        if ( strpos( $this->properties['options']->formatString, '%act%' ) !== false )
+         {
+-            $this->measures['actSpace'] = strlen( sprintf( $this->options->actFormat, $this->max ) );
++            $this->measures['actSpace'] = strlen( sprintf( $this->properties['options']->actFormat, $this->max ) );
+         }
+-        if ( strpos( $this->options->formatString, '%fraction%' ) !== false )
++        if ( strpos( $this->properties['options']->formatString, '%fraction%' ) !== false )
+         {
+-            $this->measures['fractionSpace'] = strlen( sprintf( $this->options->fractionFormat, 100 ) );
++            $this->measures['fractionSpace'] = strlen( sprintf( $this->properties['options']->fractionFormat, 100 ) );
+         }
+-        $this->measures['barSpace'] = $this->options->width - array_sum( $this->measures );
++        $this->measures['barSpace'] = $this->properties['options']->width - array_sum( $this->measures );
+     }
+ 
+     /**
+
+Modified: trunk/ConsoleTools/src/statusbar.php
+===================================================================
+--- trunk/ConsoleTools/src/statusbar.php	2006-08-17 14:13:54 UTC (rev 3310)
++++ trunk/ConsoleTools/src/statusbar.php	2006-08-17 14:14:28 UTC (rev 3311)
+@@ -32,6 +32,8 @@
+  * $out->outputText( "Finished uploading files: $msg\n" );
+  * </code>
+  *  
++ * @property ezcConsoleStatusbarOptions $options
++ *           Contains the options for this class.
+  * 
+  * @package ConsoleTools
+  * @version //autogen//
+@@ -39,11 +41,11 @@
+ class ezcConsoleStatusbar
+ {
+     /**
+-     * Options
++     * Container to hold the properties
+      *
+-     * @var ezcConsoleStatusbarOptions
++     * @var array(string=>mixed)
+      */
+-    protected $options;
+
+--C776248C018.1155829049/mta.example.com--

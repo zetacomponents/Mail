@@ -835,5 +835,20 @@ END;
         $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
 
     }
+
+    public function testVarious10()
+    {
+        $parser = new ezcMailParser();
+        try
+        {
+            $set = new SingleFileSet( 'various/test-bounced' );
+            $mail = $parser->parseMail( $set );
+            $this->assertEquals( 1, count( $mail ) );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
 }
 ?>
