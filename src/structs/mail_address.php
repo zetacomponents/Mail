@@ -14,8 +14,9 @@
  * formats.
  *
  * @package Mail
+ * @version //autogentag//
  */
-class ezcMailAddress
+class ezcMailAddress extends ezcBaseStruct
 {
     /**
      * The name of the recipient (optional).

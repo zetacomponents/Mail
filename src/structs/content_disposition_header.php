@@ -15,7 +15,7 @@
  *
  * @package Mail
  */
-class ezcMailContentDispositionHeader
+class ezcMailContentDispositionHeader extends ezcBaseStruct
 {
     /**
      * The disposition type, either "inline" or "attachment".
