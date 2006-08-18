@@ -46,7 +46,7 @@ class ezcMailVariableSet implements ezcMailParserSet
      */
     public function __construct( $mail )
     {
-        $this->mail = preg_split( "/\n/",$mail);
+        $this->mail = preg_split( "/\r\n|\n/", $mail );
         reset( $this->mail );
     }
 
@@ -68,7 +68,7 @@ class ezcMailVariableSet implements ezcMailParserSet
             return null;
         }
 
-        return $line;
+        return $line . "\n";
     }
 
     /**

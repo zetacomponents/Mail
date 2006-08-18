@@ -21,8 +21,9 @@ class ezcMailTransportVariableTest extends ezcTestCase
 
     public function testOneLine()
     {
-        $reference = "Line1";
-        $set = new ezcMailVariableSet( $reference );
+        $reference = "Line1\n";
+        $input = "Line1";
+        $set = new ezcMailVariableSet( $input );
         $result = '';
 
         $line = $set->getNextLine();
@@ -38,8 +39,8 @@ class ezcMailTransportVariableTest extends ezcTestCase
     public function testMultiLineCRLF()
     {
         $input = "Line1\r\nLine2";
-        $reference = "Line1\nLine2";
-        $set = new ezcMailVariableSet( $reference );
+        $reference = "Line1\nLine2\n";
+        $set = new ezcMailVariableSet( $input );
         $result = '';
 
         $line = $set->getNextLine();
@@ -47,10 +48,6 @@ class ezcMailTransportVariableTest extends ezcTestCase
         {
             $result .= $line;
             $line = $set->getNextLine();
-            if( $line !== null )
-            {
-                $result .= "\n";
-            }
         }
         $this->assertEquals( $reference, $result );
         $this->assertEquals( false, $set->nextMail() );
@@ -58,8 +55,9 @@ class ezcMailTransportVariableTest extends ezcTestCase
 
     public function testMultiLineLF()
     {
-        $reference = "Line1\nLine2";
-        $set = new ezcMailVariableSet( $reference );
+        $reference = "Line1\nLine2\n";
+        $input = "Line1\nLine2";
+        $set = new ezcMailVariableSet( $input );
         $result = '';
 
         $line = $set->getNextLine();
@@ -67,11 +65,6 @@ class ezcMailTransportVariableTest extends ezcTestCase
         {
             $result .= $line;
             $line = $set->getNextLine();
-
-            if( $line !== null )
-            {
-                $result .= "\n";
-            }
         }
         $this->assertEquals( $reference, $result );
         $this->assertEquals( false, $set->nextMail() );
@@ -83,7 +76,6 @@ class ezcMailTransportVariableTest extends ezcTestCase
         $set = new ezcMailVariableSet( $mail_msg );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-
         // check that we have no extra linebreaks
         $this->assertEquals( "notdisclosed@mydomain.com", $mail[0]->from->email );
     }
