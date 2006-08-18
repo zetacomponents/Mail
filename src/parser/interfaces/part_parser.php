@@ -111,7 +111,7 @@ abstract class ezcMailPartParser
                 }
                 else
                 {
-                    $bodyParser = new ezcMailTextParser( $headers );
+                    $bodyParser = new ezcMailTextParser( $subType, $headers );
                 }
                 break;
 
