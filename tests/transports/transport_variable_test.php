@@ -37,7 +37,8 @@ class ezcMailTransportVariableTest extends ezcTestCase
 
     public function testMultiLineCRLF()
     {
-        $reference = "Line1\r\nLine2";
+        $input = "Line1\r\nLine2";
+        $reference = "Line1\nLine2";
         $set = new ezcMailVariableSet( $reference );
         $result = '';
 
@@ -46,6 +47,10 @@ class ezcMailTransportVariableTest extends ezcTestCase
         {
             $result .= $line;
             $line = $set->getNextLine();
+            if( $line !== null )
+            {
+                $result .= "\n";
+            }
         }
         $this->assertEquals( $reference, $result );
         $this->assertEquals( false, $set->nextMail() );
@@ -62,9 +67,25 @@ class ezcMailTransportVariableTest extends ezcTestCase
         {
             $result .= $line;
             $line = $set->getNextLine();
+
+            if( $line !== null )
+            {
+                $result .= "\n";
+            }
         }
         $this->assertEquals( $reference, $result );
         $this->assertEquals( false, $set->nextMail() );
+    }
+
+    public function testFromProcMail()
+    {
+        $mail_msg = file_get_contents( dirname( __FILE__ ) . '/data/test-variable' );
+        $set = new ezcMailVariableSet( $mail_msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+
+        // check that we have no extra linebreaks
+        $this->assertEquals( "notdisclosed@mydomain.com", $mail[0]->from->email );
     }
 }
 ?>

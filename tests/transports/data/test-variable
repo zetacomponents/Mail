@@ -1,0 +1,34 @@
+From notdisclosed@mydomain.com  Wed Jul 26 14:24:29 2006
+Return-Path: <notdisclosed@mydomain.com>
+Received: from csefast.ucsd.edu (csefast.ucsd.edu [132.239.15.6])
+	by up.ucsd.edu (8.13.1/8.13.1) with ESMTP id k6QLOT0O019465
+	for <destination@destinationdomain.com>; Wed, 26 Jul 2006 14:24:29 -0700
+Received: from wcmta2.mycingular.net (wcmta2.mycingular.net [66.102.172.232])
+	by csefast.ucsd.edu (8.13.1/8.13.1) with ESMTP id k6QLOSoL000488
+	for <destination@destinationdomain.com>; Wed, 26 Jul 2006 14:24:29 -0700
+Received: from mydomain.com (wcmmg2.mycingular.net [10.46.26.19])
+	by wcmta2.mycingular.net (8.12.11/8.12.11) with SMTP id k6QLORGs005719
+	for destination@destinationdomain.com; Wed, 26 Jul 2006 16:24:27 -0500 (CDT)
+	(envelope-from notdisclosed@mydomain.com)
+Date: Wed, 26 Jul 2006 16:24:27 -0500 (CDT)
+Message-Id: <notdisclosed@mydomain.com>
+FROM: notdisclosed@mydomain.com
+TO: destination@destinationdomain.com
+SUBJECT: Me
+X-Spam-Status: No, score=2.2 required=5.0 autolearn=no version=3.0.6 
+	scanner=csefast.ucsd.edu
+X-Spam-Report: 
+	*  0.2 NO_REAL_NAME From: does not include a real name
+	*  0.5 FROM_ENDS_IN_NUMS From: ends in numbers
+	*  1.5 FROM_STARTS_WITH_NUMS From: starts with nums
+	*  0.1 FORGED_RCVD_HELO Received: contains a forged HELO
+X-Spam-Level: **
+X-Spam-Checker-Version: SpamAssassin 3.0.6 (2005-12-07) on csefast.ucsd.edu
+
+Hi
+
+--
+
+Mobile Email from a Cingular Wireless Customer http://www.cingular.com
+
+

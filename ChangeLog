@@ -3,7 +3,8 @@
 
 - Added the ezcMailPop3Transport::fetchByMessageNr() method that returns an
   ezcMailPop3Set containing the message with the specified number.
-
+- Fixed bug #8736: variable transport non-functional
+	
 
 1.1.1 - Monday 07 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
