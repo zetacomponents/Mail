@@ -349,12 +349,12 @@ class ezcMailTools
         // To = Reply-To if set
         if ( $mail->getHeader( 'Reply-To' ) != '' )
         {
-            $reply->to = ezcMailTools::parseEmailAddress( $mail->getHeader( 'Reply-To' ) );
+            $reply->to = ezcMailTools::parseEmailAddresses( $mail->getHeader( 'Reply-To' ) );
         }
         else  // Else To = From
 
         {
-            $reply->to = $mail->from;
+            $reply->to = array( $mail->from );
         }
 
         if ( $type == self::REPLY_ALL )

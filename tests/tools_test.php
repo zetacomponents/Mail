@@ -156,7 +156,8 @@ class ezcMailToolsTest extends ezcTestCase
         $reply = ezcMailTools::replyToMail( $mail[0],
                                             new ezcMailAddress( 'test@example.com', 'Reply Guy' ) );
 
-        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $reply->to );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ) ),
+                             $reply->to );
         $this->assertEquals( new ezcMailAddress( 'test@example.com', 'Reply Guy' ), $reply->from );
         $this->assertEquals( 'Re: Simple mail with text subject and body', $reply->subject );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'In-Reply-To' ) );
@@ -174,7 +175,8 @@ class ezcMailToolsTest extends ezcTestCase
                                             new ezcMailAddress( 'test@example.com', 'Reply Guy' ),
                                             ezcMailTools::REPLY_ALL, 'Sv: ' );
 
-        $this->assertEquals( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ), $reply->to );
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ) ),
+                             $reply->to );
         $this->assertEquals( new ezcMailAddress( 'test@example.com', 'Reply Guy' ), $reply->from );
         $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ),
                                     new ezcMailAddress( 'user@example.com', '', 'utf-8' ) ), $reply->cc );
