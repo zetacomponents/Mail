@@ -178,45 +178,23 @@ class ezcMail extends ezcMailPart
     {
         switch ( $name )
         {
-            case 'from':
-                return $this->properties['from'];
-                break;
-
             case 'to':
-                return $this->properties['to'];
-                break;
-
             case 'cc':
-                return (array) $this->properties['cc'];
-                break;
-
             case 'bcc':
-                return (array) $this->properties['bcc'];
-                break;
+                return (array) $this->properties[$name];
 
+            case 'from':
             case 'subject':
-                return $this->properties['subject'];
-                break;
-
             case 'subjectCharset':
-                return $this->properties['subjectCharset'];
-                break;
-
             case 'body':
-                return $this->properties['body'];
-                break;
-
             case 'messageID':
-                return $this->properties['messageID'];
-                break;
+                return $this->properties[$name];
 
             case 'timestamp':
                 return strtotime( $this->getHeader( "Date" ) );
-                break;
 
             default:
                 return parent::__get( $name );
-                break;
         }
     }
 
