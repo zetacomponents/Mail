@@ -54,6 +54,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailComposer extends ezcMail
 {

@@ -22,6 +22,7 @@
  * @todo // support for signing?
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailPop3Transport
 {

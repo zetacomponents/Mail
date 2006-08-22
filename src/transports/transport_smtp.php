@@ -34,6 +34,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailSmtpTransport implements ezcMailTransport
 {

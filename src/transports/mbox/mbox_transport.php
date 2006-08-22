@@ -16,6 +16,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailMboxTransport
 {

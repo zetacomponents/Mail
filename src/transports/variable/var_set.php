@@ -27,6 +27,7 @@ declare(encoding="latin1");
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailVariableSet implements ezcMailParserSet
 {

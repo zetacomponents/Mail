@@ -15,6 +15,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailMtaTransport implements ezcMailTransport
 {

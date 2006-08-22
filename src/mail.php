@@ -60,6 +60,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMail extends ezcMailPart
 {

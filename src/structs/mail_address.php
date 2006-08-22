@@ -15,6 +15,7 @@
  *
  * @package Mail
  * @version //autogentag//
+ * @mainclass
  */
 class ezcMailAddress extends ezcBaseStruct
 {

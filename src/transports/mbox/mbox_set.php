@@ -18,6 +18,7 @@
  *
  * @package Mail
  * @version //autogen//
+ * @mainclass
  */
 class ezcMailMboxSet implements ezcMailParserSet
 {
