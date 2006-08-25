@@ -1,0 +1,15 @@
+Mail Parsing and Displaying Example
+===================================
+
+This script demonstrates how to display parsed email messages:
+
+.. include:: display-example.php
+   :literal:
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End:
+   vim: et syn=rst tw=79
