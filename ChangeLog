@@ -4,6 +4,9 @@
 - Added the ezcMailPop3Transport::fetchByMessageNr() method that returns an
   ezcMailPop3Set containing the message with the specified number.
 - Fixed bug #8736: variable transport non-functional.
+- Fixed bug that caused the contentId property of the ezcMailFile class not to
+  be set even if it was available for the related part while parsing
+  multipart/related messages.
 - PHP 5.2 compatibility.
 	
 

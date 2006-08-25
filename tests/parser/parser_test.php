@@ -254,6 +254,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( ezcMailFile::CONTENT_TYPE_IMAGE, $filePart->contentType );
         $this->assertEquals( ezcMailFile::DISPLAY_INLINE, $filePart->dispositionType );
         $this->assertEquals( 'jpeg', $filePart->mimeType );
+        $this->assertEquals( '689D8AD3-D129-443F-94F7-90037B82B429@ez.no', $filePart->contentId );
 
         $this->assertEquals( 1142414084, $mail->timestamp );
         $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );

@@ -88,6 +88,12 @@ class ezcMailMultipartRelated extends ezcMailMultipart
         }
         $contentId = trim( $part->getHeader( 'Content-ID' ), '<>' );
 
+        // Set the content ID property of the ezcMailFile if one was found
+        if ( $part instanceof ezcMailFile )
+        {
+            $part->contentId = $contentId;
+        }
+
         if ( count( $this->parts ) > 0 )
         {
             $this->parts[] = $part;
