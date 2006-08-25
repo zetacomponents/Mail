@@ -149,7 +149,7 @@ Mail retrieval and parsing
 
 Many applications have a need to interact with an email address. The mail
 component makes this easy through the class ezcMailParser and the mail
-retreival transport classes. Mail is fetched, parsed and returned to you in the
+retrieval transport classes. Mail is fetched, parsed and returned to you in the
 same structure that is used to send mail.
 
 The mail components currently allows you to fetch and parse mail messages from
@@ -172,6 +172,10 @@ shown in the next example.
 
 .. include:: tutorial_example_08.php
    :literal:
+
+For a more elaborate example please see the display_example_.
+
+.. _display_example: Mail_display-example.html
 
 References
 ==========

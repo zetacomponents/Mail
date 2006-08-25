@@ -1,7 +1,10 @@
 Mail Parsing and Displaying Example
 ===================================
 
-This script demonstrates how to display parsed email messages:
+This script demonstrates how to display parsed email messages. It takes one
+argument on the command line. This argument is a file containing one mail file
+which is then read and parsed in line 9 to 11. Line 12 starts the display
+process.
 
 .. include:: display-example.php
    :literal:
