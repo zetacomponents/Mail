@@ -14,7 +14,9 @@
  * @todo MimeType recognition
  *
  * @property string $fileName
- *           The file on disk.
+ *           The file on disk. The file with this name will only be available
+ *           in the script that parses the mail. It will automatically be
+ *           removed when the script ends.
  * @property string $mimeType
  *           The mimetype of the file. ezcMailFile tries to extract this from
  *           the file, but you can override it with this property.
