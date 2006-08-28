@@ -1,4 +1,4 @@
-1.1.2 - [RELEASEDATE]
+1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added the ezcMailPop3Transport::fetchByMessageNr() method that returns an
