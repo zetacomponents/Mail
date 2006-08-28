@@ -165,3 +165,4 @@ function formatAddress( $address )
 	}
 	return $name . "<{$address->email}>";	
 }
+?>
