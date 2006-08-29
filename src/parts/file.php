@@ -159,7 +159,7 @@ class ezcMailFile extends ezcMailPart
     }
 
     /**
-     * Sets the property $name to $value.
+     * Returns the value of property $value.
      *
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
      * @param string $name
