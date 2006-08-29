@@ -86,10 +86,16 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
     public $additionalParameters = array();
 
     /**
-     * Constructs a new ezcMailAddress with the mail address $email and the optional name $name.
+     * Constructs a new ezcMailContentDispositionHeader holding the various values of this
+     * container.
      *
-     * @param string $email
-     * @param string $name
+     * @param string $disposition
+     * @param string $fileName
+     * @param string $creationDate
+     * @param string $modificationDate
+     * @param string $readDate
+     * @param string $size
+     * @param array(string=>string) $additionalParameters
      */
     public function __construct( $disposition = 'inline',
                                  $fileName = null,
