@@ -358,7 +358,7 @@ class ezcMailPop3Transport
 
         // fetch the data from the server and prepare it to be returned.
         $message = "";
-        while ( $response = $this->connection->getLine( true ) !== "." )
+        while ( ( $response = $this->connection->getLine( true ) ) !== "." )
         {
             $message .= $response . "\n";
         }
@@ -434,11 +434,57 @@ class ezcMailPop3Transport
     public function fetchByMessageNr( $number, $deleteFromServer = false )
     {
         $messages = $this->listMessages();
-        if ( !array_key_exists( $number, $messages ) )
+        if ( !isset( $messages[$number] ) )
         {
             throw new ezcMailNoSuchMessageException( $number );
         }
         return new ezcMailPop3Set( $this->connection, array( $number ), $deleteFromServer );
+    }
+
+    /**
+     * Returns an ezcMailPop3Set with $count messages starting from $offset.
+     *
+     * Fetches $count messages starting from the $offset and returns them as a
+     * ezcMailPop3Set. If $count is not specified or if it is 0, it fetches
+     * all messages starting from the $offset.
+     * 
+     * @throws ezcMailInvalidLimitException if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
+     *         the existing range of messages.
+     *
+     * @param int $offset
+     * @param int $count
+     * @param bool $deleteFromServer
+     * @return ezcMailPop3Set
+     */
+    public function fetchFromOffset( $offset, $count = 0, $deleteFromServer = false )
+    {
+        if ( $count < 0 )
+        {
+            throw new ezcMailInvalidLimitException( $offset, $count );
+        }
+        $messages = $this->listMessages();
+        if ( !empty( $messages ) )
+        {
+            $messages = array_keys( $messages );
+            if ( $count == 0 )
+            {
+                $range = array_slice( $messages, $offset - 1, count( $messages ), true );
+            }
+            else
+            {
+                $range = array_slice( $messages, $offset - 1, $count, true );
+            }
+            if ( !isset( $range[$offset - 1] ) )
+            {
+                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+            }
+            return new ezcMailPop3Set( $this->connection, $range, $deleteFromServer );
+        }
+        else
+        {
+            return new ezcMailPop3Set( $this->connection, array(), $deleteFromServer );
+        }
     }
 }
 ?>

@@ -2,6 +2,7 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added IMAP transport.
+- Added fetchFromOffset() method to POP3 and MBOX transports.
 
 
 1.1.2 - Monday 28 August 2006

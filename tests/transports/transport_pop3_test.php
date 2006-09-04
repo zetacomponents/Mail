@@ -170,6 +170,62 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $this->assertEquals( 'ezcMailPop3Set', get_class( $message ) );
     }
     
+    public function testfetchFromOffset1()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $set = $pop3->fetchFromOffset( -1, 10 );
+            $this->assertEquals( 'Expected exception was not thrown' );
+        }
+        catch ( ezcMailOffsetOutOfRangeException $e )
+        {
+            $this->assertEquals( 'The offset <-1> is outside of the message subset <-1, 10>.', $e->getMessage());
+        }
+    }
+
+    public function testfetchFromOffset2()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $set = $pop3->fetchFromOffset( 10, 1 );
+            $this->assertEquals( 'Expected exception was not thrown' );
+        }
+        catch ( ezcMailOffsetOutOfRangeException $e )
+        {
+            $this->assertEquals( 'The offset <10> is outside of the message subset <10, 1>.', $e->getMessage() );
+        }
+    }
+
+    public function testfetchFromOffset3()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $set = $pop3->fetchFromOffset( 0, -1 );
+            $this->assertEquals( 'Expected exception was not thrown' );
+        }
+        catch ( ezcMailInvalidLimitException $e )
+        {
+            $this->assertEquals( 'The message count <-1> is not allowed for the message subset <0, -1>.', $e->getMessage() );
+        }
+    }
+
+    public function testfetchFromOffset4()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $set = $pop3->fetchFromOffset( 1, 4 );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
     public function testStatus()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );

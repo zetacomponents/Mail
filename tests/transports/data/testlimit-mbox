@@ -1,0 +1,628 @@
+From - Fri Aug 11 11:36:09 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 0CE4148C06C;
+	Sun, 30 Jul 2006 16:05:19 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k6UE59i12176;
+	Sun, 30 Jul 2006 16:05:09 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k6UE1Li11998
+	for <svn-components@example.com>; Sun, 30 Jul 2006 16:01:22 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1G7BsC-0005ce-00
+	for <svn-components@example.com>; Sun, 30 Jul 2006 16:02:28 +0200
+To: svn-components@example.com
+From: Kore Nordmann <kn@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1G7BsC-0005ce-00@svn>
+Subject: [svn-components] 3204 - in trunk/Graph: src/element tests [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Sun, 30 Jul 2006 16:02:28 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Status: RO
+Content-Length: 5271
+X-UID: 2
+X-Keywords:                                                                                                    
+
+Author: Kore Nordmann
+Date: 2006-07-30 16:02:26 +0200 (Sun, 30 Jul 2006)
+New Revision: 3204
+
+Log:
+- Fixed borders for title element
+
+Modified:
+   trunk/Graph/src/element/text.php
+   trunk/Graph/tests/text_test.php
+
+@@ -112,7 +112,7 @@
+             ->expects( $this->at( 0 ) )
+             ->method( 'drawText' )
+             ->with(
+-                $this->equalTo( new ezcGraphBoundings( 6, 6, 494, 25 ) ),
++                $this->equalTo( new ezcGraphBoundings( 6, 6, 494, 14 ) ),
+                 $this->equalTo( 'Title of a chart' ),
+                 $this->equalTo( ezcGraph::CENTER | ezcGraph::MIDDLE )
+             );
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:09 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 85DEA48C017;
+	Wed,  2 Aug 2006 12:00:22 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k72A0Gi09581;
+	Wed, 2 Aug 2006 12:00:16 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k729x3i09547
+	for <svn-components@example.com>; Wed, 2 Aug 2006 11:59:03 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1G8DWS-0000Sq-00
+	for <svn-components@example.com>; Wed, 02 Aug 2006 12:00:16 +0200
+To: svn-components@example.com
+From: Derick Rethans <dr@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_docs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1G8DWS-0000Sq-00@svn>
+Subject: [svn-components] 3215 - docs/guidelines [eZComponents: Docs]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Wed, 02 Aug 2006 12:00:16 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 5618
+Status: RO
+X-UID: 17
+X-Keywords:                                                                                                   
+
+Author: Derick Rethans
+Date: 2006-08-02 12:00:16 +0200 (Wed, 02 Aug 2006)
+New Revision: 3215
+
+Log:
+- Added property usage guidelines.
+
+Added:
+   docs/guidelines/properties.txt
+
+
+Property changes on: docs/guidelines/properties.txt
+___________________________________________________________________
+Name: svn:eol-style
+   + native
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id DEF2F48C016;
+	Wed,  2 Aug 2006 16:35:16 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k72EZ6i13392;
+	Wed, 2 Aug 2006 16:35:06 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k72EVSi13343
+	for <svn-components@example.com>; Wed, 2 Aug 2006 16:31:28 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1G8Hm6-0003dR-00
+	for <svn-components@example.com>; Wed, 02 Aug 2006 16:32:42 +0200
+To: svn-components@example.com
+From: Kore Nordmann <kn@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1G8Hm6-0003dR-00@svn>
+Subject: [svn-components] 3218 - trunk/Graph/src/options [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Wed, 02 Aug 2006 16:32:42 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 5446
+Status: RO
+X-UID: 20
+X-Keywords:                                                                                                   
+
+Author: Kore Nordmann
+Date: 2006-08-02 16:32:39 +0200 (Wed, 02 Aug 2006)
+New Revision: 3218
+
+Log:
+- Forgot adding 3d renderer options in last commit
+
+Added:
+   trunk/Graph/src/options/renderer_3d.php
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 9207C48C043;
+	Mon,  7 Aug 2006 16:00:19 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k77E06u12497;
+	Mon, 7 Aug 2006 16:00:06 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k77DuDu12443
+	for <svn-components@example.com>; Mon, 7 Aug 2006 15:56:13 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GA5aY-0002gu-00
+	for <svn-components@example.com>; Mon, 07 Aug 2006 15:56:14 +0200
+To: svn-components@example.com
+From: Derick Rethans <dr@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GA5aY-0002gu-00@svn>
+Subject: [svn-components] 3234 - in trunk/Feed: src src/processors tests [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Mon, 07 Aug 2006 15:56:14 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.9 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 7089
+Status: RO
+X-UID: 41
+X-Keywords:                                                                                                   
+
+Author: Derick Rethans
+Date: 2006-08-07 15:56:13 +0200 (Mon, 07 Aug 2006)
+New Revision: 3234
+
+Log:
+- Get rid of the factory method as it's not needed like that.
+
+Modified:
+   trunk/Feed/src/feed.php
+   trunk/Feed/src/processors/rss2.php
+   trunk/Feed/tests/feed_test.php
+   trunk/Feed/tests/rss2_test.php
+
+
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 4411848C026;
+	Tue,  8 Aug 2006 13:50:18 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k78BoBu28366;
+	Tue, 8 Aug 2006 13:50:11 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k78Blgu28335
+	for <svn-components@example.com>; Tue, 8 Aug 2006 13:47:42 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GAQ3l-0004E5-00
+	for <svn-components@example.com>; Tue, 08 Aug 2006 13:47:45 +0200
+To: svn-components@example.com
+From: Kore Nordmann <kn@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GAQ3l-0004E5-00@svn>
+Subject: [svn-components] 3243 - in trunk/Graph: src/renderer tests tests/data/compare [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Tue, 08 Aug 2006 13:47:45 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 4535
+Status: RO
+X-UID: 50
+X-Keywords:                                                                                                   
+
+Author: Kore Nordmann
+Date: 2006-08-08 13:47:42 +0200 (Tue, 08 Aug 2006)
+New Revision: 3243
+
+Log:
+- Fixed drawing of chart title in 3d renderer
+
+Added:
+   trunk/Graph/tests/data/compare/ezcGraphRenderer3dTest_testRenderLabeledPieSegmentWithTitle.png
+Modified:
+   trunk/Graph/src/renderer/3d.php
+   trunk/Graph/tests/data/compare/ezcGraphRenderer3dTest_testRender3dLineChart.png
+   trunk/Graph/tests/renderer_3d_test.php
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id DD50348C03A;
+	Tue,  8 Aug 2006 14:10:18 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k78CACu28643;
+	Tue, 8 Aug 2006 14:10:12 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k78C95u28613
+	for <svn-components@example.com>; Tue, 8 Aug 2006 14:09:05 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GAQOR-0004tu-00
+	for <svn-components@example.com>; Tue, 08 Aug 2006 14:09:07 +0200
+To: svn-components@example.com
+From: Kore Nordmann <kn@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GAQOR-0004tu-00@svn>
+Subject: [svn-components] 3245 - in trunk/Graph: src/element tests tests/data/compare [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Tue, 08 Aug 2006 14:09:07 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 5454
+Status: RO
+X-UID: 52
+X-Keywords:                                                                                                   
+
+Author: Kore Nordmann
+Date: 2006-08-08 14:09:04 +0200 (Tue, 08 Aug 2006)
+New Revision: 3245
+
+Log:
+- Fixed calculation of title boundings to respect margin of title element
+- Made ezcGraphChartElementText::maxHeight accessible
+
+Added:
+   trunk/Graph/tests/data/compare/ezcGraphRenderer3dTest_testRender3dLineChartBigMaxFontSize.png
+   trunk/Graph/tests/data/compare/ezcGraphRenderer3dTest_testRender3dLineChartSmallMaxFontSize.png
+Modified:
+   trunk/Graph/src/element/text.php
+   trunk/Graph/tests/renderer_3d_test.php
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 07A9548C03A;
+	Wed,  9 Aug 2006 17:15:27 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k79FFHu12698;
+	Wed, 9 Aug 2006 17:15:17 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k79FCbu12639
+	for <svn-components@example.com>; Wed, 9 Aug 2006 17:12:38 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GApjY-0004ur-00
+	for <svn-components@example.com>; Wed, 09 Aug 2006 17:12:36 +0200
+To: svn-components@example.com
+From: Tobias Schlitt <ts@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GApjY-0004ur-00@svn>
+Subject: [svn-components] 3255 - in trunk/ConsoleTools: . src tests [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Wed, 09 Aug 2006 17:12:36 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 4665
+Status: RO
+X-UID: 63
+X-Keywords:                                                                                                   
+
+Author: Tobias Schlitt
+Date: 2006-08-09 17:11:39 +0200 (Wed, 09 Aug 2006)
+New Revision: 3255
+
+Log:
+- Fixed bug #8738: Unexpected behaviour with options->colPadding.
+
+Modified:
+   trunk/ConsoleTools/ChangeLog
+   trunk/ConsoleTools/src/table.php
+   trunk/ConsoleTools/tests/table_test.php
+
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:36:10 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 794DA48C026;
+	Thu, 10 Aug 2006 13:45:21 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7ABjDu24204;
+	Thu, 10 Aug 2006 13:45:13 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7ABhtu24179
+	for <svn-components@example.com>; Thu, 10 Aug 2006 13:43:55 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GB8xF-0006qP-00
+	for <svn-components@example.com>; Thu, 10 Aug 2006 13:44:01 +0200
+To: svn-components@example.com
+From: Raymond Bosman <rb@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_trunk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GB8xF-0006qP-00@svn>
+Subject: [svn-components] 3259 - in trunk/Archive/src: file tar [eZComponents: Trunk]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Thu, 10 Aug 2006 13:44:01 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Content-Length: 4891
+Status: RO
+X-UID: 66
+X-Keywords:                                                                                                   
+
+Author: Raymond Bosman
+Date: 2006-08-10 13:44:01 +0200 (Thu, 10 Aug 2006)
+New Revision: 3259
+
+Log:
+- Code cleanup.
+
+Modified:
+   trunk/Archive/src/file/block_file.php
+   trunk/Archive/src/file/file.php
+   trunk/Archive/src/tar/v7_tar.php
+
+
+
+Modified: trunk/Archive/src/tar/v7_tar.php
+===================================================================
+--- trunk/Archive/src/tar/v7_tar.php	2006-08-10 10:06:15 UTC (rev 3258)
++++ trunk/Archive/src/tar/v7_tar.php	2006-08-10 11:44:01 UTC (rev 3259)
+@@ -418,8 +418,6 @@
+         $this->file->seek( 0, SEEK_END );
+         $this->headers[$this->fileNumber]->writeEncodedHeader( $this->file );
+ 
+-        $this->file->seek( 0, SEEK_END );
+-
+         // Add the new blocknumber to the map.
+         $this->headerPositions[$this->fileNumber] = $this->file->key();
+ 
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+
+From - Fri Aug 11 11:50:52 2006
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <svn-components-admin@example.com>
+X-Original-To: as@example.com
+Delivered-To: as@mta.example.com
+Received: from zap.example.com (zap.example.com [194.248.150.21])
+	by mta.example.com (Postfix) with ESMTP id 28B5C48C013;
+	Fri, 11 Aug 2006 11:50:20 +0200 (CEST)
+Received: from zap.example.com (localhost [127.0.0.1])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7B9oFu04230;
+	Fri, 11 Aug 2006 11:50:15 +0200
+Received: from svn ([85.19.74.71])
+	by zap.example.com (8.11.6/8.11.0) with ESMTP id k7B9nDu04207
+	for <svn-components@example.com>; Fri, 11 Aug 2006 11:49:13 +0200
+Received: from apache by svn with local (Exim 3.35 #1 (Debian))
+	id 1GBTdo-0006k0-00
+	for <svn-components@example.com>; Fri, 11 Aug 2006 11:49:20 +0200
+To: svn-components@example.com
+From: Derick Rethans <dr@example.com>
+X-svn-commit: 1
+X-svn-identifier: ezcomponents_docs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1GBTdo-0006k0-00@svn>
+Subject: [svn-components] 3263 - docs/guidelines [eZComponents: Docs]
+Sender: svn-components-admin@example.com
+Errors-To: svn-components-admin@example.com
+X-BeenThere: svn-components@example.com
+X-Mailman-Version: 2.0.1
+Precedence: bulk
+List-Help: <mailto:svn-components-request@example.com?subject=help>
+List-Post: <mailto:svn-components@example.com>
+List-Subscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=subscribe>
+List-Id: List for SVN commits for the Components project <svn-components.example.com>
+List-Unsubscribe: <http://example.com/mailman/listinfo/svn-components>,
+	<mailto:svn-components-request@example.com?subject=unsubscribe>
+List-Archive: <http://example.com/pipermail/svn-components/>
+Date: Fri, 11 Aug 2006 11:49:20 +0200
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on dolly
+X-Spam-Level: 
+X-Spam-Status: No, score=-100.0 required=15.0 tests=AWL,USER_IN_WHITELIST 
+	autolearn=ham version=3.0.4
+Status: O
+X-UID: 6
+Content-Length: 4448
+X-Keywords:                                                                                                    
+
+Author: Derick Rethans
+Date: 2006-08-11 11:49:20 +0200 (Fri, 11 Aug 2006)
+New Revision: 3263
+
+Log:
+- Added 1st version of development process guidelines.
+
+Added:
+   docs/guidelines/dev_process.txt
+
+-- 
+svn-components mailing list
+svn-components@example.com
+http://example.com/mailman/listinfo/svn-components
+

@@ -127,11 +127,48 @@ class ezcMailMboxTransport
     public function fetchByMessageNr( $number )
     {
         $messages = $this->listMessages();
-        if ( !array_key_exists( $number, $messages ) )
+        if ( !isset( $messages[$number] ) )
         {
             throw new ezcMailNoSuchMessageException( $number );
         }
         return new ezcMailMboxSet( $this->fh, array( 0 => $messages[$number] ) );
+    }
+
+    /**
+     * Returns an ezcMailMboxSet with $count messages starting from $offset.
+     *
+     * Fetches $count messages starting from the $offset and returns them as a
+     * ezcMailMboxSet. If $count is not specified or if it is 0, it fetches
+     * all messages starting from the $offset.
+     * 
+     * @throws ezcMailInvalidLimitException if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
+     *         the existing range of messages.
+     *
+     * @param int $offset
+     * @param int $count
+     * @return ezcMailMboxSet
+     */
+    public function fetchFromOffset( $offset, $count = 0 )
+    {
+        if ( $count < 0 )
+        {
+            throw new ezcMailInvalidLimitException( $offset, $count );
+        }
+        $messages = $this->listMessages();
+        if ( !isset( $messages[$offset] ) )
+        {
+            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+        }
+        if ( $count == 0 )
+        {
+            $range = array_slice( $messages, $offset );
+        }
+        else
+        {
+            $range = array_slice( $messages, $offset, $count );
+        }
+        return new ezcMailMboxSet( $this->fh, $range );
     }
 }
 ?>
