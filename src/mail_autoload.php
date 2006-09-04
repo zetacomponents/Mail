@@ -29,6 +29,8 @@ return array(
     'ezcMailTransportConnection'    => 'Mail/transports/transport_connection.php',
     'ezcMailPop3Transport'          => 'Mail/transports/pop3/pop3_transport.php',
     'ezcMailPop3Set'                => 'Mail/transports/pop3/pop3_set.php',
+    'ezcMailImapTransport'          => 'Mail/transports/imap/imap_transport.php',
+    'ezcMailImapSet'                => 'Mail/transports/imap/imap_set.php',
     'ezcMailMboxTransport'          => 'Mail/transports/mbox/mbox_transport.php',
     'ezcMailMboxSet'                => 'Mail/transports/mbox/mbox_set.php',
     'ezcMailFileSet'                => 'Mail/transports/file/file_set.php',
@@ -38,6 +40,8 @@ return array(
     'ezcMailTransportException'     => 'Mail/exceptions/transport_exception.php',
     'ezcMailTransportSmtpException' => 'Mail/exceptions/transport_smtp_exception.php',
     'ezcMailNoSuchMessageException' => 'Mail/exceptions/no_such_message.php',
+    'ezcMailOffsetOutOfRangeException' => 'Mail/exceptions/offset_out_of_range.php',
+    'ezcMailInvalidLimitException' => 'Mail/exceptions/invalid_limit.php',
 
     'ezcMailTools'                  => 'Mail/tools.php',
     'ezcMailParser'                 => 'Mail/parser/parser.php',
