@@ -23,7 +23,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
 	public function setUp()
 	{
-        if ( fsockopen( ezcMailTransportSmtpTest::HOST, ezcMailTransportSmtpTest::PORT, $errno, $errstr, 1 ) === false )
+        if ( @fsockopen( ezcMailTransportSmtpTest::HOST, ezcMailTransportSmtpTest::PORT, $errno, $errstr, 1 ) === false )
         {
             $this->markTestSkipped( "No connection to SMTP server " . ezcMailTransportSmtpTest::HOST . ":" . ezcMailTransportSmtpTest::PORT . "." );
         }
