@@ -28,7 +28,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
             $this->markTestSkipped( "No connection to SMTP server " . ezcMailTransportSmtpTest::HOST . ":" . ezcMailTransportSmtpTest::PORT . "." );
         }
 
-        $this->transport = new ezcMailTransportSmtp( ezcMailTransportSmtp::HOST, '', '', ezcMailTransportSmtp::PORT );
+        $this->transport = new ezcMailTransportSmtp( ezcMailTransportSmtpTest::HOST, '', '', ezcMailTransportSmtpTest::PORT );
         $this->mail = new ezcMail();
         $this->mail->from = new ezcMailAddress( 'nospam@ez.no', 'Unit testing' );
         $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'Foster' ) );
