@@ -105,12 +105,15 @@ class ezcMailRfc822Parser extends ezcMailPartParser
 
     /**
      * Returns an ezcMail corresponding to the parsed message.
+     * You can specify an alternate class using the $class parameter, if you
+     * extended ezcMail.
      *
+     * @param string $class Class to instanciate instead of ezcMail.
      * @return ezcMail
      */
-    public function finish()
+    public function finish( $class = "ezcMail" )
     {
-        $mail = new ezcMail();
+        $mail = new $class();
         $mail->setHeaders( $this->headers->getCaseSensitiveArray() );
         ezcMailPartParser::parsePartHeaders( $this->headers, $mail );
 

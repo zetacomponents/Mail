@@ -45,12 +45,15 @@ class ezcMailParser
 
     /**
      * Returns an array of ezcMail objects parsed from the mail set $set.
+     * You can optionally provide an alternate class name, which will be
+     * instanciated instead of ezcMail, if you need to extend ezcMail.
      *
      * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
      * @param ezcMailParserSet $set
+     * @param string $class         A class derived from ezcMail.
      * @returns array(ezcMail)
      */
-    public function parseMail( ezcMailParserSet $set )
+    public function parseMail( ezcMailParserSet $set, $class = "ezcMail" )
     {
         $mail = array();
         do
@@ -61,7 +64,7 @@ class ezcMailParser
             {
                 $this->partParser->parseBody( $data );
             }
-            $mail[] = $this->partParser->finish();
+            $mail[] = $this->partParser->finish( $class );
         }while( $set->nextMail() );
         return $mail;
     }

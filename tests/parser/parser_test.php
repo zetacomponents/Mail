@@ -53,6 +53,10 @@ class SingleFileSet implements ezcMailParserSet
     }
 }
 
+class ExtendedMail extends ezcMail
+{
+
+}
 
 /**
  * @package Mail
@@ -850,6 +854,22 @@ END;
         {
             $this->fail( $e->getMessage() );
         }
+    }
+
+    public function testExtendedMailClass()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-text-lineendings' );
+        $mail = $parser->parseMail( $set, "ExtendedMail" );
+        foreach ( $set as $mail )
+        {
+            $this->assertType(
+                "ExtendedMail",
+                $mail,
+                "Parser did not create instance of extended mail class."
+            );
+        }
+
     }
 }
 ?>
