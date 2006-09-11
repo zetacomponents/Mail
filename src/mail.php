@@ -50,10 +50,11 @@
  *                                       The encoding of the subject.
  * @property ezcMailPart           $body The body part of the message.
  *
- * @property-read string           $messageID
+ * @property-read string           $messageId
  *                                       The message ID of the message. Treat
  *                                       as read-only unless you're 100% sure
- *                                       what you're doing.
+ *                                       what you're doing. Also accessible through
+ *                                       the deprecated property messageID.
  * @property-read integer          $timestamp
  *                                       The date/time of when the message was
  *                                       sent as Unix Timestamp.
@@ -110,7 +111,7 @@ class ezcMail extends ezcMailPart
         $this->properties['subject'] = null;
         $this->properties['subjectCharset'] = 'us-ascii';
         $this->properties['body'] = null;
-        $this->properties['messageID'] = null;
+        $this->properties['messageId'] = null;
     }
 
     /**
@@ -153,8 +154,9 @@ class ezcMail extends ezcMailPart
                 $this->properties['body'] = $value;
                 break;
 
+            case 'messageId':
             case 'messageID':
-                $this->properties['messageID'] = $value;
+                $this->properties['messageId'] = $value;
                 break;
 
             case 'timestamp':
@@ -188,8 +190,11 @@ class ezcMail extends ezcMailPart
             case 'subject':
             case 'subjectCharset':
             case 'body':
-            case 'messageID':
+            case 'messageId':
                 return $this->properties[$name];
+
+            case 'messageID': // deprecated version
+                return $this->properties['messageId'];
 
             case 'timestamp':
                 return strtotime( $this->getHeader( "Date" ) );
@@ -300,7 +305,7 @@ class ezcMail extends ezcMailPart
         $this->setHeader( 'User-Agent', 'eZ components' );
         $this->setHeader( 'Date', date( 'r' ) );
         $idhost = $this->from != null && $this->from->email != '' ? $this->from->email : 'localhost';
-        if ( is_null( $this->messageID ) )
+        if ( is_null( $this->messageId ) )
         {
             $this->setHeader( 'Message-Id', '<' . ezcMailTools::generateMessageId( $idhost ) . '>' );
         }

@@ -3,7 +3,7 @@
 
 - Added IMAP transport.
 - Added fetchFromOffset() method to POP3 and MBOX transports.
-
+- Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId
 
 1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

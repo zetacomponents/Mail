@@ -20,7 +20,7 @@ function formatMail( $mail )
 	$t .= "Bcc:       ". formatAddresses( $mail->bcc ). "\n";
 	$t .= 'Date:      '. date( DATE_RFC822, $mail->timestamp ). "\n";
 	$t .= 'Subject:   '. $mail->subject . "\n";
-	$t .= "MessageId: ". $mail->messageID . "\n";
+	$t .= "MessageId: ". $mail->messageId . "\n";
 	$t .= "\n";
 	$t .= formatMailPart( $mail->body );
 	return $t;
