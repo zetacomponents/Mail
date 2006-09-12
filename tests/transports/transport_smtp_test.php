@@ -21,8 +21,8 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     const PORT = 2525;
 
-	public function setUp()
-	{
+    public function setUp()
+    {
         if ( @fsockopen( ezcMailTransportSmtpTest::HOST, ezcMailTransportSmtpTest::PORT, $errno, $errstr, 1 ) === false )
         {
             $this->markTestSkipped( "No connection to SMTP server " . ezcMailTransportSmtpTest::HOST . ":" . ezcMailTransportSmtpTest::PORT . "." );
@@ -34,7 +34,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'Foster' ) );
         $this->mail->subject = "[Components test] SMTP test";
         $this->mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
-	}
+    }
 
     /**
      * Tests sending a complete mail message.
