@@ -59,6 +59,8 @@
  *                                       The date/time of when the message was
  *                                       sent as Unix Timestamp.
  *
+ * @apichange Remove the support for the deprecated property messageID.
+ *
  * @package Mail
  * @version //autogen//
  * @mainclass
