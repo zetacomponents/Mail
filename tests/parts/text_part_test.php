@@ -17,11 +17,10 @@ class ezcMailTextTest extends ezcTestCase
 {
     private $part;
 
-	public function setUp()
+	protected function setUp()
 	{
         $this->part = new ezcMailText( "dummy" );
 	}
-
 
     /**
      * Test that the constuctor eats parameters like it should

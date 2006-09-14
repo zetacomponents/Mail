@@ -17,7 +17,7 @@ class ezcMailComposerTest extends ezcTestCase
 {
     private $mail;
 
-	public function setUp()
+	protected function setUp()
 	{
         $this->mail = new ezcMailComposer();
 	}

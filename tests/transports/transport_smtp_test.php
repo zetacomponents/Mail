@@ -21,7 +21,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     const PORT = 2525;
 
-    public function setUp()
+    protected function setUp()
     {
         if ( @fsockopen( ezcMailTransportSmtpTest::HOST, ezcMailTransportSmtpTest::PORT, $errno, $errstr, 1 ) === false )
         {
