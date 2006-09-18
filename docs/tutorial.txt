@@ -177,6 +177,16 @@ For a more elaborate example please see the display_example_.
 
 .. _display_example: Mail_display-example.html
 
+Troubleshooting
+===============
+
+Qmail MTA
+---------
+Qmail insists should only have "\n" linebreaks and will send garbled messages
+with the default "\r\n" setting. Use ezcMailTools::setLineBreak( "\n" ) before 
+sending mail to fix this issue.
+
+
 References
 ==========
 1. A list of mail related RFCs_.
