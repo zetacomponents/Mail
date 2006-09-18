@@ -13,7 +13,7 @@
  *
  * The system MTA translates to sendmail on most Linux distributions.
  *
- * Qmail insists should only have "\n" linebreaks and will send
+ * Qmail insists it should only have "\n" linebreaks and will send
  * garbled messages with the default "\r\n" setting.
  * Use ezcMailTools::setLineBreak( "\n" ) before sending mail to fix this issue.
  *
