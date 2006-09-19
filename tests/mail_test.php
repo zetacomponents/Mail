@@ -258,6 +258,17 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( '<test-ezc-message-id@ezc.ez.no>', $this->mail->getHeader( 'Message-Id' ) );
     }
 
+    public function testMailAddressToString()
+    {
+        $addr = new ezcMailAddress( "test@example.com", "John Doe" );
+
+        $this->assertEquals(
+            "John Doe <test@example.com>",
+            $addr->__toString(),
+            "Address not correctly serialized."
+        );
+    }
+
     public function testGenerateEmpty()
     {
         $return = $this->mail->generate();
