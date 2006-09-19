@@ -83,7 +83,7 @@ class ezcMailAddress extends ezcBaseStruct
      */
     function __toString()
     {
-        return ezcMailTools::composeEmailAddress( $this );
+        return ( !empty( $this->name ) ? "{$this->name} " : "" ) . "<{$this->email}>";
     }
 }
 ?>
