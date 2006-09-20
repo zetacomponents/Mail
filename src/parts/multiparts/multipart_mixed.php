@@ -18,7 +18,7 @@
  * and an attachment using ezcMailMultipartMixed.
  * <code>
  *        $mixed = new ezcMailMultipartMixed( new ezcMailTextPart( "Picture of me flying!" ),
- *                                            new ezcMailFilePart( "fly.jpg" ) );
+ *                                            new ezcMailFile( "fly.jpg" ) );
  *        $mail = new ezcMail();
  *        $mail->body = $mixed;
  * </code>

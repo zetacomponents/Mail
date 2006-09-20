@@ -223,7 +223,7 @@ class ezcMailFileParser extends ezcMailPartParser
      *
      * This method is called automatically by the parent part.
      *
-     * @return ezcMailFilePart
+     * @return ezcMailFile
      */
     public function finish()
     {

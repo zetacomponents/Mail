@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailFile class
+ * File containing the ezcMailFilePart class
  *
  * @package Mail
  * @version //autogen//
@@ -14,15 +14,11 @@
  * @todo MimeType recognition
  *
  * @property string $fileName
- *           The file on disk. The file with this name will only be available
- *           in the script that parses the mail. It will automatically be
- *           removed when the script ends.
+ *           The name of the file which is to be attached to the email.
  * @property string $mimeType
- *           The mimetype of the file. ezcMailFile tries to extract this from
- *           the file, but you can override it with this property.
+ *           The mimetype of the file.
  * @property string $contentType
- *           The content type of the file. ezcMailFile tries to extract this
- *           from the file, but you can override it with this property.
+ *           The content type of the file.
  *           Possible values are: CONTENT_TYPE_IMAGE, CONTENT_TYPE_VIDEO and
  *           CONTENT_TYPE_APPLICATION.
  * @property string $dispositionType
@@ -36,7 +32,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailFile extends ezcMailPart
+abstract class ezcMailFilePart extends ezcMailPart
 {
     /**
      * Image content type. Use this if the contents of the file is an image.
@@ -76,7 +72,7 @@ class ezcMailFile extends ezcMailPart
      *
      * @var array(string=>mixed)
      */
-    private $properties = array();
+    protected $properties = array();
 
     /**
      * Constructs a new attachment with $fileName.
@@ -84,7 +80,7 @@ class ezcMailFile extends ezcMailPart
      * @param string $fileName
      * @return void
      */
-    public function __construct( $fileName /*,$encoding = ezcMail::BASE64*/ )
+    public function __construct( $fileName )
     {
         parent::__construct();
 
@@ -95,23 +91,15 @@ class ezcMailFile extends ezcMailPart
         $this->properties['dispositionType'] = null;
         $this->properties['contentId'] = null;
 
-        // for the same reason, this must be set first
         $this->fileName = $fileName;
-
-//        $this->encoding = ezcMail::BASE64;
         $this->setHeader( 'Content-Transfer-Encoding', 'base64' );
-
         $this->dispositionType = self::DISPLAY_ATTACHMENT;
-        // default to mimetype application/octet-stream
-        $this->contentType = self::CONTENT_TYPE_APPLICATION;
-        $this->mimeType = "octet-stream";
     }
 
     /**
      * Sets the property $name to $value.
      *
      * @throws ezcBasePropertyNotFoundException if the property does not exist.
-     * @throws ezcBaseFileNotFoundException when setting the property with an invalid filename.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -121,21 +109,10 @@ class ezcMailFile extends ezcMailPart
         switch ( $name )
         {
             case 'fileName':
-                if ( is_readable( $value ) )
-                {
-                    $this->properties['fileName'] = $value;
-                    $this->setHeaderContentType();
-                    $this->setHeaderContentDisposition();
-                }
-                else
-                {
-                    throw new ezcBaseFileNotFoundException( $value );
-                }
+                $this->properties['fileName'] = $value;
+                $this->setHeaderContentType();
+                $this->setHeaderContentDisposition();
                 break;
-//            case 'encoding':
-//                $this->properties['encoding'] = $value;
-//                $this->setHeader( 'Content-Transfer-Encoding', $value );
-//                break;
             case 'mimeType':
                 $this->properties['mimeType'] = $value;
                 $this->setHeaderContentType();
@@ -173,9 +150,6 @@ class ezcMailFile extends ezcMailPart
             case 'fileName':
                 return $this->properties['fileName'];
                 break;
-//            case 'encoding':
-//                return $this->properties['encoding'];
-//                break;
             case 'mimeType':
                 return $this->properties['mimeType'];
                 break;
@@ -195,16 +169,6 @@ class ezcMailFile extends ezcMailPart
     }
 
     /**
-     * Returns the contents of the file with the correct encoding.
-     *
-     * @return string
-     */
-    public function generateBody(  )
-    {
-        return chunk_split( base64_encode( file_get_contents( $this->fileName ) ), 76, ezcMailTools::lineBreak() );
-    }
-
-    /**
      * Sets the Content-Type header based on the contentType, mimeType and fileName.
      *
      * @return void
@@ -216,7 +180,9 @@ class ezcMailFile extends ezcMailPart
     }
 
     /**
-     * Sets the Content-Disposition header based on the properties: dispositionType and fileName.
+     * Sets the Content-Disposition header
+     *
+     * Based on the properties $dispositionType and $fileName.
      *
      * @return void
      */
@@ -229,8 +195,8 @@ class ezcMailFile extends ezcMailPart
         $this->contentDisposition->disposition = $this->dispositionType;
         $this->contentDisposition->fileName = basename( $this->fileName );
 
-//        $this->setHeader( 'Content-Disposition',
-//                          $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
+        //$this->setHeader( 'Content-Disposition',
+        //                  $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
     }
 }
 ?>

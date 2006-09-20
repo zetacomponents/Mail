@@ -236,6 +236,77 @@ class ezcMailComposerTest extends ezcTestCase
 //        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
     }
 
+    /**
+     * Tests adding a valid virtual attachment.
+     */
+    public function testAddVirtualAttachmentValid()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addAttachment( "fly.jpg", "Should be a picture with naked people" );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with one virtual attachment only
+     */
+    public function testMailOneVirtualAttachmentNoText()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "One attachments only.";
+        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with many virtual attachments only
+     */
+    public function testMailManyVirtualAttachmentsNoText()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Many attachments only.";
+        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with txt, html and attachments (virtual and not).
+     */
+    public function testMailTextHtmlAndVirtualAttachments()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Alternative HTML/Text message and attachments.";
+        $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
+        $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
+        $this->mail->addAttachment( "fly1.jpg", "JPG content" );
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->build();
+    }
+
+    /**
+     * Tests a complete mail with html images and files
+     * http://www.apps.ietf.org/msglint.html - validator
+     */
+    public function testMailHtmlWithImagesAndVirtualFiles()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\" />Here is some text after the image. Here is the <a href=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\">file.</a></html>";
+        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->build();
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailComposerTest" );

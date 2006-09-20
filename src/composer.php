@@ -59,7 +59,7 @@
 class ezcMailComposer extends ezcMail
 {
     /**
-     * Holds the attachments.
+     * Holds the attachments filenames.
      *
      * The array contains relative or absolute paths to the attachments.
      *
@@ -67,6 +67,16 @@ class ezcMailComposer extends ezcMail
      */
     private $attachments = array();
 
+    /**
+     * Holds the attachments contents.
+     *
+     * The array contains the contents of the corresponding index in the
+     * {@link $attachments} array.
+     *
+     * @var array(string)
+     */
+    private $contents = array();
+    
     /**
      * Holds the properties of this class.
      *
@@ -135,27 +145,39 @@ class ezcMailComposer extends ezcMail
     /**
      * Adds the file $fileName to the list of attachments.
      *
+     * If $content is specified, $fileName is not checked and is used as
+     * a key in the the list of contents, where $content will be added.
+     * 
      * @throws ezcBaseFileNotFoundException if $fileName does not exists.
      * @throws ezcBaseFilePermissionProblem if $fileName could not be read.
      * @param string $fileName
+     * @param string $content
      * @return void
      */
-    public function addAttachment( $fileName  )
+    public function addAttachment( $fileName, $content = null )
     {
-        if ( is_readable( $fileName ) )
+        if ( is_null( $content ) )
         {
-            $this->attachments[] = $fileName;
-        }
-        else
-        {
-            if ( file_exists( $fileName ) )
+            if ( is_readable( $fileName ) )
             {
-                throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
+                $this->attachments[] = $fileName;
             }
             else
             {
-                throw new ezcBaseFileNotFoundException( $fileName );
+                if ( file_exists( $fileName ) )
+                {
+                    throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
+                }
+                else
+                {
+                    throw new ezcBaseFileNotFoundException( $fileName );
+                }
             }
+        }
+        else
+        {
+            $this->attachments[] = $fileName;
+            $this->contents[$fileName] = $content;
         }
     }
 
@@ -198,7 +220,14 @@ class ezcMailComposer extends ezcMail
         // special case, mail with no text and one attachment
         if ( $mainPart == false && count( $this->attachments ) == 1 )
         {
-            $mainPart = new ezcMailFile( $this->attachments[0] );
+            if ( isset( $this->contents[$this->attachments[0]] ) )
+            {
+                $mainPart = new ezcMailVirtualFile( $this->attachments[0], $this->contents[$this->attachments[0]] );
+            }
+            else
+            {
+                $mainPart = new ezcMailFile( $this->attachments[0] );
+            }
         }
         else if ( count( $this->attachments ) > 0 )
         {
@@ -209,7 +238,14 @@ class ezcMailComposer extends ezcMail
             // add the attachments to the mixed part
             foreach ( $this->attachments as $attachment )
             {
-                $mainPart->appendPart( new ezcMailFile( $attachment ) );
+                if ( isset( $this->contents[$attachment] ) )
+                {
+                    $mainPart->appendPart( new ezcMailVirtualFile( $attachment, $this->contents[$attachment] ) );
+                }
+                else
+                {
+                    $mainPart->appendPart( new ezcMailFile( $attachment ) );
+                }
             }
         }
 
@@ -250,6 +286,8 @@ class ezcMailComposer extends ezcMail
                 {
                     if ( is_readable( $fileName ) )
                     {
+                        // @todo waiting for fix of the fileinfo extension
+                        // $contents = file_get_contents( $fileName );
                         $filePart = new ezcMailFile( $fileName );
                         $cid = $result->addRelatedPart( $filePart );
                         // replace the original file reference with a reference to the cid
