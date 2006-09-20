@@ -17,10 +17,10 @@ class ezcMailTest extends ezcTestCase
 {
     private $mail;
 
-	protected function setUp()
-	{
+    protected function setUp()
+    {
         $this->mail = new ezcMail();
-	}
+    }
 
     public function testProperties()
     {
