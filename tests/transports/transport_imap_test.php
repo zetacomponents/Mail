@@ -297,7 +297,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 15 ), $uids );
+        $this->assertEquals( array( 1 => 52 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -308,10 +308,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 15,
-                2 => 16,
-                3 => 17,
-                4 => 18,
+                1 => 52,
+                2 => 53,
+                3 => 54,
+                4 => 55,
             ),
             $uids
         );
