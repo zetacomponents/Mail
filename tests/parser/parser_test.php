@@ -871,5 +871,16 @@ END;
         }
 
     }
+    
+    public function testHeadersHolder()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertType(
+            "ezcMailHeadersHolder",
+            $mail[0]->headers
+        );
+    }
 }
 ?>

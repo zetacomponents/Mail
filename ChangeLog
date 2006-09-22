@@ -7,6 +7,8 @@
   ezcMailParser->parse() can now deal with classes that extend ezcMail.
   Additionally, added this functionality to ezcMailTool::replyToMail().
 - Implemented suggestion #8988: ezcMailAddress should implement __toString().
+- Implemented read access to property ezcMailPart->headers for extending this
+  class and its derives.
 - Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId
 - Added a new class (ezcMailVirtualFile) to allow attachments from memory.
 

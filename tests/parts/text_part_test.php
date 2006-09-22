@@ -59,6 +59,10 @@ class ezcMailTextTest extends ezcTestCase
         $this->assertEquals( ezcMail::EIGHT_BIT, $temp->encoding );
         $this->assertEquals( 'plain', $temp->subType );
         $this->assertEquals( 'dummy', $temp->text );
+        $this->assertEquals(
+            new ezcMailHeadersHolder(),
+            $temp->headers
+        );
     }
 
     public function testSetProperties()

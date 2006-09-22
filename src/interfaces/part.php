@@ -25,6 +25,12 @@
  *           Content-Disposition field itself based on it's own properties when
  *           sending mail.
  *
+ * @property-read ezcMailHeadersHolder $headers
+ *                Contains the header holder object, taking care of the headers
+ *                of this part. Can be retreived for reasons of extending this 
+ *                class and its derivals.
+ *           
+ *
  * @package Mail
  * @version //autogen//
  */
@@ -96,6 +102,9 @@ abstract class ezcMailPart
             case 'contentDisposition':
                 return isset( $this->properties[$name] ) ? $this->properties[$name] : null;
                 break;
+
+            case "headers":
+                return $this->headers;
 
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
