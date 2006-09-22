@@ -342,9 +342,10 @@ class ezcMailTools
      * @return ezcMail
      */
     static public function replyToMail( ezcMail $mail, ezcMailAddress $from,
-                                        $type = self::REPLY_SENDER, $subjectPrefix = "Re: " )
+                                        $type = self::REPLY_SENDER, $subjectPrefix = "Re: ",
+                                        $mailClass = "ezcMail" )
     {
-        $reply = new ezcMail();
+        $reply = new $mailClass();
         $reply->from = $from;
 
         // To = Reply-To if set

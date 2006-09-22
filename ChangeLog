@@ -5,6 +5,7 @@
 - Added fetchFromOffset() method to POP3 and MBOX transports.
 - Implemented suggestion #8989: Extending the ezcMail class.
   ezcMailParser->parse() can now deal with classes that extend ezcMail.
+  Additionally, added this functionality to ezcMailTool::replyToMail().
 - Implemented suggestion #8988: ezcMailAddress should implement __toString().
 - Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId
 - Added a new class (ezcMailVirtualFile) to allow attachments from memory.
