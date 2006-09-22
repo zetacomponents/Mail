@@ -8,6 +8,10 @@
  * @subpackage Tests
  */
 
+class ezcMailExtended extends ezcMail
+{
+
+}
 
 /**
  * @package Mail
@@ -162,6 +166,28 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( 'Re: Simple mail with text subject and body', $reply->subject );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'In-Reply-To' ) );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'References' ) );
+    }
+    
+    public function testReplyToExtended()
+    {
+        $parser = new ezcMailParser();
+        $set = new ezcMailFileSet( array( dirname( __FILE__ )
+                                          . '/parser/data/kmail/simple_mail_with_text_subject_and_body.mail' ) );
+        $mail = $parser->parseMail( $set );
+
+        $reply = ezcMailTools::replyToMail(
+            $mail[0],
+            new ezcMailAddress( 'test@example.com', 'Reply Guy' ),
+            ezcMailTools::REPLY_SENDER,
+            "Re: ",
+            "ezcMailExtended"
+        );
+
+        $this->assertType(
+            "ezcMailExtended",
+            $reply,
+            "replyToMaol created incorrect class instance."
+        );
     }
 
     public function testReplyToAll()
