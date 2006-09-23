@@ -27,7 +27,7 @@
  *           while creating mail, and is always 'utf-8' while parsing mail.
  * @property string $originalCharset
  *           The characterset in which a text part originally was before the
- *           conversion to UTF-8. (readonly)
+ *           conversion to UTF-8 when parsing incomming mail. (readonly)
  * @property string $subType
  *           The subtype of this text part. Defaults to 'plain' for plain text.
  *           Use 'html' for HTML messages.
@@ -51,9 +51,13 @@ class ezcMailText extends ezcMailPart
     /**
      * Constructs a new TextPart with the given $text, $charset and $encoding.
      *
+     * OriginalCharset is only used when parsing mail. Parsed mail will always be converted to UTF-8
+     * in this case $originalCharset will holds the charset before it was converted.
+     *
      * @param string $text
      * @param string $charset
      * @param int $encoding
+     * @param string $originalCharset
      */
     public function __construct( $text, $charset = "us-ascii", $encoding = ezcMail::EIGHT_BIT, $originalCharset = 'us-ascii' )
     {
