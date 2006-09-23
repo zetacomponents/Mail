@@ -11,7 +11,8 @@
   class and its derives.
 - Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId
 - Added a new class (ezcMailVirtualFile) to allow attachments from memory.
-
+- Fixed bug #9048: [ezcMail] ezcMailText does not encode properly
+	
 
 1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

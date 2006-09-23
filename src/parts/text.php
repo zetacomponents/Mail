@@ -161,8 +161,23 @@ class ezcMailText extends ezcMailPart
      */
     public function generateBody()
     {
-        // convert linebreaks to the correct type.
-        return preg_replace( "/\r\n|\r|\n/", ezcMailTools::lineBreak(), $this->text );
+        switch( $this->encoding )
+        {
+            case ezcMail::BASE64:
+                // leaves a \r\n to much at the end, but since it is base64 it will decode
+                // properly so we just leave it
+                return chunk_split( base64_encode( $this->text ), 76, ezcMailTools::lineBreak() );
+                break;
+            case ezcMail::QUOTED_PRINTABLE:
+                 $text = preg_replace( '/[^\x21-\x3C\x3E-\x7E\x09\x20]/e',
+                                       'sprintf( "=%02X", ord ( "$0" ) ) ;',  $this->text );
+                 preg_match_all( '/.{1,73}([^=]{0,2})?/', $text, $match );
+                 $text = implode( '=' . ezcMailTools::lineBreak(), $match[0] );
+                return $text;
+                break;
+            default:
+                return preg_replace( "/\r\n|\r|\n/", ezcMailTools::lineBreak(), $this->text );
+        }
     }
 }
 ?>

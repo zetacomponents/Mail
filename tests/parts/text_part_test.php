@@ -89,9 +89,29 @@ class ezcMailTextTest extends ezcTestCase
         $this->assertEquals( 'new dummy', $temp->text );
     }
 
+    public function testBase64Encode()
+    {
+        $reference = "Content-Type: text/plain; charset=us-ascii" . ezcMailTools::lineBreak() .
+            "Content-Transfer-Encoding: base64" . ezcMailTools::lineBreak() .ezcMailTools::lineBreak() .
+            "SGVyZSBpcyBzb21lIHRleHQ=" . ezcMailTools::lineBreak();
+        $text = new ezcMailText( "Here is some text", "us-ascii", ezcMail::BASE64 );
+        $this->assertEquals( $reference, $text->generate() );
+    }
+
+    public function testQuotedPrintableEncode()
+    {
+        $reference = "Content-Type: text/plain; charset=iso-8859-1" . ezcMailTools::lineBreak() .
+            "Content-Transfer-Encoding: quoted_printable"  . ezcMailTools::lineBreak() . ezcMailTools::lineBreak() .
+            "=E6=F8=E5=0A=F8=E6=E5";
+
+        $text = new ezcMailText( "זרו\nרזו", "iso-8859-1", ezcMail::QUOTED_PRINTABLE );
+        $this->assertEquals( $reference, $text->generate() );
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailTextTest" );
     }
 }
 ?>
+q
