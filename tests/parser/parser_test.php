@@ -856,6 +856,18 @@ END;
         }
     }
 
+    public function testVarious11()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-RFC2184-header' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $parts = $mail[0]->body->getParts();
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+        $this->assertEquals( "this_thing_has_a_very_long_file_name.jpg",
+                             $parts[1]->contentDisposition->fileName, "Fails until I figure out what the RFC means." );
+    }
+
     public function testExtendedMailClass()
     {
         $parser = new ezcMailParser();
