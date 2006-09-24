@@ -92,17 +92,55 @@ class ezcMailTools
      * Returns the array $items consisting of ezcMailAddress objects
      * as one RFC822 compliant address string.
      *
+     * Set foldLength to control how many characters each line can have before a line
+     * break is inserted according to the folding rules specified in RFC2822.
+     *
      * @param array(ezcMailAddress) $items
+     * @parem int $foldLength
      * @return string
      */
-    public static function composeEmailAddresses( array $items )
+    public static function composeEmailAddresses( array $items, $foldLength = null )
     {
         $textElements = array();
         foreach ( $items as $item )
         {
             $textElements[] = ezcMailTools::composeEmailAddress( $item );
         }
-        return implode( ', ', $textElements );
+
+        if( $foldLength === null ) // quick version
+        {
+            return implode( ', ', $textElements );
+        }
+
+        $result = "";
+        $charsSinceFold = 0;
+        foreach( $textElements as $element )
+        {
+            $length = strlen( $element );
+            if( ( $charsSinceFold + $length + 2 /* comma, space */ ) > $foldLength )
+            {
+                // fold last line if there is any
+                if( $result != '' )
+                {
+                    $result .= "," . ezcMailTools::lineBreak() .' ';
+                    $charsSinceFold = 0;
+                }
+                $result .= $element;
+            }
+            else
+            {
+                if( $result == '' )
+                {
+                    $result = $element;
+                }
+                else
+                {
+                    $result .= ', ' . $element;
+                }
+            }
+            $charsSinceFold += $length + 1 /*space*/;
+        }
+        return $result;
     }
 
     /**

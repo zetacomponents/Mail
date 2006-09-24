@@ -274,15 +274,18 @@ class ezcMail extends ezcMailPart
 
         if ( $this->to !== null )
         {
-            $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to ) );
+            $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to,
+                                                                         ezcMailHeaderFolder::getLimit()) );
         }
         if ( count( $this->cc ) )
         {
-            $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc ) );
+            $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc,
+                                                                         ezcMailHeaderFolder::getLimit()) );
         }
         if ( count( $this->bcc ) )
         {
-            $this->setHeader( "Bcc", ezcMailTools::composeEmailAddresses( $this->bcc ) );
+            $this->setHeader( "Bcc", ezcMailTools::composeEmailAddresses( $this->bcc,
+                                                                          ezcMailHeaderFolder::getLimit()) );
         }
 
         // build subject header
@@ -291,7 +294,7 @@ class ezcMail extends ezcMailPart
             $preferences = array(
                 'input-charset' => $this->subjectCharset,
                 'output-charset' => $this->subjectCharset,
-                'line-length' => 76,
+                'line-length' => ezcMailHeaderFolder::getLimit(),
                 'scheme' => 'B',
                 'line-break-chars' => ezcMailTools::lineBreak()
             );
@@ -300,7 +303,7 @@ class ezcMail extends ezcMailPart
         }
         else
         {
-            $this->setHeader( 'Subject', $this->subject );
+            $this->setHeader( 'Subject', ezcMailHeaderFolder::foldAny( $this->subject ) );
         }
 
         $this->setHeader( 'MIME-Version', '1.0' );

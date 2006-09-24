@@ -27,9 +27,9 @@
  *
  * @property-read ezcMailHeadersHolder $headers
  *                Contains the header holder object, taking care of the headers
- *                of this part. Can be retreived for reasons of extending this 
+ *                of this part. Can be retreived for reasons of extending this
  *                class and its derivals.
- *           
+ *
  *
  * @package Mail
  * @version //autogen//
@@ -138,6 +138,9 @@ abstract class ezcMailPart
      *
      * If the header is already set it will override the old value.
      *
+     * Headers set should be folded at 76 or 998 characters according to
+     * the folding rules described in RFC 2822.
+     *
      * Note: The header Content-Disposition will be overwritten by the
      * contents of the contentsDisposition property if set.
      *
@@ -158,6 +161,9 @@ abstract class ezcMailPart
      * The headers specified in the associative array of the
      * form array(headername=>value) will overwrite any existing
      * header values.
+     *
+     * Headers set should be folded at 76 or 998 characters according to
+     * the folding rules described in RFC 2822.
      *
      * @param array(string=>string) $headers
      * @return void

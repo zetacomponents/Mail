@@ -61,6 +61,7 @@ return array(
     'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php',
     'ezcMailParserShutdownHandler'  => 'Mail/parser/shutdown_handler.php',
 
-    'ezcMailCharsetConverter'       => 'Mail/internal/charset_convert.php'
+    'ezcMailCharsetConverter'       => 'Mail/internal/charset_convert.php',
+    'ezcMailHeaderFolder'           => 'Mail/internal/header_folder.php'
     );
 ?>

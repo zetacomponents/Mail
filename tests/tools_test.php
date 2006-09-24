@@ -46,6 +46,35 @@ class ezcMailToolsTest extends ezcTestCase
                              ezcMailTools::composeEmailAddresses( $addresses ) );
     }
 
+    public function testComposeEmailAddressesSingleFolding()
+    {
+        $reference = "John Doe <john@doe.com>, Harry Doe <harry@doe.com>," .
+            ezcMailTools::lineBreak() .
+            " Gordon Doe <gordon@doe.com>, debra@doe.com";
+        $addresses = array( new ezcMailAddress( 'john@doe.com', 'John Doe' ),
+                            new ezcMailAddress( 'harry@doe.com', 'Harry Doe' ),
+                            new ezcMailAddress( 'gordon@doe.com', 'Gordon Doe' ),
+                            new ezcMailAddress( 'debra@doe.com' ) );
+        $result = ezcMailTools::composeEmailAddresses( $addresses, 76 );
+        $this->assertEquals( $reference, $result );
+    }
+
+    public function testComposeEmailAddressesMultiFolding()
+    {
+        $reference = "John Doe <john@doe.com>, Harry Doe <harry@doe.com>," .
+            ezcMailTools::lineBreak() .
+            " Nancy Doe <nancy@doe.com>, Faith Doe <faith@doe.com>," .
+            ezcMailTools::lineBreak() .
+            " Gordon Doe <gordon@doe.com>, debra@doe.com";
+        $addresses = array( new ezcMailAddress( 'john@doe.com', 'John Doe' ),
+                            new ezcMailAddress( 'harry@doe.com', 'Harry Doe' ),
+                            new ezcMailAddress( 'nancy@doe.com', 'Nancy Doe' ),
+                            new ezcMailAddress( 'faith@doe.com', 'Faith Doe' ),
+                            new ezcMailAddress( 'gordon@doe.com', 'Gordon Doe' ),
+                            new ezcMailAddress( 'debra@doe.com' ) );
+        $result = ezcMailTools::composeEmailAddresses( $addresses, 76 );
+        $this->assertEquals( $reference, $result );
+    }
 
     public function testParseEmailAddressMimeGood()
     {
