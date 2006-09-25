@@ -114,4 +114,3 @@ class ezcMailTextTest extends ezcTestCase
     }
 }
 ?>
-q
