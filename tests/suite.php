@@ -29,6 +29,7 @@ require_once( "tutorial_examples.php" );
 require_once( "parser/parser_test.php" );
 require_once( "parser/headers_holder_test.php" );
 require_once( "parser/parts/multipart_mixed_test.php" );
+require_once( "parser/rfc2231_implementation_test.php" );
 require_once( "header_folder_test.php" );
 
 /**
@@ -60,6 +61,7 @@ class ezcMailSuite extends ezcTestSuite
         $this->addTest( ezcMailParserTest::suite() );
         $this->addTest( ezcMailHeadersHolderTest::suite() );
         $this->addTest( ezcMailMultipartMixedParserTest::suite() );
+        $this->addTest( ezcMailRfc2231ImplementationTest::suite() );
         $this->addTest( ezcMailHeaderFolderTest::suite() );
 	}
 

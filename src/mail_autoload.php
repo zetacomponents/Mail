@@ -60,6 +60,7 @@ return array(
     'ezcMailHeadersHolder'          => 'Mail/parser/headers_holder.php',
     'ezcMailParserSet'              => 'Mail/parser/interfaces/parser_set.php',
     'ezcMailParserShutdownHandler'  => 'Mail/parser/shutdown_handler.php',
+    'ezcMailRfc2231Implementation'  => 'Mail/parser/rfc2231_implementation.php',
 
     'ezcMailCharsetConverter'       => 'Mail/internal/charset_convert.php',
     'ezcMailHeaderFolder'           => 'Mail/internal/header_folder.php'
