@@ -126,7 +126,7 @@ abstract class ezcMailPart
      */
     public function getHeader( $name )
     {
-        if ( isset( $this->headers ) )
+        if ( isset( $this->headers[$name] ) )
         {
             return $this->headers[$name];
         }

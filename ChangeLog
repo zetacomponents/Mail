@@ -15,6 +15,8 @@
 - Fixed bug #9049: [Mail] illegal length of Bcc header	
 - Fixed bug #8850: Support multiline header parameters 
 	Fixed by implementing RFC2231.
+- Fixed a bug in ezcMailPart: now the getHeader() functions returns an empty
+  string instead of null in case of an unknown header.
 	
 1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

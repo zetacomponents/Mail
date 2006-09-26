@@ -55,6 +55,11 @@ class ezcMailPartTest extends ezcTestCase
         $this->assertEquals( "pkej@ez.no", $this->part->getHeader( "From" ) );
     }
 
+    public function testGetUnknownHeader()
+    {
+        $this->assertSame( '', $this->part->getHeader( "FromFrom" ) );
+    }
+    
     public function testSetHeaders()
     {
         // check that it is empty before we start
