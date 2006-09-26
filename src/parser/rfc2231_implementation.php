@@ -6,6 +6,7 @@
  * @version //autogen//
  * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
+ * @access private
  */
 
 /**
@@ -85,7 +86,7 @@ class ezcMailRfc2231Implementation
                     preg_match( "/(\S*)'(\S*)'(.*)/", $parts[0]['value'], $matches );
                     $charset = $matches[1];
                     $language = $matches[2];
-                    $parts[0]['value'] = $matches[3]; // rewrite value: todo: decoding
+                    $parts[0]['value'] = urldecode( $matches[3] ); // rewrite value: todo: decoding
                     $result[1][$paramName] = array( 'value' => $parts[0]['value'] );
                 }
 
@@ -103,8 +104,8 @@ class ezcMailRfc2231Implementation
                 {
                     for( $i = 1; $i < count( $parts ); $i++ )
                     {
-                        // TODO: encoding
-                        $result[1][$paramName]['value'] .= $parts[$i]['value'];
+                        $result[1][$paramName]['value'] .= $parts[$i]['encoding'] ?
+                            urldecode( $parts[$i]['value'] ) : $parts[$i]['value'];
                     }
                 }
             }
@@ -112,8 +113,52 @@ class ezcMailRfc2231Implementation
         return $result;
     }
 
-    public static function parseContentDisposition( $header )
+    /**
+     * Returns the a ezcMailContentDispositionHeader for the parsed $header.
+     *
+     * If $cd is provided this object will be used to fill in the blanks. This function
+     * will not clear out any old values in the object.
+     *
+     * @param string $header
+     * @return ezcMailContentDispositionHeader
+     */
+    public static function parseContentDisposition( $header, ezcMailContentDispositionHeader $cd = null )
     {
+        if( $cd === null )
+        {
+            $cd = new ezcMailContentDispositionHeader();
+        }
+
+        $parsedHeader = self::parseHeader( $header );
+        $cd->disposition = $parsedHeader[0];
+        if( isset( $parsedHeader[1] ) )
+        {
+            foreach( $parsedHeader[1] as $paramName => $data )
+            {
+                switch ( $paramName )
+                {
+                    case 'filename':
+                        $cd->fileName = $data['value'];
+                        break;
+                    case 'creation-date':
+                        $cd->creationDate = $data['value'];
+                        break;
+                    case 'modification-date':
+                        $cd->modificationDate = $data['value'];
+                        break;
+                    case 'read-date':
+                        $cd->readDate = $data['value'];
+                        break;
+                    case 'size':
+                        $cd->size = $data['value'];
+                        break;
+                    default:
+                        $cd->additionalParameters[$paramName] = $data['value'];
+                        break;
+                }
+            }
+        }
+        return $cd;
     }
 
     public static function parseContentType( $header )

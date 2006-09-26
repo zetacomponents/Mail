@@ -191,43 +191,7 @@ abstract class ezcMailPartParser
     {
         if ( isset( $headers['Content-Disposition'] ) )
         {
-            $cd = new ezcMailContentDispositionHeader();
-            if ( preg_match( '/^\s*attachment;?/i',
-                             $headers['Content-Disposition'], $matches ) )
-            {
-                $cd->disposition = "attachment";
-            }
-
-            // parameters
-            if ( preg_match_all( '/\s*(\S*)="?([^;"]*);?/i',
-                             $headers['Content-Disposition'], $matches, PREG_SET_ORDER ) )
-            {
-                foreach ( $matches as $param )
-                {
-                    switch ( $param[1] )
-                    {
-                        case 'filename':
-                            $cd->fileName = trim( $param[2], '"' );
-                            break;
-                        case 'creation-date':
-                            $cd->creationDate = trim( $param[2], '"' );
-                            break;
-                        case 'modification-date':
-                            $cd->modificationDate = trim( $param[2], '"' );
-                            break;
-                        case 'read-date':
-                            $cd->readDate = trim( $param[2], '"' );
-                            break;
-                        case 'size':
-                            $cd->readDate = trim( $param[2], '"' );
-                            break;
-                        default:
-                            $cd->additionalParameters[$param[1]] = $param[2];
-                            break;
-                    }
-                }
-            }// end parameters
-            $part->contentDisposition = $cd;
+            $part->contentDisposition = ezcMailRfc2231Implementation::parseContentDisposition( $headers['Content-Disposition'] );
         }
     }
 }
