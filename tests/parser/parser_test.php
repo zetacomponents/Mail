@@ -644,6 +644,16 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
+    public function testDraft1Bcc()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/drafts/postponed-msgs-pine.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( array( new ezcMailAddress( 'sb@example.com', 'Sebastian Bergmann', 'utf-8' ) ), $mail[0]->bcc );
+    }
+
     // Comment: The CC string is in iso-8859-1 not in UTF-8 as it says it is. Is this our
     // problem or not?!? Anyway, we need to check for false return everywhere we use the iconv method.
     public function testVarious1()

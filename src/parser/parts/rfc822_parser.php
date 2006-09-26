@@ -135,7 +135,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         // bcc
         if ( isset( $this->headers['Bcc'] ) )
         {
-            $mail->cc = ezcMailTools::parseEmailAddresses( $this->headers['Bcc'] );
+            $mail->bcc = ezcMailTools::parseEmailAddresses( $this->headers['Bcc'] );
         }
         // subject
         if ( isset( $this->headers['Subject'] ) )

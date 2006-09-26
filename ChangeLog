@@ -17,7 +17,9 @@
 	Fixed by implementing RFC2231.
 - Fixed a bug in ezcMailPart: now the getHeader() functions returns an empty
   string instead of null in case of an unknown header.
-	
+- Fixed a bug in ezcMailRfc822Parser: the bcc is set correctly now.
+
+
 1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
