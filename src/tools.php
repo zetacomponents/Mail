@@ -96,7 +96,7 @@ class ezcMailTools
      * break is inserted according to the folding rules specified in RFC2822.
      *
      * @param array(ezcMailAddress) $items
-     * @parem int $foldLength
+     * @param int $foldLength
      * @return string
      */
     public static function composeEmailAddresses( array $items, $foldLength = null )
