@@ -216,6 +216,15 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
     }
 
+    public function testListMessagesWithAttachments()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox' );
+        $list = $imap->listMessages( "multipart/mixed" );
+        $this->assertEquals( array( 1 => '1723', 2 => '1694', 4 => '64070' ), $list );
+    }
+
     public function testFetchByMessageNr1()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );

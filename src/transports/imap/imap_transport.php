@@ -305,12 +305,17 @@ class ezcMailImapTransport
      * It returns only the messages with the flag \Deleted not set.
      * The format of the returned array is array(message_id => size).
      * Eg: ( 2 => 1700, 5 => 1450, 6 => 21043 )
-     * 
+     * If $contentType is set, it returns only the messages with
+     * $contentType in the Content-Type header.
+     * For example $contentType can be "multipart/mixed" to return only the
+     * messages with attachments.
+     *
      * @throws ezcMailTransportException if there was no connection to the
      *         server or if the server sent a negative response.
+     * @param string $contentType
      * @return array(int=>int)
      */
-    public function listMessages()
+    public function listMessages( $contentType = null )
     {
         if ( $this->state != self::STATE_SELECTED )
         {
@@ -322,7 +327,12 @@ class ezcMailImapTransport
  
         // get the numbers of the existing messages
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} SEARCH UNDELETED" );
+        $command = "{$tag} SEARCH UNDELETED";
+        if ( !is_null( $contentType ) )
+        {
+            $command .= " HEADER \"Content-Type\" \"{$contentType}\"";
+        }
+        $this->connection->sendData( $command );
         $response = $this->getResponse( '* SEARCH' );
         if ( strpos( $response, '* SEARCH' ) !== false )
         {
@@ -578,7 +588,7 @@ class ezcMailImapTransport
      * Fetches $count messages starting from the $offset and returns them as a
      * ezcMailImapSet. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
-     * 
+     *
      * @throws ezcMailInvalidLimitException if $count is negative.
      * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
      *         the existing range of messages.
