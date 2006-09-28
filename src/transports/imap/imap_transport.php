@@ -496,7 +496,7 @@ class ezcMailImapTransport
             {
                 $result[(int)$msgNum] = trim( substr( $response, 9 ) );
             }
-            $response = $this->getResponse( $tag );
+            $response = $this->getResponse( $tag, $response );
         }
         else
         {
@@ -539,11 +539,7 @@ class ezcMailImapTransport
     public function fetchAll( $deleteFromServer = false )
     {
         $messages = $this->listMessages();
-        if ( !empty( $messages ) )
-        {
-            return new ezcMailImapSet( $this->connection, array_keys( $messages ), $deleteFromServer );
-        }
-        return new ezcMailImapSet( $this->connection, array(), $deleteFromServer );
+        return new ezcMailImapSet( $this->connection, array_keys( $messages ), $deleteFromServer );
     }
 
     /**
@@ -565,20 +561,13 @@ class ezcMailImapTransport
     public function fetchByMessageNr( $number, $deleteFromServer = false )
     {
         $messages = $this->listMessages();
-        if ( !empty( $messages ) )
+        if ( !isset( $messages[$number] ) )
         {
-            if ( !isset( $messages[$number] ) )
-            {
-                throw new ezcMailNoSuchMessageException( $number );
-            }
-            else
-            {
-                return new ezcMailImapSet( $this->connection, array( 0 => $number ), $deleteFromServer );
-            }
+            throw new ezcMailNoSuchMessageException( $number );
         }
         else
         {
-            return new ezcMailImapSet( $this->connection, array(), $deleteFromServer );
+            return new ezcMailImapSet( $this->connection, array( 0 => $number ), $deleteFromServer );
         }
     }
 
@@ -604,28 +593,20 @@ class ezcMailImapTransport
         {
             throw new ezcMailInvalidLimitException( $offset, $count );
         }
-        $messages = $this->listMessages();
-        if ( !empty( $messages ) )
+        $messages = array_keys( $this->listMessages() );
+        if ( $count == 0 )
         {
-            $messages = array_keys( $messages );
-            if ( $count == 0 )
-            {
-                $range = array_slice( $messages, $offset - 1, count( $messages ), true );
-            }
-            else
-            {
-                $range = array_slice( $messages, $offset - 1, $count, true );
-            }
-            if ( !isset( $range[$offset - 1] ) )
-            {
-                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
-            }
-            return new ezcMailImapSet( $this->connection, $range, $deleteFromServer );
+            $range = array_slice( $messages, $offset - 1, count( $messages ), true );
         }
         else
         {
-            return new ezcMailImapSet( $this->connection, array(), $deleteFromServer );
+            $range = array_slice( $messages, $offset - 1, $count, true );
         }
+        if ( !isset( $range[$offset - 1] ) )
+        {
+            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+        }
+        return new ezcMailImapSet( $this->connection, $range, $deleteFromServer );
     }
 
     /**

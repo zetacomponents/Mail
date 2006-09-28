@@ -234,6 +234,25 @@ class ezcMailTest extends ezcTestCase
 //        $transport->send( $this->mail );
     }
 
+    public function testFullMailDigestArray()
+    {
+        $digest = new ezcMail();
+        $digest->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $digest->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $digest->subject = "זרו";
+        $digest->body = new ezcMailText( "Dette er body ßßזרווו" );
+
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "זרו";
+        $this->mail->subjectCharset = 'iso-8859-1';
+        $this->mail->body = new ezcMailMultipartMixed( new ezcMailText( "Dette er body ßßזרווו", "iso-8859-1" ),
+                                                       new ezcMailMultipartDigest( array( new ezcMailRfc822Digest( $digest ) ) ) );
+
+//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+//        $transport->send( $this->mail );
+    }
+
     public function testMessageID1()
     {
         $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
@@ -273,7 +292,6 @@ class ezcMailTest extends ezcTestCase
     {
         $return = $this->mail->generate();
     }
-
 
     public static function suite()
     {

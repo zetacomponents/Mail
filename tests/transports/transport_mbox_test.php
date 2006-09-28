@@ -23,6 +23,26 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $this->assertEquals( 0, count( $mail ) );
     }
 
+    public function testFetchMailFromUnreadableMbox()
+    {
+        $tempDir = $this->createTempDir( 'ezcMailTransportMboxTest' );
+        $fileName = $tempDir . "/test-unreadable-mbox.mbox";
+        $fileHandle = fopen( $fileName, "wb" );
+        fwrite( $fileHandle, "some contents" );
+        fclose( $fileHandle );
+        chmod( $fileName, 0 );
+        try
+        {
+            $mbox = new ezcMailMboxTransport( realpath( $fileName ) );
+            $this->removeTempDir();
+            $this->fail( "Didn't get exception when expected." );
+        }
+        catch ( ezcBaseFilePermissionException $e )
+        {
+            $this->removeTempDir();
+        }
+    }
+
     public function testFetchMail()
     {
         $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/test-mbox" );
@@ -137,6 +157,16 @@ class ezcMailTransportMboxTest extends ezcTestCase
     {
         $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/testlimit-mbox" );
         $set = $mbox->fetchFromOffset( 0, 10 );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 8, count( $mail ) );
+        $this->assertEquals( "[svn-components] 3263 - docs/guidelines [eZComponents: Docs]", $mail[7]->subject );
+    }
+
+    public function testfetchFromOffset5()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/testlimit-mbox" );
+        $set = $mbox->fetchFromOffset( 0, 0 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 8, count( $mail ) );

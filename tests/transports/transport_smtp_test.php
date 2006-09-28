@@ -36,9 +36,28 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
     }
 
-    /**
-     * Tests sending a complete mail message.
-     */
+    public function testProperties()
+    {
+        try
+        {
+            $x = $this->transport->invalid_property;
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
+
+        try
+        {
+            $this->transport->invalid_property = '';
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
+    }
+
+    // Tests sending a complete mail message.
     public function testFullMail()
     {
         try
@@ -51,9 +70,50 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
     }
 
-    /**
-     * Tests sending several complete mail messages.
-     */
+    // Tests sending a complete mail message with CCs.
+    public function testFullMailCc()
+    {
+        $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    // Tests sending a complete mail message with BCCs.
+    public function testFullMailBcc()
+    {
+        $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    // Tests sending a complete mail message with CCs and BCCs.
+    public function testFullMailCcBcc()
+    {
+        $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
+        $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    // Tests sending several complete mail messages.
     public function testFullMailMultiple()
     {
         try
@@ -67,9 +127,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
     }
 
-    /**
-     * Tests sending several complete mail messages with keep connection.
-     */
+    // Tests sending several complete mail messages with keep connection.
     public function testFullMailMultipleKeepConnection()
     {
         try
@@ -84,9 +142,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
     }
 
-    /**
-     * Tests sending a mail to an invalid host.
-     */
+    // Tests sending a mail to an invalid host.
     public function testInvalidHost()
     {
         $transport = new ezcMailTransportSmtp( "invalidhost.online.no" );
@@ -109,14 +165,11 @@ class ezcMailTransportSmtpTest extends ezcTestCase
             // great, it failed.
             return;
         }
-
         $this->fail( "SMTP connect to an invalidhost did not fail." );
     }
 
-    /**
-     * Tests sending an invalid mail.
-     */
-    public function testInvalidMail()
+    // Tests sending a mail with empty to field.
+    public function testInvalidMail1()
     {
         $this->mail->to = array();
         $this->mail->subject = "No recepients";
@@ -126,14 +179,25 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            // great, it failed. Let's check that we got the correct error.
-            if ( strstr( $e->getMessage(), 'recipients' ) )
-            {
-                return;
-            }
+            return;
         }
+        $this->fail( "SMTP send without recipients did not fail." );
+    }
 
-        $this->fail( "SMTP connect to an invalidhost did not fail." );
+    // Tests sending a mail with to not set.
+    public function testInvalidMail2()
+    {
+        $this->mail->to = null;
+        $this->mail->subject = "No recepients";
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            return;
+        }
+        $this->fail( "SMTP send without recipients did not fail." );
     }
 
     public static function suite()

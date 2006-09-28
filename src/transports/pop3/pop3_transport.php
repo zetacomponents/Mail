@@ -315,7 +315,7 @@ class ezcMailPop3Transport
     {
         if ( $this->state != self::STATE_TRANSACTION )
         {
-            throw new ezcMailTransportException( "Can't call listMessages() on the POP3 transport when not successfully logged in." );
+            throw new ezcMailTransportException( "Can't call delete() on the POP3 transport when not successfully logged in." );
         }
         $this->connection->sendData( "DELE {$msgNum}" );
         $response = $this->connection->getLine(); // ignore response
@@ -463,28 +463,20 @@ class ezcMailPop3Transport
         {
             throw new ezcMailInvalidLimitException( $offset, $count );
         }
-        $messages = $this->listMessages();
-        if ( !empty( $messages ) )
+        $messages = array_keys( $this->listMessages() );
+        if ( $count == 0 )
         {
-            $messages = array_keys( $messages );
-            if ( $count == 0 )
-            {
-                $range = array_slice( $messages, $offset - 1, count( $messages ), true );
-            }
-            else
-            {
-                $range = array_slice( $messages, $offset - 1, $count, true );
-            }
-            if ( !isset( $range[$offset - 1] ) )
-            {
-                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
-            }
-            return new ezcMailPop3Set( $this->connection, $range, $deleteFromServer );
+            $range = array_slice( $messages, $offset - 1, count( $messages ), true );
         }
         else
         {
-            return new ezcMailPop3Set( $this->connection, array(), $deleteFromServer );
+            $range = array_slice( $messages, $offset - 1, $count, true );
         }
+        if ( !isset( $range[$offset - 1] ) )
+        {
+            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+        }
+        return new ezcMailPop3Set( $this->connection, $range, $deleteFromServer );
     }
 }
 ?>

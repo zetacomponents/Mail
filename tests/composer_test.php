@@ -56,6 +56,35 @@ class ezcMailComposerTest extends ezcTestCase
     }
 
     /**
+     * Tests adding a valid attachment, but without read permissions.
+     */
+    public function testAddAttachmentUnreadable()
+    {
+        $tempDir = $this->createTempDir( 'ezcMailComposerTest' );
+        $fileName = $tempDir . "/fly_unreadable.jpg";
+        $fileHandle = fopen( $fileName, "wb" );
+        fwrite( $fileHandle, "some contents" );
+        fclose( $fileHandle );
+        chmod( $fileName, 0 );
+        try
+        {
+            $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->subject = "Message with invalid files..";
+            $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+            $this->mail->addAttachment( realpath( $fileName ) );
+            $this->mail->build();
+        }
+        catch ( ezcBaseFilePermissionException $e )
+        {
+            $this->removeTempDir();
+            return;
+        }
+        $this->removeTempDir();
+        $this->fail( "Adding unreadable attachments did not fail.\n" );
+    }
+
+    /**
      * Tests adding an invalid attachment.
      */
     public function testAddAttachmentInValid()
@@ -234,6 +263,35 @@ class ezcMailComposerTest extends ezcTestCase
 //        echo "\n---------------\n";
         // let's try to send the thing
 //        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+    }
+
+    /**
+     * Tests a mail with unreadable html images.
+     */
+    public function testMailHtmlWithImagesUnreadable()
+    {
+        $tempDir = $this->createTempDir( 'ezcMailComposerTest' );
+        $fileName = $tempDir . "/fly_unreadable.jpg";
+        $fileHandle = fopen( $fileName, "wb" );
+        fwrite( $fileHandle, "some contents" );
+        fclose( $fileHandle );
+        chmod( $fileName, 0 );
+        try
+        {
+            $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+            $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->subject = "HTML message with embeded unreadable images.";
+            $this->mail->htmlText = "<html>Some text before the image: <img src=\"file://"
+                                       . realpath( $fileName ). "\" /></html>";
+            $this->mail->build();
+        }
+        catch ( ezcBaseFilePermissionException $e )
+        {
+            $this->removeTempDir();
+            return;
+        }
+        $this->removeTempDir();
+        $this->fail( "Adding unreadable images did not fail.\n" );
     }
 
     /**

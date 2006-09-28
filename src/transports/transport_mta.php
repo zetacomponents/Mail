@@ -45,11 +45,16 @@ class ezcMailMtaTransport implements ezcMailTransport
     {
         $mail->appendExcludeHeaders( array( 'to', 'subject' ) );
         $headers = rtrim( $mail->generateHeaders() ); // rtrim removes the linebreak at the end, mail doesn't want it.
+
+        if ( ( count( $mail->to ) + count( $mail->cc ) + count( $mail->bcc ) ) < 1 )
+        {
+            throw new ezcMailTransportException( 'No recipient addresses found in message header.' );
+        }
         $success = mail( ezcMailTools::composeEmailAddresses( $mail->to ),
                          $mail->getHeader( 'Subject' ), $mail->generateBody(), $headers );
         if ( $success === false )
         {
-            throw new ezcMailTransportException();
+            throw new ezcMailTransportException( 'The email could not be sent by sendmail' );
         }
     }
 }

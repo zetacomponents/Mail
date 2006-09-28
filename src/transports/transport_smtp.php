@@ -160,22 +160,12 @@ class ezcMailSmtpTransport implements ezcMailTransport
         switch ( $name )
         {
             case 'user':
-                $this->properties['user'] = $value;
-                break;
             case 'password':
-                $this->properties['password'] = $value;
-                break;
             case 'senderHost':
-                $this->properties['senderHost'] = $value;
-                break;
             case 'serverHost':
-                $this->properties['serverHost'] = $value;
-                break;
             case 'serverPort':
-                $this->properties['serverPort'] = $value;
-                break;
             case 'timeout':
-                $this->properties['timeout'] = $value;
+                $this->properties[$name] = $value;
                 break;
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
@@ -195,23 +185,12 @@ class ezcMailSmtpTransport implements ezcMailTransport
         switch ( $name )
         {
             case 'user':
-                return $this->properties['user'];
-                break;
             case 'password':
-                return $this->properties['password'];
-                break;
             case 'senderHost':
-                return $this->properties['senderHost'];
-                break;
             case 'serverHost':
-                return $this->properties['serverHost'];
-                break;
             case 'serverPort':
-                return $this->properties['serverPort'];
-                break;
             case 'timeout':
-                return $this->properties['timeout'];
-                break;
+                return $this->properties[$name];
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
@@ -248,7 +227,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     {
         // sanity check the e-mail
         // need at least one recepient
-        if ( count( $mail->to ) < 1 )
+        if ( ( count( $mail->to ) + count( $mail->cc ) + count( $mail->bcc ) ) < 1 )
         {
             throw new ezcMailTransportException( "Can not send e-mail with no 'to' recipients." );
         }

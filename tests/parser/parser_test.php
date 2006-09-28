@@ -260,6 +260,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $filePart->mimeType );
         $this->assertEquals( '689D8AD3-D129-443F-94F7-90037B82B429@ez.no', $filePart->contentId );
 
+        $this->assertEquals( $filePart, $parts[1]->getRelatedPartByID( '689D8AD3-D129-443F-94F7-90037B82B429@ez.no' ) );
         $this->assertEquals( 1142414084, $mail->timestamp );
         $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );
     }

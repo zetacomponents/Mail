@@ -21,6 +21,10 @@
 - Fixed a bug in ezcMailMultipartRelated: the getRelatedParts() and
   getRelatedPartByID() functions return now correct values if the main part of
   the message is missing.
+- Fixed a bug in ezcMailMtaTransport and ezcMailSmtpTransport: checking for
+  sending a message without recipients.
+- Fixed a bug in ezcMailImapTransport: listUniqueIdentifiers() does not hang
+  anymore when supplied parameter is an invalid message number.
 
 
 1.1.2 - Monday 28 August 2006

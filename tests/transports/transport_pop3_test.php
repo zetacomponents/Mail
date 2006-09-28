@@ -52,7 +52,6 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
-
     public function testInvalidCallListMessages()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
@@ -95,6 +94,33 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
+    public function testInvalidCallDelete()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->disconnect();
+        try
+        {
+            $pop3->delete( 1000 );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testLoginAuthenticated()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $pop3->authenticate( "ezcomponents", "ezcomponents" );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
 
     public function testInvalidCallListUniqueMessages()
     {
@@ -226,6 +252,17 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
     }
 
+    public function testfetchFromOffset5()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $set = $pop3->fetchFromOffset( 1, 0 );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
     public function testStatus()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
@@ -244,11 +281,39 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $this->assertEquals( true, count( explode( "\n", $list ) ) > 1 );
     }
 
+    public function testInvalidTop()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $pop3->top( 1000, 1 );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testDelete()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $pop3->delete( 1000 );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+    
     public function testListUniqueIdentifiersSingle()
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.52" ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => "1143007546.84" ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -257,10 +322,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $this->assertEquals(
             array(
-                1 => '1143007546.52',
-                2 => '1143007546.53',
-                3 => '1143007546.54',
-                4 => '1143007546.55',
+                1 => '1143007546.84',
+                2 => '1143007546.85',
+                3 => '1143007546.86',
+                4 => '1143007546.87',
             ),
             $pop3->listUniqueIdentifiers()
         );

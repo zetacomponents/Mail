@@ -240,6 +240,20 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( '<1234.567@example.com> <200602061533.27600.fh@ez.no>', $reply->getHeader( 'References' ) );
     }
 
+    public function testReplyToReply()
+    {
+        $mail = new ezcMail();
+        $mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Fræderik Hølljen', 'ISO-8859-1' ) );
+
+        $address = new ezcMailAddress( 'test@example.com', 'Reply Går', 'ISO-8859-1' );
+        $mail->setHeader( 'Reply-To', ezcMailTools::composeEmailAddress( $address ) );
+        //$mail->setHeader( 'Reply-To', 'test@example.com' );
+
+        $reply = ezcMailTools::replyToMail( $mail,
+                                            new ezcMailAddress( 'test@example.com', 'Reply Går', 'ISO-8859-1' ) );
+        $this->assertEquals( $reply->to, array( new ezcMailAddress( 'test@example.com', "Reply G\xC3\xA5r", 'utf-8' ) ) );
+    }
+
     public static function suite()
     {
          return new ezcTestSuite( "ezcMailToolsTest" );
