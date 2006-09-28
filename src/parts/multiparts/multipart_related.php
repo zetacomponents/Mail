@@ -126,6 +126,10 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      */
     public function getRelatedParts()
     {
+        if ( is_null( $this->getMainPart() ) )
+        {
+            return array_slice( $this->parts, 0 );
+        }
         return array_slice( $this->parts, 1 );
     }
 
@@ -137,7 +141,8 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      */
     public function getRelatedPartByID( $cid )
     {
-        foreach ( array_slice( $this->parts, 1 ) as $part )
+        $parts = $this->getRelatedParts();
+        foreach ( $parts as $part )
         {
             if ( ( $part->getHeader( 'Content-ID' ) !== '' ) &&
                 ( $part->getHeader( 'Content-ID' ) == "<$cid>" ) )

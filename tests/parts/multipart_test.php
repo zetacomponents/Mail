@@ -50,6 +50,14 @@ class ezcMailMultipartTest extends ezcTestCase
     {
         $this->assertSetPropertyFails( $this->multipart, "does_not_exist", array( 42 )  );
         $this->assertSetProperty( $this->multipart, "boundary", array( "testvalue" ) );
+        try
+        {
+            $this->multipart->does_not_exist;
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
     }
 
     /**
@@ -122,6 +130,30 @@ class ezcMailMultipartTest extends ezcTestCase
         $part->addRelatedPart( new ezcMailText( 'a' ) );
         $part->addRelatedPart( new ezcMailText( 'a' ) );
         $this->assertEquals( 2, count( $part->getRelatedParts() ) );
+    }
+
+    public function testGetMultipartRelatedPartsEmpty()
+    {
+        $part = new ezcMailMultipartRelated();
+        $this->assertEquals( null, $part->getMainPart() );
+        $this->assertEquals( 0, count( $part->getRelatedParts() ) );
+        $this->assertEquals( false, $part->getRelatedPartByID( 'no such id' ) );
+    }
+
+    public function testInvalidGetMultipartRelatedByID()
+    {
+        $part = new ezcMailMultipartRelated;
+        $part->setMainPart( $main = new ezcMailText( 'a' ) );
+        $this->assertEquals( $main, $part->getMainPart() );
+        $part->addRelatedPart( new ezcMailText( 'a' ) );
+        $this->assertEquals( false, $part->getRelatedPartByID( 'no such id' ) );
+    }
+
+    public function testGetMultipartRelatedWithoutMain()
+    {
+        $part = new ezcMailMultipartRelated;
+        $part->addRelatedPart( new ezcMailText( 'a' ) );
+        $this->assertEquals( 1, count( $part->getRelatedParts() ) );
     }
 
     public static function suite()
