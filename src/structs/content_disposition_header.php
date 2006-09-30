@@ -34,6 +34,20 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
     public $fileName;
 
     /**
+     * The language of the filename.
+     *
+     * @var string
+     */
+    public $fileNameLanguage;
+
+    /**
+     * The characterset of the file name.
+     *
+     * @var string
+     */
+    public $fileNameCharSet;
+
+    /**
      * The creation date of the file attachment.
      *
      * The time should be formatted as specified by http://www.faqs.org/rfcs/rfc822.html
@@ -86,6 +100,16 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
     public $additionalParameters = array();
 
     /**
+     * Holds language and characterset data for the additional parameters.
+     *
+     * Format: array(parameterName=>array('charSet'=>string,'language'=>string))
+     *
+     * @apichange Merge this with $additionalParamters OR come up with an entirely new idea for the ContentDispositionHeader
+     * @var array(string=>array())
+     */
+    public $additionalParametersMetaData = array();
+
+    /**
      * Constructs a new ezcMailContentDispositionHeader holding the various values of this
      * container.
      *
@@ -103,10 +127,14 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
                                  $modificationDate = null,
                                  $readDate = null,
                                  $size = null,
-                                 $additionalParameters = array() )
+                                 $additionalParameters = array(),
+                                 $fileNameLanguage = null,
+                                 $fileNameCharSet = null )
     {
         $this->disposition = $disposition;
         $this->fileName = $fileName;
+        $this->fileNameLanguage = $fileNameLanguage;
+        $this->fileNameCharSet = $fileNameCharSet;
         $this->creationDate = $creationDate;
         $this->modificationDate = $modificationDate;
         $this->readDate = $readDate;
@@ -135,7 +163,9 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
                                                     $array['modificationDate'],
                                                     $array['readDate'],
                                                     $array['size'],
-                                                    $array['additionalParameters']
+                                                    $array['additionalParameters'],
+                                                    $array['fileNameLangauge'],
+                                                    $array['fileNameCharSet']
                                                     );
     }
 }

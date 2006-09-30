@@ -139,6 +139,14 @@ class ezcMailRfc2231Implementation
                 {
                     case 'filename':
                         $cd->fileName = $data['value'];
+                        if( isset( $data['charset'] ) )
+                        {
+                            $cd->fileNameCharSet = $data['charset'];
+                        }
+                        if( isset( $data['language'] ) )
+                        {
+                            $cd->fileNameLanguage = $data['language'];
+                        }
                         break;
                     case 'creation-date':
                         $cd->creationDate = $data['value'];
@@ -154,15 +162,19 @@ class ezcMailRfc2231Implementation
                         break;
                     default:
                         $cd->additionalParameters[$paramName] = $data['value'];
+                        if( isset( $data['charset'] ) )
+                        {
+                            $cd->additionalParametersMetaData[$paramName]['charSet'] = $data['charset'];
+                        }
+                        if( isset( $data['language'] ) )
+                        {
+                            $cd->additionalParametersMetaData[$paramName]['language'] = $data['language'];
+                        }
                         break;
                 }
             }
         }
         return $cd;
-    }
-
-    public static function parseContentType( $header )
-    {
     }
 }
 ?>

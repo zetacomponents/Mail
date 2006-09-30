@@ -122,6 +122,29 @@ class ezcMailRfc2231ImplementationTest extends ezcTestCase
         $this->assertEquals( "5423", $cd->size );
     }
 
+    public function testParseContentDispositionFileNameLangCharset()
+    {
+        $input = "attachment; filename*0*=\"iso-8859-1'no'b%F8lle%2Etxt\"; filename*1*=\"%2Etar%2Egz\"";
+        $result = ezcMailRfc2231Implementation::parseContentDisposition( $input );
+        $this->assertEquals( 'bølle.txt.tar.gz', $result->fileName, "File name failed" );
+        $this->assertEquals( 'iso-8859-1', $result->fileNameCharSet, "Character set failed" );
+        $this->assertEquals( 'no', $result->fileNameLanguage, "Language failed" );
+    }
+
+    public function testParseContentDispositionAdditionalParametersLangCharSet()
+    {
+        $input = "attachment; filename*0*=\"iso-8859-1'no'b%F8lle%2Etxt\"; filename*1*=\"%2Etar%2Egz\"; murka*=\"iso-8859-1'no'b%F8lle%2Etxt\"";
+        $result = ezcMailRfc2231Implementation::parseContentDisposition( $input );
+        $this->assertEquals( 'bølle.txt.tar.gz', $result->fileName );
+        $this->assertEquals( 'iso-8859-1', $result->fileNameCharSet );
+        $this->assertEquals( 'no', $result->fileNameLanguage );
+
+        $this->assertEquals( 'bølle.txt', $result->additionalParameters['murka'] );
+        $this->assertEquals( 'iso-8859-1', $result->additionalParametersMetaData['murka']['charSet'] );
+        $this->assertEquals( 'no', $result->additionalParametersMetaData['murka']['language'] );
+    }
+
+
     public function testParseContentDispositionReuse()
     {
         $cd = new ezcMailContentDispositionHeader();

@@ -27,6 +27,9 @@
   anymore when supplied parameter is an invalid message number.
 - Added an optional parameter to listMessages() method in IMAP, to return
   messages with a certain Content-Type header.
+- Implemented support for character set and language for
+  ezcContentDispositionHeader
+
 
 1.1.2 - Monday 28 August 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
