@@ -9,26 +9,32 @@
 - Implemented suggestion #8988: ezcMailAddress should implement __toString().
 - Implemented read access to property ezcMailPart->headers for extending this
   class and its derives.
-- Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId
 - Added a new class (ezcMailVirtualFile) to allow attachments from memory.
-- Fixed bug #9048: [ezcMail] ezcMailText does not encode properly
-- Fixed bug #9049: [Mail] illegal length of Bcc header	
-- Fixed bug #8850: Support multiline header parameters 
-	Fixed by implementing RFC2231.
-- Fixed a bug in ezcMailPart: now the getHeader() functions returns an empty
-  string instead of null in case of an unknown header.
-- Fixed a bug in ezcMailRfc822Parser: the bcc is set correctly now.
-- Fixed a bug in ezcMailMultipartRelated: the getRelatedParts() and
-  getRelatedPartByID() functions return now correct values if the main part of
-  the message is missing.
-- Fixed a bug in ezcMailMtaTransport and ezcMailSmtpTransport: checking for
-  sending a message without recipients.
-- Fixed a bug in ezcMailImapTransport: listUniqueIdentifiers() does not hang
-  anymore when supplied parameter is an invalid message number.
 - Added an optional parameter to listMessages() method in IMAP, to return
   messages with a certain Content-Type header.
+
+
+1.1.3 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId.
+- Fixed bug #9048: ezcMailText does not encode properly.
+- Fixed bug #9049: Long headers are not wrapped and could cause MTA warnings.
+- Fixed bug #8850: Support multiline header parameters by
+  implementing RFC2231.
+- Fixed a bug in ezcMailPart: The getHeader() function returns an empty
+  string instead of null in case of an unknown header.
+- Fixed a bug in ezcMailRfc822Parser: The bcc is set correctly now while
+  parsing e-mail.
+- Fixed a bug in ezcMailMultipartRelated: The getRelatedParts() and
+  getRelatedPartByID() functions return now correct values if the main part of
+  the message is missing.
+- Fixed a bug in ezcMailMtaTransport and ezcMailSmtpTransport: Checking for
+  sending a message without recipients.
+- Fixed a bug in ezcMailImapTransport: listUniqueIdentifiers() does not hang
+  anymore when the supplied parameter is an invalid message number.
 - Implemented support for character set and language for
-  ezcContentDispositionHeader
+  ezcContentDispositionHeader.
 
 
 1.1.2 - Monday 28 August 2006
