@@ -85,7 +85,7 @@ class ezcMailHeaderFolder
     static public function foldAny( $text )
     {
         // Don't fold unless we have to.
-        if( strlen( $text ) < self::$limit )
+        if ( strlen( $text ) < self::$limit )
         {
             return $text;
         }
@@ -100,29 +100,29 @@ class ezcMailHeaderFolder
         $search = 0;
         $previousFold = 0;
 
-        while( ( $search + self::$limit ) < $length )
+        while ( ( $search + self::$limit ) < $length )
         {
             // search from the max possible length of the substring
             $search += self::$limit;
-            while( $text[$search] != " " && $text[$search] != "\t" && $search > $previousFold )
+            while ( $text[$search] != " " && $text[$search] != "\t" && $search > $previousFold )
             {
                 $search--;
             }
 
-            if( $search == $previousFold )
+            if ( $search == $previousFold )
             {
                 // continuous string of more than limit chars.
                 // We will just have to continue searching forwards to the next whitespace instead
                 // This is not confirming to standard.. but what can we do?
                 $search += self::$limit; // back to where we started
-                while( $text[$search] != " " && $text[$search] != "\t" && $search < $length )
+                while ( $text[$search] != " " && $text[$search] != "\t" && $search < $length )
                 {
                     $search++;
                 }
             }
 
             // lets fold
-            if( $folded === "" )
+            if ( $folded === "" )
             {
                 $folded = substr( $text, $previousFold, $search - $previousFold );
             }
@@ -134,7 +134,7 @@ class ezcMailHeaderFolder
             $previousFold = $search;
         }
         // we need to append the rest if there is any
-        if( $search < $length )
+        if ( $search < $length )
         {
             $folded .= ezcMailTools::lineBreak() . substr( $text, $search );
         }

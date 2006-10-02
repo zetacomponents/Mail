@@ -107,20 +107,20 @@ class ezcMailTools
             $textElements[] = ezcMailTools::composeEmailAddress( $item );
         }
 
-        if( $foldLength === null ) // quick version
+        if ( $foldLength === null ) // quick version
         {
             return implode( ', ', $textElements );
         }
 
         $result = "";
         $charsSinceFold = 0;
-        foreach( $textElements as $element )
+        foreach ( $textElements as $element )
         {
             $length = strlen( $element );
-            if( ( $charsSinceFold + $length + 2 /* comma, space */ ) > $foldLength )
+            if ( ( $charsSinceFold + $length + 2 /* comma, space */ ) > $foldLength )
             {
                 // fold last line if there is any
-                if( $result != '' )
+                if ( $result != '' )
                 {
                     $result .= "," . ezcMailTools::lineBreak() .' ';
                     $charsSinceFold = 0;
@@ -129,7 +129,7 @@ class ezcMailTools
             }
             else
             {
-                if( $result == '' )
+                if ( $result == '' )
                 {
                     $result = $element;
                 }

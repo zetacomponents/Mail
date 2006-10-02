@@ -195,7 +195,7 @@ abstract class ezcMailFilePart extends ezcMailPart
         $this->contentDisposition->disposition = $this->dispositionType;
         $this->contentDisposition->fileName = basename( $this->fileName );
 
-        //$this->setHeader( 'Content-Disposition',
+        // $this->setHeader( 'Content-Disposition',
         //                  $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
     }
 }

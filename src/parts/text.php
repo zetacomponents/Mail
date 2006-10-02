@@ -161,7 +161,7 @@ class ezcMailText extends ezcMailPart
      */
     public function generateBody()
     {
-        switch( $this->encoding )
+        switch ( $this->encoding )
         {
             case ezcMail::BASE64:
                 // leaves a \r\n to much at the end, but since it is base64 it will decode

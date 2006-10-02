@@ -47,7 +47,7 @@ class ezcMailRfc2231Implementation
         // parameters
         if ( preg_match_all( '/\s*(\S*)="?([^;"]*);?/i', $header, $matches, PREG_SET_ORDER ) )
         {
-            foreach( $matches as $parameter )
+            foreach ( $matches as $parameter )
             {
                 // if normal parameter, simply add it
                 if ( !preg_match( '/([^\*]+)\*(\d+)?(\*)?/', $parameter[1], $metaData ) )
@@ -59,7 +59,7 @@ class ezcMailRfc2231Implementation
                     // metaData [1] holds the param name
                     // metaData [2] holds the count or is not set in case of charset only
                     // metaData [3] holds '*' if there is charset in addition to folding
-                    if( isset( $metaData[2] ) ) // we have folding
+                    if ( isset( $metaData[2] ) ) // we have folding
                     {
                         $parameterBuffer[$metaData[1]][$metaData[2]]['value'] = $parameter[2];
                         $parameterBuffer[$metaData[1]][$metaData[2]]['encoding'] =
@@ -75,13 +75,13 @@ class ezcMailRfc2231Implementation
 
             // whohooo... we have all the parameters nicely sorted.
             // Now we must go through them all and convert them into the end result
-            foreach( $parameterBuffer as $paramName => $parts )
+            foreach ( $parameterBuffer as $paramName => $parts )
             {
                 // fetch language and encoding if we have it
                 // syntax: '[charset]'[language]'encoded_string
                 $language = null;
                 $charset = null;
-                if( $parts[0]['encoding'] == true )
+                if ( $parts[0]['encoding'] == true )
                 {
                     preg_match( "/(\S*)'(\S*)'(.*)/", $parts[0]['value'], $matches );
                     $charset = $matches[1];
@@ -91,16 +91,16 @@ class ezcMailRfc2231Implementation
                 }
 
                 $result[1][$paramName] = array( 'value' => $parts[0]['value'] );
-                if( strlen( $charset ) > 0 )
+                if ( strlen( $charset ) > 0 )
                 {
                     $result[1][$paramName]['charset'] = $charset;
                 }
-                if( strlen( $language ) > 0 )
+                if ( strlen( $language ) > 0 )
                 {
                     $result[1][$paramName]['language'] = $language;
                 }
 
-                if( count( $parts > 1 ) )
+                if ( count( $parts > 1 ) )
                 {
                     for( $i = 1; $i < count( $parts ); $i++ )
                     {
@@ -124,26 +124,26 @@ class ezcMailRfc2231Implementation
      */
     public static function parseContentDisposition( $header, ezcMailContentDispositionHeader $cd = null )
     {
-        if( $cd === null )
+        if ( $cd === null )
         {
             $cd = new ezcMailContentDispositionHeader();
         }
 
         $parsedHeader = self::parseHeader( $header );
         $cd->disposition = $parsedHeader[0];
-        if( isset( $parsedHeader[1] ) )
+        if ( isset( $parsedHeader[1] ) )
         {
-            foreach( $parsedHeader[1] as $paramName => $data )
+            foreach ( $parsedHeader[1] as $paramName => $data )
             {
                 switch ( $paramName )
                 {
                     case 'filename':
                         $cd->fileName = $data['value'];
-                        if( isset( $data['charset'] ) )
+                        if ( isset( $data['charset'] ) )
                         {
                             $cd->fileNameCharSet = $data['charset'];
                         }
-                        if( isset( $data['language'] ) )
+                        if ( isset( $data['language'] ) )
                         {
                             $cd->fileNameLanguage = $data['language'];
                         }
@@ -162,11 +162,11 @@ class ezcMailRfc2231Implementation
                         break;
                     default:
                         $cd->additionalParameters[$paramName] = $data['value'];
-                        if( isset( $data['charset'] ) )
+                        if ( isset( $data['charset'] ) )
                         {
                             $cd->additionalParametersMetaData[$paramName]['charSet'] = $data['charset'];
                         }
-                        if( isset( $data['language'] ) )
+                        if ( isset( $data['language'] ) )
                         {
                             $cd->additionalParametersMetaData[$paramName]['language'] = $data['language'];
                         }
