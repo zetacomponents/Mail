@@ -53,6 +53,29 @@ class ezcMailMboxTransport
     }
 
     /**
+     * Finds the position of the first message while skipping a possible header.
+     *
+     * Mbox files can contain a header which does not describe an email
+     * message. This method skips over this optional header by checking for a
+     * specific From MAILER-DAEMON header.
+     *
+     * @return int
+     */
+    private function findFirstMessage()
+    {
+        $data = fgets( $this->fh );
+        fseek( $this->fh, 0 );
+        if ( substr( $data, 0, 18 ) === 'From MAILER-DAEMON' )
+        {
+            return $this->findNextMessage();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
      * Reads through the Mbox file and stops at the next message.
      *
      * Messages in Mbox files are separated with lines starting with "From "
@@ -86,7 +109,7 @@ class ezcMailMboxTransport
         $messages = array();
         fseek( $this->fh, 0 );
         // Skip the first mail as this is the mbox header
-        $position = $this->findNextMessage();
+        $position = $this->findFirstMessage();
         if ( $position === false )
         {
             return $messages;

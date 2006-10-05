@@ -153,6 +153,15 @@ class ezcMailPop3Set implements ezcMailParserSet
         return false;
     }
 
+    /**
+     * Returns whether the set has mails
+     *
+     * @return bool
+     */
+    public function hasData()
+    {
+        return count( $this->messages );
+    }
 }
 
 ?>

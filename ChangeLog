@@ -35,6 +35,7 @@
   anymore when the supplied parameter is an invalid message number.
 - Implemented support for character set and language for
   ezcContentDispositionHeader.
+- Fixed an issue with mbox files without an mbox header being present.
 
 
 1.1.2 - Monday 28 August 2006

@@ -1,0 +1,78 @@
+From MAILER-DAEMON Thu Oct  5 10:35:22 2006
+Date: 05 Oct 2006 10:35:22 +0200
+From: Mail System Internal Data <MAILER-DAEMON@ez.no>
+Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
+X-IMAP: 1160037322 0000000000
+Status: RO
+
+This text is part of the internal format of your mail folder, and is not
+a real message.  It is created automatically by the mail system software.
+If deleted, important folder data will be lost, and it will be re-created
+with the data reset to initial values.
+
+From xdebug-general-bounce@lists.example.org  Mon Oct  2 20:31:34 2006
+Return-Path: <xdebug-general-bounce@lists.example.org>
+Received: from kossu.home.example.nl (localhost [127.0.0.1])
+	by kossu.home.example.nl (8.13.7/8.13.7/Debian-2) with ESMTP id k92IVYTF014488
+	for <derick@localhost>; Mon, 2 Oct 2006 20:31:34 +0200
+X-Spam-Checker-Version: SpamAssassin 3.1.4 (2006-07-25) on host.example.nl
+X-Spam-Level: 
+X-Spam-Status: No, score=0.0 required=8.0 tests=UNPARSEABLE_RELAY 
+	autolearn=disabled version=3.1.4
+Received: from 127.0.0.1 [127.0.0.1]
+	by kossu.home.example.nl with POP3 (fetchmail-6.3.4)
+	for <derick@localhost> (single-drop); Mon, 02 Oct 2006 20:31:34 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by host.example.nl (8.13.7/8.12.11) with ESMTP id k92INSE6000130;
+	Mon, 2 Oct 2006 20:23:28 +0200
+X-Virus-Scanned: by amavisd-new at example.nl
+Received: from host.example.nl (localhost [127.0.0.1])
+	by host.example.nl (8.13.7/8.12.11) with ESMTP id k92IN0Ht016732;
+	Mon, 2 Oct 2006 20:23:00 +0200
+Received: with ECARTIS (v1.0.0; list xdebug-general); Mon, 02 Oct 2006 20:23:00 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by host.example.nl (8.13.7/8.12.11) with ESMTP id k92IMxwc029854;
+	Mon, 2 Oct 2006 20:23:00 +0200
+Date: Mon, 2 Oct 2006 20:22:43 +0200 (CEST)
+From: Derick Rethans <derick@example.org>
+X-X-Sender: derick@localhost
+To: Ethan Winn <public@example.com>
+cc: xdebug-general@lists.example.org
+Subject: [xdebug-general] Re: Vim foldexpr for text profile output
+In-Reply-To: <814022a30609262117y3ea71307g71cd0436bb224d43@mail.gmail.com>
+Message-ID: <Pine.LNX.4.62.0610022021580.3766@localhost>
+References: <814022a30609251738q547f14acof0d436ded633a640@mail.gmail.com>
+ <814022a30609262117y3ea71307g71cd0436bb224d43@mail.gmail.com>
+X-Face: "L'&?Ah3MYF@FB4hU'XhNhLB]222(Lbr2Y@F:GE[OO;"F5p>qtFBl|yVVA&D{A(g3[C}mG:199P+5C'v.M/u@Z\![0b:Mv.[l6[uWl'
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-archive-position: 693
+X-ecartis-version: Ecartis v1.0.0
+Sender: xdebug-general-bounce@lists.example.org
+Errors-to: xdebug-general-bounce@lists.example.org
+X-original-sender: derick@example.org
+Precedence: bulk
+X-list: xdebug-general
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-2.1.12 (host.example.nl [127.0.0.1]); Mon, 02 Oct 2006 20:23:18 +0200 (CEST)
+X-Bogosity: No, tests=bogofilter, spamicity=0.000000, version=0.96.0
+Status: R
+X-Status: 
+X-Keywords:                  
+
+On Wed, 27 Sep 2006, Ethan Winn wrote:
+
+> Actually, I debugged a bit and this expression is really better:
+> 
+> autocmd FileType xdebug set
+> foldexpr=strlen(substitute(substitute(substitute(getline(v:lnum),'\\s>=>','->',\"g\"),'^.\\{21\\}\\(\\s\\+\\)\\?->.*$','\\1',''),'\\s\\s','\
+> ',\"g\"))
+
+Thanks! I added this as part of my trace file colorization script 
+(xt.vim) in the Xdebug repository with some small changes.
+
+regards,
+Derick
+
+-- 
+Xdebug | http://example.org | xdebug-general@lists.example.org
+

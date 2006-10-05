@@ -103,6 +103,16 @@ class ezcMailMboxSet implements ezcMailParserSet
     }
 
     /**
+     * Returns whether the set contains mails
+     *
+     * @return bool
+     */
+    public function hasData()
+    {
+        return $this->hasMoreMailData;
+    }
+
+    /**
      * Moves the set to the next mail and returns true upon success.
      *
      * False is returned if there are no more mail in the set.

@@ -14,13 +14,42 @@
  */
 class ezcMailTransportMboxTest extends ezcTestCase
 {
-    public function testFetchMailFromBrokenMbox()
+    public function testFetchMailEmptyMbox()
     {
-        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/../parser/data/various/test-filename-with-space" );
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/empty.mbox" );
         $set = $mbox->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 0, count( $mail ) );
+    }
+
+    public function testFetchMailEmptyMboxNoHeader()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/empty-no-header.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 0, count( $mail ) );
+    }
+
+    public function testFetchMailMboxHeader()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/one-mail.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( "[xdebug-general] Re: Vim foldexpr for text profile output", $mail[0]->subject );
+    }
+
+    public function testFetchMailMboxNoHeader()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/one-mail-no-header.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( "[xdebug-general] Re: Vim foldexpr for text profile output", $mail[0]->subject );
     }
 
     public function testFetchMailFromUnreadableMbox()
@@ -159,8 +188,8 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $set = $mbox->fetchFromOffset( 0, 10 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $this->assertEquals( 8, count( $mail ) );
-        $this->assertEquals( "[svn-components] 3263 - docs/guidelines [eZComponents: Docs]", $mail[7]->subject );
+        $this->assertEquals( 9, count( $mail ) );
+        $this->assertEquals( "[svn-components] 3263 - docs/guidelines [eZComponents: Docs]", $mail[8]->subject );
     }
 
     public function testfetchFromOffset5()
@@ -169,8 +198,8 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $set = $mbox->fetchFromOffset( 0, 0 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $this->assertEquals( 8, count( $mail ) );
-        $this->assertEquals( "[svn-components] 3263 - docs/guidelines [eZComponents: Docs]", $mail[7]->subject );
+        $this->assertEquals( 9, count( $mail ) );
+        $this->assertEquals( "[svn-components] 3263 - docs/guidelines [eZComponents: Docs]", $mail[8]->subject );
     }
 
     public function testBrokenFilePointer()

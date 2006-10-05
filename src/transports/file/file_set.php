@@ -76,6 +76,16 @@ class ezcMailFileSet implements ezcMailParserSet
     }
 
     /**
+     * Returns whether the file set contains files
+     *
+     * @return bool
+     */
+    public function hasData()
+    {
+        return count( $this->files );
+    }
+
+    /**
      * Returns one line of data from the current mail in the set.
      *
      * Null is returned if there is no current mail in the set or

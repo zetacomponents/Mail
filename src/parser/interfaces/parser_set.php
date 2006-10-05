@@ -34,5 +34,12 @@ interface ezcMailParserSet
      * @return bool
      */
     public function nextMail();
+
+    /**
+     * Returns whether mails are being available for parsing.
+     *
+     * @return bool
+     */
+    public function hasData();
 }
 ?>

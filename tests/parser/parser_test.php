@@ -28,6 +28,11 @@ class SingleFileSet implements ezcMailParserSet
 //    }
     }
 
+    public function hasData()
+    {
+        return !feof( $this->fp );
+    }
+
     public function getNextLine()
     {
         if ( feof( $this->fp ) )

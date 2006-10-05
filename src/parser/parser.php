@@ -56,6 +56,10 @@ class ezcMailParser
     public function parseMail( ezcMailParserSet $set, $class = "ezcMail" )
     {
         $mail = array();
+        if ( !$set->hasData() )
+        {
+            return $mail;
+        }
         do
         {
             $this->partParser = new ezcMailRfc822Parser();
@@ -65,7 +69,7 @@ class ezcMailParser
                 $this->partParser->parseBody( $data );
             }
             $mail[] = $this->partParser->finish( $class );
-        }while( $set->nextMail() );
+        } while ( $set->nextMail() );
         return $mail;
     }
 

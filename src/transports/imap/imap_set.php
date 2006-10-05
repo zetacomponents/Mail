@@ -245,5 +245,15 @@ class ezcMailImapSet implements ezcMailParserSet
         $this->currentTag = $tagLetter . sprintf( "%04s", $tagNumber );
         return $this->currentTag;
     }
+
+    /**
+     * Returns whether the set has mails
+     *
+     * @return bool
+     */
+    public function hasData()
+    {
+        return count( $this->messages );
+    }
 }
 ?>
