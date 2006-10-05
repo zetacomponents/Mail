@@ -72,7 +72,7 @@ class ezcMailParserTest extends ezcTestCase
 {
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailParserTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailParserTest" );
     }
 
     //

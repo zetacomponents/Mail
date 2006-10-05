@@ -202,7 +202,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTransportSmtpTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTransportSmtpTest" );
     }
 }
 ?>

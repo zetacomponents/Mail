@@ -177,7 +177,7 @@ class ezcMailPartTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailPartTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailPartTest" );
     }
 }
 ?>

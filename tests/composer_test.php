@@ -367,7 +367,7 @@ class ezcMailComposerTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailComposerTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );
     }
 }
 ?>

@@ -30,7 +30,7 @@ class ezcMailVirtualFileTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailVirtualFileTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailVirtualFileTest" );
     }
 }
 ?>

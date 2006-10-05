@@ -38,7 +38,7 @@ class ezcMailRfc822DigestTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailRfc822DigestTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailRfc822DigestTest" );
     }
 }
 ?>

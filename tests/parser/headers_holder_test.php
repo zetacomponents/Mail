@@ -16,7 +16,7 @@ class ezcMailHeadersHolderTest extends ezcTestCase
 {
     public static function suite()
     {
-        return new ezcTestSuite( "ezcMailHeadersHolderTest" );
+        return new PHPUnit_Framework_TestSuite( "ezcMailHeadersHolderTest" );
     }
 
     public function testSet()

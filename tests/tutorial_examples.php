@@ -110,7 +110,7 @@ class ezcMailTutorialExamples extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTutorialExamples" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTutorialExamples" );
     }
 }
 ?>

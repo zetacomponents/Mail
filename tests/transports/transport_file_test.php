@@ -16,7 +16,7 @@ class ezcMailTransportFileTest extends ezcTestCase
 {
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTransportFileTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTransportFileTest" );
     }
 
     public function testSingle()

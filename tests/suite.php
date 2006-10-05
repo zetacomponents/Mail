@@ -37,7 +37,7 @@ require_once( "header_folder_test.php" );
  * @package Mail
  * @subpackage Tests
  */
-class ezcMailSuite extends ezcTestSuite
+class ezcMailSuite extends PHPUnit_Framework_TestSuite
 {
 	public function __construct()
 	{

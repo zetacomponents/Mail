@@ -442,7 +442,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTransportImapTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
     }
 }
 ?>

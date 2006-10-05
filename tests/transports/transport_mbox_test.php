@@ -217,7 +217,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTransportMboxTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTransportMboxTest" );
     }
 }
 ?>

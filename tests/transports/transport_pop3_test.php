@@ -354,7 +354,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailTransportPop3Test" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
 }
 ?>

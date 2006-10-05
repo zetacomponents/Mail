@@ -67,7 +67,7 @@ class ezcMailHeaderFolderTest extends ezcTestCase
 
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailHeaderFolderTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailHeaderFolderTest" );
     }
 }
 ?>

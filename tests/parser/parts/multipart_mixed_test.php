@@ -69,7 +69,7 @@ class ezcMailMultipartMixedParserTest extends ezcTestCase
 {
     public static function suite()
     {
-         return new ezcTestSuite( "ezcMailMultipartMixedParserTest" );
+         return new PHPUnit_Framework_TestSuite( "ezcMailMultipartMixedParserTest" );
     }
 
     public function testKmail1()
