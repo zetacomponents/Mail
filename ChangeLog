@@ -14,7 +14,7 @@
   messages with a certain Content-Type header.
 
 
-1.1.3 - [RELEASEDATE]
+1.1.3 - Monday 09 October 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed bug #8990: ezcMail->messageID should be named ezcMail->messageId.
