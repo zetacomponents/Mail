@@ -7,6 +7,9 @@
  * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
+
+ezcBase::checkDependency( 'Mail', ezcBase::DEP_PHP_EXTENSION, 'iconv' );
+
 return array(
     'ezcMailAddress'                => 'Mail/structs/mail_address.php',
     'ezcMailContentDispositionHeader'=> 'Mail/structs/content_disposition_header.php',
