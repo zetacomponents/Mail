@@ -47,10 +47,16 @@ class ezcMailImapTransport
     const STATE_SELECTED = 4;
 
     /**
+     * Internal state when the IMAP transport is connected to a server,
+     * authenticated, and a mailbox is selected read only.
+     */
+    const STATE_SELECTED_READONLY = 5;
+
+    /**
      * Internal state when the LOGOUT command has been issued to the IMAP
      * server, but before the disconnect has taken place.
      */
-    const STATE_LOGOUT = 5;
+    const STATE_LOGOUT = 6;
 
     /**
      * The response sent from the IMAP server is "OK".
@@ -91,7 +97,8 @@ class ezcMailImapTransport
      * @var int {@link STATE_NOT_CONNECTED},
      *          {@link STATE_NOT_AUTHENTICATED},
      *          {@link STATE_AUTHENTICATED},
-     *          {@link STATE_SELECTED} or
+     *          {@link STATE_SELECTED},
+     *          {@link STATE_SELECTED_READONLY} or
      *          {@link STATE_LOGOUT}.
      */
     private $state = self::STATE_NOT_CONNECTED;
@@ -209,7 +216,8 @@ class ezcMailImapTransport
      * Lists the available mailboxes on the IMAP server.
      *
      * Before listing the mailboxes, the connection state ($state) must
-     * be at least {@link STATE_AUTHENTICATED} or {@link STATE_SELECTED}.
+     * be at least {@link STATE_AUTHENTICATED} or {@link STATE_SELECTED} or
+     * {@link STATE_SELECTED_READONLY}.
      * 
      * For more information about $reference and $mailbox, consult
      * the IMAP RFC document (http://www.faqs.org/rfcs/rfc1730.html).
@@ -229,7 +237,8 @@ class ezcMailImapTransport
     public function listMailboxes( $reference = '', $mailbox = '*' )
     {
         if ( $this->state != self::STATE_AUTHENTICATED &&
-             $this->state != self::STATE_SELECTED )
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't list mailboxes when not successfully logged in." );
         }
@@ -266,31 +275,43 @@ class ezcMailImapTransport
      * This method should be called after authentication, and before fetching
      * any messages.
      * Before selecting the mailbox, the connection state ($state) must
-     * be at least {@link STATE_AUTHENTICATED} or {@link STATE_SELECTED}.
+     * be at least {@link STATE_AUTHENTICATED}, {@link STATE_SELECTED} or
+     * or {@link STATE_SELECTED_READONLY}.
      * If the selecting of the mailbox fails (with "NO" or "BAD" response
      * from the server), $state revert to STATE_AUTHENTICATED.
-     * After successfully selecting a mailbox, $state will be STATE_SELECTED.
+     * After successfully selecting a mailbox, $state will be STATE_SELECTED
+     * or STATE_SELECTED_READONLY.
      * Inbox is a special mailbox and can be specified in whatever-case.
      * 
      * @throws ezcMailMailTransportException if $state is not accepted or
      *         if $mailbox does not exist.
      * @param string $mailbox
+     * @param bool $readOnly
      */
-    public function selectMailbox( $mailbox )
+    public function selectMailbox( $mailbox, $readOnly = false )
     {
         if ( $this->state != self::STATE_AUTHENTICATED &&
-             $this->state != self::STATE_SELECTED )
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't select a mailbox when not successfully logged in." );
         }
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} SELECT \"{$mailbox}\"" );
-
+        if ( $readOnly !== true ) 
+        {
+            $this->connection->sendData( "{$tag} SELECT \"{$mailbox}\"" );
+            $state = self::STATE_SELECTED;
+        }
+        else 
+        {
+            $this->connection->sendData( "{$tag} EXAMINE \"{$mailbox}\"" );
+            $state = self::STATE_SELECTED_READONLY;
+        }
         $response = $this->getResponse( $tag );
         if ( $this->responseType( $response ) == self::RESPONSE_OK )
         {
-            $this->state = self::STATE_SELECTED;
+            $this->state = $state;
         }
         else
         {
@@ -317,7 +338,8 @@ class ezcMailImapTransport
      */
     public function listMessages( $contentType = null )
     {
-        if ( $this->state != self::STATE_SELECTED )
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call listMessages() on the IMAP transport when a mailbox is not selected." );
         }
@@ -387,7 +409,8 @@ class ezcMailImapTransport
      */
     public function status( &$numMessages, &$sizeMessages )
     {
-        if ( $this->state != self::STATE_SELECTED )
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call status() on the IMAP transport when a mailbox is not selected." );
         }
@@ -437,7 +460,8 @@ class ezcMailImapTransport
      */
     public function top( $msgNum, $chars )
     {
-        if ( $this->state != self::STATE_SELECTED )
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call top() on the IMAP transport when a mailbox is not selected." );
         }
@@ -492,7 +516,8 @@ class ezcMailImapTransport
      */
     public function listUniqueIdentifiers( $msgNum = null )
     {
-        if ( $this->state != self::STATE_SELECTED )
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call listUniqueIdentifiers() on the IMAP transport when a mailbox is not selected." );
         }

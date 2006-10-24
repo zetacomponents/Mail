@@ -398,7 +398,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 84 ), $uids );
+        $this->assertEquals( array( 1 => 172 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -409,10 +409,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 84,
-                2 => 85,
-                3 => 86,
-                4 => 87,
+                1 => 172,
+                2 => 173,
+                3 => 174,
+                4 => 175,
             ),
             $uids
         );
@@ -438,6 +438,59 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->disconnect();
         $imap->disconnect();
+    }
+
+    public function testListMessagesReadOnly()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox', true );
+        $list = $imap->listMessages();
+        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
+    }
+
+    public function testStatusReadOnly()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox', true );
+        $imap->status( $num, $size );
+        $this->assertEquals( 4, $num );
+        $this->assertEquals( 69024, $size );
+    }
+
+    public function testTopReadOnly()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox', true );
+        $list = $imap->top( 1, 1 );
+        // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
+        $this->assertEquals( true, count( explode( "\n", $list ) ) > 1 );
+    }
+
+    public function testDeleteReadOnly()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox', true );
+        try
+        {
+            $imap->delete( 1 );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testListUniqueIdentifiersReadOnly()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox', true );
+        $uids = $imap->listUniqueIdentifiers( 1 );
+        $this->assertEquals( array( 1 => 172 ), $uids );
     }
 
     public static function suite()
