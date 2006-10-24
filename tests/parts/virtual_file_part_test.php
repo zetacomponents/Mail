@@ -28,6 +28,13 @@ class ezcMailVirtualFileTest extends ezcTestCase
                              $filePart->generate() );
     }
 
+    public function testIsSet()
+    {
+        $filePart = new ezcMailVirtualFile( "fly.jpg", file_get_contents( dirname( __FILE__) . "/data/fly.jpg" ) );
+        $this->assertEquals( true, isset( $filePart->contents ) );
+        $this->assertEquals( false, isset( $filePart->no_such_property ) );
+    } 
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailVirtualFileTest" );

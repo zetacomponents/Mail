@@ -365,6 +365,14 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->build();
     }
 
+    public function testIsSet()
+    {
+        $mail = new ezcMailComposer();
+        $this->assertEquals( false, isset( $mail->plainText ) );
+        $this->assertEquals( false, isset( $mail->htmlText ) );
+        $this->assertEquals( false, isset( $mail->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );

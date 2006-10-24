@@ -143,6 +143,24 @@ class ezcMailComposer extends ezcMail
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'plainText':
+            case 'htmlText':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Adds the file $fileName to the list of attachments.
      *
      * If $content is specified, $fileName is not checked and is used as

@@ -115,6 +115,26 @@ abstract class ezcMailPart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'contentDisposition':
+                return isset( $this->properties[$name] );
+
+            case "headers":
+                return isset( $this->headers );
+
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Returns the RAW value of the header $name.
      *
      * Returns an empty string if the header is not found.

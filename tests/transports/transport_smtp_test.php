@@ -200,6 +200,17 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->fail( "SMTP send without recipients did not fail." );
     }
 
+    public function testIsSet()
+    {
+        $this->assertEquals( true, isset( $this->transport->user ) );
+        $this->assertEquals( true, isset( $this->transport->password ) );
+        $this->assertEquals( true, isset( $this->transport->senderHost ) );
+        $this->assertEquals( true, isset( $this->transport->serverHost ) );
+        $this->assertEquals( true, isset( $this->transport->serverPort ) );
+        $this->assertEquals( true, isset( $this->transport->timeout ) );
+        $this->assertEquals( false, isset( $this->transport->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportSmtpTest" );

@@ -44,6 +44,17 @@ class ezcMailFileTest extends ezcTestCase
         $this->fail( "Invalid file failed or wrong exception thrown" );
     }
 
+    public function testIsSet()
+    {
+        $filePart = new ezcMailFile( dirname( __FILE__) . "/data/fly.jpg" );
+        $this->assertEquals( true, isset( $filePart->fileName ) );
+        $this->assertEquals( true, isset( $filePart->mimeType ) );
+        $this->assertEquals( true, isset( $filePart->contentType ) );
+        $this->assertEquals( true, isset( $filePart->dispositionType ) );
+        $this->assertEquals( false, isset( $filePart->contentId ) );
+        $this->assertEquals( false, isset( $filePart->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailFileTest" );

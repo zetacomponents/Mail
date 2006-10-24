@@ -100,6 +100,23 @@ class ezcMailVirtualFile extends ezcMailFilePart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'contents':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Returns the contents of the file with the correct encoding.
      *
      * @return string

@@ -100,6 +100,22 @@ class ezcMailRfc822Digest extends ezcMailPart
         }
     }
 
+    /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'mail':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
 
     /**
      * Returns the body part of this mail consisting of the digested mail.

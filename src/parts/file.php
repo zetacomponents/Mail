@@ -169,6 +169,27 @@ abstract class ezcMailFilePart extends ezcMailPart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'fileName':
+            case 'mimeType':
+            case 'contentType':
+            case 'dispositionType':
+            case 'contentId':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Sets the Content-Type header based on the contentType, mimeType and fileName.
      *
      * @return void

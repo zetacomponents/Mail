@@ -82,6 +82,16 @@ class ezcMailTextTest extends ezcTestCase
             $this->assertEquals( 'The property <originalCharset> is read-only.', $e->getMessage() );
         }
 
+        try
+        {
+            $temp->no_such_property = 'xxx';
+            $this->fail( 'Expected exception was not thrown' );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( 'No such property name <no_such_property>.', $e->getMessage() );
+        }
+
         $this->assertEquals( 'utf-8', $temp->charset );
         $this->assertEquals( 'iso-8859-2', $temp->originalCharset );
         $this->assertEquals( ezcMail::EIGHT_BIT, $temp->encoding );
@@ -106,6 +116,16 @@ class ezcMailTextTest extends ezcTestCase
 
         $text = new ezcMailText( "זרו\nרזו", "iso-8859-1", ezcMail::QUOTED_PRINTABLE );
         $this->assertEquals( $reference, $text->generate() );
+    }
+
+    public function testIsSet()
+    {
+        $this->assertEquals( true, isset( $this->part->charset ) );
+        $this->assertEquals( true, isset( $this->part->originalCharset ) );
+        $this->assertEquals( true, isset( $this->part->subType ) );
+        $this->assertEquals( true, isset( $this->part->encoding ) );
+        $this->assertEquals( true, isset( $this->part->text ) );
+        $this->assertEquals( false, isset( $this->part->no_such_property ) );
     }
 
     public static function suite()

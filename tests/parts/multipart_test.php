@@ -156,6 +156,13 @@ class ezcMailMultipartTest extends ezcTestCase
         $this->assertEquals( 1, count( $part->getRelatedParts() ) );
     }
 
+    public function testIsSet()
+    {
+        $part = new ezcMailMultipartRelated();
+        $this->assertEquals( true, isset( $part->boundary ) );
+        $this->assertEquals( false, isset( $part->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailMultipartTest" );

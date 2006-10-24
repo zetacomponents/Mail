@@ -303,6 +303,24 @@ class ezcMailTest extends ezcTestCase
         $return = $this->mail->generate();
     }
 
+    public function testIsSet()
+    {
+        $mail = new ezcMail();
+        $this->assertEquals( true, isset( $mail->headers ) );
+        $this->assertEquals( false, isset( $mail->contentDisposition ) );
+        $this->assertEquals( true, isset( $mail->to ) );
+        $this->assertEquals( true, isset( $mail->cc ) );
+        $this->assertEquals( true, isset( $mail->bcc ) );
+        $this->assertEquals( false, isset( $mail->from ) );
+        $this->assertEquals( false, isset( $mail->subject ) );
+        $this->assertEquals( true, isset( $mail->subjectCharset ) );
+        $this->assertEquals( false, isset( $mail->body ) );
+        $this->assertEquals( false, isset( $mail->messageId ) );
+        $this->assertEquals( false, isset( $mail->messageID ) );
+        $this->assertEquals( false, isset( $mail->timestamp ) );
+        $this->assertEquals( false, isset( $mail->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTest" );

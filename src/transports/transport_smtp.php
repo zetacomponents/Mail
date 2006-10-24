@@ -197,6 +197,27 @@ class ezcMailSmtpTransport implements ezcMailTransport
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'user':
+            case 'password':
+            case 'senderHost':
+            case 'serverHost':
+            case 'serverPort':
+            case 'timeout':
+                return isset( $this->properties[$name] );
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Sets if the connection should be kept open after sending an email.
      *
      * This method should be called prior to the first call to send().

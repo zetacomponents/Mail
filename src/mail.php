@@ -207,6 +207,31 @@ class ezcMail extends ezcMailPart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'to':
+            case 'cc':
+            case 'bcc':
+            case 'from':
+            case 'subject':
+            case 'subjectCharset':
+            case 'body':
+            case 'messageId':
+            case 'messageID': // deprecated version
+            case 'timestamp':
+                return isset( $this->properties[$name] );
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Adds the ezcMailAddress $address to the list of 'to' recipients.
      *
      * @param ezcMailAddress $address

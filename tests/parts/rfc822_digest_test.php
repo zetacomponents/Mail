@@ -36,6 +36,26 @@ class ezcMailRfc822DigestTest extends ezcTestCase
                              $digest->generate() );
     }
 
+    public function testProperties()
+    {
+        $digest = new ezcMailRfc822Digest( new DigestTestMail() );
+        try
+        {
+            $digest->no_such_property = 'xxx';
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
+    }
+
+    public function testIsSet()
+    {
+        $digest = new ezcMailRfc822Digest( new DigestTestMail() );
+        $this->assertEquals( true, isset( $digest->mail ) );
+        $this->assertEquals( false, isset( $digest->no_such_property ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailRfc822DigestTest" );

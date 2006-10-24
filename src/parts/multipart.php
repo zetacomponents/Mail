@@ -131,6 +131,23 @@ abstract class ezcMailMultipart extends ezcMailPart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'boundary':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Returns the generated body for all multipart types.
      *
      * @return string

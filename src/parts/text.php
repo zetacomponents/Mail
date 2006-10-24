@@ -139,6 +139,27 @@ class ezcMailText extends ezcMailPart
     }
 
     /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'charset':
+            case 'originalCharset':
+            case 'subType':
+            case 'encoding':
+            case 'text':
+                return isset( $this->properties[$name] );
+
+            default:
+                return parent::__isset( $name );
+        }
+    }
+
+    /**
      * Returns the headers set for this part as a RFC822 compliant string.
      *
      * This method does not add the required two lines of space
