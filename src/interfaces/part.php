@@ -80,9 +80,12 @@ abstract class ezcMailPart
             case 'contentDisposition':
                 $this->properties[$name] = $value;
                 break;
+
+            case 'headers':
+                throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
-                break;
         }
 
     }
@@ -101,17 +104,15 @@ abstract class ezcMailPart
         {
             case 'contentDisposition':
                 return isset( $this->properties[$name] ) ? $this->properties[$name] : null;
-                break;
 
             case "headers":
                 return $this->headers;
 
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
-                break;
+
         }
     }
-
 
     /**
      * Returns the RAW value of the header $name.

@@ -3,6 +3,8 @@
 
 - Implemented feature request #9229: ability to selectMailbox readonly in
   IMAP. Patch by Mikko Koppanen.
+- Fixed a bug in ezcMailPart: when setting the headers property the correct
+  exception is thrown (ezcBasePropertyPermissionException).
 
 
 1.2beta1 - Tuesday 24 October 2006

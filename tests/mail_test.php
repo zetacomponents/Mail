@@ -36,6 +36,16 @@ class ezcMailTest extends ezcTestCase
         {
             $this->assertEquals( 'The property <timestamp> is read-only.', $e->getMessage() );
         }
+
+        try
+        {
+            $this->mail->headers = null;
+            $this->fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBasePropertyPermissionException $e )
+        {
+            $this->assertEquals( 'The property <headers> is read-only.', $e->getMessage() );
+        }
     }
 
     public function testAddAddresses()
