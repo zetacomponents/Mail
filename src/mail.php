@@ -210,6 +210,7 @@ class ezcMail extends ezcMailPart
      * Returns true if the property $name is set, otherwise false.
      *
      * @return bool
+     * @ignore
      */
     public function __isset( $name )
     {
@@ -224,8 +225,11 @@ class ezcMail extends ezcMailPart
             case 'body':
             case 'messageId':
             case 'messageID': // deprecated version
-            case 'timestamp':
                 return isset( $this->properties[$name] );
+
+            case 'timestamp':
+                return $this->getHeader( "Date" ) != null;
+
             default:
                 return parent::__isset( $name );
         }

@@ -36,6 +36,7 @@ return array(
     'ezcMailPop3Set'                => 'Mail/transports/pop3/pop3_set.php',
     'ezcMailImapTransport'          => 'Mail/transports/imap/imap_transport.php',
     'ezcMailImapSet'                => 'Mail/transports/imap/imap_set.php',
+    'ezcMailImapFlags'              => 'Mail/transports/imap/imap_flags.php',
     'ezcMailMboxTransport'          => 'Mail/transports/mbox/mbox_transport.php',
     'ezcMailMboxSet'                => 'Mail/transports/mbox/mbox_set.php',
     'ezcMailFileSet'                => 'Mail/transports/file/file_set.php',

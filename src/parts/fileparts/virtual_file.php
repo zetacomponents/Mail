@@ -103,6 +103,7 @@ class ezcMailVirtualFile extends ezcMailFilePart
      * Returns true if the property $name is set, otherwise false.
      *
      * @return bool
+     * @ignore
      */
     public function __isset( $name )
     {

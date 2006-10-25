@@ -65,6 +65,7 @@ class ezcMailRfc822Digest extends ezcMailPart
      * @param string $name
      * @param mixed $value
      * @return void
+     * @ignore
      */
     public function __set( $name, $value )
     {
@@ -86,6 +87,7 @@ class ezcMailRfc822Digest extends ezcMailPart
      * @param string $name
      * @param mixed $value
      * @return void
+     * @ignore
      */
     public function __get( $name )
     {
@@ -104,6 +106,7 @@ class ezcMailRfc822Digest extends ezcMailPart
      * Returns true if the property $name is set, otherwise false.
      *
      * @return bool
+     * @ignore
      */
     public function __isset( $name )
     {
