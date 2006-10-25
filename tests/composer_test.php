@@ -32,6 +32,8 @@ class ezcMailComposerTest extends ezcTestCase
                                   array( 'Doesn\'t look as if it\'s ever used.' ) );
         $this->assertSetProperty( $this->mail, 'htmlText',
                                   array( "That thing's WATCHING me... Good thing I'm naturally PHOTOGENIC!" ) );
+        $this->assertSetProperty( $this->mail, 'charset',
+                                  array( "us-ascii" ) );
     }
 
     /**
@@ -222,6 +224,20 @@ class ezcMailComposerTest extends ezcTestCase
     }
 
     /**
+     * Test a complete mail with txt and html and set charset for both
+     */
+    public function testMailTextAndHtmlSetCharset()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Alternative HTML/Text message.";
+        $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
+        $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
+        $this->mail->charset = 'iso-8859-1';
+        $this->mail->build();
+    }
+
+    /**
      * Test a complete mail with txt, html and attachments
      */
     public function testMailTextHtmlAndAttachments()
@@ -370,6 +386,7 @@ class ezcMailComposerTest extends ezcTestCase
         $mail = new ezcMailComposer();
         $this->assertEquals( false, isset( $mail->plainText ) );
         $this->assertEquals( false, isset( $mail->htmlText ) );
+        $this->assertEquals( true, isset( $mail->charset ) );
         $this->assertEquals( false, isset( $mail->no_such_property ) );
     }
 

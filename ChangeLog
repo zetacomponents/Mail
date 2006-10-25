@@ -6,6 +6,8 @@
 - Fixed a bug in ezcMailPart: when setting the headers property the correct
   exception is thrown (ezcBasePropertyPermissionException).
 - Fixed bug #9042: added __isset() method to classes that use properties.
+- Implemented feature request #9100: added ability to set character in the
+  composer for text part and html part.
 
 
 1.2beta1 - Tuesday 24 October 2006

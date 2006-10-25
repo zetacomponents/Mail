@@ -51,6 +51,9 @@
  *           images and/or files these will be included into the mail when
  *           generateBody is called. Links to local files must start with
  *           "file://" in order to be recognized.
+ * @property string $charset
+ *           Contains the character set for both $plainText and $htmlText.
+ *           Default value is 'us-ascii'.
  *
  * @package Mail
  * @version //autogen//
@@ -91,6 +94,7 @@ class ezcMailComposer extends ezcMail
     {
         $this->properties['plainText'] = null;
         $this->properties['htmlText'] = null;
+        $this->properties['charset'] = 'us-ascii';
         parent::__construct();
     }
 
@@ -107,11 +111,11 @@ class ezcMailComposer extends ezcMail
         switch ( $name )
         {
             case 'plainText':
-                $this->properties['plainText'] = $value;
-                break;
             case 'htmlText':
-                $this->properties['htmlText'] = $value;
+            case 'charset':
+                $this->properties[$name] = $value;
                 break;
+
             default:
                 parent::__set( $name, $value );
                 break;
@@ -131,11 +135,11 @@ class ezcMailComposer extends ezcMail
         switch ( $name )
         {
             case 'plainText':
-                return $this->properties['plainText'];
-                break;
             case 'htmlText':
-                return $this->properties['htmlText'];
+            case 'charset':
+                return $this->properties[$name];
                 break;
+
             default:
                 return parent::__get( $name );
                 break;
@@ -153,6 +157,7 @@ class ezcMailComposer extends ezcMail
         {
             case 'plainText':
             case 'htmlText':
+            case 'charset':
                 return isset( $this->properties[$name] );
 
             default:
@@ -214,7 +219,7 @@ class ezcMailComposer extends ezcMail
         // create the text part if there is one
         if ( $this->plainText != '' )
         {
-            $mainPart = new ezcMailText( $this->plainText );
+            $mainPart = new ezcMailText( $this->plainText, $this->charset );
         }
 
         // create the HTML part if there is one
@@ -289,7 +294,7 @@ class ezcMailComposer extends ezcMail
             // pictures/files can be added multiple times. We only need them once.
             $matches = array_unique( $matches[0] );
 
-            $result = new ezcMailText( $this->htmlText );
+            $result = new ezcMailText( $this->htmlText, $this->charset );
             $result->subType = "html";
             if ( count( $matches ) > 0 )
             {
