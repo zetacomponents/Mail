@@ -22,13 +22,13 @@ Received: from jdi.jdi-ict.nl (jdi.jdi-ict.nl [82.94.239.5])
 Received: from localhost (localhost [127.0.0.1])
 	by jdi.jdi-ict.nl (8.13.6/8.12.11) with SMTP id k3LC609d009006
 	for <dr@ez.no>; Fri, 21 Apr 2006 14:06:00 +0200
-From: John Doe <john@doe.com>
+From: John Doe <john@example.com>
 To: Derick Rethans <dr@ez.no>
 Subject: Example of an HTML email with attachments
 MIME-Version: 1.0
 User-Agent: eZ components
 Date: Fri, 21 Apr 2006 14:04:46 +0200
-Message-Id: <2006042114142146.32705.2@doe.com>
+Message-Id: <2006042114142146.32705.2@example.com>
 Content-Type: multipart/mixed; boundary="2006042114142145:32705:2"
 X-Virus-Scanned: by amavisd-new at jdi-ict.nl
 X-Bogosity: Yes, tests=bogofilter, spamicity=0.764894, version=0.96.0
