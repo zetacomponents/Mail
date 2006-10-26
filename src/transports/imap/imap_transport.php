@@ -104,6 +104,13 @@ class ezcMailImapTransport
     private $state = self::STATE_NOT_CONNECTED;
 
     /**
+     * Holds the currently selected mailbox.
+     * 
+     * @var string
+     */
+    private $selectedMailbox = null;
+
+    /**
      * The connection to the IMAP server.
      *
      * @var ezcMailTransportConnection
@@ -118,8 +125,8 @@ class ezcMailImapTransport
      * the class variables {@link $this->server} and {@link $this->port} to
      * the respective parameters values.
      *
-     * @throws ezcMailTransportException if it was not possible to connect to
-     *         the server.
+     * @throws ezcMailTransportException
+     *         if it was not possible to connect to the server.
      * @param string $server
      * @param int $port
      */
@@ -157,6 +164,7 @@ class ezcMailImapTransport
             // discard the "bye bye" message ("{$tag} OK Logout completed.")
             $this->getResponse( $tag );
             $this->state = self::STATE_LOGOUT;
+            $this->selectedMailbox = null;
 
             $this->connection->close();
             $this->connection = null;
@@ -175,8 +183,9 @@ class ezcMailImapTransport
      * connection with the IMAP server will be closed, and false is returned,
      * and it is the application's task to reconnect and reauthenticate.
      *
-     * @throws ezcMailTransportException if the provided username/password
-     *         combination did not work.
+     * @throws ezcMailTransportException
+     *         if there is no connection to the server
+     *         or if the provided username/password combination did not work
      * @param string $user
      * @param string $password
      * @return bool
@@ -208,6 +217,7 @@ class ezcMailImapTransport
         else
         {
             $this->state = self::STATE_AUTHENTICATED;
+            $this->selectedMailbox = null;
         }
         return true;
     }
@@ -227,9 +237,9 @@ class ezcMailImapTransport
      * specified upper-case or lower-case or mixed-case. The other mailboxes
      * should be specified as they are (to the selectMailbox() method).
      * 
-     * @throws ezcMailMailTransportException if $state is not accepted or
-     *         if the combination $reference + $mailbox is not correct
-     *         for this IMAP server.
+     * @throws ezcMailMailTransportException
+     *         if $state is not accepted
+     *         or if the combination $reference + $mailbox is not correct
      * @param string $reference
      * @param string $mailbox
      * @return array(int=>string)
@@ -283,8 +293,9 @@ class ezcMailImapTransport
      * or STATE_SELECTED_READONLY.
      * Inbox is a special mailbox and can be specified in whatever-case.
      * 
-     * @throws ezcMailMailTransportException if $state is not accepted or
-     *         if $mailbox does not exist.
+     * @throws ezcMailMailTransportException
+     *         if $state is not accepted
+     *         or if $mailbox does not exist
      * @param string $mailbox
      * @param bool $readOnly
      */
@@ -312,12 +323,151 @@ class ezcMailImapTransport
         if ( $this->responseType( $response ) == self::RESPONSE_OK )
         {
             $this->state = $state;
+            $this->selectedMailbox = $mailbox;
         }
         else
         {
             $this->state = self::STATE_AUTHENTICATED;
+            $this->selectedMailbox = null;
             throw new ezcMailTransportException( "Mailbox <{$mailbox}> does not exist on the IMAP server." );
         }
+    }
+
+    /**
+     * Creates the mailbox $mailbox.
+     *
+     * @throws ezcMailTransportException
+     *         if $state is not accepted
+     *         or if $mailbox exists or cannot be created
+     * @param string $mailbox
+     * @return bool
+     */
+    public function createMailbox( $mailbox )
+    {
+        if ( $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't create a mailbox when not successfully logged in." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} CREATE \"{$mailbox}\"" );
+        $response = $this->getResponse( $tag );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not create mailbox <{$mailbox}>: {$response}" );
+        }
+        return true;
+    }
+
+    /**
+     * Renames the mailbox $mailbox to $newName.
+     *
+     * Inbox cannot be renamed.
+     *
+     * @throws ezcMailTransportException
+     *         if $state is not accepted
+     *         or if trying to rename the currently selected mailbox
+     *         or if $mailbox does not exist or cannot be renamed
+     *         or if mailbox $newName already exists
+     * @param string $mailbox
+     * @param string $newName
+     * @return bool
+     */
+    function renameMailbox( $mailbox, $newName )
+    {
+        if ( $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't rename a mailbox when not successfully logged in." );
+        }
+
+        if ( strtolower( $this->selectedMailbox ) == strtolower( $mailbox ) )
+        {
+            throw new ezcMailTransportException( "Can't rename the currently selected mailbox." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} RENAME \"{$mailbox}\" \"{$newName}\"" );
+        $response = $this->getResponse( $tag );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not rename the mailbox <{$mailbox}> to <{$newName}>: {$response}" );
+        }
+        return true;
+    }
+
+    /**
+     * Deletes the mailbox $mailbox.
+     *
+     * Inbox cannot be deleted.
+     *
+     * @throws ezcMailTransportException
+     *         if $state is not accepted
+     *         or if trying to delete the currently selected mailbox
+     *         or if $mailbox does not exist or cannot be deleted
+     * @param string $mailbox
+     * @return bool
+     */
+    public function deleteMailbox( $mailbox )
+    {
+        if ( $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't delete a mailbox when not successfully logged in." );
+        }
+
+        if ( strtolower( $this->selectedMailbox ) == strtolower( $mailbox ) )
+        {
+            throw new ezcMailTransportException( "Can't delete the currently selected mailbox." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} DELETE \"{$mailbox}\"" );
+        $response = $this->getResponse( $tag );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not delete the mailbox <{$mailbox}>: {$response}" );
+        }
+        return true;
+    }
+
+    /** 
+     * Copies message(s) from the selected mailbox to mailbox $destination.
+     *
+     * $messages can be:
+     * - a single message number (eg: 1)
+     * - a message range (eg. 1:4)
+     * - a message list (eg. 1,2,4)
+     *
+     * @throws ezcMailTransportException
+     *         if $state is not accepted
+     *         or if $destination does not exist or storage space is not enough
+     *         or if $messages contains unexistent messages
+     * @param string $messages
+     * @param string $destination
+     * @return bool
+     */
+    public function copyMessages( $messages, $destination )
+    {
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't copy messages on the IMAP transport when a mailbox is not selected." );
+        }
+    
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} COPY {$messages} \"{$destination}\"" );
+        
+        $response = $this->getResponse( $tag );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not copy  <{$messages}> to <{$destination}>: {$response}" );
+        }
+        return true;
     }
 
     /**
@@ -331,8 +481,9 @@ class ezcMailImapTransport
      * For example $contentType can be "multipart/mixed" to return only the
      * messages with attachments.
      *
-     * @throws ezcMailTransportException if there was no connection to the
-     *         server or if the server sent a negative response.
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the server sent a negative response
      * @param string $contentType
      * @return array(int=>int)
      */
@@ -404,8 +555,12 @@ class ezcMailImapTransport
      * size of the messages through the input variables $numMessages and
      * $sizeMessages.
      *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the server sent a negative response.
      * @param int &$numMessages
      * @param int &$sizeMessages
+     * @return bool
      */
     public function status( &$numMessages, &$sizeMessages )
     {
@@ -417,6 +572,7 @@ class ezcMailImapTransport
         $messages = $this->listMessages();
         $numMessages = count( $messages );
         $sizeMessages = array_sum( $messages );
+        return true;
     }
 
     /**
@@ -425,9 +581,10 @@ class ezcMailImapTransport
      * The message number must be a valid identifier fetched with e.g.
      * listMessages().
      *
-     * @throws ezcMailTransportException if the mail could not be deleted or
-     *         if there is no connection to the server.
-     * @return void
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the mail could not be deleted
+     * @return bool
      */
     public function delete( $msgNum )
     {
@@ -444,6 +601,7 @@ class ezcMailImapTransport
         {
             throw new ezcMailTransportException( "The IMAP server could not delete the message <{$msgNum}>: {$response}" );
         }
+        return true;
     }
 
     /**
@@ -452,8 +610,9 @@ class ezcMailImapTransport
      * If the command failed or if it was not supported by the server an empty
      * string is returned.
      * 
-     * @throws ezcMailTransportException if there was no connection to the
-     *         server or if the server sent a negative response.
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the server sent a negative response
      * @param int $msgNum
      * @param int $numLines
      * @return string
@@ -509,8 +668,9 @@ class ezcMailImapTransport
      *
      * @todo add UIVALIDITY value to UID (like in POP3) (if necessary).
      * 
-     * @throws ezcMailTransportException if there was no connection to the
-     *         server.
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
      * @param int $msgNum
      * @return array(int=>string)
      */
@@ -568,7 +728,9 @@ class ezcMailImapTransport
      * If $deleteFromServer is set to true the mail will be removed from the
      * server after retrieval. If not it will be left.
      *
-     * @throws ezcMailTransportException if the mail could not be retrieved.
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
      * @param bool $deleteFromServer
      * @return ezcMailParserSet
      */
@@ -587,9 +749,11 @@ class ezcMailImapTransport
      * Note: for IMAP the first message is 1 (so for $number = 0 the exception
      * will be thrown).
      * 
-     * @throws ezcMailNoSuchMessageException if the message $number is out
-     *         of range.
-     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     * @throws ezcMailNoSuchMessageException
+     *         if the message $number is out of range
      * @param int $number
      * @param bool $deleteFromServer
      * @return ezcMailImapSet
@@ -614,10 +778,13 @@ class ezcMailImapTransport
      * ezcMailImapSet. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
      *
-     * @throws ezcMailInvalidLimitException if $count is negative.
-     * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
-     *         the existing range of messages.
-     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     * @throws ezcMailInvalidLimitException
+     *         if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException
+     *         if $offset is outside of the existing range of messages.
      * @param int $offset
      * @param int $count
      * @param bool $deleteFromServer
@@ -655,8 +822,8 @@ class ezcMailImapTransport
       *     {@link RESPONSE_UNTAGGED}
       *     {@link RESPONSE_FEEDBACK}
       *
-      * @throws ezcMailTransportException if the IMAP response ($line) is
-      *         not recognized.
+      * @throws ezcMailTransportException
+      *         if the IMAP response ($line) is not recognized
       * @param string $line
       * @return int
       */
