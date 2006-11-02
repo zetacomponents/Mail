@@ -178,7 +178,7 @@ class ezcMailImapSet implements ezcMailParserSet
 
     /**
       * Reads the responses from the server until encountering $tag.
-      * 
+      *
       * In IMAP, each command sent by the client is prepended with a
       * alphanumeric tag like 'A1234'. The server sends the response
       * to the client command as lines, and the last line in the response
@@ -190,7 +190,7 @@ class ezcMailImapSet implements ezcMailParserSet
       * It returns the tagged line to be processed by the calling method.
       * If $response is specified, then it will not read the response
       * from the server before searching for $tag in $response.
-      * 
+      *
       * @param string $tag
       * @param string $response
       * @return string
@@ -215,7 +215,7 @@ class ezcMailImapSet implements ezcMailParserSet
 
     /**
       * Generates the next IMAP tag to prepend to client commands.
-      * 
+      *
       * The structure of the IMAP tag is Axxxx, where
       *     A is a letter (uppercase for conformity, it can be lowercase also)
       *     x is a digit from 0 to 9
@@ -224,7 +224,7 @@ class ezcMailImapSet implements ezcMailParserSet
       * Everytime it is called, the tag increases by 1.
       * If it reaches the last tag, it wraps around to the first tag.
       * By default, the first tag is A0001.
-      * 
+      *
       * @return string
       */
     private function getNextTag()

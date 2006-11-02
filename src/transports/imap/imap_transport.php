@@ -7,6 +7,7 @@
  * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
+
 /**
  * ezcMailImapTransport implements IMAP for mail retrieval.
  *
@@ -85,8 +86,37 @@ class ezcMailImapTransport
     const RESPONSE_FEEDBACK = 5;
 
     /**
+      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
+      *     ANSWERED   Message has been answered
+      *     DELETED    Message is marked to be deleted by later EXPUNGE
+      *     DRAFT      Message has marked as a draft
+      *     FLAGGED    Message is "flagged" for urgent/special attention
+      *     SEEN       Message has been read
+      *
+      * @var array(int=>string)
+      */
+    private static $basicFlags = array( 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'SEEN' );
+
+    /**
+      * Extended flags are used by {@link searchByFlag()}
+      *     ANSWERED   Message has been answered
+      *     DELETED    Message is marked to be deleted by later EXPUNGE
+      *     DRAFT      Message has marked as a draft
+      *     FLAGGED    Message is "flagged" for urgent/special attention
+      *     RECENT     Message is recent (cannot be set)
+      *     SEEN       Message has been read
+      *     UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+      *                Opposites of the above flags
+      *     NEW        Equivalent to RECENT + UNSEEN
+      *     ALL        All the messages
+      *
+      * @var array(int=>string)
+      */
+    private static $extendedFlags = array( 'ALL', 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNDRAFT', 'UNFLAGGED', 'UNRECENT', 'UNSEEN' );
+
+    /**
      * Used to generate a tag for sending commands to the IMAP server.
-     * 
+     *
      * @var string
      */
     private $currentTag = 'A0000';
@@ -105,7 +135,7 @@ class ezcMailImapTransport
 
     /**
      * Holds the currently selected mailbox.
-     * 
+     *
      * @var string
      */
     private $selectedMailbox = null;
@@ -228,7 +258,7 @@ class ezcMailImapTransport
      * Before listing the mailboxes, the connection state ($state) must
      * be at least {@link STATE_AUTHENTICATED} or {@link STATE_SELECTED} or
      * {@link STATE_SELECTED_READONLY}.
-     * 
+     *
      * For more information about $reference and $mailbox, consult
      * the IMAP RFC document (http://www.faqs.org/rfcs/rfc1730.html).
      * By default, $reference is "" and $mailbox is "*".
@@ -236,7 +266,7 @@ class ezcMailImapTransport
      * user on this IMAP server. Inbox is a special mailbox, and it can be
      * specified upper-case or lower-case or mixed-case. The other mailboxes
      * should be specified as they are (to the selectMailbox() method).
-     * 
+     *
      * @throws ezcMailMailTransportException
      *         if $state is not accepted
      *         or if the combination $reference + $mailbox is not correct
@@ -292,7 +322,7 @@ class ezcMailImapTransport
      * After successfully selecting a mailbox, $state will be STATE_SELECTED
      * or STATE_SELECTED_READONLY.
      * Inbox is a special mailbox and can be specified in whatever-case.
-     * 
+     *
      * @throws ezcMailMailTransportException
      *         if $state is not accepted
      *         or if $mailbox does not exist
@@ -471,7 +501,7 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns a list of the messages on the server.
+     * Returns a list of the not deleted messages in the current mailbox.
      *
      * It returns only the messages with the flag \Deleted not set.
      * The format of the returned array is array(message_id => size).
@@ -580,10 +610,14 @@ class ezcMailImapTransport
      *
      * The message number must be a valid identifier fetched with e.g.
      * listMessages().
+     * The message is not physically deleted, but has its \Deleted flag set,
+     * and can be later undeleted by clearing its \Deleted flag
+     * {@see clearFlag()}.
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if the mail could not be deleted
+     * @param $msgNum
      * @return bool
      */
     public function delete( $msgNum )
@@ -605,19 +639,19 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns the headers and the first $chars characters from message $msgNum.
+     * Returns the headers and the first characters from message $msgNum.
      *
      * If the command failed or if it was not supported by the server an empty
      * string is returned.
-     * 
+     *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if the server sent a negative response
      * @param int $msgNum
-     * @param int $numLines
+     * @param int $chars
      * @return string
      */
-    public function top( $msgNum, $chars )
+    public function top( $msgNum, $chars = 0 )
     {
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
@@ -628,9 +662,9 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} FETCH {$msgNum} (RFC822.HEADER BODY[TEXT]<0.{$chars}>)" );
         $response = $this->getResponse( 'FETCH (' );
+        $message = "";
         if ( strpos( $response, 'FETCH (' ) !== false )
         {
-            $message = "";
             $response = "";
             while ( strpos( $response, 'BODY[TEXT]' ) === false )
             {
@@ -748,7 +782,7 @@ class ezcMailImapTransport
      * server after retrieval. If not it will be left.
      * Note: for IMAP the first message is 1 (so for $number = 0 the exception
      * will be thrown).
-     * 
+     *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if server sent a negative response
@@ -813,8 +847,234 @@ class ezcMailImapTransport
     }
 
     /**
+     * Wrapper function to fetch messages by a certain flag.
+     *
+     * $flag can be one of:
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message has marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      RECENT     Message is recent
+     *      SEEN       Message has been read
+     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     *                 Opposites of the above flags
+     *      NEW        Equivalent to RECENT + UNSEEN
+     *      ALL        All the messages
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if $flag is not valid
+     * @param string $flag
+	 * @return ezcMailImapSet
+     */
+    public function fetchByFlag( $flag )
+    {
+        $messages = $this->searchByFlag( $flag );
+        return new ezcMailImapSet( $this->connection, $messages );
+    }
+
+    /**
+     * Wrapper function to fetch count of messages by a certain flag.
+     *
+     * $flag can be one of:
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message has marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      RECENT     Message is recent
+     *      SEEN       Message has been read
+     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     *                 Opposites of the above flags
+     *      NEW        Equivalent to RECENT + UNSEEN
+     *      ALL        All the messages
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if $flag is not valid
+     * @param string $flag
+	 * @return int
+     */
+    public function countByFlag( $flag )
+    {
+        $messages = $this->searchByFlag( $flag );
+        return count( $messages );
+    }
+
+    /**
+     * Sets $flag on $messages.
+     *
+     * $messages can be:
+     * - a single message number (eg. 1)
+     * - a message range (eg. 1:4)
+     * - a message list (eg. 1,2,4)
+     * $flag can be one of:
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message has marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      SEEN       Message has been read
+     * This function automatically adds the '\' in front of the flag when
+     * calling the server command.
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if $flag is not valid
+     * @param string $messages
+     * @param string $flag
+     * @return bool
+     */
+    public function setFlag( $messages, $flag )
+    {
+        if ( $this->state != self::STATE_SELECTED )
+        {
+            throw new ezcMailTransportException( "Can't set flags when a mailbox is not selected." );
+        }
+
+        $flag = $this->normalizeFlag( $flag );
+        if( in_array( $flag, self::$basicFlags ) )
+        {
+            $tag = $this->getNextTag();
+            $this->connection->sendData( "{$tag} STORE {$messages} +FLAGS (\\{$flag})" );
+            $response = $this->getResponse( $tag );
+            if ( $this->responseType( $response ) != self::RESPONSE_OK )
+            {
+                throw new ezcMailTransportException( "The IMAP server could not set flag <{$flag}> on the messages <{$messages}>: {$response}" );
+            }
+        }
+        else
+        {
+            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for setting." );
+        }
+        return true;
+    }
+
+    /**
+     * Clears $flag from $messages.
+     *
+     * $messages can be:
+     * - a single message number (eg. 1)
+     * - a message range (eg. 1:4)
+     * - a message list (eg. 1,2,4)
+     * $flag can be one of:
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message has marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      SEEN       Message has been read
+     * This function automatically adds the '\' in front of the flag when
+     * calling the server command.
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if $flag is not valid
+     * @param string $messages
+     * @param string $flag
+     * @return bool
+     */
+    public function clearFlag( $messages, $flag )
+    {
+        if ( $this->state != self::STATE_SELECTED )
+        {
+            throw new ezcMailTransportException( "Can't clear flags when a mailbox is not selected." );
+        }
+
+        $flag = $this->normalizeFlag( $flag );
+        if( in_array( $flag, self::$basicFlags ) )
+        {
+            $tag = $this->getNextTag();
+            $this->connection->sendData( "{$tag} STORE {$messages} -FLAGS (\\{$flag})" );
+            $response = $this->getResponse( $tag );
+            if ( $this->responseType( $response ) != self::RESPONSE_OK )
+            {
+                throw new ezcMailTransportException( "The IMAP server could not clear flag <{$flag}> on the messages <{$messages}>: {$response}" );
+            }
+        }
+        else
+        {
+            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for clearing." );
+        }
+        return true;
+    }
+
+    /**
+     * Finds messages in the selected mailbox by a certain flag.
+     *
+     * $flag can be one of:
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message has marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      RECENT     Message is recent
+     *      SEEN       Message has been read
+     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     *                 Opposites of the above flags
+     *      NEW        Equivalent to RECENT + UNSEEN
+     *      ALL        All the messages
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if $flag is not valid
+     * @param string $flag
+	 * @return array(int=>int)
+     */
+    private function searchByFlag( $flag )
+    {
+        if ( $this->state != self::STATE_SELECTED &&
+			 $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't search by flags on the IMAP transport when a mailbox is not selected." );
+        }
+
+        $flag = $this->normalizeFlag( $flag );
+		if( in_array( $flag, self::$extendedFlags ) )
+        {
+            $tag = $this->getNextTag();
+            $this->connection->sendData( "{$tag} SEARCH ({$flag})" );
+            $response = $this->getResponse( '* SEARCH' );
+            $matchingMessages = array();
+
+            if ( strpos( $response, '* SEARCH' ) !== false )
+            {
+                $ids = substr( trim( $response ), 9 );
+                if( !empty( $ids ) )
+                {
+                    $matchingMessages = explode( ' ', $ids );
+                }
+            }
+            $response = $this->getResponse( $tag, $response );
+            if ( $this->responseType( $response ) != self::RESPONSE_OK )
+            {
+                throw new ezcMailTransportException( "The IMAP server could not search the messages by flags: {$response}" );
+            }
+        }
+        else
+        {
+            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for searching." );
+        }
+        return $matchingMessages;
+    }
+
+    /**
+     * Clears $flag of unwanted characters and makes it uppercase.
+     *
+     * @param string $flag
+     * @return string
+     */ 
+    private function normalizeFlag( $flag )
+    {
+        $flag = strtoupper( $flag );
+        $flag = str_replace( '\\', '', $flag );
+        return $flag;
+    }
+
+    /**
       * Parses $line to return the response code.
-      * 
+      *
       * Returns one of the following:
       *     {@link RESPONSE_OK}
       *     {@link RESPONSE_NO}
@@ -854,7 +1114,7 @@ class ezcMailImapTransport
 
     /**
       * Reads the responses from the server until encountering $tag.
-      * 
+      *
       * In IMAP, each command sent by the client is prepended with a
       * alphanumeric tag like 'A1234'. The server sends the response
       * to the client command as lines, and the last line in the response
@@ -866,7 +1126,7 @@ class ezcMailImapTransport
       * It returns the tagged line to be processed by the calling method.
       * If $response is specified, then it will not read the response
       * from the server before searching for $tag in $response.
-      * 
+      *
       * @param string $tag
       * @param string $response
       * @return string
@@ -891,7 +1151,7 @@ class ezcMailImapTransport
 
     /**
       * Generates the next IMAP tag to prepend to client commands.
-      * 
+      *
       * The structure of the IMAP tag is Axxxx, where
       *     A is a letter (uppercase for conformity)
       *     x is a digit from 0 to 9
@@ -900,7 +1160,7 @@ class ezcMailImapTransport
       * Everytime it is called, the tag increases by 1.
       * If it reaches the last tag, it wraps around to the first tag.
       * By default, the first generated tag is A0001.
-      * 
+      *
       * @return string
       */
     private function getNextTag()

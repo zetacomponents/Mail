@@ -10,6 +10,9 @@
   composer for text part and html part.
 - Implemented feature requests #9212 and #9228: createMailbox, renameMailbox,
   deleteMailbox, copyMessages methods in IMAP. Patches by Mikko Koppanen.
+- Implemented feature requests #9171, #9172, #9206, #9228: fetchByFlag(),
+  countByFlag(), setFlag(), clearFlag() methods in IMAP. Patches by Mikko
+  Koppanen.
 
 
 1.2beta1 - Tuesday 24 October 2006

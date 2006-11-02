@@ -412,7 +412,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 180 ), $uids );
+        $this->assertEquals( array( 1 => 196 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -423,10 +423,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 180,
-                2 => 181,
-                3 => 182,
-                4 => 183,
+                1 => 196,
+                2 => 197,
+                3 => 198,
+                4 => 199,
             ),
             $uids
         );
@@ -504,7 +504,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 180 ), $uids );
+        $this->assertEquals( array( 1 => 196 ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()
@@ -669,6 +669,175 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
 
         $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testFetchByFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "inbox" );
+        $set = $imap->fetchByFlag( "undeleted" );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+    }
+
+    public function testFetchByFlagInvalidFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "inbox" );
+        try
+        {
+            $set = $imap->fetchByFlag( "no such flag" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testFetchByFlagNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $set = $imap->fetchByFlag( "undeleted" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testCountByFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "inbox" );
+        $this->assertEquals( 4, $imap->countByFlag( "seen" ) );
+    }
+
+    public function tesCountByFlagInvalidFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "inbox" );
+        try
+        {
+            $count = $imap->countByFlag( "no such flag" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testCountByFlagNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $count = $imap->countByFlag( "undeleted" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testSetFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->copyMessages( "1:4", "Guybrush" );
+        $imap->selectMailbox( "Guybrush" );
+        $imap->setFlag( "1", "ANSWERED" );
+        $imap->setFlag( "1,2", "FLAGGED" );
+        $imap->setFlag( "3:4", "DRAFT" );
+        $imap->delete( "1" ); // it is not deleted permanently,
+                              // but just its flag \Deleted is set
+        $this->assertEquals( 2, $imap->countByFlag( "FLAGGED" ) );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testSetFlagInvalidFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->setFlag( "1", "no such flag" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testSetFlagNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->setFlag( "1", "ANSWERED" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testClearFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->copyMessages( "1:4", "Guybrush" );
+        $imap->selectMailbox( "Guybrush" );
+        $imap->clearFlag( "1", "SEEN" );
+        $imap->clearFlag( "1,2", "FLAGGED" );
+        $imap->clearFlag( "3:4", "DRAFT" );
+        $this->assertEquals( 1, $imap->countByFlag( "UNSEEN" ) );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testClearFlagInvalidFlag()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->clearFlag( "1", "no such flag" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testClearFlagNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->clearFlag( "1", "ANSWERED" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function tearDown()
