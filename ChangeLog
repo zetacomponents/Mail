@@ -13,6 +13,8 @@
 - Implemented feature requests #9171, #9172, #9206, #9228: fetchByFlag(),
   countByFlag(), setFlag(), clearFlag() methods in IMAP. Patches by Mikko
   Koppanen.
+- Implemented feature request #9173: status() also returns number of recent
+  and unseen messages in IMAP.
 
 
 1.2beta1 - Tuesday 24 October 2006

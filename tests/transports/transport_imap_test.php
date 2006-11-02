@@ -361,9 +361,11 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap = new ezcMailImapTransport( "dolly.ez.no" );
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
-        $imap->status( $num, $size );
+        $imap->status( $num, $size, $recent, $unseen );
         $this->assertEquals( 4, $num );
         $this->assertEquals( 69024, $size );
+        $this->assertEquals( 0, $recent );
+        $this->assertEquals( 0, $unseen );
     }
 
     public function testTop()

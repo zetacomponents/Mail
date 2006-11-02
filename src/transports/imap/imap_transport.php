@@ -539,10 +539,10 @@ class ezcMailImapTransport
         $response = $this->getResponse( '* SEARCH' );
         if ( strpos( $response, '* SEARCH' ) !== false )
         {
-            $response = trim( substr( $response, 9 ) );
-            if ( trim( $response ) !== "" )
+            $ids = trim( substr( $response, 9 ) );
+            if ( trim( $ids ) !== "" )
             {
-                $messageList = explode( ' ', $response );
+                $messageList = explode( ' ', $ids );
             }
         }
         // skip the OK response ("{$tag} OK Search completed.")
@@ -581,18 +581,24 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns the number of messages on the server and the combined
-     * size of the messages through the input variables $numMessages and
-     * $sizeMessages.
+     * Returns information about messages in the selected mailbox.
+     *
+     * The information returned through parameters is:
+     * $numMessages = number of not deleted messages in the selected mailbox
+     * $sizeMessages = sum of the not deleted messages sizes
+     * $recent = number of recent and not deleted messages
+     * $unseen = number of unseen and not deleted messages
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if the server sent a negative response.
      * @param int &$numMessages
      * @param int &$sizeMessages
+     * @param int &$recent
+     * @param int &$unseen
      * @return bool
      */
-    public function status( &$numMessages, &$sizeMessages )
+    public function status( &$numMessages, &$sizeMessages, &$recent = 0, &$unseen = 0 )
     {
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
@@ -602,6 +608,11 @@ class ezcMailImapTransport
         $messages = $this->listMessages();
         $numMessages = count( $messages );
         $sizeMessages = array_sum( $messages );
+        $messages = array_keys( $messages );
+        $recentMessages = array_intersect( $this->searchByFlag( "RECENT" ), $messages );
+        $unseenMessages = array_intersect( $this->searchByFlag( "UNSEEN" ), $messages );
+        $recent = count( $recentMessages );
+        $unseen = count( $unseenMessages );
         return true;
     }
 
@@ -898,6 +909,7 @@ class ezcMailImapTransport
      */
     public function countByFlag( $flag )
     {
+        $flag = $this->normalizeFlag( $flag );
         $messages = $this->searchByFlag( $flag );
         return count( $messages );
     }
@@ -1030,18 +1042,18 @@ class ezcMailImapTransport
             throw new ezcMailTransportException( "Can't search by flags on the IMAP transport when a mailbox is not selected." );
         }
 
+        $matchingMessages = array();
         $flag = $this->normalizeFlag( $flag );
 		if( in_array( $flag, self::$extendedFlags ) )
         {
             $tag = $this->getNextTag();
             $this->connection->sendData( "{$tag} SEARCH ({$flag})" );
             $response = $this->getResponse( '* SEARCH' );
-            $matchingMessages = array();
 
             if ( strpos( $response, '* SEARCH' ) !== false )
             {
                 $ids = substr( trim( $response ), 9 );
-                if( !empty( $ids ) )
+                if ( trim( $ids ) !== "" )
                 {
                     $matchingMessages = explode( ' ', $ids );
                 }
