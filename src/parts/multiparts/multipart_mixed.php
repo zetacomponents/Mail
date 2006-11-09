@@ -36,7 +36,6 @@ class ezcMailMultipartMixed extends ezcMailMultipart
      * type are ignored.
      *
      * @param ezcMailPart|array(ezcMailPart)
-     * @return void
      */
     public function __construct()
     {
@@ -48,7 +47,6 @@ class ezcMailMultipartMixed extends ezcMailMultipart
      * Appends a part to the list of parts.
      *
      * @param ezcMailpart $part
-     * @return void
      */
     public function appendPart( ezcMailpart $part )
     {

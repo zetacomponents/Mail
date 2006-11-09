@@ -36,7 +36,8 @@ class ezcMailTransportConnection
      *
      * $timeout controls the amount of seconds before the connection times out.
      *
-     * @throws Exception if a connection to the server could not be made.
+     * @throws ezcMailTransportException
+     *         if a connection to the server could not be made.
      */
     public function __construct( $server, $port, $timeout = 5 )
     {
@@ -62,9 +63,9 @@ class ezcMailTransportConnection
      *
      * This method appends one line-break at the end of $data.
      *
-     * @throws ezcMailTransportSmtpException if there is no valid connection.
+     * @throws ezcMailTransportException
+     *         if there is no valid connection.
      * @param string $data
-     * @return void
      */
     public function sendData( $data )
     {
@@ -84,7 +85,8 @@ class ezcMailTransportConnection
      * The returned lined will have linebreaks removed if the $trim option is set.
      *
      * @param bool $trim
-     * @throws ezcMailTransportSmtpConnection if there is no valid connection.
+     * @throws ezcMailTransportConnection
+     *         if there is no valid connection.
      * @return string
      */
     public function getLine( $trim = false )
@@ -111,13 +113,11 @@ class ezcMailTransportConnection
                 return rtrim( $data, "\r\n" );
             }
         }
-        throw new ezcMailTransportSmtpException( 'Could not read from the stream. It was probably terminated by the host.' );
+        throw new ezcMailTransportException( 'Could not read from the stream. It was probably terminated by the host.' );
     }
 
     /**
      * Closes the connection to the server if it is open.
-     *
-     * @return void
      */
     public function close()
     {

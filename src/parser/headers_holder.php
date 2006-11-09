@@ -39,6 +39,8 @@ class ezcMailHeadersHolder implements ArrayAccess
     /**
      * Constructs a new case insensitive associtive array formed around the array
      * $map with mixed case keys.
+     *
+     * @param array(string=>string) $map
      */
     public function __construct( array $map = array() )
     {
@@ -84,7 +86,6 @@ class ezcMailHeadersHolder implements ArrayAccess
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function offsetSet( $key, $value )
     {
@@ -104,7 +105,6 @@ class ezcMailHeadersHolder implements ArrayAccess
      * Unsets the key $key.
      *
      * @param string $key
-     * @return void
      */
     public function offsetUnset( $key )
     {
@@ -119,12 +119,11 @@ class ezcMailHeadersHolder implements ArrayAccess
     /**
      * Returns a copy of the associative array with the case of the keys preserved.
      *
-     * @return array
+     * @return array(string=>string)
      */
     public function getCaseSensitiveArray()
     {
         return $this->map;
     }
 }
-
 ?>

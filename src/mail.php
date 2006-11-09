@@ -102,7 +102,7 @@ class ezcMail extends ezcMailPart
     /**
      * Constructs an empty ezcMail object.
      */
-    public function __construct( )
+    public function __construct()
     {
         parent::__construct();
 
@@ -119,7 +119,10 @@ class ezcMail extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
+     * @throws ezcBasePropertyPermissionException
+     *         if the property is read-only.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -174,7 +177,8 @@ class ezcMail extends ezcMailPart
     /**
      * Returns the property $name.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @return mixed
      * @ignore
@@ -209,6 +213,7 @@ class ezcMail extends ezcMailPart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -239,7 +244,6 @@ class ezcMail extends ezcMailPart
      * Adds the ezcMailAddress $address to the list of 'to' recipients.
      *
      * @param ezcMailAddress $address
-     * @return void
      */
     public function addTo( ezcMailAddress $address )
     {
@@ -250,7 +254,6 @@ class ezcMail extends ezcMailPart
      * Adds the ezcMailAddress $address to the list of 'cc' recipients.
      *
      * @param ezcMailAddress $address
-     * @return void
      */
     public function addCc( ezcMailAddress $address )
     {
@@ -261,7 +264,6 @@ class ezcMail extends ezcMailPart
      * Adds the ezcMailAddress $address to the list of 'bcc' recipients.
      *
      * @param ezcMailAddress $address
-     * @return void
      */
     public function addBcc( ezcMailAddress $address )
     {
@@ -288,8 +290,8 @@ class ezcMail extends ezcMailPart
      * Returns the generated headers for the mail.
      *
      * This method is called automatically when the mail message is built.
-     * You can re-implement this method in subclasses if you wish to set different
-     * mail headers than ezcMail.
+     * You can re-implement this method in subclasses if you wish to set
+     * different mail headers than ezcMail.
      *
      * @return string
      */

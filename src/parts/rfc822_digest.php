@@ -60,11 +60,10 @@ class ezcMailRfc822Digest extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
-     * @throws ezcBaseFileNotFoundException when setting the property with an invalid filename.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
-     * @return void
      * @ignore
      */
     public function __set( $name, $value )
@@ -83,10 +82,10 @@ class ezcMailRfc822Digest extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
-     * @param mixed $value
-     * @return void
+     * @return mixed
      * @ignore
      */
     public function __get( $name )
@@ -105,6 +104,7 @@ class ezcMailRfc822Digest extends ezcMailPart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */

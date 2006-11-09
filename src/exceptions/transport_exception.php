@@ -20,8 +20,7 @@ class ezcMailTransportException extends ezcBaseException
     /**
      * Constructs an ezcMailTransportException with low level information $driverInfo.
      *
-     * @param string $message
-     * @param string $additionalInfo
+     * @param string $driverInfo
      */
     public function __construct( $driverInfo = '' )
     {

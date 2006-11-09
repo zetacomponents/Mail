@@ -26,16 +26,22 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
 
     /**
      * The headers for the multipart.
+     *
+     * @var ezcMailHeadersHolder
      */
     protected $headers = null;
 
     /**
      * The headers for the current subpart.
+     *
+     * @var ezcMailHeadersHolder
      */
     private $currentPartHeaders = null;
 
     /**
      * The current part.
+     *
+     * @var ezcMailPartParser
      */
     private $currentPartParser = null;
 
@@ -68,6 +74,8 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
 
     /**
      * Constructs a new Multipart parser.
+     *
+     * @param ezcMailHeadersHolder $headers
      */
     public function __construct( ezcMailHeadersHolder $headers )
     {
@@ -91,9 +99,9 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
     /**
      * Parses a multipart body.
      *
-     * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
-     * @param string $line
-     * @return void
+     * @throws ezcBaseFileNotFoundException
+     *         if a neccessary temporary file could not be opened.
+     * @param string $origLine
      */
     public function parseBody( $origLine )
     {
@@ -205,6 +213,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
      * This function will be called every time a part has been parsed.
      *
      * Implementors should put the part into the correct multitype part.
+     * @param ezcMailPart $part
      */
     abstract public function partDone( ezcMailPart $part );
 

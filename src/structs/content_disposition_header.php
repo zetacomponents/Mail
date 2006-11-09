@@ -164,7 +164,7 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
                                                     $array['readDate'],
                                                     $array['size'],
                                                     $array['additionalParameters'],
-                                                    $array['fileNameLangauge'],
+                                                    $array['fileNameLanguage'],
                                                     $array['fileNameCharSet']
                                                     );
     }

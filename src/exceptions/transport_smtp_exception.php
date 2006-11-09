@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailException class
+ * File containing the ezcMailTransportSmtpException class
  *
  * @package Mail
  * @version //autogen//
@@ -10,7 +10,7 @@
  */
 
 /**
- * ezcMailTransportSmtpExceptions are thrown when an exceptional state
+ * ezcMailTransportSmtpException is thrown when an exceptional state
  * occures internally in the ezcMailSmtpTransport class. As it never enters
  * "userspace" the class is marked as private.
  *
@@ -22,9 +22,9 @@ class ezcMailTransportSmtpException extends ezcMailException
 {
     /**
      * Constructs an ezcMailTransportSmtpException with the highlevel error
-     * message $message and the lowlevel errormessage $additionalInfo.
+     * message $message.
      *
-     * @param int $code
+     * @param string $message
      */
     public function __construct( $message )
     {

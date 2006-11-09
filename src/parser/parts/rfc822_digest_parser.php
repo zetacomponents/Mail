@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailRfc822Parser class
+ * File containing the ezcMailRfc822DigestParser class
  *
  * @package Mail
  * @version //autogen//
@@ -29,6 +29,8 @@ class ezcMailRfc822DigestParser extends ezcMailPartParser
 
     /**
      * Holds the digested message parser.
+     *
+     * @var ezcMailPartParser
      */
     private $mailParser = null;
 
@@ -49,7 +51,6 @@ class ezcMailRfc822DigestParser extends ezcMailPartParser
      * Every line is part of the digested mail. It is sent directly to the mail parser.
      *
      * @param string $line
-     * @returns void
      */
     public function parseBody( $line )
     {

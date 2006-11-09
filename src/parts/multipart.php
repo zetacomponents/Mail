@@ -42,8 +42,8 @@ abstract class ezcMailMultipart extends ezcMailPart
     private $properties = array();
 
     /**
-     * The counter is unique between all multipart types and is used to generate
-     * unique boundary strings.
+     * The counter is unique between all multipart types and is used to
+     * generate unique boundary strings.
      *
      * @var int
      */
@@ -58,7 +58,7 @@ abstract class ezcMailMultipart extends ezcMailPart
      * $parts should be of the format array(array(ezcMailPart)|ezcMailPart)
      *
      * Subclasses must call this method in the constructor.
-     * @param array
+     * @param array $parts
      */
     public function __construct( array $parts )
     {
@@ -89,7 +89,8 @@ abstract class ezcMailMultipart extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -99,7 +100,7 @@ abstract class ezcMailMultipart extends ezcMailPart
         switch ( $name )
         {
             case 'boundary':
-                $this->properties['boundary'] = $value;
+                $this->properties[$name] = $value;
                 $this->setHeader( 'Content-Type', 'multipart/' . $this->multipartType() . '; ' .
                                   'boundary="' . $this->boundary . '"' );
                 break;
@@ -112,7 +113,8 @@ abstract class ezcMailMultipart extends ezcMailPart
     /**
      * Returns the property $name.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @return mixed
      * @ignore
@@ -122,7 +124,7 @@ abstract class ezcMailMultipart extends ezcMailPart
         switch ( $name )
         {
             case 'boundary':
-                return $this->properties['boundary'];
+                return $this->properties[$name];
                 break;
             default:
                 return parent::__get( $name );
@@ -133,6 +135,7 @@ abstract class ezcMailMultipart extends ezcMailPart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -181,6 +184,5 @@ abstract class ezcMailMultipart extends ezcMailPart
     {
         return date( "YmdGHjs" ) . ':' . getmypid() . ':' . self::$counter++;
     }
-
 }
 ?>

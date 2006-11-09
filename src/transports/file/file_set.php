@@ -64,7 +64,6 @@ class ezcMailFileSet implements ezcMailParserSet
      * Destructs the set.
      *
      * Closes any open files.
-     * @return void
      */
     public function __destruct()
     {
@@ -161,5 +160,4 @@ class ezcMailFileSet implements ezcMailParserSet
         return false;
     }
 }
-
 ?>

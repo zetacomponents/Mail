@@ -20,15 +20,14 @@
  *           Contains the information from the Content-Disposition field of
  *           this mail.  This useful especially when you are investigating
  *           retrieved mail to see if a part is an attachment or should be
- *           displayed inline.  However, it can also be used to set the same on
- *           outgoing mail. Note that the ezcMailFile part sets the
- *           Content-Disposition field itself based on it's own properties when
- *           sending mail.
- *
+ *           displayed inline.  However, it can also be used to set the same
+ *           on outgoing mail. Note that the ezcMailFile part sets the
+ *           Content-Disposition field itself based on it's own properties
+ *           when sending mail.
  * @property-read ezcMailHeadersHolder $headers
- *                Contains the header holder object, taking care of the headers
- *                of this part. Can be retreived for reasons of extending this
- *                class and its derivals.
+ *                Contains the header holder object, taking care of the
+ *                headers of this part. Can be retreived for reasons of
+ *                extending this class and its derivals.
  *
  *
  * @package Mail
@@ -68,7 +67,10 @@ abstract class ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
+     * @throws ezcBasePropertyPermissionException
+     *         if the property is read-only.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -93,7 +95,8 @@ abstract class ezcMailPart
     /**
      * Returns the property $name.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @return mixed
      * @ignore
@@ -117,6 +120,7 @@ abstract class ezcMailPart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -170,7 +174,6 @@ abstract class ezcMailPart
      *
      * @param string $name
      * @param string $value
-     * @return void
      */
     public function setHeader( $name, $value )
     {
@@ -188,7 +191,6 @@ abstract class ezcMailPart
      * the folding rules described in RFC 2822.
      *
      * @param array(string=>string) $headers
-     * @return void
      */
     public function setHeaders( array $headers )
     {
@@ -210,6 +212,7 @@ abstract class ezcMailPart
      * headers when the mail is generated.
      *
      * @see setHeader()
+     *
      * @return string
      */
     public function generateHeaders()
@@ -270,8 +273,8 @@ abstract class ezcMailPart
      * The array $headers will be excluded when the headers are generated.
      *
      * @see generateHeaders()
+     *
      * @param array(string) $headers
-     * @return void
      */
     public function appendExcludeHeaders( array $headers )
     {
@@ -286,8 +289,8 @@ abstract class ezcMailPart
     /**
      * Returns the body of this part as a string.
      *
-     * This method is called automatically by generate() and
-     * subclasses and must implement it.
+     * This method is called automatically by generate() and subclasses must
+     * implement it.
      *
      * @return string
      */

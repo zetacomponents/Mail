@@ -72,7 +72,8 @@ class ezcMailFileParser extends ezcMailPartParser
      * Constructs a new ezcMailFileParser with maintype $mainType subtype $subType
      * and headers $headers..
      *
-     * @throws ezcBaseFileNotFoundException if the file attachment file could not be openened.
+     * @throws ezcBaseFileNotFoundException
+     *         if the file attachment file could not be openened.
      * @param string $mainType
      * @param string $subType
      * @param ezcMailHeadersHolder $headers
@@ -111,7 +112,8 @@ class ezcMailFileParser extends ezcMailPartParser
      * This method will create a new unique folder in the temporary directory specified in ezcMailParser.
      * The fileName property of this class will be set to the location of the new file.
      *
-     * @throws ezcBaseFileNotFoundException if the file could not be opened.
+     * @throws ezcBaseFileNotFoundException
+     *         if the file could not be opened.
      * @param string $fileName
      * @returns resource
      */
@@ -161,7 +163,6 @@ class ezcMailFileParser extends ezcMailPartParser
      * It is used to correctly determine the type of linebreak used in the mail.
      *
      * @param string $line
-     * @return void
      */
     private function appendStreamFilters( $line )
     {
@@ -202,7 +203,6 @@ class ezcMailFileParser extends ezcMailPartParser
      * a directory based on the process ID and the time.
      *
      * @param string $line
-     * @return void
      */
     public function parseBody( $line )
     {
@@ -277,7 +277,5 @@ class ezcMailFileParser extends ezcMailPartParser
 
         return $filePart;
     }
-
 }
-
 ?>

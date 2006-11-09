@@ -51,7 +51,10 @@ class ezcMailMboxSet implements ezcMailParserSet
     private $currentMesssagePosition = 0;
 
     /**
-     * Constructs a new mbox parser set
+     * Constructs a new mbox parser set.
+     *
+     * @throws ezcBaseFileIoException
+     *         if $fh is not a filepointer resource.
      */
     public function __construct( $fh, array $messages )
     {
@@ -103,7 +106,7 @@ class ezcMailMboxSet implements ezcMailParserSet
     }
 
     /**
-     * Returns whether the set contains mails
+     * Returns whether the set contains mails.
      *
      * @return bool
      */

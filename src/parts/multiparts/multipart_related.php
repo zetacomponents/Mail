@@ -46,7 +46,6 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      * as the main body. Parameters of the wrong type are ignored.
      *
      * @param ezcMailPart|array(ezcMailPart)
-     * @return void
      */
     public function __construct()
     {
@@ -58,7 +57,6 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      * Sets the main part $part of this alternative multipart.
      *
      * @param ezcMailPart $part
-     * @return void
      */
     public function setMainPart( ezcMailPart $part )
     {

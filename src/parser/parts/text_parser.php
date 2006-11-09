@@ -24,11 +24,8 @@ class ezcMailTextParser extends ezcMailPartParser
      */
     private $text = null;
 
-
     /**
      * Holds the headers of this text part.
-     *
-     * The format of the array is array(name=>value)
      *
      * @var ezcMailHeadersHolder
      */
@@ -46,7 +43,7 @@ class ezcMailTextParser extends ezcMailPartParser
      * additional headers $headers.
      *
      * @param string $subType
-     * @param array(string=>string) $headers
+     * @param ezcMailHeadersHolder $headers
      */
     public function __construct( $subType, ezcMailHeadersHolder $headers )
     {
@@ -58,7 +55,6 @@ class ezcMailTextParser extends ezcMailPartParser
      * Adds each line to the body of the text part.
      *
      * @param string $line
-     * @return void
      */
     public function parseBody( $line )
     {
@@ -113,5 +109,4 @@ class ezcMailTextParser extends ezcMailPartParser
         return $part;
     }
 }
-
 ?>

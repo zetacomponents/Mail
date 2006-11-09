@@ -45,6 +45,8 @@ class ezcMailHeaderFolder
 
     /**
      * The default folding limit.
+     *
+     * @var int
      */
     static private $limit = 76;
 
@@ -56,7 +58,6 @@ class ezcMailHeaderFolder
      * - ezcMailHeaderFolder::HARD_LIMIT (998 characters)
      *
      * @param int $numCharacters
-     * @return void
      */
     static public function setLimit( $numCharacters )
     {
@@ -68,7 +69,7 @@ class ezcMailHeaderFolder
      *
      * @return int
      */
-    static public function getLimit( )
+    static public function getLimit()
     {
         return self::$limit;
     }

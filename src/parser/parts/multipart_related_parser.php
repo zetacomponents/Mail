@@ -26,6 +26,8 @@ class ezcMailMultipartRelatedParser extends ezcMailMultipartParser
 
     /**
      * Constructs a new ezcMailMultipartRelatedParser.
+     *
+     * @param ezcMailHeadersHolder $headers
      */
     public function __construct( ezcMailHeadersHolder $headers )
     {
@@ -40,7 +42,6 @@ class ezcMailMultipartRelatedParser extends ezcMailMultipartParser
      * each time a part is parsed.
      *
      * @param ezcMailPart $part
-     * @return void
      */
     public function partDone( ezcMailPart $part )
     {

@@ -26,7 +26,8 @@
  *           The characterset used for this text part. Defaults to 'us-ascii'
  *           while creating mail, and is always 'utf-8' while parsing mail.
  * @property string $subType
- *           The subtype of this text part. Defaults to 'plain' for plain text.
+ *           The subtype of this text part.
+ *           Defaults to 'plain' for plain text.
  *           Use 'html' for HTML messages.
  * @property string $encoding
  *           The encoding of the text. Defaults to eight bit.
@@ -51,8 +52,9 @@ class ezcMailText extends ezcMailPart
     /**
      * Constructs a new TextPart with the given $text, $charset and $encoding.
      *
-     * OriginalCharset is only used when parsing mail. Parsed mail will always be converted to UTF-8
-     * in this case $originalCharset will holds the charset before it was converted.
+     * OriginalCharset is only used when parsing mail. Parsed mail will always
+     * be converted to UTF-8 in this case $originalCharset will hold the
+     * charset before it was converted.
      *
      * @param string $text
      * @param string $charset
@@ -74,7 +76,10 @@ class ezcMailText extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
+     * @throws ezcBasePropertyPermissionException
+     *         if the property is read-only.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -84,16 +89,10 @@ class ezcMailText extends ezcMailPart
         switch ( $name )
         {
             case 'charset':
-                $this->properties['charset'] = $value;
-                break;
             case 'subType':
-                $this->properties['subType'] = $value;
-                break;
             case 'encoding':
-                $this->properties['encoding'] = $value;
-                break;
             case 'text':
-                $this->properties['text'] = $value;
+                $this->properties[$name] = $value;
                 break;
             case 'originalCharset':
                 throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
@@ -107,9 +106,9 @@ class ezcMailText extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
-     * @param mixed $value
      * @return mixed
      * @ignore
      */
@@ -118,29 +117,20 @@ class ezcMailText extends ezcMailPart
         switch ( $name )
         {
             case 'charset':
-                return $this->properties['charset'];
-                break;
             case 'originalCharset':
-                return $this->properties['originalCharset'];
-                break;
             case 'subType':
-                return $this->properties['subType'];
-                break;
             case 'encoding':
-                return $this->properties['encoding'];
-                break;
             case 'text':
-                return $this->properties['text'];
-                break;
+                return $this->properties[$name];
             default:
                 return parent::__get( $name );
-                break;
         }
     }
 
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name     
      * @return bool
      * @ignore
      */

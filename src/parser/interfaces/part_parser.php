@@ -28,9 +28,9 @@
  * When there are no more lines the parent part will call finish() and the mail
  * part corresponding to the part you are parsing should be returned.
  *
+ * @todo case on headers
  * @package Mail
  * @version //autogen//
- * @todo case on headers
  * @access private
  */
 abstract class ezcMailPartParser
@@ -40,7 +40,7 @@ abstract class ezcMailPartParser
      *
      * This variable is used when glueing together multi-line headers.
      *
-     * @var string $lastParsedHeader
+     * @var string
      */
     private $lastParsedHeader = null;
 
@@ -52,7 +52,6 @@ abstract class ezcMailPartParser
      * mailPart.
      *
      * @param string $line
-     * @return void
      */
     abstract public function parseBody( $line );
 
@@ -69,7 +68,8 @@ abstract class ezcMailPartParser
      * Returns a part parser corresponding to the given $headers.
      *
      * @todo rename to createPartParser
-     * @throws ezcBaseFileNotFoundException if a neccessary temporary file could not be openened.
+     * @throws ezcBaseFileNotFoundException
+     *         if a neccessary temporary file could not be openened.
      * @return ezcMailPartParser
      */
     static public function createPartParserForHeaders( ezcMailHeadersHolder $headers )
@@ -159,7 +159,6 @@ abstract class ezcMailPartParser
      * @todo deal with headers that are listed several times
      * @param string $line
      * @param ezcMailHeadersHolder $headers
-     * @return void
      */
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
     {
@@ -185,7 +184,6 @@ abstract class ezcMailPartParser
      *
      * @param ezcMailHeadersHolder $headers
      * @param ezcMailPart $part
-     * @return void
      */
     static public function parsePartHeaders( ezcMailHeadersHolder $headers, ezcMailPart $part )
     {

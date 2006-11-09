@@ -33,10 +33,9 @@ class ezcMailMboxTransport
      * Opens the mbox $fileName.
      *
      * @throws ezcBaseFileNotFoundException
-     *         If the mbox file could not be found.
+     *         if the mbox file could not be found.
      * @throws ezcBaseFilePermissionException
-     *         If the mbox file could be opened for reading.
-     *
+     *         if the mbox file could be opened for reading.
      * @param string $fileName
      */
     public function __construct( $fileName )
@@ -141,9 +140,8 @@ class ezcMailMboxTransport
     /**
      * Returns an ezcMailMboxSet containing only the $number -th message in the mbox.
      *
-     * @throws ezcMailNoSuchMessageException if the message $number is out
-     * of range.
-     *
+     * @throws ezcMailNoSuchMessageException
+     *         if the message $number is out of range.
      * @param int $number
      * @return ezcMailMboxSet
      */
@@ -164,10 +162,10 @@ class ezcMailMboxTransport
      * ezcMailMboxSet. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
      * 
-     * @throws ezcMailInvalidLimitException if $count is negative.
-     * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
-     *         the existing range of messages.
-     *
+     * @throws ezcMailInvalidLimitException
+     *         if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException
+     *         if $offset is outside of the existing range of messages.
      * @param int $offset
      * @param int $count
      * @return ezcMailMboxSet

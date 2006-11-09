@@ -414,7 +414,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 196 ), $uids );
+        $this->assertEquals( array( 1 => 212 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -425,10 +425,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 196,
-                2 => 197,
-                3 => 198,
-                4 => 199,
+                1 => 212,
+                2 => 213,
+                3 => 214,
+                4 => 215,
             ),
             $uids
         );
@@ -506,7 +506,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 196 ), $uids );
+        $this->assertEquals( array( 1 => 212 ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()

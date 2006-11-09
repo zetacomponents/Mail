@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailTransportSmtp class
+ * File containing the ezcMailSmtpTransport class
  *
  * @package Mail
  * @version //autogen//
@@ -71,7 +71,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Holds the connection status.
      *
-     * $var int {@link STATUS_NOT_CONNECTED}, {@link STATUS_CONNECTED} or {@link STATUS_AUTHENTICATED}.
+     * $var int {@link STATUS_NOT_CONNECTED},
+     *          {@link STATUS_CONNECTED} or
+     *          {@link STATUS_AUTHENTICATED}.
      */
     private $status;
 
@@ -101,7 +103,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Constructs a new ezcMailTransportSmtp.
      *
-     * The constructor expects, at least, the hostname $host of the SMTP server.
+     * The constructor expects, at least, the hostname $host of the SMTP
+     * server.
      *
      * The username $user will be used for authentication if provided.
      * If it is left blank no authentication will be performed.
@@ -117,7 +120,6 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @param string $user
      * @param string $password
      * @param int $port
-     * @return void
      */
     public function __construct( $host, $user = '', $password = '', $port = 25  )
     {
@@ -136,7 +138,6 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Destructs this object.
      *
      * Closes the connection if it is still open.
-     * @return void
      */
     public function __destruct()
     {
@@ -150,7 +151,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -167,6 +169,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'timeout':
                 $this->properties[$name] = $value;
                 break;
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
@@ -175,7 +178,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Returns the property $name.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @return mixed
      * @ignore
@@ -191,6 +195,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'serverPort':
             case 'timeout':
                 return $this->properties[$name];
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
@@ -199,6 +204,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -213,6 +219,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'serverPort':
             case 'timeout':
                 return isset( $this->properties[$name] );
+
             default:
                 return false;
         }
@@ -224,11 +231,11 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * This method should be called prior to the first call to send().
      *
      * Keeping the connection open is useful if you are sending a lot of mail.
-     * It removes the overhead of opening the connection after each mail is sent.
+     * It removes the overhead of opening the connection after each mail is
+     * sent.
      *
-     * Use disconnect() to close the connection if you have requested to keep it open.
-     *
-     * @return void
+     * Use disconnect() to close the connection if you have requested to keep
+     * it open.
      */
     public function keepConnection()
     {
@@ -238,12 +245,12 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Sends the ezcMail $mail using the SMTP protocol.
      *
-     * If you want to send several email use keepConnection() to leave the connection
-     * to the server open between each mail.
+     * If you want to send several email use keepConnection() to leave the
+     * connection to the server open between each mail.
      *
-     * @throws ezcMailTransportException if the mail could not be sent.
+     * @throws ezcMailTransportException
+     *         if the mail could not be sent.
      * @param ezcMail $mail
-     * @return void
      */
     public function send( ezcMail $mail )
     {
@@ -323,11 +330,11 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Creates a connection to the SMTP server and initiates the login
      * procedure.
      *
-     * @throws ezcMailTransportSmtpException if no connection could be made
+     * @throws ezcMailTransportSmtpException
+     *         if no connection could be made
      *         or if the login failed.
-     * @return void
      */
-    private function connect( )
+    private function connect()
     {
         // FIXME: The @ should be removed when PHP doesn't throw warnings for connect problems
         $this->connection = @stream_socket_client( "tcp://{$this->serverHost}:{$this->serverPort}",
@@ -351,8 +358,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * authenticates the user, if login data is provided to the
      * constructor.
      *
-     * @throws ezcMailTransportSmtpException if the HELO/EHLO command or authentication fails.
-     * @return void
+     * @throws ezcMailTransportSmtpException
+     *         if the HELO/EHLO command or authentication fails.
      */
     private function login()
     {
@@ -396,8 +403,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Sends the QUIT command to the server and breaks the connection.
      *
-     * @throws ezcMailTransportException if the QUIT command failed.
-     * @return void
+     * @throws ezcMailTransportException
+     *         if the QUIT command failed.
      */
     public function disconnect()
     {
@@ -432,15 +439,16 @@ class ezcMailSmtpTransport implements ezcMailTransport
     }
 
     /**
-     * Sends the MAIL FROM command, with the sender's mail address $from, to the server.
+     * Sends the MAIL FROM command, with the sender's mail address $from.
      *
      * This method must be called once to tell the server the sender address.
      *
-     * The senders mail address $from may be enclosed in angle brackets.
+     * The sender's mail address $from may be enclosed in angle brackets.
      *
-     * @throws ezcMailTransportException if there is no valid connection or if the MAIL FROM command failed.
+     * @throws ezcMailTransportException
+     *         if there is no valid connection
+     *         or if the MAIL FROM command failed.
      * @param string $from
-     * @return void
      */
     private function cmdMail( $from )
     {
@@ -464,9 +472,10 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * The recipient mail address $email may be enclosed in angle brackets.
      *
-     * @throws ezcMailTransportException if there is no valid connection or if the RCPT TO command failed.
+     * @throws ezcMailTransportException
+     *         if there is no valid connection
+     *         or if the RCPT TO command failed.
      * @param string $to
-     * @return void
      */
     protected function cmdRcpt( $email )
     {
@@ -483,8 +492,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Send the DATA command to the SMTP server.
      *
-     * @throws ezcMailTransportException if there is no valid connection or if the DATA command failed.
-     * @return void
+     * @throws ezcMailTransportException
+     *         if there is no valid connection
+     *         or if the DATA command failed.
      */
     private function cmdData()
     {
@@ -503,9 +513,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * This method appends one line-break at the end of $data.
      *
-     * @throws ezcMailTransportSmtpException if there is no valid connection.
+     * @throws ezcMailTransportSmtpException
+     *         if there is no valid connection.
      * @param string $data
-     * @return void
      */
     private function sendData( $data )
     {
@@ -522,7 +532,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Returns data received from the connection stream.
      *
-     * @throws ezcMailTransportSmtpConnection if there is no valid connection.
+     * @throws ezcMailTransportSmtpConnection
+     *         if there is no valid connection.
      * @return string
      */
     private function getData()
@@ -550,7 +561,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * $line contains the complete data retrieved from the stream. This can be used to retrieve
      * the error message in case of an error.
      *
-     * @throws ezcMailTransportSmtpException if it could not fetch data from the stream.
+     * @throws ezcMailTransportSmtpException
+     *         if it could not fetch data from the stream.
      * @param string &$line
      * @return string
      */
@@ -563,6 +575,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
 /**
  * This class is deprecated. Use ezcMailSmtpTransport instead.
+ *
  * @package Mail
  */
 class ezcMailTransportSmtp extends ezcMailSmtpTransport

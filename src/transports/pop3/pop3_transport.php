@@ -85,7 +85,8 @@ class ezcMailPop3Transport
      * You can specify the $port if the pop3 server is not on the default port
      * 110.
      *
-     * @throws ezcMailTransportException if it was not possible to connect to the server.
+     * @throws ezcMailTransportException
+     *         if it was not possible to connect to the server.
      * @param string $server
      * @param int $port
      */
@@ -124,7 +125,8 @@ class ezcMailPop3Transport
      *
      * This method should be called directly after the construction of this object.
      *
-     * @throws ezcMailTransportException if the provided username/password combination did not work.
+     * @throws ezcMailTransportException
+     *         if the provided username/password combination did not work.
      * @param string $user
      * @param string $password
      * @param int method
@@ -185,8 +187,9 @@ class ezcMailPop3Transport
      *
      * The format of the returned array is array(message_id => message_size)
      *
-     * @throws ezcMailTransportException if there was no connection to the
-     *         server or if the server sent a negative response.
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server sent a negative response.
      * @return array(int=>int)
      */
     public function listMessages()
@@ -229,7 +232,9 @@ class ezcMailPop3Transport
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
-     * @throws ezcMailTransportException if there was no connection to the server.
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
      * @param int $msgNum The message number
      * @return array(int=>string)
      */
@@ -275,9 +280,11 @@ class ezcMailPop3Transport
      * size of the messages through the input variables $numMessages and
      * $sizeMessages.
      *
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
      * @param int &$numMessages
      * @param int &$sizeMessages
-     * @return void
      */
     public function status( &$numMessages, &$sizeMessages )
     {
@@ -308,9 +315,9 @@ class ezcMailPop3Transport
      * Any future reference to the message-number associated with the message
      * in a command generates an error.
      *
-     * @throws ezcMailTransportException if the mail could not be deleted or if
-     *         there is no connection to the server.
-     * @return void
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
      */
     public function delete( $msgNum )
     {
@@ -336,8 +343,9 @@ class ezcMailPop3Transport
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
-     * @throws ezcMailTransportException if there was no connection to the
-     *         server or if the server sent a negative response.
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
      * @param int $msgNum
      * @param int $numLines
      * @return string
@@ -372,7 +380,9 @@ class ezcMailPop3Transport
      * If $deleteFromServer is set to true the mail will be removed from the server after
      * retrieval. If not it will be left.
      *
-     * @throws ezcMailTransportException if the mail could not be retrieved.
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
      * @param bool $deleteFromServer
      * @return ezcMailParserSet
      */
@@ -384,8 +394,6 @@ class ezcMailPop3Transport
 
     /**
      * Disconnects the transport from the pop3 server.
-     *
-     * @return void
      */
     public function disconnect()
     {
@@ -425,9 +433,11 @@ class ezcMailPop3Transport
      * Note: for POP3 the first message is 1 (so for $number = 0 the exception
      * will be thrown).
      * 
-     * @throws ezcMailNoSuchMessageException if the message $number is out
-     * of range.
-     *
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
+     * @throws ezcMailNoSuchMessageException
+     *         if the message $number is out of range.
      * @param int $number
      * @param bool $deleteFromServer
      * @return ezcMailPop3Set
@@ -449,10 +459,13 @@ class ezcMailPop3Transport
      * ezcMailPop3Set. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
      * 
-     * @throws ezcMailInvalidLimitException if $count is negative.
-     * @throws ezcMailOffsetOutOfRangeException if $offset is outside of
-     *         the existing range of messages.
-     *
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server send a negative response.
+     * @throws ezcMailInvalidLimitException
+     *         if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException
+     *         if $offset is outside of the existing range of messages.
      * @param int $offset
      * @param int $count
      * @param bool $deleteFromServer

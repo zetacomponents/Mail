@@ -278,7 +278,7 @@ class ezcMailTools
      *
      * The formula used is [$partName]."@".[time].[counter]
      *
-     * @param  string $partName
+     * @param string $partName
      * @return string
      */
     public static function generateContentId( $partName = "part" )
@@ -291,7 +291,6 @@ class ezcMailTools
      * The default is to use "\r\n" as specified by RFC 2045.
      *
      * @param string $characters
-     * @return void
      */
     public static function setLineBreak( $characters )
     {
@@ -320,6 +319,7 @@ class ezcMailTools
      * trying to "fix" the original $text before trying to convert it.
      *
      * @param string $text
+     * @param string $charset
      * @return string
      */
     public static function mimeDecode( $text, $charset = 'utf-8' )
@@ -373,10 +373,11 @@ class ezcMailTools
      * Use $subjectPrefix to set the prefix to the subject of the mail. The default
      * is to prefix with 'Re: '.
      *
+     * @param ezcMail $mail
      * @param ezcMailAddress $from
-     * @param int
      * @param int $type REPLY_SENDER or REPLY_ALL
      * @param string $subjectPrefix
+     * @param string $mailClass
      * @return ezcMail
      */
     static public function replyToMail( ezcMail $mail, ezcMailAddress $from,

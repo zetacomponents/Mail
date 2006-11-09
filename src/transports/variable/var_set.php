@@ -39,11 +39,11 @@ class ezcMailVariableSet implements ezcMailParserSet
     private $mail = array();
 
     /**
-     * Constructs a new set that servers the files specified by $files.
+     * Constructs a new set that servers the files specified by $mail.
      *
      * The set will start on the first file in the the array.
      *
-     * @param array(string) $files
+     * @param array(string) $mail
      */
     public function __construct( $mail )
     {
@@ -55,7 +55,7 @@ class ezcMailVariableSet implements ezcMailParserSet
      * Returns one line of data from the current mail in the set.
      *
      * Null is returned if there is no current mail in the set or
-     * the end of the mail is reached,
+     * the end of the mail is reached.
      *
      * @return string
      */

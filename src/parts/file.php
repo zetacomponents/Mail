@@ -56,14 +56,14 @@ abstract class ezcMailFilePart extends ezcMailPart
     const CONTENT_TYPE_APPLICATION = "application";
 
     /**
-     * Use DISPLAY_ATTACHMENT if you want the file to be displayed as an attachment
-     * to the recipients of the mail.
+     * Use DISPLAY_ATTACHMENT if you want the file to be displayed as an
+     * attachment to the recipients of the mail.
      */
     const DISPLAY_ATTACHMENT = "attachment";
 
     /**
-     * Use DISPLAY_INLINE if you want the file to be displayed inline in the mail
-     * to the recipients.
+     * Use DISPLAY_INLINE if you want the file to be displayed inline in the
+     * mail to the recipients.
      */
     const DISPLAY_INLINE = "inline";
 
@@ -78,7 +78,6 @@ abstract class ezcMailFilePart extends ezcMailPart
      * Constructs a new attachment with $fileName.
      *
      * @param string $fileName
-     * @return void
      */
     public function __construct( $fileName )
     {
@@ -99,7 +98,8 @@ abstract class ezcMailFilePart extends ezcMailPart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -138,9 +138,10 @@ abstract class ezcMailFilePart extends ezcMailPart
     /**
      * Returns the value of property $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
-     * @param mixed $value
+     * @return mixed
      * @ignore
      */
     public function __get( $name )
@@ -148,20 +149,13 @@ abstract class ezcMailFilePart extends ezcMailPart
         switch ( $name )
         {
             case 'fileName':
-                return $this->properties['fileName'];
-                break;
             case 'mimeType':
-                return $this->properties['mimeType'];
-                break;
             case 'contentType':
-                return $this->properties['contentType'];
-                break;
             case 'dispositionType':
-                return $this->properties['dispositionType'];
-                break;
             case 'contentId':
-                return $this->properties['contentId'];
+                return $this->properties[$name];
                 break;
+
             default:
                 return parent::__get( $name );
                 break;
@@ -171,6 +165,7 @@ abstract class ezcMailFilePart extends ezcMailPart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -191,9 +186,9 @@ abstract class ezcMailFilePart extends ezcMailPart
     }
 
     /**
-     * Sets the Content-Type header based on the contentType, mimeType and fileName.
+     * Sets the Content-Type header.
      *
-     * @return void
+     * Based on the contentType, mimeType and fileName.
      */
     private function setHeaderContentType()
     {
@@ -202,11 +197,9 @@ abstract class ezcMailFilePart extends ezcMailPart
     }
 
     /**
-     * Sets the Content-Disposition header
+     * Sets the Content-Disposition header.
      *
      * Based on the properties $dispositionType and $fileName.
-     *
-     * @return void
      */
     private function setHeaderContentDisposition()
     {

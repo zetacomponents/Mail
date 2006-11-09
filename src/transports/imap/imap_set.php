@@ -73,7 +73,8 @@ class ezcMailImapSet implements ezcMailParserSet
      *
      * If $deleteFromServer is set to true the messages will be deleted after retrieval.
      *
-     * @throws ezcMailTransportException if the server sent a negative reply when requesting the first mail.
+     * @throws ezcMailTransportException
+     *         if the server send a negative response.
      * @param ezcMailTransportConnection $connection
      * @param array(ezcMail) $messages
      * @param bool $deleteFromServer
@@ -132,7 +133,8 @@ class ezcMailImapSet implements ezcMailParserSet
      *
      * False is returned if there are no more mail in the set.
      *
-     * @throws ezcMailTransportException if the server sent a negative reply when requesting a mail.
+     * @throws ezcMailTransportException
+     *         if the server sent a negative response.
      * @return bool
      */
     public function nextMail()

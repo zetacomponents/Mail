@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailTransportMta class
+ * File containing the ezcMailMtaTransport class
  *
  * @package Mail
  * @version //autogen//
@@ -24,7 +24,7 @@
 class ezcMailMtaTransport implements ezcMailTransport
 {
     /**
-     * Constructs a new ezcMailTransportMta.
+     * Constructs a new ezcMailMtaTransport.
      */
     public function __construct(  )
     {
@@ -36,10 +36,9 @@ class ezcMailMtaTransport implements ezcMailTransport
      * Note that a message may not arrive at the destination even though
      * it was accepted for delivery.
      *
-     * @throws ezcMailException if the mail was not accepted for delivery
-     *         by the MTA.
+     * @throws ezcMailTransportException
+     *         if the mail was not accepted for delivery by the MTA.
      * @param ezcMail $mail
-     * @return void
      */
     public function send( ezcMail $mail )
     {
@@ -61,6 +60,7 @@ class ezcMailMtaTransport implements ezcMailTransport
 
 /**
  * This class is deprecated. Use ezcMailMtaTransport instead.
+ *
  * @package Mail
  */
 class ezcMailTransportMta extends ezcMailMtaTransport
