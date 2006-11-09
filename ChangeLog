@@ -15,7 +15,8 @@
   Koppanen.
 - Implemented feature request #9173: status() also returns number of recent
   and unseen messages in IMAP.
-
+- Implemented feature request #9079: added ability to add mail attachments
+  using streams.
 
 1.2beta1 - Tuesday 24 October 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailFile class
+ * File containing the ezcMailStreamFile class
  *
  * @package Mail
  * @version //autogen//
@@ -9,49 +9,38 @@
  */
 
 /**
- * Mail part for binary data from the file system.
+ * Mail part for data in a stream.
+ *
+ * @property string $stream
+ *           The stream object to be read and added as an attachment. The
+ *           mimeType and contentType are set in the constructor or if not
+ *           specified they are extracted with the fileinfo extension if it
+ *           is available, otherwise they are set to application/octet-stream.
  *
  * @package Mail
  * @version //autogen//
  */
-class ezcMailFile extends ezcMailFilePart
+class ezcMailStreamFile extends ezcMailFilePart
 {
     /**
-     * Constructs a new attachment with $fileName.
+     * Constructs a new attachment with $fileName and $stream.
      *
-     * If the $mimeType and $contentType are not specified they are extracted
-     * with the fileinfo extension if it is available, otherwise they are set
+     * If the $mimeType and $contentType are not specified they are set
      * to application/octet-stream.
      *
      * @param string $fileName
+     * @param resource $stream
      * @param string $contentType
      * @param string $mimeType
      */
-    public function __construct( $fileName, $contentType = null, $mimeType = null )
+    public function __construct( $fileName, $stream, $contentType = null, $mimeType = null )
     {
         parent::__construct( $fileName );
-
+        $this->stream = $stream;
         if ( $contentType != null && $mimeType != null )
         {
             $this->contentType = $contentType;
             $this->mimeType = $mimeType;
-        }
-        elseif ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
-        {
-            // get mime and content type
-            $fileInfo = finfo_open( FILEINFO_MIME );
-            $mimeParts = finfo_file( $fileInfo, $fileName );
-            if ( $mimeParts !== false && strpos( $mimeParts, '/' ) !== false )
-            {
-                list( $this->contentType, $this->mimeType ) = explode( '/', $mimeParts );
-            }
-            else
-            {
-                // default to mimetype application/octet-stream
-                $this->contentType = self::CONTENT_TYPE_APPLICATION;
-                $this->mimeType = "octet-stream";
-            }
-            finfo_close( $fileInfo );
         }
         else
         {
@@ -66,8 +55,6 @@ class ezcMailFile extends ezcMailFilePart
      *
      * @throws ezcBasePropertyNotFoundException
      *         if the property does not exist.
-     * @throws ezcBaseFileNotFoundException
-     *         when setting the property with an invalid filename.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -76,15 +63,8 @@ class ezcMailFile extends ezcMailFilePart
     {
         switch ( $name )
         {
-            case 'fileName':
-                if ( is_readable( $value ) )
-                {
-                    parent::__set( $name, $value );
-                }
-                else
-                {
-                    throw new ezcBaseFileNotFoundException( $value );
-                }
+            case 'stream':
+                $this->properties[$name] = $value;
                 break;
             default:
                 return parent::__set( $name, $value );
@@ -105,6 +85,9 @@ class ezcMailFile extends ezcMailFilePart
     {
         switch ( $name )
         {
+            case 'stream':
+                return $this->properties[$name];
+                break;
             default:
                 return parent::__get( $name );
                 break;
@@ -122,6 +105,9 @@ class ezcMailFile extends ezcMailFilePart
     {
         switch ( $name )
         {
+            case 'stream':
+                return isset( $this->properties[$name] );
+
             default:
                 return parent::__isset( $name );
         }
@@ -130,11 +116,14 @@ class ezcMailFile extends ezcMailFilePart
     /**
      * Returns the contents of the file with the correct encoding.
      *
+     * The stream might become unusable after this if it doesn't support seek.
+     *
      * @return string
      */
     public function generateBody()
     {
-        return chunk_split( base64_encode( file_get_contents( $this->fileName ) ), 76, ezcMailTools::lineBreak() );
+        $contents = stream_get_contents( $this->stream );
+        return chunk_split( base64_encode( $contents ), 76, ezcMailTools::lineBreak() );
     }
 }
 ?>

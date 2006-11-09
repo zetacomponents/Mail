@@ -47,9 +47,9 @@
  *           Contains the message of the mail in HTML. You should also provide
  *           the text of the HTML message in the plainText property. Both will
  *           be sent and the receiver will see the HTML message if his/her
- *           client supports HTML.  If the HTML message contains links to local
- *           images and/or files these will be included into the mail when
- *           generateBody is called. Links to local files must start with
+ *           client supports HTML.  If the HTML message contains links to
+ *           local images and/or files these will be included into the mail
+ *           when generateBody is called. Links to local files must start with
  *           "file://" in order to be recognized.
  * @property string $charset
  *           Contains the character set for both $plainText and $htmlText.
@@ -71,16 +71,6 @@ class ezcMailComposer extends ezcMail
     private $attachments = array();
 
     /**
-     * Holds the attachments contents.
-     *
-     * The array contains the contents of the corresponding index in the
-     * {@link $attachments} array.
-     *
-     * @var array(string)
-     */
-    private $contents = array();
-    
-    /**
      * Holds the properties of this class.
      *
      * @var array(string=>mixed)
@@ -101,7 +91,8 @@ class ezcMailComposer extends ezcMail
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -118,14 +109,14 @@ class ezcMailComposer extends ezcMail
 
             default:
                 parent::__set( $name, $value );
-                break;
         }
     }
 
     /**
      * Returns the property $name.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @return mixed
      * @ignore
@@ -138,17 +129,16 @@ class ezcMailComposer extends ezcMail
             case 'htmlText':
             case 'charset':
                 return $this->properties[$name];
-                break;
 
             default:
                 return parent::__get( $name );
-                break;
         }
     }
 
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */
@@ -169,22 +159,26 @@ class ezcMailComposer extends ezcMail
     /**
      * Adds the file $fileName to the list of attachments.
      *
-     * If $content is specified, $fileName is not checked and is used as
-     * a key in the the list of contents, where $content will be added.
+     * If $content is specified, $fileName is not checked if it exists.
+     * $this->attachments will also contain in this case the $content,
+     * $contentType and $mimeType.
      * 
-     * @throws ezcBaseFileNotFoundException if $fileName does not exists.
-     * @throws ezcBaseFilePermissionProblem if $fileName could not be read.
+     * @throws ezcBaseFileNotFoundException
+     *         if $fileName does not exists.
+     * @throws ezcBaseFilePermissionProblem
+     *         if $fileName could not be read.
      * @param string $fileName
      * @param string $content
-     * @return void
+     * @param string $contentType
+     * @param string $mimeType
      */
-    public function addAttachment( $fileName, $content = null )
+    public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null )
     {
         if ( is_null( $content ) )
         {
             if ( is_readable( $fileName ) )
             {
-                $this->attachments[] = $fileName;
+                $this->attachments[] = array( $fileName, null, $contentType, $mimeType );
             }
             else
             {
@@ -200,8 +194,7 @@ class ezcMailComposer extends ezcMail
         }
         else
         {
-            $this->attachments[] = $fileName;
-            $this->contents[$fileName] = $content;
+            $this->attachments[] = array( $fileName, $content, $contentType, $mimeType );
         }
     }
 
@@ -210,8 +203,8 @@ class ezcMailComposer extends ezcMail
      *
      * This method must be called before the message is sent.
      *
-     * @throws ezcBaseFileNotFoundException if any of the attachment files can not be found.
-     * @return void
+     * @throws ezcBaseFileNotFoundException
+     *         if any of the attachment files can not be found.
      */
     public function build()
     {
@@ -244,13 +237,20 @@ class ezcMailComposer extends ezcMail
         // special case, mail with no text and one attachment
         if ( $mainPart == false && count( $this->attachments ) == 1 )
         {
-            if ( isset( $this->contents[$this->attachments[0]] ) )
+            if ( isset( $this->attachments[0][1] ) )
             {
-                $mainPart = new ezcMailVirtualFile( $this->attachments[0], $this->contents[$this->attachments[0]] );
+                if ( is_resource( $this->attachments[0][1] ) )
+                {
+                    $mainPart = new ezcMailStreamFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] );
+                }
+                else
+                {
+                    $mainPart = new ezcMailVirtualFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] );
+                }
             }
             else
             {
-                $mainPart = new ezcMailFile( $this->attachments[0] );
+                $mainPart = new ezcMailFile( $this->attachments[0][0], $this->attachments[0][2], $this->attachments[0][3] );
             }
         }
         else if ( count( $this->attachments ) > 0 )
@@ -262,13 +262,20 @@ class ezcMailComposer extends ezcMail
             // add the attachments to the mixed part
             foreach ( $this->attachments as $attachment )
             {
-                if ( isset( $this->contents[$attachment] ) )
+                if ( isset( $attachment[1] ) )
                 {
-                    $mainPart->appendPart( new ezcMailVirtualFile( $attachment, $this->contents[$attachment] ) );
+                    if ( is_resource( $attachment[1] ) )
+                    {
+                        $mainPart->appendPart( new ezcMailStreamFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] ) );
+                    }
+                    else
+                    {
+                        $mainPart->appendPart( new ezcMailVirtualFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] ) );
+                    }
                 }
                 else
                 {
-                    $mainPart->appendPart( new ezcMailFile( $attachment ) );
+                    $mainPart->appendPart( new ezcMailFile( $attachment[0], $attachment[2], $attachment[3] ) );
                 }
             }
         }
@@ -282,7 +289,10 @@ class ezcMailComposer extends ezcMail
      * This method adds local files/images to the mail itself using a
      * {@link ezcMailMultipartRelated} object.
      *
-     * @throws ezcMailException If an inline local file is not found or can't be read.
+     * @throws ezcBaseFileNotFoundException
+     *         if $fileName does not exists.
+     * @throws ezcBaseFilePermissionProblem
+     *         if $fileName could not be read.
      * @return ezcMailPart
      */
     private function generateHtmlPart()

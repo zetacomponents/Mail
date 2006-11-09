@@ -20,6 +20,7 @@ return array(
     'ezcMailFilePart'               => 'Mail/parts/file.php',
     'ezcMailFile'                   => 'Mail/parts/fileparts/disk_file.php',
     'ezcMailVirtualFile'            => 'Mail/parts/fileparts/virtual_file.php',
+    'ezcMailStreamFile'             => 'Mail/parts/fileparts/stream_file.php',
     'ezcMailRfc822Digest'           => 'Mail/parts/rfc822_digest.php',
     'ezcMailText'                   => 'Mail/parts/text.php',
     'ezcMailMultipart'              => 'Mail/parts/multipart.php',

@@ -13,8 +13,9 @@
  *
  * @property string $contents
  *           The contents to be added as an attachment. The mimeType and
- *           contentType are extracted with the fileinfo extension if it is
- *           available, otherwise they are set to application/octet-stream.
+ *           contentType are set in the constructor or if not specified they
+ *           are extracted with the fileinfo extension if it is available,
+ *           otherwise they are set to application/octet-stream.
  *
  * @package Mail
  * @version //autogen//
@@ -24,16 +25,26 @@ class ezcMailVirtualFile extends ezcMailFilePart
     /**
      * Constructs a new attachment with $fileName and $contents.
      *
+     * If the $mimeType and $contentType are not specified they are extracted
+     * with the fileinfo extension if it is available, otherwise they are set
+     * to application/octet-stream.
+     *
      * @param string $fileName
-     * @return void
+     * @param string $contents
+     * @param string $contentType
+     * @param string $mimeType
      */
-    public function __construct( $fileName, $contents )
+    public function __construct( $fileName, $contents, $contentType = null, $mimeType = null )
     {
         parent::__construct( $fileName );
-
         $this->contents = $contents;
 
-        if ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        if ( $contentType != null && $mimeType != null )
+        {
+            $this->contentType = $contentType;
+            $this->mimeType = $mimeType;
+        }
+        elseif ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
         {
             // get mime and content type
             $fileInfo = new finfo( FILEINFO_MIME );
@@ -60,7 +71,8 @@ class ezcMailVirtualFile extends ezcMailFilePart
     /**
      * Sets the property $name to $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -70,7 +82,7 @@ class ezcMailVirtualFile extends ezcMailFilePart
         switch ( $name )
         {
             case 'contents':
-                $this->properties['contents'] = $value;
+                $this->properties[$name] = $value;
                 break;
             default:
                 return parent::__set( $name, $value );
@@ -81,9 +93,10 @@ class ezcMailVirtualFile extends ezcMailFilePart
     /**
      * Returns the value of property $value.
      *
-     * @throws ezcBasePropertyNotFoundException if the property does not exist.
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property does not exist.
      * @param string $name
-     * @param mixed $value
+     * @return mixed
      * @ignore
      */
     public function __get( $name )
@@ -91,7 +104,7 @@ class ezcMailVirtualFile extends ezcMailFilePart
         switch ( $name )
         {
             case 'contents':
-                return $this->properties['contents'];
+                return $this->properties[$name];
                 break;
             default:
                 return parent::__get( $name );
@@ -102,6 +115,7 @@ class ezcMailVirtualFile extends ezcMailFilePart
     /**
      * Returns true if the property $name is set, otherwise false.
      *
+     * @param string $name
      * @return bool
      * @ignore
      */

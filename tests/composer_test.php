@@ -58,6 +58,19 @@ class ezcMailComposerTest extends ezcTestCase
     }
 
     /**
+     * Tests adding a valid attachment and setting content&mime type.
+     */
+    public function testAddAttachmentValidSetMime()
+    {
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", null, "image", "jpeg" );
+        $this->mail->build();
+    }
+
+    /**
      * Tests adding a valid attachment, but without read permissions.
      */
     public function testAddAttachmentUnreadable()
@@ -140,12 +153,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "Text only.";
         $this->mail->plainText = "Text only. Should not have a multipart body.";
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -158,12 +167,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "HTML only..";
         $this->mail->htmlText = "<html><i><b>HTML only. Should not have a multipart body.</b></i></html>";
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -176,12 +181,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "One attachments only.";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -195,12 +196,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -214,13 +211,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
         $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
         $this->mail->build();
-
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -250,12 +242,8 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "---------------\n";
-        // let's try to send the thing
         $transport = new ezcMailTransportMta();
-//        $transport->send( $this->mail );
+        // $transport->send( $this->mail );
     }
 
     /**
@@ -274,11 +262,7 @@ class ezcMailComposerTest extends ezcTestCase
                                    . "/parts/data/fly.jpg\">file.</a></html>";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-//        echo "\n---------------\n";
-//        echo $this->mail->generate();
-//        echo "\n---------------\n";
-        // let's try to send the thing
-//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+        // $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
     }
 
     /**
@@ -315,11 +299,26 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testAddVirtualAttachmentValid()
     {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
-        $this->mail->addAttachment( "fly.jpg", "Should be a picture with naked people" );
+        $this->mail->addAttachment( "fly.jpg", $contents );
+        $this->mail->build();
+    }
+
+    /**
+     * Tests adding a valid virtual attachment and setting content&mime type.
+     */
+    public function testAddVirtualAttachmentValidSetMime()
+    {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addAttachment( "fly.jpg", $contents, "image", "jpeg" );
         $this->mail->build();
     }
 
@@ -328,10 +327,11 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailOneVirtualAttachmentNoText()
     {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "One attachments only.";
-        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->addAttachment( "fly.jpg", $contents );
         $this->mail->build();
     }
 
@@ -340,11 +340,12 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailManyVirtualAttachmentsNoText()
     {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Many attachments only.";
-        $this->mail->addAttachment( "fly.jpg", "JPG content" );
-        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->addAttachment( "fly.jpg", $contents );
+        $this->mail->addAttachment( "fly.jpg", $contents );
         $this->mail->build();
     }
 
@@ -353,12 +354,13 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailTextHtmlAndVirtualAttachments()
     {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message and attachments.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
         $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
-        $this->mail->addAttachment( "fly1.jpg", "JPG content" );
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", $contents );
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
     }
@@ -369,6 +371,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailHtmlWithImagesAndVirtualFiles()
     {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
@@ -377,10 +380,102 @@ class ezcMailComposerTest extends ezcTestCase
                                    . "/parts/data/fly.jpg\" />Here is some text after the image. Here is the <a href=\"file://"
                                    . dirname( __FILE__  )
                                    . "/parts/data/fly.jpg\">file.</a></html>";
-        $this->mail->addAttachment( "fly.jpg", "JPG content" );
+        $this->mail->addAttachment( "fly.jpg", $contents );
         $this->mail->build();
     }
 
+    /**
+     * Tests adding a valid stream attachment.
+     */
+    public function testAddStreamAttachmentValid()
+    {
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addAttachment( "fly.jpg", $file );
+        $this->mail->build();
+    }
+
+    /**
+     * Tests adding a valid stream attachment and setting content&mime type.
+     */
+    public function testAddStreamAttachmentValidSetMime()
+    {
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addAttachment( "fly.jpg", $file, "image", "jpeg" );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with one stream attachment only
+     */
+    public function testMailOneStreamAttachmentNoText()
+    {
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "One attachments only.";
+        $this->mail->addAttachment( "fly.jpg", $file );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with many stream attachments only
+     */
+    public function testMailManyStreamAttachmentsNoText()
+    {
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Many attachments only.";
+        $this->mail->addAttachment( "fly.jpg", $file );
+        $this->mail->addAttachment( "fly.jpg", $file );
+        $this->mail->build();
+    }
+
+    /**
+     * Test a complete mail with txt, html and attachments (virtual, stream, file).
+     */
+    public function testMailTextHtmlAndStreamAttachments()
+    {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Alternative HTML/Text message and attachments.";
+        $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
+        $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", $contents );
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", $file );
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->build();
+    }
+
+    /**
+     * Tests a complete mail with html images and files
+     * http://www.apps.ietf.org/msglint.html - validator
+     */
+    public function testMailHtmlWithImagesAndStreamFiles()
+    {
+        $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\" />Here is some text after the image. Here is the <a href=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\">file.</a></html>";
+        $this->mail->addAttachment( "fly.jpg", $file );
+        $this->mail->build();
+    }
+    
     public function testIsSet()
     {
         $mail = new ezcMailComposer();
