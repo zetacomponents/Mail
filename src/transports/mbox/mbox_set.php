@@ -46,8 +46,18 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     private $initialized = false;
 
+    /**
+     * Holds the current message positions.
+     *
+     * @var array(int=>int)
+     */
     private $messagePositions = array();
 
+    /**
+     * Holds the current message position in array $messagePositions.
+     *
+     * @var int
+     */
     private $currentMesssagePosition = 0;
 
     /**
@@ -55,6 +65,8 @@ class ezcMailMboxSet implements ezcMailParserSet
      *
      * @throws ezcBaseFileIoException
      *         if $fh is not a filepointer resource.
+     * @param resource(filepointer) $fh
+     * @param array(int=>int) $messages
      */
     public function __construct( $fh, array $messages )
     {

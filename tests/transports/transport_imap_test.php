@@ -1112,6 +1112,16 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    public function testGetMessageNumbersFromSet()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->fetchAll();
+        $messageNumbers = $set->getMessageNumbers();
+        $this->assertEquals( array( 1, 2, 3, 4 ), $messageNumbers );
+    }
+
     public function tearDown()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );

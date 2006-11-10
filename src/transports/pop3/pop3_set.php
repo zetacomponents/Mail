@@ -164,6 +164,15 @@ class ezcMailPop3Set implements ezcMailParserSet
     {
         return count( $this->messages );
     }
-}
 
+    /**
+     * Returns message numbers for current set.
+     *
+     * @return array
+     */
+    public function getMessageNumbers()
+    {
+        return $this->messages;
+    }
+}
 ?>

@@ -352,6 +352,15 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->disconnect();
     }
 
+    public function testGetMessageNumbersFromSet()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $set = $pop3->fetchAll();
+        $messageNumbers = $set->getMessageNumbers();
+        $this->assertEquals( array( 1, 2, 3, 4 ), $messageNumbers );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
