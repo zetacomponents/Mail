@@ -17,6 +17,8 @@
   and unseen messages in IMAP.
 - Implemented feature request #9079: added ability to add mail attachments
   using streams.
+- Implemented feature request #9333: sortMessages(), sortFromOffset(),
+  fetchFlags() methods in IMAP. Patches by Mikko Koppanen.
 
 1.2beta1 - Tuesday 24 October 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

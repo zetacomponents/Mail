@@ -414,7 +414,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 212 ), $uids );
+        $this->assertEquals( array( 1 => 216 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -425,10 +425,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 212,
-                2 => 213,
-                3 => 214,
-                4 => 215,
+                1 => 216,
+                2 => 217,
+                3 => 218,
+                4 => 219,
             ),
             $uids
         );
@@ -506,7 +506,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 212 ), $uids );
+        $this->assertEquals( array( 1 => 216 ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()
@@ -835,6 +835,276 @@ class ezcMailTransportImapTest extends ezcTestCase
         try
         {
             $imap->clearFlag( "1", "ANSWERED" );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testUnsorted()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[2]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
+    }
+
+    public function testSortFromOffsetInvalidCriteria()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'invalid criteria' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+    }
+
+    public function testSortFromOffsetDefaultCriteria()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'received' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+    }
+
+    public function testSortFromOffsetInvalidOffset()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->sortFromOffset( 10, 4, 'subject' );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcMailOffsetOutOfRangeException $e )
+        {
+        }
+    }
+
+    public function testSortFromOffsetInvalidCount()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->sortFromOffset( 1, -1, 'subject' );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcMailInvalidLimitException $e )
+        {
+        }
+    }
+
+    public function testSortFromOffsetCountZero()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 0, 'subject' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
+    public function testSortFromOffsetNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->sortFromOffset( 1, 4, 'subject' );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testSortFromOffsetBySubject()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'subject' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
+    public function testSortFromOffsetBySubjectReverse()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'subject', true );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
+    }
+
+    public function testSortFromOffsetByDate()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'date' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
+    public function testSortFromOffsetByDateReverse()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( 1, 4, 'date', true );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
+    }
+
+    public function testSortMessagesBySubject()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+    }
+
+    public function testSortMessagesBySubjectReverse()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject', true );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
+    }
+
+    public function testSortMessagesOneElement()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortMessages( array( 1 ), 'subject' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[0]->subject );
+    }
+
+    public function testSortMessagesEmpty()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->sortMessages( array(), 'subject' );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testSortMessagesNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject' );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testFetchFlags()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $flags = $imap->fetchFlags( array( 1, 2, 3, 4 ) );
+        $expected = array( 1 => array( '\Seen' ),
+                           2 => array( '\Seen' ),
+                           3 => array( '\Seen' ),
+                           4 => array( '\Seen' )
+                         );
+        $this->assertEquals( $expected, $flags );
+    }
+
+    public function testFetchFlagsEmpty()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        try
+        {
+            $imap->fetchFlags( array() );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testFetchFlagsNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->fetchFlags( array( 1, 2, 3, 4 ) );
             $this->fail( "Expected exception was not thrown." );
         }
         catch ( ezcMailTransportException $e )

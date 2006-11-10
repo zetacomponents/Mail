@@ -71,8 +71,7 @@ class ezcMailParser
                 $this->partParser->parseBody( $data );
             }
             $mail[] = $this->partParser->finish( $class );
-        }
-        while ( $set->nextMail() );
+        } while ( $set->nextMail() );
         return $mail;
     }
 

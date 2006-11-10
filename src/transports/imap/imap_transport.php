@@ -368,7 +368,8 @@ class ezcMailImapTransport
      *
      * @throws ezcMailTransportException
      *         if $state is not accepted
-     *         or if $mailbox exists or cannot be created
+     *         or if $mailbox exists
+     *         or if $mailbox cannot be created
      * @param string $mailbox
      * @return bool
      */
@@ -399,7 +400,8 @@ class ezcMailImapTransport
      * @throws ezcMailTransportException
      *         if $state is not accepted
      *         or if trying to rename the currently selected mailbox
-     *         or if $mailbox does not exist or cannot be renamed
+     *         or if $mailbox does not exist
+     *         or if $mailbox cannot be renamed
      *         or if mailbox $newName already exists
      * @param string $mailbox
      * @param string $newName
@@ -437,7 +439,8 @@ class ezcMailImapTransport
      * @throws ezcMailTransportException
      *         if $state is not accepted
      *         or if trying to delete the currently selected mailbox
-     *         or if $mailbox does not exist or cannot be deleted
+     *         or if $mailbox does not exist
+     *         or if $mailbox cannot be deleted
      * @param string $mailbox
      * @return bool
      */
@@ -475,7 +478,8 @@ class ezcMailImapTransport
      *
      * @throws ezcMailTransportException
      *         if $state is not accepted
-     *         or if $destination does not exist or storage space is not enough
+     *         or if $destination does not exist
+     *         or if storage space is not enough
      *         or if $messages contains unexistent messages
      * @param string $messages
      * @param string $destination
@@ -591,7 +595,7 @@ class ezcMailImapTransport
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
-     *         or if the server sent a negative response.
+     *         or if the server sent a negative response
      * @param int &$numMessages
      * @param int &$sizeMessages
      * @param int &$recent
@@ -627,7 +631,7 @@ class ezcMailImapTransport
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
-     *         or if the mail could not be deleted
+     *         or if the server sent a negative response
      * @param $msgNum
      * @return bool
      */
@@ -829,7 +833,7 @@ class ezcMailImapTransport
      * @throws ezcMailInvalidLimitException
      *         if $count is negative.
      * @throws ezcMailOffsetOutOfRangeException
-     *         if $offset is outside of the existing range of messages.
+     *         if $offset is outside of the existing range of messages
      * @param int $offset
      * @param int $count
      * @param bool $deleteFromServer
@@ -858,7 +862,75 @@ class ezcMailImapTransport
     }
 
     /**
-     * Wrapper function to fetch messages by a certain flag.
+     * Fetches $count messages from $offset sorted by $sortCriteria.
+     *
+     * Fetches $count messages starting from the $offset and returns them as a
+     * ezcMailImapSet. If $count is is 0, it fetches all messages starting from
+     * the $offset.
+     * $sortCriteria is an email header like: Subject, To, From, Date, Sender.
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response.
+     * @throws ezcMailInvalidLimitException
+     *         if $count is negative.
+     * @throws ezcMailOffsetOutOfRangeException
+     *         if $offset is outside of the existing range of messages
+     * @param int $offset
+     * @param int $count
+     * @param string $sortCriteria
+     * @param bool $reverse
+     * @return ezcMailImapSet
+     */
+    public function sortFromOffset( $offset, $count = 0, $sortCriteria, $reverse = false )
+    {
+        if ( $count < 0 )
+        {
+            throw new ezcMailInvalidLimitException( $offset, $count );
+        }
+
+        $messageCount = $this->countByFlag( 'ALL' );
+        $messages = array_keys( $this->sort( range( 1, $messageCount ), $sortCriteria, $reverse ) );
+
+        if ( $count == 0 )
+        {
+            $range = array_slice( $messages, $offset - 1, count( $messages ), true );
+        }
+        else
+        {
+            $range = array_slice( $messages, $offset - 1, $count, true );
+        }
+        if ( !isset( $range[$offset - 1] ) )
+        {
+            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+        }
+        return new ezcMailImapSet( $this->connection, $range );
+    }
+
+    /**
+     * Fetches messages $messages sorted by $sortCriteria.
+     *
+     * $messages is an array of message numbers, for example:
+     *      array( 1, 2, 4 );
+     * $sortCriteria is an email header like: Subject, To, From, Date, Sender.
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if array $messages is empty
+     * @param array(int=>int) $messages
+     * @param string $sortCriteria
+     * @param bool $reverse
+     * @return ezcMailImapSet
+     */
+    public function sortMessages( $messages, $sortCriteria, $reverse = false )
+    {
+        $messages = $this->sort( $messages, $sortCriteria, $reverse );
+        return new ezcMailImapSet( $this->connection, array_keys ( $messages ) );
+    }
+
+    /**
+     * Fetches messages by a certain flag.
      *
      * $flag can be one of:
      *      ANSWERED   Message has been answered
@@ -912,6 +984,61 @@ class ezcMailImapTransport
         $flag = $this->normalizeFlag( $flag );
         $messages = $this->searchByFlag( $flag );
         return count( $messages );
+    }
+
+    /**
+     * Fetches IMAP flags for messages $messages.
+     *
+     * $messages is an array of message numbers, for example:
+     *      array( 1, 2, 4 );
+     * The format of the returned array is:
+     * array( message_number => array( flags ) )
+     * Example:
+     * - for
+     *      $messages = array( 1, 2, 4 );
+     * - the returned flags are
+     *      array( 1 => array( '\Seen' ),
+     *             2 => array( '\Seen' ),
+     *             4 => array( '\Seen', 'NonJunk' )
+     *           );
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     * @param array $messages
+     * @return array(int=>mixed)
+     */
+    public function fetchFlags( $messages )
+    {
+        if ( $this->state != self::STATE_SELECTED &&
+			 $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't fetch flags on the IMAP transport when a mailbox is not selected." );
+        }
+
+        $flags = array();
+        $ids = implode( $messages, ',' );
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} FETCH {$ids} (FLAGS)" );
+
+        $response = $this->connection->getLine();
+        while ( strpos( $response, $tag ) === false )
+        {
+            if ( strpos( $response, ' FETCH (' ) !== false )
+            {
+                preg_match( '/\*\s(.*)\sFETCH\s\(FLAGS \((.*)\)/U', $response, $matches );
+                $parts = explode( ' ', $matches[2] );
+                $flags[intval( $matches[1] )] = $parts;
+            }
+            $response = $this->connection->getLine();
+        }         
+
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not fetch flags for the messages: {$response}" );
+        }
+        return $flags;
     }
 
     /**
@@ -1082,6 +1209,93 @@ class ezcMailImapTransport
         $flag = strtoupper( $flag );
         $flag = str_replace( '\\', '', $flag );
         return $flag;
+    }
+
+    /**
+     * Sorts message numbers array $messages by the specified $sortCriteria.
+     *
+     * $messages is an array of message numbers, for example:
+     *      array( 1, 2, 4 );
+     * $sortCriteria is an email header like: Subject, To, From, Date, Sender.
+     * The sorting is done with the php function natcasesort().
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if server sent a negative response
+     *         or if the array $messages is empty
+     * @param array(int=>int) $messages
+     * @param string $sortCriteria
+     * @param bool $reverse
+     * @return array(int=>string)
+     */
+    private function sort( $messages, $sortCriteria, $reverse = false )
+    {
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't sort on the IMAP transport when a mailbox is not selected." );
+        }
+
+        $result = array();
+        $query = ucfirst( strtolower( $sortCriteria ) );
+        $messageNumbers = implode( ',', $messages );
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} FETCH {$messageNumbers} (BODY[HEADER.FIELDS ({$query})])" );
+
+        $response = $this->connection->getLine();
+        while ( strpos( $response, $tag ) === false )
+        {
+            if ( strpos( $response, ' FETCH (' ) !== false )
+            {
+                preg_match('/^\* ([0-9]+) FETCH/', $response, $matches );
+                $messageNumber = $matches[1];
+            }
+
+            if ( strpos( $response, $query ) !== false )
+            {
+                $strippedResponse = trim( trim( str_replace( "{$query}: ", '', $response ) ), '"' );
+                switch ( $query )
+                {
+                    case 'Date':
+                        $strippedResponse = strtotime( $strippedResponse );
+                        break;
+                    case 'Subject':
+                    case 'From':
+                    case 'Sender':
+                    case 'To':
+                        $strippedResponse = ezcMailTools::mimeDecode( $strippedResponse );
+                        break;
+                    default:
+                        break;
+                }
+                $result[$messageNumber] = $strippedResponse;
+            }
+
+            // in case the mail doesn't have the $sortCriteria header (like junk mail missing Subject header)
+            if ( strpos( $response, ')' ) !== false && !isset( $result[$messageNumber] ) )
+            {
+                $result[$messageNumber] = '';
+            }
+
+            $response = $this->connection->getLine();
+        }
+
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not sort the messages: {$response}" );
+        }
+
+        if ( $reverse === true )
+        {
+            natcasesort( $result );
+            $result = array_reverse( $result, true );
+        }
+        else
+        {
+            natcasesort( $result );
+        }
+        return $result;
     }
 
     /**
