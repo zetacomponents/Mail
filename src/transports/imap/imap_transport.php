@@ -12,8 +12,8 @@
  * ezcMailImapTransport implements IMAP for mail retrieval.
  *
  * The implementation supports most of the basic commands specified in
- * http://www.faqs.org/rfcs/rfc1730.html and
- * http://www.faqs.org/rfcs/rfc2060.html
+ * http://www.faqs.org/rfcs/rfc1730.html (IMAP4) and
+ * http://www.faqs.org/rfcs/rfc2060.html (IMAP4rev1)
  *
  * @todo ignore messages of a certain size?
  * @todo // add support for SSL?
@@ -216,7 +216,7 @@ class ezcMailImapTransport
      * and it is the application's task to reconnect and reauthenticate.
      *
      * @throws ezcMailTransportException
-     *         if there is no connection to the server
+     *         if there was no connection to the server
      *         or if the provided username/password combination did not work
      * @param string $user
      * @param string $password
@@ -1198,15 +1198,8 @@ class ezcMailImapTransport
     /**
      * Sends a NOOP command to the server, use it to keep the connection alive.
      *
-     * RFC2060: "The NOOP command always succeeds.  It does nothing.
-     * Since any command can return a status update as untagged data, the
-     * NOOP command can be used as a periodic poll for new messages or
-     * message status updates during a period of inactivity.  The NOOP
-     * command can also be used to reset any inactivity autologout timer
-     * on the server."
-     *
      * @throws ezcMailTransportException
-     *         if there is no connection to the server
+     *         if there was no connection to the server
      *         or if the server sent a negative response
      */
     public function noop()
@@ -1226,6 +1219,44 @@ class ezcMailImapTransport
         {
             throw new ezcMailTransportException( "NOOP failed: <{$response}>." );
         }
+    }
+
+    /**
+     * Returns an array with the capabilities of the IMAP server.
+     *
+     * @throws ezcMailTransportException
+     *         if there was no connection to the server
+     *         or if the server sent a negative response
+     * @return array(string)
+     */
+    public function capability()
+    {
+        if ( $this->state != self::STATE_NOT_AUTHENTICATED &&
+             $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Trying to request capability when not connected to server." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} CAPABILITY" );
+
+        $response = $this->connection->getLine();
+        while ( $this->responseType( $response ) != self::RESPONSE_UNTAGGED &&
+                strpos( $response, '* CAPABILITY ' ) === false )
+        {
+            $response = $this->connection->getLine();
+        }
+        $result = trim( $response );
+
+        $response = trim( $this->getResponse( $tag ) );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server responded negative to the CAPABILITY command: <{$response}>." );
+        }
+
+        return explode( ' ', str_replace( '* CAPABILITY ', '', $result ) );
     }
 
     /**
