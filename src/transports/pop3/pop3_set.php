@@ -168,7 +168,7 @@ class ezcMailPop3Set implements ezcMailParserSet
     /**
      * Returns message numbers for current set.
      *
-     * @return array
+     * @return array(int=>int)
      */
     public function getMessageNumbers()
     {

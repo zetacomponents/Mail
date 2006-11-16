@@ -37,7 +37,6 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            $this->assertEquals( 'An error occured while sending or receiving mail. The IMAP server did not accept the username and/or password.', $e->getMessage() );
         }
     }
 
@@ -51,7 +50,6 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            $this->assertEquals( 'An error occured while sending or receiving mail. The IMAP server did not accept the username and/or password.', $e->getMessage() );
         }
     }
 
@@ -169,7 +167,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            $this->assertEquals( 'An error occured while sending or receiving mail. Can\'t select a mailbox when not successfully logged in.', $e->getMessage() );
+            $this->assertEquals( 'An error occured while sending or receiving mail. Can\'t call selectMailbox() when not successfully logged in.', $e->getMessage() );
         }
     }
 
@@ -184,7 +182,6 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            $this->assertEquals( 'An error occured while sending or receiving mail. Mailbox <no-such-mailbox> does not exist on the IMAP server.', $e->getMessage() );
         }
     }
 
@@ -414,7 +411,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 216 ), $uids );
+        $this->assertEquals( array( 1 => 236 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -425,10 +422,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 216,
-                2 => 217,
-                3 => 218,
-                4 => 219,
+                1 => 236,
+                2 => 237,
+                3 => 238,
+                4 => 239,
             ),
             $uids
         );
@@ -506,7 +503,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 216 ), $uids );
+        $this->assertEquals( array( 1 => 236 ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()
@@ -1120,6 +1117,35 @@ class ezcMailTransportImapTest extends ezcTestCase
         $set = $imap->fetchAll();
         $messageNumbers = $set->getMessageNumbers();
         $this->assertEquals( array( 1, 2, 3, 4 ), $messageNumbers );
+    }
+
+    public function testNoop()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->noop();
+    }
+
+    public function testNoopSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->noop();
+    }
+
+    public function testNoopNotConnected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->disconnect();
+        try
+        {
+            $imap->noop();
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public function tearDown()

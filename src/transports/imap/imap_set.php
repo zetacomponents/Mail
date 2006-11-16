@@ -261,7 +261,7 @@ class ezcMailImapSet implements ezcMailParserSet
     /**
      * Returns message numbers for current set.
      *
-     * @return array
+     * @return array(int=>int)
      */
     public function getMessageNumbers()
     {
