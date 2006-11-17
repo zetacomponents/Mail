@@ -1251,6 +1251,36 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    public function testExpunge()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->copyMessages( "1:4", "Guybrush" );
+        $imap->selectMailbox( "Guybrush" );
+        $this->assertEquals( 4, $imap->countByFlag( "ALL" ) );
+        $imap->delete( 1 );
+        $imap->expunge();
+        $this->assertEquals( 3, $imap->countByFlag( "ALL" ) );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testExpungeNotSelected()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->expunge();
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
     public function tearDown()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );

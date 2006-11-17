@@ -30,6 +30,7 @@
 - Fixed bug #9442: added missing hasData() method to ezcMailVariableSet.
 - Implemented feature request #9331: added returnPath property in ezcMail and
   SMTP and MTA transports use it to generate a Return-Path header if needed.
+- Added expunge() method in IMAP transport.
 
 
 1.2beta1 - Tuesday 24 October 2006

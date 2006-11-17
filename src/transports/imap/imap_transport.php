@@ -1260,6 +1260,32 @@ class ezcMailImapTransport
     }
 
     /**
+     * Sends an EXPUNGE command to the server.
+     *
+     * This method permanently deletes the messages marked for deletion by
+     * the method delete().
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox was not selected
+     *         or if the server sent a negative response
+     */
+    public function expunge()
+    {
+        if ( $this->state != self::STATE_SELECTED )
+        {
+            throw new ezcMailTransportException( "Can not issue EXPUNGE command if a mailbox is not selected." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} EXPUNGE" );
+        $response = trim( $this->getResponse( $tag ) );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "EXPUNGE failed: <{$response}>." );
+        }
+    }
+
+    /**
      * Appends $mail to the $mailbox mailbox.
      *
      * Use this method to create email messages in a mailbox such as Sent or
