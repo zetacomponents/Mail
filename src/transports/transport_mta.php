@@ -49,8 +49,13 @@ class ezcMailMtaTransport implements ezcMailTransport
         {
             throw new ezcMailTransportException( 'No recipient addresses found in message header.' );
         }
+        $additionalParameters = "";
+        if ( isset( $mail->returnPath ) )
+        {
+            $additionalParameters = "-f{$mail->returnPath->email}";
+        }
         $success = mail( ezcMailTools::composeEmailAddresses( $mail->to ),
-                         $mail->getHeader( 'Subject' ), $mail->generateBody(), $headers );
+                         $mail->getHeader( 'Subject' ), $mail->generateBody(), $headers, $additionalParameters );
         if ( $success === false )
         {
             throw new ezcMailTransportException( 'The email could not be sent by sendmail' );

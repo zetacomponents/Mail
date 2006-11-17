@@ -38,10 +38,10 @@
  *               sent to this address.
  *
  * @property ezcMailAddress        $from Contains the from address as an
- *                                       ezcMailaddress object.
- * @property array(ezcMailAddress) $to   Contains an array of ezcMailaddress objects.
- * @property array(ezcMailAddress) $cc   Contains an array of ezcMailaddress objects.
- * @property array(ezcMailAddress) $bcc  Contains an array of ezcMailaddress objects.
+ *                                       ezcMailAddress object.
+ * @property array(ezcMailAddress) $to   Contains an array of ezcMailAddress objects.
+ * @property array(ezcMailAddress) $cc   Contains an array of ezcMailAddress objects.
+ * @property array(ezcMailAddress) $bcc  Contains an array of ezcMailAddress objects.
  * @property string                $subject
  *                                       Contains the subject of the e-mail.
  *                                       Use setSubject if you require a
@@ -58,6 +58,8 @@
  * @property-read integer          $timestamp
  *                                       The date/time of when the message was
  *                                       sent as Unix Timestamp.
+ * @property ezcMailAddress        $returnPath Contains the Return-Path address as an
+ *                                             ezcMailAddress object.
  *
  * @apichange Remove the support for the deprecated property messageID.
  *
@@ -114,6 +116,7 @@ class ezcMail extends ezcMailPart
         $this->properties['subjectCharset'] = 'us-ascii';
         $this->properties['body'] = null;
         $this->properties['messageId'] = null;
+        $this->properties['returnPath'] = null;
     }
 
     /**
@@ -168,6 +171,10 @@ class ezcMail extends ezcMailPart
                 throw new ezcBasePropertyPermissionException( $name, ezcBasePropertyPermissionException::READ );
                 break;
 
+            case 'returnPath':
+                $this->properties['returnPath'] = $value;
+                break;
+
             default:
                 parent::__set( $name, $value );
                 break;
@@ -197,6 +204,7 @@ class ezcMail extends ezcMailPart
             case 'subjectCharset':
             case 'body':
             case 'messageId':
+            case 'returnPath':
                 return $this->properties[$name];
 
             case 'messageID': // deprecated version
@@ -229,8 +237,11 @@ class ezcMail extends ezcMailPart
             case 'subjectCharset':
             case 'body':
             case 'messageId':
-            case 'messageID': // deprecated version
+            case 'returnPath':
                 return isset( $this->properties[$name] );
+
+            case 'messageID': // deprecated version
+                return isset( $this->properties['messageId'] );
 
             case 'timestamp':
                 return $this->getHeader( "Date" ) != null;

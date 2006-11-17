@@ -86,6 +86,20 @@ class ezcMailTransportMtaTest extends ezcTestCase
         $this->fail( 'MTA send without recipients did not fail.' );
     }
 
+    // Tests sending a complete mail message with Return-Path set.
+    public function testFullMailReturnPath()
+    {
+        $this->mail->returnPath = new ezcMailAddress( 'returnpath@ez.no' );
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportMtaTest" );

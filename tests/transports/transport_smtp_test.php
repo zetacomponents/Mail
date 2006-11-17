@@ -200,6 +200,20 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->fail( "SMTP send without recipients did not fail." );
     }
 
+    // Tests sending a complete mail message with Return-Path set.
+    public function testFullMailReturnPath()
+    {
+        $this->mail->returnPath = new ezcMailAddress( 'returnpath@ez.no' );
+        try
+        {
+            $this->transport->send( $this->mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
     public function testIsSet()
     {
         $this->assertEquals( true, isset( $this->transport->user ) );

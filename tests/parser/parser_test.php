@@ -910,5 +910,15 @@ END;
             $mail[0]->headers
         );
     }
+
+    public function testReturnPath()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'gmail/html_mail.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( 'sender@gmail.com', $mail->returnPath->email );
+    }
 }
 ?>

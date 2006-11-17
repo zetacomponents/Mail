@@ -149,6 +149,12 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             $mail->messageID = $this->headers['Message-Id'];
         }
 
+        // Return-Path
+        if ( isset( $this->headers['Return-Path'] ) )
+        {
+            $mail->returnPath = ezcMailTools::parseEmailAddress( $this->headers['Return-Path'] );
+        }
+
         if ( $this->bodyParser !== null )
         {
             $mail->body = $this->bodyParser->finish();

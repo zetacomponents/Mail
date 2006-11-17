@@ -245,7 +245,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Sends the ezcMail $mail using the SMTP protocol.
      *
-     * If you want to send several email use keepConnection() to leave the
+     * If you want to send several emails use keepConnection() to leave the
      * connection to the server open between each mail.
      *
      * @throws ezcMailTransportException
@@ -269,7 +269,15 @@ class ezcMailSmtpTransport implements ezcMailTransport
                 $this->connect();
             }
 
-            $this->cmdMail( $mail->from->email );
+            if ( isset( $mail->returnPath ) )
+            {
+                $this->cmdMail( $mail->returnPath->email );
+            }
+            else
+            {
+                $this->cmdMail( $mail->from->email );
+            }
+
             // each recepient must be listed here.
             // this controls where the mail is actually sent as SMTP does not
             // read the headers itself
