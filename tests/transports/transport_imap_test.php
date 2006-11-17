@@ -411,7 +411,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 236 ), $uids );
+        $this->assertEquals( array( 1 => 240 ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -422,10 +422,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 236,
-                2 => 237,
-                3 => 238,
-                4 => 239,
+                1 => 240,
+                2 => 241,
+                3 => 242,
+                4 => 243,
             ),
             $uids
         );
@@ -503,7 +503,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 236 ), $uids );
+        $this->assertEquals( array( 1 => 240 ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()
@@ -1172,6 +1172,76 @@ class ezcMailTransportImapTest extends ezcTestCase
         try
         {
             $imap->capability();
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testAppend()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'mcfly@example.com', 'Marty McFly' );
+        $mail->addTo( new ezcMailAddress( 'doc@example.com', 'Doc' ) );
+        $mail->subject = "Do not open until 1985";
+        $mail->body = new ezcMailText( "NOBODY calls me a chicken!" );
+        $data = $mail->generate();
+
+        $imap->append( "Guybrush", $data );
+        $imap->append( "Guybrush", $data, array( 'Answered' ) );
+
+        $imap->selectMailbox( "Guybrush" );
+        $imap->status( $numMessages, $sizeMessages );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+
+        $this->assertEquals( 2, $numMessages );
+    }
+
+    public function testAppendInvalidDestination()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $mail = new ezcMail();
+        try
+        {
+            $imap->append( "no such mailbox", $mail->generate() );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testAppendInvalidMessage()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $mail = null;
+        try
+        {
+            $imap->append( "Guybrush", $mail );
+            $this->fail( "Expected exception was not thrown." );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testAppendNotAuthenticated()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $mail = new ezcMail();
+        try
+        {
+            $imap->append( "Guybrush", $mail->generate() );
             $this->fail( "Expected exception was not thrown." );
         }
         catch ( ezcMailTransportException $e )

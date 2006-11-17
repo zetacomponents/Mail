@@ -25,6 +25,8 @@
   transports. Patch by Mikko Koppanen.
 - Implemented feature request #9423: capability() method in IMAP transport.
   Patch by Mikko Koppanen.
+- Implemented feature request #9425: append() method in IMAP transport. Patch
+  by Mikko Koppanen.
 
 
 1.2beta1 - Tuesday 24 October 2006

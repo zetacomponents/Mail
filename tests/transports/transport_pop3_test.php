@@ -313,7 +313,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546.236" ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => "1143007546.240" ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -322,10 +322,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $this->assertEquals(
             array(
-                1 => '1143007546.236',
-                2 => '1143007546.237',
-                3 => '1143007546.238',
-                4 => '1143007546.239',
+                1 => '1143007546.240',
+                2 => '1143007546.241',
+                3 => '1143007546.242',
+                4 => '1143007546.243',
             ),
             $pop3->listUniqueIdentifiers()
         );

@@ -932,7 +932,7 @@ class ezcMailImapTransport
      * $flag can be one of:
      *      ANSWERED   Message has been answered
      *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message has marked as a draft
+     *      DRAFT      Message is marked as a draft
      *      FLAGGED    Message is "flagged" for urgent/special attention
      *      RECENT     Message is recent
      *      SEEN       Message has been read
@@ -960,7 +960,7 @@ class ezcMailImapTransport
      * $flag can be one of:
      *      ANSWERED   Message has been answered
      *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message has marked as a draft
+     *      DRAFT      Message is marked as a draft
      *      FLAGGED    Message is "flagged" for urgent/special attention
      *      RECENT     Message is recent
      *      SEEN       Message has been read
@@ -1048,7 +1048,7 @@ class ezcMailImapTransport
      * $flag can be one of:
      *      ANSWERED   Message has been answered
      *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message has marked as a draft
+     *      DRAFT      Message is marked as a draft
      *      FLAGGED    Message is "flagged" for urgent/special attention
      *      SEEN       Message has been read
      * This function automatically adds the '\' in front of the flag when
@@ -1097,7 +1097,7 @@ class ezcMailImapTransport
      * $flag can be one of:
      *      ANSWERED   Message has been answered
      *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message has marked as a draft
+     *      DRAFT      Message is marked as a draft
      *      FLAGGED    Message is "flagged" for urgent/special attention
      *      SEEN       Message has been read
      * This function automatically adds the '\' in front of the flag when
@@ -1142,7 +1142,7 @@ class ezcMailImapTransport
      * $flag can be one of:
      *      ANSWERED   Message has been answered
      *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message has marked as a draft
+     *      DRAFT      Message is marked as a draft
      *      FLAGGED    Message is "flagged" for urgent/special attention
      *      RECENT     Message is recent
      *      SEEN       Message has been read
@@ -1260,6 +1260,77 @@ class ezcMailImapTransport
     }
 
     /**
+     * Appends $mail to the $mailbox mailbox.
+     *
+     * Use this method to create email messages in a mailbox such as Sent or
+     * Draft.
+     *
+     * $flags is an array of flags to be set to the $mail (if provided):
+     *      ANSWERED   Message has been answered
+     *      DELETED    Message is marked to be deleted by later EXPUNGE
+     *      DRAFT      Message is marked as a draft
+     *      FLAGGED    Message is "flagged" for urgent/special attention
+     *      SEEN       Message has been read
+     * This function automatically adds the '\' in front of each flag when
+     * calling the server command.
+     *
+     * @throws ezcMailTransportException
+     *         if user is not authenticated
+     *         or if the server sent a negative response
+     *         or if $mailbox does not exists
+     * @param string $mailbox
+     * @param string $mail
+     * @param array(string) $flags
+     */
+    public function append( $mailbox, $mail, $flags = null )
+    {
+        if ( $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't call append() if not authenticated." );
+        }
+
+        $tag = $this->getNextTag();
+        $mailSize = strlen( $mail );
+        if ( !is_null( $flags ) )
+        {
+            for ( $i = 0; $i < count( $flags ); $i++ )
+            {
+                $flags[$i] = '\\' . $this->normalizeFlag( $flags[$i] );
+            }
+            $flagList = implode( ' ', $flags );
+            $command = "{$tag} APPEND {$mailbox} ({$flagList}) {{$mailSize}}";
+        }
+        else
+        {
+            $command = "{$tag} APPEND {$mailbox} {{$mailSize}}";
+        }
+
+        $this->connection->sendData( $command );
+        $response = trim( $this->connection->getLine() );
+
+        if ( strpos( $response, 'TRYCREATE' ) !== false )
+        {
+            throw new ezcMailTransportException( "Mailbox does not exist: <{$response}>." );
+        }
+
+        if ( $this->responseType( $response ) == self::RESPONSE_FEEDBACK )
+        {
+            $this->connection->sendData( $mail );
+            $response = trim( $this->getResponse( $tag ) );
+            if ( $this->responseType( $response ) != self::RESPONSE_OK )
+            {
+                throw new ezcMailTransportException( "The IMAP server could not append message to mailbox <{$mailbox}>: <{$response}>." );
+            }
+        }
+        elseif ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not append message to mailbox <{$mailbox}>: <{$response}>." );
+        }
+    }
+
+    /**
      * Clears $flag of unwanted characters and makes it uppercase.
      *
      * @param string $flag
@@ -1269,7 +1340,7 @@ class ezcMailImapTransport
     {
         $flag = strtoupper( $flag );
         $flag = str_replace( '\\', '', $flag );
-        return $flag;
+        return trim( $flag );
     }
 
     /**
