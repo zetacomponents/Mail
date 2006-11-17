@@ -3,6 +3,7 @@ eZ components - Mail
 
 .. contents:: Table of Contents
 
+
 Introduction
 ============
 
@@ -12,6 +13,7 @@ use the ezcMailComposer class. This class allows you to send HTML mail with
 images, attachments and an optional text part.
 If you require more advanced email messages you can build the complete message
 yourself using the ezcMailPart derived classes.
+
 
 Class overview
 ==============
@@ -37,6 +39,7 @@ ezcMailParser
   This class parses mail messages from text into ezcMail structures. You can
   use it together with the mail retrieval transport classes.
 
+
 Usage
 =====
 
@@ -47,7 +50,7 @@ The mail component provides transport protocols both for sending and retrieving
 mail.
 For sending mail we support:
 
-- SMTP through the class ezMailSmtpTransport
+- SMTP through the class ezcMailSmtpTransport
 - MTA through the class ezcMailMtaTransport
 
 ezcMailSmtpTransport makes it possible to send mail over the SMTP
@@ -57,6 +60,13 @@ ezcMailMtaTransport which wraps over the PHP mail function..
 For mail retrieval we currently support:
 
 - POP3 through the class ezcMailPop3Transport
+- IMAP through the class ezcMailImapTransport
+
+Other transports:
+
+- MBOX transport to handle Unix mailbox formats
+- File transport to handle emails stored in files
+- Variable transport to handle emails stored in memory
 
 Send a mail with the composer
 -----------------------------
@@ -126,7 +136,6 @@ that a valid ezcMail object is available in the $digest variable.
 .. include:: tutorial_example_05.php
    :literal:
 
-
 Character encoding
 ------------------
 
@@ -142,7 +151,6 @@ iso-8859-1:
 You can of course choose and combine any available character set. Make sure
 that the input text is in the encoding specified or you may get unexpected
 results.
-
 
 Mail retrieval and parsing
 --------------------------
@@ -177,11 +185,13 @@ For a more elaborate example please see the display_example_.
 
 .. _display_example: Mail_display-example.html
 
+
 Troubleshooting
 ===============
 
 Qmail MTA
 ---------
+
 Qmail insists it should only have "\n" linebreaks and will send garbled messages
 with the default "\\r\\n" setting. Use ezcMailTools::setLineBreak( "\\n" ) before 
 sending mail to fix this issue.
