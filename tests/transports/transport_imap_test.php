@@ -14,6 +14,8 @@
  */
 class ezcMailTransportImapTest extends ezcTestCase
 {
+    private static $ids = array();
+
     public function testInvalidServer()
     {
         try
@@ -411,7 +413,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 240 ), $uids );
+        $this->assertEquals( array( 1 => self::$ids[0] ), $uids );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -422,10 +424,10 @@ class ezcMailTransportImapTest extends ezcTestCase
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
             array(
-                1 => 240,
-                2 => 241,
-                3 => 242,
-                4 => 243,
+                1 => self::$ids[0],
+                2 => self::$ids[1],
+                3 => self::$ids[2],
+                4 => self::$ids[3],
             ),
             $uids
         );
@@ -503,7 +505,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
-        $this->assertEquals( array( 1 => 240 ), $uids );
+        $this->assertEquals( array( 1 => self::$ids[0] ), $uids );
     }
 
     public function testCreateRenameDeleteMailbox()
@@ -1272,7 +1274,16 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public static function suite()
     {
-         return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
+        // small hack because the message IDs keep increasing everyday by 4 on the server
+        self::$ids = array( 0, 1, 2, 3 );
+        $refDate = mktime( 0, 0, 0, 9, 18, 2006 );
+        $today = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'y' ) );
+        $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
+        for ( $i = 0; $i < count( self::$ids ); $i++ )
+        {
+            self::$ids[$i] += 4 * $days;
+        }
+        return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
     }
 }
 ?>
