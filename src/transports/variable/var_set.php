@@ -39,11 +39,9 @@ class ezcMailVariableSet implements ezcMailParserSet
     private $mail = array();
 
     /**
-     * Constructs a new set that servers the files specified by $mail.
+     * Constructs a new set that contains one mail from $mail.
      *
-     * The set will start on the first file in the the array.
-     *
-     * @param array(string) $mail
+     * @param string $mail
      */
     public function __construct( $mail )
     {
@@ -75,7 +73,7 @@ class ezcMailVariableSet implements ezcMailParserSet
     /**
      * Moves the set to the next mail and returns true upon success.
      *
-     * False is returned if there are no more mail in the set.
+     * False is returned if there are no more mail in the set (always).
      *
      * @return bool
      */
@@ -83,6 +81,15 @@ class ezcMailVariableSet implements ezcMailParserSet
     {
         return false;
     }
-}
 
+    /**
+     * Returns whether the variable set contains mails.
+     *
+     * @return bool
+     */
+    public function hasData()
+    {
+        return true;
+    }
+}
 ?>
