@@ -17,11 +17,9 @@
 class ezcMailException extends ezcBaseException
 {
     /**
-     * Constructs a new ezcMailException with error message $message and
-     * error code $code.
+     * Constructs a new ezcMailException with error message $message.
      *
      * @param string $message
-     * @param int $code
      */
     public function __construct( $message )
     {
