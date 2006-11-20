@@ -1,36 +1,36 @@
 1.2beta2 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Implemented feature request #9229: ability to selectMailbox readonly in
-  IMAP. Patch by Mikko Koppanen.
-- Fixed a bug in ezcMailPart: when setting the headers property the correct
-  exception is thrown (ezcBasePropertyPermissionException).
+- Added feature #9079: The ability to add mail attachments using streams.
+- Added feature #9100: The ability to set the character set in the
+  composer for text and HTML parts.
+- Added feature #9331: Added the returnPath property in ezcMail to set the
+  envelope address while sending mail with the SMTP and MTA transports.
+- Added feature #9334: Added the getMessageNumbers() method to the IMAP and
+  POP3 sets to return message numbers. Patch by Mikko Koppanen.
+
+- Fixed an issue in ezcMailPart: When setting the headers property the wrong
+  exception was thrown.
 - Fixed bug #9042: added __isset() method to classes that use properties.
-- Implemented feature request #9100: added ability to set character in the
-  composer for text part and html part.
-- Implemented feature requests #9212 and #9228: createMailbox, renameMailbox,
-  deleteMailbox, copyMessages methods in IMAP. Patches by Mikko Koppanen.
-- Implemented feature requests #9171, #9172, #9206, #9228: fetchByFlag(),
-  countByFlag(), setFlag(), clearFlag() methods in IMAP. Patches by Mikko
-  Koppanen.
-- Implemented feature request #9173: status() also returns number of recent
-  and unseen messages in IMAP.
-- Implemented feature request #9079: added ability to add mail attachments
-  using streams.
-- Implemented feature request #9333: sortMessages(), sortFromOffset(),
-  fetchFlags() methods in IMAP. Patches by Mikko Koppanen.
-- Implemented feature request #9334: IMAP and POP3 sets can return message
-  numbers (method getMessageNumbers()). Patch by Mikko Koppanen.
-- Implemented feature request #9424: noop() method in IMAP and POP3
-  transports. Patch by Mikko Koppanen.
-- Implemented feature request #9423: capability() method in IMAP transport.
-  Patch by Mikko Koppanen.
-- Implemented feature request #9425: append() method in IMAP transport. Patch
-  by Mikko Koppanen.
 - Fixed bug #9442: added missing hasData() method to ezcMailVariableSet.
-- Implemented feature request #9331: added returnPath property in ezcMail and
-  SMTP and MTA transports use it to generate a Return-Path header if needed.
-- Added expunge() method in IMAP transport.
+- Various additions to the IMAP Transport:
+
+  * Added features #9171, #9172, #9206, #9228: Added the fetchByFlag(),
+    countByFlag(), setFlag(), clearFlag() methods. Patches by Mikko Koppanen.
+  * Added feature #9173: Changed the status() method to also return the number
+    of recent and unseen messages.
+  * Added features #9212 and #9228: Added the createMailbox(), renameMailbox(),
+    deleteMailbox() and copyMessages() methods. Patches by Mikko Koppanen.
+  * Added feature #9229: Added a parameter to selectMailbox to select a mail
+    box in readonly mode. Patch by Mikko Koppanen.
+  * Added feature #9333: Added the sortMessages(), sortFromOffset() and
+    fetchFlags() methods. Patches by Mikko Koppanen.
+  * Added feature #9336: Added the expunge() method. Patch by Mikko Koppanen.
+  * Added feature #9423: Added the capability() method.  Patch by Mikko
+    Koppanen.
+  * Added feature #9424: Added the noop() method in IMAP and POP3 transports.
+    Patch by Mikko Koppanen.
+  * Added feature #9425: Added the append() method.
 
 
 1.2beta1 - Tuesday 24 October 2006
@@ -123,7 +123,7 @@
   RFC822 compliant address strings but also address strings in local
   encoding. This is useful when ezcMailAddress items directly from
   user inserted address string (e.g from a composer window).
-- Implemented feature request #8266: Property for the Content-Disposition
+- Added feature #8266: Property for the Content-Disposition
   stuff on the ezcMailPart level. Implemented for both parsing and sending.
 - Changed mime string decoding to be more robust by trying to work around
   common mistakes by MUAs.
