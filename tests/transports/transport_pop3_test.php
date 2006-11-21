@@ -167,7 +167,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailNoSuchMessageException $e )
         {
-            $this->assertEquals( 'The message with ID <-1> could not be found.', $e->getMessage() );
+            $this->assertEquals( "The message with ID '-1' could not be found.", $e->getMessage() );
         }
     }
 
@@ -182,7 +182,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailNoSuchMessageException $e )
         {
-            $this->assertEquals( 'The message with ID <0> could not be found.', $e->getMessage() );
+            $this->assertEquals( "The message with ID '0' could not be found.", $e->getMessage() );
         }
     }
 
@@ -209,7 +209,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailOffsetOutOfRangeException $e )
         {
-            $this->assertEquals( 'The offset <-1> is outside of the message subset <-1, 10>.', $e->getMessage());
+            $this->assertEquals( "The offset '-1' is outside of the message subset '-1', '10'.", $e->getMessage());
         }
     }
 
@@ -224,7 +224,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailOffsetOutOfRangeException $e )
         {
-            $this->assertEquals( 'The offset <10> is outside of the message subset <10, 1>.', $e->getMessage() );
+            $this->assertEquals( "The offset '10' is outside of the message subset '10', '1'.", $e->getMessage() );
         }
     }
 
@@ -239,7 +239,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailInvalidLimitException $e )
         {
-            $this->assertEquals( 'The message count <-1> is not allowed for the message subset <0, -1>.', $e->getMessage() );
+            $this->assertEquals( "The message count '-1' is not allowed for the message subset '0', '-1'.", $e->getMessage() );
         }
     }
 

@@ -102,7 +102,7 @@ class ezcMailPop3Transport
         $this->greeting = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $this->greeting ) )
         {
-            throw new ezcMailTransportException( "The connection to the POP3 server is ok, but a negative response from server was received: <{$this->greeting}>. Try again later." );
+            throw new ezcMailTransportException( "The connection to the POP3 server is ok, but a negative response from server was received: '{$this->greeting}'. Try again later." );
         }
         $this->state = self::STATE_AUTHORIZATION;
     }
@@ -171,13 +171,13 @@ class ezcMailPop3Transport
             $response = $this->connection->getLine();
             if ( !$this->isPositiveResponse( $response ) )
             {
-                throw new ezcMailTransportException( "The POP3 server did not accept the username: <{$response}>." );
+                throw new ezcMailTransportException( "The POP3 server did not accept the username: {$response}." );
             }
             $this->connection->sendData( "PASS {$password}" );
             $response = $this->connection->getLine();
             if ( !$this->isPositiveResponse( $response ) )
             {
-                throw new ezcMailTransportException( "The POP3 server did not accept the password: <{$response}>." );
+                throw new ezcMailTransportException( "The POP3 server did not accept the password: {$response}." );
             }
         }
         else if ( $method == self::AUTH_APOP ) // APOP login
@@ -198,7 +198,7 @@ class ezcMailPop3Transport
             $response = $this->connection->getLine();
             if ( !$this->isPositiveResponse( $response ) )
             {
-                throw new ezcMailTransportException( "The POP3 server did not accept the APOP login: <{$response}>." );
+                throw new ezcMailTransportException( "The POP3 server did not accept the APOP login: {$response}." );
             }
         }
         else
@@ -231,7 +231,7 @@ class ezcMailPop3Transport
         $response = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $response ) )
         {
-            throw new ezcMailTransportException( "The POP3 server sent a negative response to the LIST command: <{$response}>." );
+            throw new ezcMailTransportException( "The POP3 server sent a negative response to the LIST command: {$response}." );
         }
 
         // fetch the data from the server and prepare it to be returned.
@@ -285,7 +285,7 @@ class ezcMailPop3Transport
             }
             else
             {
-                throw new ezcMailTransportException( "The POP3 server sent a negative response to the UIDL command: <{$response}>." );
+                throw new ezcMailTransportException( "The POP3 server sent a negative response to the UIDL command: {$response}." );
             }
         }
         else
@@ -303,7 +303,7 @@ class ezcMailPop3Transport
             }
             else
             {
-                throw new ezcMailTransportException( "The POP3 server sent a negative response to the UIDL command: <{$response}>." );
+                throw new ezcMailTransportException( "The POP3 server sent a negative response to the UIDL command: {$response}." );
             }
         }
         return $result;
@@ -338,7 +338,7 @@ class ezcMailPop3Transport
         }
         else
         {
-            throw new ezcMailTransportException( "The POP3 server did not respond with a status message: <{$response}>." );
+            throw new ezcMailTransportException( "The POP3 server did not respond with a status message: {$response}." );
         }
     }
 
@@ -366,7 +366,7 @@ class ezcMailPop3Transport
 
         if ( !$this->isPositiveResponse( $response ) )
         {
-            throw new ezcMailTransportException( "The POP3 server could not delete the message: <{$response}>." );
+            throw new ezcMailTransportException( "The POP3 server could not delete the message: {$response}." );
         }
     }
 
@@ -398,7 +398,7 @@ class ezcMailPop3Transport
         $response = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $response ) )
         {
-            throw new ezcMailTransportException( "The POP3 server sent a negative response to the TOP command: <{$response}>." );
+            throw new ezcMailTransportException( "The POP3 server sent a negative response to the TOP command: {$response}." );
         }
 
         // fetch the data from the server and prepare it to be returned.
@@ -515,7 +515,7 @@ class ezcMailPop3Transport
         $response = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $response ) )
         {
-            throw new ezcMailTransportException( "The POP3 server sent a negative response to the NOOP command: <{$response}>." );
+            throw new ezcMailTransportException( "The POP3 server sent a negative response to the NOOP command: {$response}." );
         }
     }
 

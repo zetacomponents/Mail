@@ -18,13 +18,13 @@
 class ezcMailTransportException extends ezcBaseException
 {
     /**
-     * Constructs an ezcMailTransportException with low level information $driverInfo.
+     * Constructs an ezcMailTransportException with low level information $message.
      *
-     * @param string $driverInfo
+     * @param string $message
      */
-    public function __construct( $driverInfo = '' )
+    public function __construct( $message = '' )
     {
-        parent::__construct( 'An error occured while sending or receiving mail. ' . $driverInfo , 0 );
+        parent::__construct( "An error occured while sending or receiving mail. " . $message );
     }
 }
 ?>

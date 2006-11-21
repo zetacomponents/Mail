@@ -245,7 +245,7 @@ class ezcMailImapTransport
         }
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server did not accept the username and/or password: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server did not accept the username and/or password: {$response}." );
         }
         else
         {
@@ -307,7 +307,7 @@ class ezcMailImapTransport
         $response = $this->getResponse( $tag, $response );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "Could not list mailboxes with the parameters <\"{$reference}\"> and <\"{$mailbox}\">: <{$response}>." );
+            throw new ezcMailTransportException( "Could not list mailboxes with the parameters '\"{$reference}\"' and '\"{$mailbox}\"': {$response}." );
         }
         return $result;
     }
@@ -362,7 +362,7 @@ class ezcMailImapTransport
         {
             $this->state = self::STATE_AUTHENTICATED;
             $this->selectedMailbox = null;
-            throw new ezcMailTransportException( "Could not select mailbox <{$mailbox}>: <{$response}>." );
+            throw new ezcMailTransportException( "Could not select mailbox '{$mailbox}': {$response}." );
         }
     }
 
@@ -389,7 +389,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not create mailbox <{$mailbox}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not create mailbox '{$mailbox}': {$response}." );
         }
         return true;
     }
@@ -426,7 +426,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not rename the mailbox <{$mailbox}> to <{$newName}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not rename the mailbox '{$mailbox}' to '{$newName}': {$response}." );
         }
         return true;
     }
@@ -462,7 +462,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not delete the mailbox <{$mailbox}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not delete the mailbox '{$mailbox}': {$response}." );
         }
         return true;
     }
@@ -496,7 +496,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not copy <{$messages}> to <{$destination}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not copy '{$messages}' to '{$destination}': {$response}." );
         }
         return true;
     }
@@ -550,7 +550,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag, $response ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not list messages: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not list messages: {$response}." );
         }
 
         if ( !empty( $messageList ) )
@@ -575,7 +575,7 @@ class ezcMailImapTransport
             $response = trim( $this->getResponse( $tag, $response ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
-                throw new ezcMailTransportException( "The IMAP server could not list messages: <{$response}>." );
+                throw new ezcMailTransportException( "The IMAP server could not list messages: {$response}." );
             }
         }
         return $messages;
@@ -645,7 +645,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not delete the message <{$msgNum}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not delete the message '{$msgNum}': {$response}." );
         }
         return true;
     }
@@ -695,7 +695,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag, $response ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not fetch the message <{$msgNum}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not fetch the message '{$msgNum}': {$response}." );
         }
         return $message;
     }
@@ -763,7 +763,7 @@ class ezcMailImapTransport
         }
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not fetch the unique identifiers: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not fetch the unique identifiers: {$response}." );
         }
         return $result;
     }
@@ -1033,7 +1033,7 @@ class ezcMailImapTransport
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not fetch flags for the messages <{$messages}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not fetch flags for the messages '{$messages}': {$response}." );
         }
         return $flags;
     }
@@ -1077,12 +1077,12 @@ class ezcMailImapTransport
             $response = trim( $this->getResponse( $tag ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
-                throw new ezcMailTransportException( "The IMAP server could not set flag <{$flag}> on the messages <{$messages}>: <{$response}>." );
+                throw new ezcMailTransportException( "The IMAP server could not set flag '{$flag}' on the messages '{$messages}': {$response}." );
             }
         }
         else
         {
-            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for setting." );
+            throw new ezcMailTransportException( "Flag '{$flag}' is not allowed for setting." );
         }
         return true;
     }
@@ -1126,12 +1126,12 @@ class ezcMailImapTransport
             $response = trim( $this->getResponse( $tag ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
-                throw new ezcMailTransportException( "The IMAP server could not clear flag <{$flag}> on the messages <{$messages}>: <{$response}>." );
+                throw new ezcMailTransportException( "The IMAP server could not clear flag '{$flag}' on the messages '{$messages}': {$response}." );
             }
         }
         else
         {
-            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for clearing." );
+            throw new ezcMailTransportException( "Flag '{$flag}' is not allowed for clearing." );
         }
         return true;
     }
@@ -1185,12 +1185,12 @@ class ezcMailImapTransport
             $response = trim( $this->getResponse( $tag, $response ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
-                throw new ezcMailTransportException( "The IMAP server could not search the messages by flags: <{$response}>." );
+                throw new ezcMailTransportException( "The IMAP server could not search the messages by flags: {$response}." );
             }
         }
         else
         {
-            throw new ezcMailTransportException( "Flag <{$flag}> is not allowed for searching." );
+            throw new ezcMailTransportException( "Flag '{$flag}' is not allowed for searching." );
         }
         return $matchingMessages;
     }
@@ -1217,7 +1217,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "NOOP failed: <{$response}>." );
+            throw new ezcMailTransportException( "NOOP failed: {$response}." );
         }
     }
 
@@ -1253,7 +1253,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server responded negative to the CAPABILITY command: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server responded negative to the CAPABILITY command: {$response}." );
         }
 
         return explode( ' ', str_replace( '* CAPABILITY ', '', $result ) );
@@ -1281,7 +1281,7 @@ class ezcMailImapTransport
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "EXPUNGE failed: <{$response}>." );
+            throw new ezcMailTransportException( "EXPUNGE failed: {$response}." );
         }
     }
 
@@ -1338,7 +1338,7 @@ class ezcMailImapTransport
 
         if ( strpos( $response, 'TRYCREATE' ) !== false )
         {
-            throw new ezcMailTransportException( "Mailbox does not exist: <{$response}>." );
+            throw new ezcMailTransportException( "Mailbox does not exist: {$response}." );
         }
 
         if ( $this->responseType( $response ) == self::RESPONSE_FEEDBACK )
@@ -1347,12 +1347,12 @@ class ezcMailImapTransport
             $response = trim( $this->getResponse( $tag ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
-                throw new ezcMailTransportException( "The IMAP server could not append message to mailbox <{$mailbox}>: <{$response}>." );
+                throw new ezcMailTransportException( "The IMAP server could not append message to mailbox '{$mailbox}': {$response}." );
             }
         }
         elseif ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not append message to mailbox <{$mailbox}>: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not append message to mailbox '{$mailbox}': {$response}." );
         }
     }
 
@@ -1441,7 +1441,7 @@ class ezcMailImapTransport
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
-            throw new ezcMailTransportException( "The IMAP server could not sort the messages: <{$response}>." );
+            throw new ezcMailTransportException( "The IMAP server could not sort the messages: {$response}." );
         }
 
         if ( $reverse === true )

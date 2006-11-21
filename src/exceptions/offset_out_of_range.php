@@ -25,7 +25,7 @@ class ezcMailOffsetOutOfRangeException extends ezcMailException
      */
     public function __construct( $offset, $count )
     {
-        parent::__construct( "The offset <{$offset}> is outside of the message subset <{$offset}, {$count}>." );
+        parent::__construct( "The offset '{$offset}' is outside of the message subset '{$offset}', '{$count}'." );
     }
 }
 ?>

@@ -112,7 +112,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcMailNoSuchMessageException $e )
         {
-            $this->assertEquals( 'The message with ID <-1> could not be found.', $e->getMessage() );
+            $this->assertEquals( "The message with ID '-1' could not be found.", $e->getMessage() );
         }
 
         try
@@ -122,7 +122,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcMailNoSuchMessageException $e )
         {
-            $this->assertEquals( 'The message with ID <3> could not be found.', $e->getMessage() );
+            $this->assertEquals( "The message with ID '3' could not be found.", $e->getMessage() );
         }
     }
 
@@ -136,7 +136,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcBaseFileNotFoundException $e )
         {
-            $this->assertEquals( "The mbox file <$dirname/data/not-here-at-all> could not be found.", $e->getMessage() );
+            $this->assertEquals( "The mbox file '{$dirname}/data/not-here-at-all' could not be found.", $e->getMessage() );
         }
     }
 
@@ -150,7 +150,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcMailOffsetOutOfRangeException $e )
         {
-            $this->assertEquals( 'The offset <-1> is outside of the message subset <-1, 10>.', $e->getMessage());
+            $this->assertEquals( "The offset '-1' is outside of the message subset '-1', '10'.", $e->getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcMailOffsetOutOfRangeException $e )
         {
-            $this->assertEquals( 'The offset <10> is outside of the message subset <10, 1>.', $e->getMessage() );
+            $this->assertEquals( "The offset '10' is outside of the message subset '10', '1'.", $e->getMessage() );
         }
     }
 
@@ -178,7 +178,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcMailInvalidLimitException $e )
         {
-            $this->assertEquals( 'The message count <-1> is not allowed for the message subset <0, -1>.', $e->getMessage() );
+            $this->assertEquals( "The message count '-1' is not allowed for the message subset '0', '-1'.", $e->getMessage() );
         }
     }
 
@@ -211,7 +211,7 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
         catch ( ezcBaseFileIoException $e )
         {
-            self::assertEquals( "An error occurred while reading from <filepointer>. (The passed filepointer is not a stream resource.)", $e->getMessage() );
+            self::assertEquals( "An error occurred while reading from 'filepointer'. (The passed filepointer is not a stream resource.)", $e->getMessage() );
         }
     }
 
