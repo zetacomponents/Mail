@@ -34,7 +34,7 @@ class ezcMailTest extends ezcTestCase
         }
         catch ( ezcBasePropertyPermissionException $e )
         {
-            $this->assertEquals( 'The property <timestamp> is read-only.', $e->getMessage() );
+            $this->assertEquals( "The property 'timestamp' is read-only.", $e->getMessage() );
         }
 
         try
@@ -44,7 +44,7 @@ class ezcMailTest extends ezcTestCase
         }
         catch ( ezcBasePropertyPermissionException $e )
         {
-            $this->assertEquals( 'The property <headers> is read-only.', $e->getMessage() );
+            $this->assertEquals( "The property 'headers' is read-only.", $e->getMessage() );
         }
     }
 

@@ -79,7 +79,7 @@ class ezcMailTextTest extends ezcTestCase
         }
         catch ( ezcBasePropertyPermissionException $e )
         {
-            $this->assertEquals( 'The property <originalCharset> is read-only.', $e->getMessage() );
+            $this->assertEquals( "The property 'originalCharset' is read-only.", $e->getMessage() );
         }
 
         try
@@ -89,7 +89,7 @@ class ezcMailTextTest extends ezcTestCase
         }
         catch ( ezcBasePropertyNotFoundException $e )
         {
-            $this->assertEquals( 'No such property name <no_such_property>.', $e->getMessage() );
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
         }
 
         $this->assertEquals( 'utf-8', $temp->charset );

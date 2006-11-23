@@ -215,7 +215,7 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertType(
             "ezcMailExtended",
             $reply,
-            "replyToMaol created incorrect class instance."
+            "replyToMail created incorrect class instance."
         );
     }
 
