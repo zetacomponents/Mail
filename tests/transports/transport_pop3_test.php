@@ -153,7 +153,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
+        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
     }
 
     public function testFetchByMessageNr1()
@@ -271,7 +271,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $pop3->status( $num, $size );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 69024, $size );
+        $this->assertEquals( 68377, $size );
     }
 
     public function testTop()
@@ -315,7 +315,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
-        $this->assertEquals( array( 1 => "1143007546." . self::$ids[0] ), $pop3->listUniqueIdentifiers( 1 ) );
+        $this->assertEquals( array( 1 => self::$ids[0] ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
@@ -324,10 +324,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $this->assertEquals(
             array(
-                1 => '1143007546.' . self::$ids[0],
-                2 => '1143007546.' . self::$ids[1],
-                3 => '1143007546.' . self::$ids[2],
-                4 => '1143007546.' . self::$ids[3],
+                1 => self::$ids[0],
+                2 => self::$ids[1],
+                3 => self::$ids[2],
+                4 => self::$ids[3],
             ),
             $pop3->listUniqueIdentifiers()
         );
@@ -387,14 +387,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     public static function suite()
     {
         // small hack because the message IDs keep increasing everyday by 4 on the server
-        self::$ids = array( 0, 1, 2, 3 );
-        $refDate = mktime( 0, 0, 0, 9, 18, 2006 );
-        $today = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'y' ) );
-        $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
-        for ( $i = 0; $i < count( self::$ids ); $i++ )
-        {
-            self::$ids[$i] += 4 * $days;
-        }
+        self::$ids = array( '0000000f4420e93a', '000000104420e93a', '000000114420e93a', '000000124420e93a' );
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
 }

@@ -226,7 +226,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages();
-        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
+        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
     }
 
     public function testListMessagesWithAttachments()
@@ -235,7 +235,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages( "multipart/mixed" );
-        $this->assertEquals( array( 1 => '1723', 2 => '1694', 4 => '64070' ), $list );
+        $this->assertEquals( array( 1 => '1542', 2 => '1539', 4 => '63913' ), $list );
     }
 
     public function testFetchByMessageNr1()
@@ -362,7 +362,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->selectMailbox( 'inbox' );
         $imap->status( $num, $size, $recent, $unseen );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 69024, $size );
+        $this->assertEquals( 68377, $size );
         $this->assertEquals( 0, $recent );
         $this->assertEquals( 0, $unseen );
     }
@@ -461,7 +461,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $list = $imap->listMessages();
-        $this->assertEquals( array( 1 => '1723', 2 => '1694', 3 => '1537', 4 => '64070' ), $list );
+        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
     }
 
     public function testStatusReadOnly()
@@ -471,7 +471,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->selectMailbox( 'inbox', true );
         $imap->status( $num, $size );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 69024, $size );
+        $this->assertEquals( 68377, $size );
     }
 
     public function testTopReadOnly()
@@ -1304,15 +1304,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public static function suite()
     {
-        // small hack because the message IDs keep increasing everyday by 4 on the server
-        self::$ids = array( 0, 1, 2, 3 );
-        $refDate = mktime( 0, 0, 0, 9, 18, 2006 );
-        $today = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'y' ) );
-        $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
-        for ( $i = 0; $i < count( self::$ids ); $i++ )
-        {
-            self::$ids[$i] += 4 * $days;
-        }
+        self::$ids = array( 15, 16, 17, 18 );
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
     }
 }
