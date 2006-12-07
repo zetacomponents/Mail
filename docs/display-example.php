@@ -1,10 +1,10 @@
 <?php
-ini_set( 'include_path', '/home/httpd/ezcomponents/trunk' );
-require 'Base/src/base.php';
-function __autoload( $className )
-{
-	ezcBase::autoload( $className );
-}
+/**
+ * You can run this file for example with:
+ * php display-example.php ../tests/parser/data/gmail/mail_with_attachment.mail
+ */
+
+require_once "tutorial_autoload.php";
 
 $set = new ezcMailFileSet( array( $argv[1] ) );
 $parser = new ezcMailParser();

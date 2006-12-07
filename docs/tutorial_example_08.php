@@ -1,21 +1,30 @@
 <?php
 require_once 'tutorial_autoload.php';
 
-$set = ezcMailFileSet( "path_to_the_mail_file" );
-$parser = new ezcMailParser();
-$mail = $parser->parseMail( $set );
+$mailAddresses = array(
+                        new ezcMailAddress( 'john@example.com', 'Jøhn Doe', 'ISO-8859-1' ),
+                        new ezcMailAddress( 'jane@example.com', 'Jane Doe' )
+                      );
+$addresses = '=?ISO-8859-1?B?SsO4aG4gRG9l?= <john@example.com>, Jane Doe <jane@example.com';
 
-// The mail is a simple mail with a text and a file attachment.
-// Hence the body is a ezcMailMultipartMixed object.
-$parts = $mail->body->getParts();
+// Convert ezcMailAddress to string representation
+var_dump( ezcMailTools::composeEmailAddress( $mailAddresses[0] ) );
+var_dump( ezcMailTools::composeEmailAddresses( $mailAddresses ) );
 
-// the first part is the text message, the second is the file attachment
-$file = $parts[1];
+// Convert string to ezcMailAddress
+var_dump( ezcMailTools::parseEmailAddress( $addresses ) );
+var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 
-// lets move the attachment
-$newPlacement = '/path/to/my/files/' . basename( $file->fileName );
-rename( $file->fileName, $newPlacement );
+// Create a new mail object
+$mail = new ezcMail();
+$mail->from = $mailAddresses[1];
+$mail->addTo( $mailAddresses[0] );
+$mail->subject = "Top secret";
+// Use the lineBreak() method
+$mail->body = new ezcMailText( "Confidential" . ezcMailTools::lineBreak() . "DO NOT READ" );
+$mail->generate();
 
-// if you still want to use the $file object remember to tell it that we changed the name
-$file->fileName = $newPlacement;
+// Create a reply message to the previous mail object
+$reply = ezcMailTools::replyToMail( $mail, new ezcMailAddress( 'test@example.com', 'Reply Guy' ) );
+
 ?>

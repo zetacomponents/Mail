@@ -1,5 +1,5 @@
 eZ components - Mail
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. contents:: Table of Contents
 
@@ -7,12 +7,12 @@ eZ components - Mail
 Introduction
 ============
 
-The mail component provides functionality to both send, retrieve and parse
-mail messages. 
-use the ezcMailComposer class. This class allows you to send HTML mail with
-images, attachments and an optional text part.
-If you require more advanced email messages you can build the complete message
-yourself using the ezcMailPart derived classes.
+The mail component provides functionality to send, retrieve and parse
+mail messages. If you require an easy way to send a mail use the ezcMailComposer
+class, which allows you to send HTML mail with images, attachments and an
+optional text part. If you require more advanced mail messages you can build the
+complete message yourself using the ezcMailPart derived classes. You can retrieve
+mail messages from different sources using the supported transports.
 
 
 Class overview
@@ -39,6 +39,21 @@ ezcMailParser
   This class parses mail messages from text into ezcMail structures. You can
   use it together with the mail retrieval transport classes.
 
+ezcMailSmtpTransport
+  Sends mails using an SMTP server. After sending an email the connection can be
+  kept alive so that the next mail sent uses the same connection, speeding up
+  the process.
+
+ezcMailMtaTransport
+  Sends mails using the PHP mail() function.
+
+ezcMailPop3Transport
+  Connects to a POP3 server and allows fetching and deleting of mails.
+
+ezcMailImapTransport
+  Connects to an IMAP server and allows operations on mails in a mailbox
+  (fetch, delete) and operations on mailboxes (create, delete, rename, append).
+
 
 Usage
 =====
@@ -46,27 +61,69 @@ Usage
 Transport protocols
 -------------------
 
-The mail component provides transport protocols both for sending and retrieving
+The mail component provides transport protocols for both sending and retrieving
 mail.
-For sending mail we support:
 
-- SMTP through the class ezcMailSmtpTransport
-- MTA through the class ezcMailMtaTransport
+For sending mail we support the following protocols:
 
-ezcMailSmtpTransport makes it possible to send mail over the SMTP
-protocol. If you prefer using a local mail agent you can use
-ezcMailMtaTransport which wraps over the PHP mail function..
+- SMTP (ezcMailSmtpTransport) - uses an SMTP server to send mail
+- MTA (ezcMailMtaTransport) - wraps around the PHP mail() function
 
-For mail retrieval we currently support:
+For mail retrieval we currently support the following protocols:
 
-- POP3 through the class ezcMailPop3Transport
-- IMAP through the class ezcMailImapTransport
+- POP3 (ezcMailPop3Transport) - old protocol but still used
+- IMAP (ezcMailImapTransport) - handles multiple mailboxes
+- MBOX (ezcMailMboxTransport) - handles Unix mailbox file formats
 
-Other transports:
+Mail retrieval from other sources:
 
-- MBOX transport to handle Unix mailbox formats
-- File transport to handle emails stored in files
-- Variable transport to handle emails stored in memory
+- File (ezcMailFileSet) - handles mails stored in files
+- Variable (ezcMailVariableSet) - handles mails stored in memory
+
+Mail parsers
+------------
+
+After using a mail retrieval trasport to fetch a set of mails, a mail parser
+can be used to go through the set and extract the needed information like
+subject, sender, date, attachments from each mail in the set. The ezcMailParser
+class is used for this purpose.
+
+Mail parts
+----------
+
+The ezcMail component supports a wide variety of mail parts which can be used
+when sending or retrieving mails:
+
+- ezcMailFile - mail attachment from an existing file
+- ezcMailStreamFile - mail attachment from an open stream
+- ezcMailVirtualFile - mail attachment from a string in memory
+- ezcMailMultipart - support for all multipart parts
+- ezcMailMultipartAlternative - used to bundle a group of mail parts where only one should be shown
+- ezcMailMultipartDigest - used to bundle a list of mail objects
+- ezcMailMultipartMixed - used to bundle an ordered list of mail parts
+- ezcMailMultipartRelated - intended for mail parts consisting of several inter-related body parts
+- ezcMailRfc822Digest - used to insert mail into mail
+- ezcMailText - used for plain text
+
+Mail tools
+----------
+
+In the ezcMailTools class you will find various useful static methods which can be
+used in your applications:
+
+- ezcMailTools::lineBreak() - returns one end-of-line character (default \\r\\n). Use ezcMailTools::setLineBreak() to change the default
+- ezcMailTools::composeEmailAddress() - returns the RFC822 representation of a mail address as a string. Use ezcMailTools::composeEmailAddresses() for an array of mail address objects
+- ezcMailTools::parseEmailAddress() - returns an ezcMailAddress object from a string mail address. Use ezcMailTools::parseEmailAddresses() for a string of mail addresses
+- ezcMailTools::generateMessageId() - returns an unique message ID to be used for a mail message
+- ezcMailTools::generateContentId() - returns an unique ID to be used for Content-ID headers
+- ezcMailTools::mimeDecode() - decodes MIME encoded fields and tries to recover from errors
+- ezcMailTools::replyToMail() - returns a new ezcMail object that is a reply to the specified ezcMail object
+
+See the Mail tools example below for how to use these methods.
+
+
+Building and sending mail
+=========================
 
 Send a mail with the composer
 -----------------------------
@@ -80,27 +137,43 @@ displays how to send a normal text message.
 Send a mail with HTML, inline images and attachments
 ----------------------------------------------------
 
-An example with HTML text, images and attachments can be found in the
-ezcMailComposer class description.
+This example shows how to send a mail with HTML text, images and attachments
+using the ezcMailComposer class.
+
+.. include:: tutorial_example_02.php
+   :literal:
 
 Building a mail from scratch
------------------------------
+----------------------------
 
 The class structure of the mail component follows that of the mail MIME. This
 means that you can build advanced MIME messages part by part.
 
 The first example displays how to build a similar message to the one above.
 
-.. include:: tutorial_example_02.php
-   :literal:
-
-As you can see there is not much difference compared to the composer version. 
-In the next example we will add an attachment to our manually built mail:
-
 .. include:: tutorial_example_03.php
    :literal:
 
-The file 'myfile.jpg' must of course exist in order for this example to work.
+As you can see there is not much difference compared to the composer version.
+In the next example we will add an attachment to our manually built mail:
+
+.. include:: tutorial_example_04.php
+   :literal:
+
+Character encoding
+------------------
+
+Most of the world does not speak and write US ASCII and require more advanced
+character encoding to display their mail correctly.
+
+The following example shows how to send a mail entirely encoded with iso-8859-1:
+
+.. include:: tutorial_example_05.php
+   :literal:
+
+You can of course choose and combine any available character set. Make sure
+that the input text is in the encoding specified or you may get unexpected
+results.
 
 Extending the mail component
 ----------------------------
@@ -118,7 +191,7 @@ e-mail.
 
 To make it work we will create the class RFC822Digest that adds these headers:
 
-.. include:: tutorial_example_04.php
+.. include:: tutorial_example_06.php
    :literal:
 
 Our new class extends the ezcMailPart class. This is required for all parts of
@@ -133,74 +206,137 @@ since we want to include the full text of the mail digest.
 The new class can be used directly when building an email. The example assumes
 that a valid ezcMail object is available in the $digest variable.
 
-.. include:: tutorial_example_05.php
+.. include:: tutorial_example_07.php
    :literal:
 
-Character encoding
-------------------
-
-Most of the world does not speak and write US ascii and require more advanced
-character encoding to display their mail correctly.
-
-The following example shows how to send a mail entirely encoded with
-iso-8859-1:
-
-.. include:: tutorial_example_06.php
-   :literal:
-
-You can of course choose and combine any available character set. Make sure
-that the input text is in the encoding specified or you may get unexpected
-results.
-
-Mail retrieval and parsing
+Using the mail tools class
 --------------------------
 
-Many applications have a need to interact with an email address. The mail
+In this example you can see how to use the various methods from the
+ezcMailTools class.
+
+.. include:: tutorial_example_08.php
+   :literal:
+
+
+Mail retrieval and parsing
+==========================
+
+Many applications have a need to interact with a message store. The mail
 component makes this easy through the class ezcMailParser and the mail
 retrieval transport classes. Mail is fetched, parsed and returned to you in the
 same structure that is used to send mail.
 
 The mail components currently allows you to fetch and parse mail messages from
-POP3, mbox files, single mail files and from variables. The parser fully
-supports mail in all character sets, multipart mail (attachments), HTML mail, HTML mail with
-images and digest messages.
+POP3, IMAP, mbox files, single mail files and from variables. The parser fully
+supports mail in all character sets, multipart mail (attachments), HTML mail,
+HTML mail with images and digest messages.
 
-The following example shows how to fetch all messages from a POP3 account and
-parse them for usage.
+Retrieving mail using POP3
+--------------------------
 
-.. include:: tutorial_example_07.php
+The following example shows how to fetch messages from a POP3 account using
+various methods and parse them for usage.
+
+.. include:: tutorial_example_09.php
    :literal:
 
 The parser returns an array of ezcMail messages with parts organized as the
 MIME structure of the mail.
 
-If the mail contains attachments they will be saved to disk in temporary
-files. If you want to keep the files they must be moved to a temporary place as
-shown in the next example.
+Retrieving mail using IMAP
+--------------------------
 
-.. include:: tutorial_example_08.php
+The following example shows how to fetch messages from an IMAP account using
+various functions and parse them for usage.
+
+.. include:: tutorial_example_10.php
    :literal:
 
-For a more elaborate example please see the display_example_.
+The parser returns an array of ezcMail messages with parts organized as the
+MIME structure of the mail.
 
-.. _display_example: Mail_display-example.html
+Additional usage of the IMAP transport
+--------------------------------------
+
+The IMAP transport supports multiple mailboxes. In the following example it is
+shown how to work with mailboxes and flags.
+
+.. include:: tutorial_example_11.php
+   :literal:
+
+Retrieving mail from Mbox files
+-------------------------------
+
+The following example shows how to fetch all messages from an MBOX file and
+parse them for usage.
+
+.. include:: tutorial_example_12.php
+   :literal:
+
+The parser returns an array of ezcMail messages with parts organized as the
+MIME structure of the mail.
+
+Parsing a message set
+---------------------
+
+The following example shows how to parse a message set retrieved from an IMAP
+or POP3 account, an MBOX file, a single mail file or variable.
+
+.. include:: tutorial_example_13.php
+   :literal:
+
+For a more detailed example of how to use a mail object please see the
+`display example`_.
+
+.. _display example: Mail_display-example.html
 
 
 Troubleshooting
 ===============
 
-Qmail MTA
----------
+MTA: Qmail
+----------
 
-Qmail insists it should only have "\n" linebreaks and will send garbled messages
+Qmail insists it should only have "\\n" linebreaks and will send garbled messages
 with the default "\\r\\n" setting. Use ezcMailTools::setLineBreak( "\\n" ) before 
 sending mail to fix this issue.
+
+MTA: Sendmail relaying denied
+-----------------------------
+
+This can happen in case the administrator of the SMTP server you try to use
+disables the sending of mail from computers not connected to their network, or
+if requires authentication. Talk to the administrator of the SMTP server and
+see what are the requirements to send email.
+
+Check also that your sendmail is installed and configured correctly.
+
+For Windows, you need to specify a valid SMTP server in php.ini, or you can
+download a "fake" sendmail from Internet.
+
+IMAP: Authentication failed
+---------------------------
+
+Sometimes the IMAP transport fails to authenticate, in which case the
+authenticate() method will return false. The application should detect when
+this is happening and attempt authentication again (for example for a preset
+number of times such as 3).
 
 
 References
 ==========
-1. A list of mail related RFCs_.
 
+1. `IMAP4`_ (1730) and `IMAP4rev1`_ (2060) RFCs for IMAP transport
+2. `POP3`_ (1939) RFC for IMAP transport
+3. `SMTP`_ (821) and `SMTP authentication`_ (2554) RFCs for SMTP transport
+4. Other mail related RFCs_
+
+.. _IMAP4: http://www.faqs.org/rfcs/rfc1730.html
+.. _IMAP4rev1: http://www.faqs.org/rfcs/rfc2060.html
+.. _POP3: http://www.faqs.org/rfcs/rfc1939.html
+.. _SMTP: http://www.faqs.org/rfcs/rfc821.html
+.. _SMTP authentication: http://www.faqs.org/rfcs/rfc2554.html
 .. _RFCs: http://www.imc.org/rfcs.html
 
 
