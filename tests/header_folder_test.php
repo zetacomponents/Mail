@@ -48,7 +48,7 @@ class ezcMailHeaderFolderTest extends ezcTestCase
         ezcMailHeaderFolder::setLimit( ezcMailHeaderFolder::SOFT_LIMIT );
         $folded = ezcMailHeaderFolder::foldAny( $reference );
         $exploded = explode( ezcMailTools::lineBreak(), $folded );
-        foreach( $exploded as $line )
+        foreach ( $exploded as $line )
         {
             $this->assertTrue( strlen( $line ) <= 76 );
         }

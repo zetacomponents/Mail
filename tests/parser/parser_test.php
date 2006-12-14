@@ -75,9 +75,9 @@ class ezcMailParserTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( "ezcMailParserTest" );
     }
 
-    //
+    // 
     // Kmail
-    //
+    // 
     public function testKmail1()
     {
         $parser = new ezcMailParser();
@@ -222,9 +222,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<200602061538.16305.fh@ez.no>', $mail->messageID );
     }
 
-    //
+    // 
     // Mail.app
-    //
+    // 
 
     public function testMailApp1()
     {
@@ -270,9 +270,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
-    //
+    // 
     // Gmail
-    //
+    // 
     public function testGmail1()
     {
         $parser = new ezcMailParser();
@@ -372,9 +372,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<span', substr( $parts[1]->text, 0, 5 ) );
     }
 
-    //
+    // 
     // Opera
-    //
+    // 
 
     public function testOpera()
     {
@@ -447,9 +447,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
-    //
+    // 
     // Pine
-    //
+    // 
     public function testPine1()
     {
         $parser = new ezcMailParser();
@@ -576,9 +576,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body with æøå", $parts[0]->text );
     }
 
-    //
+    // 
     // Hotmail
-    //
+    // 
     public function testHotmail1()
     {
         $parser = new ezcMailParser();
@@ -810,7 +810,7 @@ END;
 
         $this->assertEquals( 1, count( $mail ) );
 
-        //subject string should be the same as in email (with line break)
+        // subject string should be the same as in email (with line break)
         $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?=" .
             "\t=?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
 

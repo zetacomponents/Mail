@@ -24,7 +24,7 @@ class ezcMailTransportFileTest extends ezcTestCase
         $set = new ezcMailFileSet( array( dirname( __FILE__ ) . '/../parser/data/gmail/html_mail.mail' ) );
         $data = '';
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $data .= $line;
             $line = $set->getNextLine();
@@ -41,7 +41,7 @@ class ezcMailTransportFileTest extends ezcTestCase
         // check first mail
         $data = '';
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $data .= $line;
             $line = $set->getNextLine();
@@ -54,7 +54,7 @@ class ezcMailTransportFileTest extends ezcTestCase
         // check second mail
         $data = '';
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $data .= $line;
             $line = $set->getNextLine();

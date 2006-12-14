@@ -27,7 +27,7 @@ class ezcMailTransportVariableTest extends ezcTestCase
         $result = '';
 
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $result .= $line;
             $line = $set->getNextLine();
@@ -44,7 +44,7 @@ class ezcMailTransportVariableTest extends ezcTestCase
         $result = '';
 
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $result .= $line;
             $line = $set->getNextLine();
@@ -61,7 +61,7 @@ class ezcMailTransportVariableTest extends ezcTestCase
         $result = '';
 
         $line = $set->getNextLine();
-        while( $line !== null )
+        while ( $line !== null )
         {
             $result .= $line;
             $line = $set->getNextLine();

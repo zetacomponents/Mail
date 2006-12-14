@@ -247,7 +247,7 @@ class ezcMailToolsTest extends ezcTestCase
 
         $address = new ezcMailAddress( 'test@example.com', 'Reply Går', 'ISO-8859-1' );
         $mail->setHeader( 'Reply-To', ezcMailTools::composeEmailAddress( $address ) );
-        //$mail->setHeader( 'Reply-To', 'test@example.com' );
+        // $mail->setHeader( 'Reply-To', 'test@example.com' );
 
         $reply = ezcMailTools::replyToMail( $mail,
                                             new ezcMailAddress( 'test@example.com', 'Reply Går', 'ISO-8859-1' ) );

@@ -946,7 +946,7 @@ class ezcMailImapTransport
      *         or if the server sent a negative response
      *         or if $flag is not valid
      * @param string $flag
-	 * @return ezcMailImapSet
+     * @return ezcMailImapSet
      */
     public function fetchByFlag( $flag )
     {
@@ -974,7 +974,7 @@ class ezcMailImapTransport
      *         or if the server sent a negative response
      *         or if $flag is not valid
      * @param string $flag
-	 * @return int
+     * @return int
      */
     public function countByFlag( $flag )
     {
@@ -1008,7 +1008,7 @@ class ezcMailImapTransport
     public function fetchFlags( $messages )
     {
         if ( $this->state != self::STATE_SELECTED &&
-			 $this->state != self::STATE_SELECTED_READONLY )
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call fetchFlags() on the IMAP transport when a mailbox is not selected." );
         }
@@ -1119,7 +1119,7 @@ class ezcMailImapTransport
         }
 
         $flag = $this->normalizeFlag( $flag );
-        if( in_array( $flag, self::$basicFlags ) )
+        if ( in_array( $flag, self::$basicFlags ) )
         {
             $tag = $this->getNextTag();
             $this->connection->sendData( "{$tag} STORE {$messages} -FLAGS (\\{$flag})" );
@@ -1156,19 +1156,19 @@ class ezcMailImapTransport
      *         or if the server sent a negative response
      *         or if $flag is not valid
      * @param string $flag
-	 * @return array(int=>int)
+     * @return array(int=>int)
      */
     private function searchByFlag( $flag )
     {
         if ( $this->state != self::STATE_SELECTED &&
-			 $this->state != self::STATE_SELECTED_READONLY )
+             $this->state != self::STATE_SELECTED_READONLY )
         {
             throw new ezcMailTransportException( "Can't call searchByFlag() on the IMAP transport when a mailbox is not selected." );
         }
 
         $matchingMessages = array();
         $flag = $this->normalizeFlag( $flag );
-		if( in_array( $flag, self::$extendedFlags ) )
+        if ( in_array( $flag, self::$extendedFlags ) )
         {
             $tag = $this->getNextTag();
             $this->connection->sendData( "{$tag} SEARCH ({$flag})" );
