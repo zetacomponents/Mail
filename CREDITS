@@ -1,18 +1,20 @@
 CREDITS
 =======
 
-eZ components team:
--------------------
-Sergey Alexeev
-Jan Borsodi
-Raymond Bosman
-Frederik Holljen
-Kore Nordmann
-Derick Rethans
-Vadym Savchuk
-Tobias Schlitt
-Alex Stanoi
+eZ components team
+------------------
 
-Contributers:
--------------
-Mikko Koppanen: various IMAP transport enhancements
+- Sergey Alexeev
+- Jan Borsodi
+- Raymond Bosman
+- Frederik Holljen
+- Kore Nordmann
+- Derick Rethans
+- Vadym Savchuk
+- Tobias Schlitt
+- Alex Stanoi
+
+Contributors
+------------
+
+- Mikko Koppanen: various IMAP transport enhancements
