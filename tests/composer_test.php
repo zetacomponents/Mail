@@ -266,6 +266,29 @@ class ezcMailComposerTest extends ezcTestCase
     }
 
     /**
+     * Tests a complete mail with html images and files
+     * http://www.apps.ietf.org/msglint.html - validator
+     */
+    public function testMailHtmlWithImagesNoExtension()
+    {
+        $tempDir = $this->createTempDir( 'ezcMailComposerTest' );
+        $fileName = $tempDir . "/fly_no_extension";
+        $fileHandle = fopen( $fileName, "wb" );
+        fwrite( $fileHandle, "some contents" );
+        fclose( $fileHandle );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
+                                   . realpath( $fileName ) . " />Here is some text after the image. Here is the <a href=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\">file.</a></html>";
+        $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->build();
+        // $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+    }
+
+    /**
      * Tests a mail with unreadable html images.
      */
     public function testMailHtmlWithImagesUnreadable()

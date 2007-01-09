@@ -444,5 +444,55 @@ class ezcMailTools
 
         return $reply;
     }
+
+    /**
+     * Guesses the content and mime type by using the file extension.
+     *
+     * The content and mime types are returned through the $contentType
+     * and $mimeType arguments.
+     * For the moment only for image files.
+     *
+     * @param string $fileName
+     * @param string $contentType
+     * @param string $mimeType
+     */
+    static public function guessContentType( $fileName, &$contentType, &$mimeType )
+    {
+        $extension = strtolower( pathinfo( $fileName, PATHINFO_EXTENSION ) );
+        switch ( $extension )
+        {
+            case 'gif':
+                $contentType = 'image';
+                $mimeType = 'gif';
+                break;
+
+            case 'jpg':
+            case 'jpe':
+            case 'jpeg':
+                $contentType = 'image';
+                $mimeType = 'jpeg';
+                break;
+
+            case 'png':
+                $contentType = 'image';
+                $mimeType = 'png';
+                break;
+
+            case 'bmp':
+                $contentType = 'image';
+                $mimeType = 'bmp';
+                break;
+
+            case 'tif':
+            case 'tiff':
+                $contentType = 'image';
+                $mimeType = 'tiff';
+                break;
+
+            default:
+                return false;
+        }
+        return true;
+    }
 }
 ?>

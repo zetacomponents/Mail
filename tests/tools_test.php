@@ -254,6 +254,38 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( $reply->to, array( new ezcMailAddress( 'test@example.com', "Reply G\xC3\xA5r", 'utf-8' ) ) );
     }
 
+    public function testGuessContentType()
+    {
+        $fileNames = array( '/home/1.jpg',
+                            '2.jpe',
+                            '3.jpeg',
+                            '4.gif',
+                            '5.tif',
+                            '6.tiff',
+                            '7.bmp',
+                            '8.png',
+                            '9.xxx',
+                            '10'
+                          );
+        $types = array( 'image/jpeg',
+                        'image/jpeg',
+                        'image/jpeg',
+                        'image/gif',
+                        'image/tiff',
+                        'image/tiff',
+                        'image/bmp',
+                        'image/png',
+                        '/',
+                        '/' );
+        for ( $i = 0; $i < count( $fileNames ); $i++ )
+        {
+            $contentType = null;
+            $mimeType = null;
+            ezcMailTools::guessContentType( $fileNames[$i], $contentType, $mimeType );
+            $this->assertEquals( $types[$i], $contentType . '/' . $mimeType );
+        }
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailToolsTest" );

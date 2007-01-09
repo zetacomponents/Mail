@@ -301,9 +301,9 @@ class ezcMailComposer extends ezcMail
         if ( $this->htmlText != '' )
         {
             // recognize file:// and file:///, pick out the image, add it as a part and then..:)
-            preg_match_all( "/file:\/\/[^ >\'\"]+/i", $this->htmlText, $matches );
+            preg_match_all( "/file:\/\/([^ >\'\"]+)/i", $this->htmlText, $matches );
             // pictures/files can be added multiple times. We only need them once.
-            $matches = array_unique( $matches[0] );
+            $matches = array_unique( $matches[1] );
 
             $result = new ezcMailText( $this->htmlText, $this->charset );
             $result->subType = "html";
@@ -322,10 +322,28 @@ class ezcMailComposer extends ezcMail
                     {
                         // @todo waiting for fix of the fileinfo extension
                         // $contents = file_get_contents( $fileName );
-                        $filePart = new ezcMailFile( $fileName );
+                        $mimeType = null;
+                        $contentType = null;
+                        if ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+                        {
+                            // if fileinfo extension is available
+                            $filePart = new ezcMailFile( $fileName );
+                        }
+                        elseif ( ezcMailTools::guessContentType( $fileName, $contentType, $mimeType ) )
+                        {
+                            // if fileinfo extension is not available try to get content/mime type
+                            // from the file extension
+                            $filePart = new ezcMailFile( $fileName, $contentType, $mimeType );
+                        }
+                        else
+                        {
+                            // fallback in case fileinfo is not available and could not get content/mime
+                            // type from file extension
+                            $filePart = new ezcMailFile( $fileName, "application", "octet-stream" );
+                        }
                         $cid = $result->addRelatedPart( $filePart );
                         // replace the original file reference with a reference to the cid
-                        $this->htmlText = str_replace( $fileName, 'cid:' . $cid, $this->htmlText );
+                        $this->htmlText = str_replace( 'file://' . $fileName, 'cid:' . $cid, $this->htmlText );
                     }
                     else
                     {
