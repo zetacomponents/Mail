@@ -15,7 +15,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailTransportException extends ezcBaseException
+class ezcMailTransportException extends ezcMailException
 {
     /**
      * Constructs an ezcMailTransportException with low level information $message.
