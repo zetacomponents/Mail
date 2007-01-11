@@ -3,6 +3,11 @@
 
 - ezcMailTransportException inherits from ezcMailException, and not directly
   from ezcBaseException.
+- Added fetchParts() to ezcMail to return the mail parts of a mail (feature
+  request #8303).
+- Added walkParts() to ezcMail and the class ezcMailPartWalkContext which can
+  be used to walk through all the parts in a mail and execute a callback
+  function on each part (for example save mail parts to disk or a database).
 
 
 1.2.1 - [RELEASEDATE]

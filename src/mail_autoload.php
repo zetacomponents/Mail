@@ -13,6 +13,7 @@ ezcBase::checkDependency( 'Mail', ezcBase::DEP_PHP_EXTENSION, 'iconv' );
 return array(
     'ezcMailAddress'                => 'Mail/structs/mail_address.php',
     'ezcMailContentDispositionHeader'=> 'Mail/structs/content_disposition_header.php',
+    'ezcMailPartWalkContext'        => 'Mail/structs/walk_context.php',
     'ezcMailPart'                   => 'Mail/interfaces/part.php',
     'ezcMailTransport'              => 'Mail/interfaces/transport.php',
     'ezcMail'                       => 'Mail/mail.php',

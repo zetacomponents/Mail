@@ -920,5 +920,163 @@ END;
         $mail = $mail[0];
         $this->assertEquals( 'sender@gmail.com', $mail->returnPath->email );
     }
+
+    public function testGetPartsNoFilterNoDigest()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, false );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText',
+                           'ezcMailFile',
+                           'ezcMailFile'
+                           );
+        $this->assertEquals( 4, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsFilterNoDigest()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( array( 'ezcMailText' ), false );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText'
+                           );
+        $this->assertEquals( 2, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsFilterNoDigestIncludeDigests()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( array( 'ezcMailText' ), true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText'
+                           );
+        $this->assertEquals( 2, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsNoFilter()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/three_message_digest.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, false );
+        $expected = array( 'ezcMailText',
+                           'ezcMailRfc822Digest',
+                           'ezcMailRfc822Digest',
+                           'ezcMailRfc822Digest',
+                           'ezcMailFile'
+                         );
+        $this->assertEquals( 5, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsNoFilterIncludeDigests()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/three_message_digest.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText',
+                           'ezcMailText',
+                           'ezcMailFile',
+                           'ezcMailText',
+                           'ezcMailFile'
+                         );
+        $this->assertEquals( 6, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsFilter()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/three_message_digest.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( array( 'ezcMailFile' ), false );
+        $expected = array( 'ezcMailFile'
+                         );
+        $this->assertEquals( 1, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsFilterIncludeDigests()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/three_message_digest.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( array( 'ezcMailFile' ), true );
+        $expected = array( 'ezcMailFile',
+                           'ezcMailFile'
+                         );
+        $this->assertEquals( 2, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testGetPartsFilterOnlyDigestIncludeDigests()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/three_message_digest.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( array( 'ezcMailRfc822Digest' ), true );
+        $this->assertEquals( 0, count( $parts ) );
+    }
+
+    public function testGetPartsDigestInDigestNoFilterIncludeDigests()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-digest-in-digest' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText',
+                           'ezcMailText',
+                           'ezcMailFile',
+                           'ezcMailFile',
+                           'ezcMailFile'
+                         );
+        $this->assertEquals( 6, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
 }
 ?>

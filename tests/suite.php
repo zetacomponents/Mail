@@ -31,6 +31,7 @@ require_once( "transports/transport_variable_test.php" );
 require_once( "tutorial_examples.php" );
 require_once( "parser/parser_test.php" );
 require_once( "parser/headers_holder_test.php" );
+require_once( "parser/walk_context_test.php" );
 require_once( "parser/parts/multipart_mixed_test.php" );
 require_once( "parser/rfc2231_implementation_test.php" );
 require_once( "header_folder_test.php" );
@@ -65,6 +66,7 @@ class ezcMailSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcMailTransportVariableTest::suite() );
         $this->addTest( ezcMailTutorialExamples::suite() );
         $this->addTest( ezcMailParserTest::suite() );
+        $this->addTest( ezcMailPartWalkContextTest::suite() );
         $this->addTest( ezcMailHeadersHolderTest::suite() );
         $this->addTest( ezcMailMultipartMixedParserTest::suite() );
         $this->addTest( ezcMailRfc2231ImplementationTest::suite() );

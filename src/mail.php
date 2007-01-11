@@ -368,5 +368,142 @@ class ezcMail extends ezcMailPart
         }
         return parent::generateHeaders();
     }
+
+    /**
+     * Returns an array of mail parts from the current mail.
+     *
+     * The array returned contains objects of classes:
+     * - ezcMailText
+     * - ezcMailFile
+     * - ezcMailRfc822Digest
+     * If the method is called with $includeDigests as true, then the returned
+     * array will not contain ezcMailRfc822Digest objects, but instead the mail
+     * parts inside the digests.
+     * The parameter $filter can be used to restrict the returned mail parts,
+     * eg. $filter = array( 'ezcMailFile' ) to return only file mail parts.
+     *
+     * A typical use for this function is to get a list of attachments from a mail.
+     * Example:
+     * <code>
+     * // $mail is an ezcMail object
+     * $parts = $mail->fetchParts();
+     * // after the above line is executed, $parts will contain an array of mail parts objects,
+     * // for example one ezcMailText object ($parts[0]) and two ezcMailRfc822Digest objects ($parts[1] and $parts[2]).
+     * // the ezcMailText object will be used to render the mail text, and the
+     * // other two objects will be displayed as links ("view attachment")
+     *
+     * // when user clicks on one of the two attachments, the parts of that attachment
+     * // must be retrieved in order to render the attached digest:
+     * $subparts = $parts[1]->mail->fetchParts();
+     * // after the above line is executed, $subparts will contain an array of mail parts objects,
+     * // for example one ezcMailText object and one ezcMailFile object
+     * </code>
+     *
+     * @param array(string) $filter
+     * @param bool $includeDigests
+     * @return array(ezcMailPart)
+     */
+    public function fetchParts( $filter = null, $includeDigests = false )
+    {
+        $context = new ezcMailPartWalkContext( array( __CLASS__, 'collectPart' ) );
+        $context->includeDigests = $includeDigests;
+        $context->filter = $filter;
+        $context->level = 0;
+        $this->walkParts( $context, $this );
+        return $context->getParts();
+    }
+
+    /**
+     * Walks recursively through the mail parts in the specified mail object.
+     *
+     * $context is an object of class ezcMailPartWalkContext, which must contain
+     * a valid callback function name to be applied to all mail parts. You can use
+     * the collectPart() method, or create your own callback function which can
+     * for example save the mail parts to disk or to a database.
+     *
+     * @see ezcMailPartWalkContext for the properties you can set to the walk context.
+     *
+     * Example:
+     * <code>
+     * class App
+     * {
+     *     public static function saveMailPart( $context, $mailPart )
+     *     {
+     *         // code to save the $mailPart object to disk
+     *     }
+     * }
+     *
+     * // use the saveMailPart() function as a callback in walkParts()
+     * // where $mail is an ezcMail object.
+     * $context = new ezcMailPartWalkContext( array( 'App', 'saveMailPart' ) );
+     * $context->includeDigests = true; // if you want to go through the digests in the mail
+     * $mail->walkParts( $context, $mail );
+     * </code>
+     *
+     * @param ezcMailPartWalkContext $context
+     * @param ezcMailPart $mail
+     */
+    public function walkParts( ezcMailPartWalkContext $context, ezcMailPart $mail )
+    {
+        $className = get_class( $mail );
+        $context->level++;
+        switch ( $className )
+        {
+            case 'ezcMail':
+            case 'ezcMailComposer':
+                $this->walkParts( $context, $mail->body );
+                break;
+
+            case 'ezcMailMultipartMixed':
+            case 'ezcMailMultipartAlternative':
+            case 'ezcMailMultipartDigest':
+                foreach ( $mail->getParts() as $part )
+                {
+                    $this->walkParts( $context, $part );
+                }
+                break;
+
+            case 'ezcMailMultipartRelated':
+                $this->walkParts( $context, $mail->getMainPart() );
+                foreach ( $mail->getRelatedParts() as $part )
+                {
+                    $this->walkParts( $context, $part );
+                }
+                break;
+
+            case 'ezcMailRfc822Digest':
+                if ( $context->includeDigests )
+                {
+                    $this->walkParts( $context, $mail->mail );
+                }
+                elseif ( empty( $context->filter ) || in_array( $className, $context->filter ) )
+                {
+                    call_user_func( $context->callbackFunction, $context, $mail );
+                }
+                break;
+
+            case 'ezcMailText':
+            case 'ezcMailFile':
+                if ( empty( $context->filter ) || in_array( $className, $context->filter ) )
+                {
+                    call_user_func( $context->callbackFunction, $context, $mail );
+                }
+                break;
+        }
+        $context->level--;
+    }
+
+    /**
+     * Saves $mail in the $context object.
+     *
+     * This function is used as a callback in the fetchParts() method.
+     *
+     * @param ezcMailPartWalkContext $context
+     * @param ezcMailPart $mail
+     */
+    protected static function collectPart( ezcMailPartWalkContext $context, ezcMailPart $mail )
+    {
+        $context->appendPart( $mail );
+    }
 }
 ?>
