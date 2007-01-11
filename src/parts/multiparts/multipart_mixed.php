@@ -46,9 +46,9 @@ class ezcMailMultipartMixed extends ezcMailMultipart
     /**
      * Appends a part to the list of parts.
      *
-     * @param ezcMailpart $part
+     * @param ezcMailPart $part
      */
-    public function appendPart( ezcMailpart $part )
+    public function appendPart( ezcMailPart $part )
     {
         $this->parts[] = $part;
     }
