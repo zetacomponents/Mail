@@ -19,6 +19,11 @@ class ezcMailTransportMtaTest extends ezcTestCase
 
     protected function setUp()
     {
+        if ( !function_exists( 'mail' ) )
+        {
+            $this->markTestSkipped( 'mail() function not available.' );
+        }
+
         $this->transport = new ezcMailTransportMta();
         $this->mail = new ezcMail();
         $this->mail->from = new ezcMailAddress( 'nospam@ez.no', 'Unit testing' );
