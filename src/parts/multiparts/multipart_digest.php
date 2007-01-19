@@ -9,7 +9,7 @@
  */
 
 /**
- * The mixed multipart type is used to bundle a list of mail objects.
+ * The digest multipart type is used to bundle a list of mail objects.
  *
  * Each part will be shown in the mail in the order provided. It is not
  * necessary to bundle digested mail using a digest object. However, it is
@@ -74,7 +74,7 @@ class ezcMailMultipartDigest extends ezcMailMultipart
     }
 
     /**
-     * Returns "mixed".
+     * Returns "digest".
      *
      * @return string
      */
