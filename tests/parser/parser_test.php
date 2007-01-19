@@ -1078,5 +1078,64 @@ END;
             $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
         }
     }
+
+    public function testMultipartReport()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/multipart-report' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailDeliveryStatus',
+                           'ezcMailText'
+                         );
+        $this->assertEquals( 3, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+        $this->assertEquals( "dns; www.brssolutions.com", $parts[1]->message["Reporting-MTA"] );
+        $this->assertEquals( "failed", $parts[1]->recipients[0]["Action"] );
+    }
+
+    public function testMultipartReportMultipleDeliveries()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/multipart-report-multiple-deliveries' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailDeliveryStatus',
+                           'ezcMailText'
+                         );
+        $this->assertEquals( 3, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+        $this->assertEquals( 3, count( $parts[1]->recipients ) );
+        $this->assertEquals( "dns; cs.utk.edu", $parts[1]->message["Reporting-MTA"] );
+        $this->assertEquals( "5.0.0 (permanent failure)", $parts[1]->recipients[0]["Status"] );
+        $this->assertEquals( "delayed", $parts[1]->recipients[1]["Action"] );
+        $this->assertEquals( "smtp; 550 user unknown", $parts[1]->recipients[2]["Diagnostic-Code"] );
+    }
+
+    public function testMultipartReportParts()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/multipart-report-multiple-deliveries' );
+        $mail = $parser->parseMail( $set );
+        $report = $mail[0]->body;
+        $this->assertEquals( "ezcMailMultipartReport", get_class( $report ) );
+        $this->assertEquals( true, strpos( $report->getReadablePart()->text, "arathib@vnet.ibm.com" ) );
+        $delivery = $report->getMachinePart();
+        $this->assertEquals( "dns; cs.utk.edu", $delivery->message["Reporting-MTA"] );
+        $this->assertEquals( "rfc822;arathib@vnet.ibm.com", $delivery->recipients[0]["Final-Recipient"] );
+        $this->assertEquals( null, $delivery->recipients[0]["no such header"] );
+        $original = $report->getOriginalPart();
+        $this->assertEquals( "[original message goes here]", trim( $original->mail->body->text ) );
+    }
 }
 ?>

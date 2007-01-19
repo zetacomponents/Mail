@@ -105,13 +105,19 @@ abstract class ezcMailPartParser
                 break;
 
             case 'message':
-                if ( $subType == "rfc822" )
+                switch ( $subType )
                 {
-                    $bodyParser = new ezcMailRfc822DigestParser( $headers );
-                }
-                else
-                {
-                    $bodyParser = new ezcMailTextParser( $subType, $headers );
+                    case "rfc822":
+                        $bodyParser = new ezcMailRfc822DigestParser( $headers );
+                        break;
+
+                    case "delivery-status":
+                        $bodyParser = new ezcMailDeliveryStatusParser( $headers );
+                        break;
+
+                    default:
+                        $bodyParser = new ezcMailTextParser( $subType, $headers );
+                        break;
                 }
                 break;
 
@@ -133,7 +139,10 @@ abstract class ezcMailPartParser
                         break;
                     case 'digest':
                         $bodyParser = new ezcMailMultipartDigestParser( $headers );
-                            break;
+                        break;
+                    case 'report':
+                        $bodyParser = new ezcMailMultipartReportParser( $headers );
+                        break;
                     default:
                         $bodyParser = new ezcMailMultipartMixedParser( $headers );
                         break;

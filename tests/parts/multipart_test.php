@@ -156,11 +156,73 @@ class ezcMailMultipartTest extends ezcTestCase
         $this->assertEquals( 1, count( $part->getRelatedParts() ) );
     }
 
+    public function testMultipartReportFetchParts()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $mail->subject = "Report";
+        $mail->subjectCharset = 'iso-8859-1';
+        $delivery = new ezcMailDeliveryStatus();
+        $delivery->message["Reporting-MTA"] = "dns; www.brssolutions.com";
+        $lastRecipient = $delivery->createRecipient();
+        $delivery->recipients[$lastRecipient]["Action"] = "failed";
+        $mail->body = new ezcMailMultipartReport(
+            new ezcMailText( "Dette er body ßßæøååå", "iso-8859-1" ),
+            $delivery,
+            new ezcMailText( "The content initially sent" )
+            );
+        $this->assertEquals( "delivery-status", $mail->body->reportType );
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, true );
+        $expected = array( 'ezcMailText',
+                           'ezcMailDeliveryStatus',
+                           'ezcMailText'
+                         );
+        $this->assertEquals( 3, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    public function testMultipartReportEmpty()
+    {
+        $report = new ezcMailMultipartReport();
+        $this->assertEquals( null, $report->getReadablePart() );
+        $this->assertEquals( null, $report->getMachinePart() );
+        $this->assertEquals( null, $report->getOriginalPart() );
+    }
+
     public function testIsSet()
     {
         $part = new ezcMailMultipartRelated();
         $this->assertEquals( true, isset( $part->boundary ) );
         $this->assertEquals( false, isset( $part->no_such_property ) );
+
+        $part = new ezcMailMultipartReport();
+        $this->assertEquals( true, isset( $part->reportType ) );
+        $this->assertEquals( false, isset( $part->no_such_property ) );
+    }
+
+    public function testDeliveryStatusProperties()
+    {
+        $part = new ezcMailDeliveryStatus();
+        $this->assertEquals( true, isset( $part->message ) );
+        $this->assertEquals( true, isset( $part->recipients ) );
+        $this->assertEquals( false, isset( $part->no_such_property ) );
+
+        try
+        {
+            $part->no_such_property = "";
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
     }
 
     public static function suite()

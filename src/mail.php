@@ -457,6 +457,7 @@ class ezcMail extends ezcMailPart
             case 'ezcMailMultipartMixed':
             case 'ezcMailMultipartAlternative':
             case 'ezcMailMultipartDigest':
+            case 'ezcMailMultipartReport':
                 foreach ( $mail->getParts() as $part )
                 {
                     $this->walkParts( $context, $part );
@@ -484,6 +485,7 @@ class ezcMail extends ezcMailPart
 
             case 'ezcMailText':
             case 'ezcMailFile':
+            case 'ezcMailDeliveryStatus':
                 if ( empty( $context->filter ) || in_array( $className, $context->filter ) )
                 {
                     call_user_func( $context->callbackFunction, $context, $mail );

@@ -8,7 +8,8 @@
 - Added walkParts() to ezcMail and the class ezcMailPartWalkContext which can
   be used to walk through all the parts in a mail and execute a callback
   function on each part (for example save mail parts to disk or a database).
-
+- Added support for multipart/report and message/delivery-status mail parts
+  (connected to issue #8694).
 
 1.2.1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

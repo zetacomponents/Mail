@@ -8,7 +8,6 @@
  * @subpackage Tests
  */
 
-
 /**
  * @package Mail
  * @subpackage Tests
@@ -261,6 +260,24 @@ class ezcMailTest extends ezcTestCase
 
 //        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
 //        $transport->send( $this->mail );
+    }
+
+    public function testMultipartReport()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $mail->subject = "Report";
+        $mail->subjectCharset = 'iso-8859-1';
+        $delivery = new ezcMailDeliveryStatus();
+        $delivery->message["Reporting-MTA"] = "dns; www.brssolutions.com";
+        $lastRecipient = $delivery->createRecipient();
+        $delivery->recipients[$lastRecipient]["Action"] = "failed";
+        $mail->body = new ezcMailMultipartReport(
+            new ezcMailText( "Dette er body ßßזרווו", "iso-8859-1" ),
+            $delivery,
+            new ezcMailText( "The content initially sent" )
+            );
     }
 
     public function testMessageID1()
