@@ -267,7 +267,7 @@ abstract class ezcMailPart
                 $cd .="; {$addKey}=\"{$addValue}\"";
             }
 
-            $this->setHeader( 'Content-Disposition', $cd );
+            $this->setHeader( 'Content-Disposition', ezcMailHeaderFolder::foldAny( $cd ) );
         }
 
         // generate headers

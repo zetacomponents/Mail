@@ -12,6 +12,9 @@
   connected to issue #8694.
 - Implemented feature request #9068: added support for filename language and
   filename charset support for the Content-Disposition header.
+- Added header folding for the Content-Disposition header.
+- Fixed an issue with ezcMailHeaderFolder::foldAny() where notices were thrown
+  if the header contained a too long string without any white spaces.
 
 
 1.2.1 - [RELEASEDATE]

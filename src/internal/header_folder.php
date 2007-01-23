@@ -27,6 +27,7 @@
  *  simply WSP characters), a CRLF may be inserted before any WSP."
  *
  * This is described in more detail in section 3.2.3.
+ *
  * @package Mail
  * @version //autogen//
  * @access private
@@ -116,7 +117,7 @@ class ezcMailHeaderFolder
                 // We will just have to continue searching forwards to the next whitespace instead
                 // This is not confirming to standard.. but what can we do?
                 $search += self::$limit; // back to where we started
-                while ( $text[$search] != " " && $text[$search] != "\t" && $search < $length )
+                while ( $search < $length && $text[$search] != " " && $text[$search] != "\t" )
                 {
                     $search++;
                 }
