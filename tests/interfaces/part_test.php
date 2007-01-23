@@ -148,7 +148,9 @@ class ezcMailPartTest extends ezcTestCase
                                                    '1024'
                                                    );
         $this->part->contentDisposition = $cd;
-        $this->assertEquals( $expectedResult, $this->part->generateHeaders() );
+        //var_dump( str_replace( "\r\n", "", $this->part->generateHeaders() ) );
+        $this->assertEquals( trim( $expectedResult ), str_replace( ezcMailTools::lineBreak(), "", $this->part->generateHeaders() ) );
+
     }
 
     public function testGenerateHeadersContentDispositionAddParams()
@@ -172,7 +174,7 @@ class ezcMailPartTest extends ezcTestCase
                                                           'x-speed' => '52' )
                                                    );
         $this->part->contentDisposition = $cd;
-        $this->assertEquals( $expectedResult, $this->part->generateHeaders() );
+        $this->assertEquals( trim( $expectedResult ), str_replace( ezcMailTools::lineBreak(), "", $this->part->generateHeaders() ) );
     }
 
     public static function suite()
