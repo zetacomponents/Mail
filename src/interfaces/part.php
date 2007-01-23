@@ -29,7 +29,6 @@
  *                headers of this part. Can be retreived for reasons of
  *                extending this class and its derivals.
  *
- *
  * @package Mail
  * @version //autogen//
  */
@@ -89,7 +88,6 @@ abstract class ezcMailPart
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
-
     }
 
     /**
@@ -225,7 +223,23 @@ abstract class ezcMailPart
             $cd = "{$cdHeader->disposition}";
             if ( $cdHeader->fileName !== null )
             {
-                $cd .= "; filename=\"{$cdHeader->fileName}\"";
+                $fileInfo = null;
+                if ( $cdHeader->fileNameCharSet !== null )
+                {
+                    $fileInfo .= "*0*=\"{$cdHeader->fileNameCharSet}";
+                    if ( $cdHeader->fileNameLanguage !== null )
+                    {
+                        $fileInfo .= "'{$cdHeader->fileNameLanguage}'";
+                    }
+                }
+                if ( $fileInfo !== null )
+                {
+                    $cd .= "; filename{$fileInfo}{$cdHeader->fileName}\"";
+                }
+                else
+                {
+                    $cd .= "; filename=\"{$cdHeader->fileName}\"";
+                }
             }
 
             if ( $cdHeader->creationDate !== null )

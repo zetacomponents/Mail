@@ -8,7 +8,6 @@
  * @subpackage Tests
  */
 
-
 /**
  * @package Mail
  * @subpackage Tests
@@ -285,6 +284,7 @@ class ezcMailComposerTest extends ezcTestCase
                                    . "/parts/data/fly.jpg\">file.</a></html>";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
+        $this->removeTempDir();
         // $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
     }
 
@@ -498,7 +498,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( "fly.jpg", $file );
         $this->mail->build();
     }
-    
+
     public function testIsSet()
     {
         $mail = new ezcMailComposer();
@@ -506,6 +506,102 @@ class ezcMailComposerTest extends ezcTestCase
         $this->assertEquals( false, isset( $mail->htmlText ) );
         $this->assertEquals( true, isset( $mail->charset ) );
         $this->assertEquals( false, isset( $mail->no_such_property ) );
+    }
+
+    public function testContentDisposition()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'as@ez.no' );
+        $mail->subject = "яверасфăîţâşåæøåöä";
+        $mail->addTo( new ezcMailAddress( 'as@ez.no' ) );
+        $file = new ezcMailFile( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $file->contentDisposition = new ezcMailContentDispositionHeader(
+            'attachment',
+            'яверасфăîţâşåæøåöä.jpg',
+            null,
+            null,
+            null,
+            null,
+            array(),
+            'no',
+            'iso-8859-1' );
+        $mail->body = new ezcMailMultipartMixed(
+            new ezcMailText( 'xxx' ),
+            $file );
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $parts = $mail[0]->fetchParts();
+        $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
+    }
+
+    public function testContentDispositionSimple()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'as@ez.no' );
+        $mail->subject = "яверасфăîţâşåæøåöä";
+        $mail->addTo( new ezcMailAddress( 'as@ez.no' ) );
+        $file = new ezcMailFile( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $file->contentDisposition = new ezcMailContentDispositionHeader(
+            'attachment',
+            'яверасфăîţâşåæøåöä.jpg' );
+        $mail->body = new ezcMailMultipartMixed(
+            new ezcMailText( 'xxx' ),
+            $file );
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $parts = $mail[0]->fetchParts();
+        $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
+    }
+
+    public function testContentDispositionAttach()
+    {
+        $mail = new ezcMailComposer();
+        $mail->from = new ezcMailAddress( 'as@ez.no' );
+        $mail->subject = "яверасфăîţâşåæøåöä";
+        $mail->addTo( new ezcMailAddress( 'as@ez.no' ) );
+        $contentDisposition = new ezcMailContentDispositionHeader(
+            'attachment',
+            'яверасфăîţâşåæøåöä.jpg',
+            null,
+            null,
+            null,
+            null,
+            array(),
+            'no',
+            'iso-8859-1' );
+        $mail->plainText = 'xxx';
+        $mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", null, null, null, $contentDisposition );
+        $mail->build();
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $parts = $mail[0]->fetchParts();
+        $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
+    }
+
+    public function testContentDispositionSimpleAttach()
+    {
+        $mail = new ezcMailComposer();
+        $mail->from = new ezcMailAddress( 'as@ez.no' );
+        $mail->subject = "яверасфăîţâşåæøåöä";
+        $mail->addTo( new ezcMailAddress( 'as@ez.no' ) );
+        $contentDisposition = new ezcMailContentDispositionHeader(
+            'attachment',
+            'яверасфăîţâşåæøåöä.jpg' );
+        $mail->plainText = 'xxx';
+        $mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", null, null, null, $contentDisposition );
+        $mail->build();
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $parts = $mail[0]->fetchParts();
+        $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
     }
 
     public static function suite()

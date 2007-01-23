@@ -197,9 +197,12 @@ abstract class ezcMailFilePart extends ezcMailPart
     }
 
     /**
-     * Sets the Content-Disposition header.
+     * Sets the Content-Disposition header based on the properties $dispositionType and $fileName.
      *
-     * Based on the properties $dispositionType and $fileName.
+     * Does not set the fileNameCharSet and fileNameLanguage properties of the
+     * Content-Disposition header. For this purpose set directly
+     * $this->contentDisposition with an object of class ezcMailContentDispositionHeader.
+     *
      */
     private function setHeaderContentDisposition()
     {
@@ -209,9 +212,6 @@ abstract class ezcMailFilePart extends ezcMailPart
         }
         $this->contentDisposition->disposition = $this->dispositionType;
         $this->contentDisposition->fileName = basename( $this->fileName );
-
-        // $this->setHeader( 'Content-Disposition',
-        //                  $this->dispositionType .'; ' . 'filename="' . basename( $this->fileName ) . '"' );
     }
 }
 ?>

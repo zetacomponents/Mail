@@ -11,9 +11,10 @@
  * A container to store a Content-Disposition header as described in http://www.faqs.org/rfcs/rfc2183.
  *
  * This container is used on the contentDisposition property on mail parts.
- * It should primarily be used for reading.
+ * Use it for reading and setting the Content-Disposition header.
  *
  * @package Mail
+ * @version //autogentag//
  */
 class ezcMailContentDispositionHeader extends ezcBaseStruct
 {

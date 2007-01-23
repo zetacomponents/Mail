@@ -162,6 +162,10 @@ class ezcMailComposer extends ezcMail
      * If $content is specified, $fileName is not checked if it exists.
      * $this->attachments will also contain in this case the $content,
      * $contentType and $mimeType.
+     * If $contentDisposition is specified, the attached file will have its
+     * Content-Disposition header set according to the $contentDisposition object
+     * and the filename of the attachment in the generated mail will be the one from
+     * the $contentDisposition object.
      * 
      * @throws ezcBaseFileNotFoundException
      *         if $fileName does not exists.
@@ -171,14 +175,15 @@ class ezcMailComposer extends ezcMail
      * @param string $content
      * @param string $contentType
      * @param string $mimeType
+     * @param ezcMailContentDispositionHeader $contentDisposition
      */
-    public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null )
+    public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
     {
         if ( is_null( $content ) )
         {
             if ( is_readable( $fileName ) )
             {
-                $this->attachments[] = array( $fileName, null, $contentType, $mimeType );
+                $this->attachments[] = array( $fileName, null, $contentType, $mimeType, $contentDisposition );
             }
             else
             {
@@ -194,7 +199,7 @@ class ezcMailComposer extends ezcMail
         }
         else
         {
-            $this->attachments[] = array( $fileName, $content, $contentType, $mimeType );
+            $this->attachments[] = array( $fileName, $content, $contentType, $mimeType, $contentDisposition );
         }
     }
 
@@ -252,6 +257,7 @@ class ezcMailComposer extends ezcMail
             {
                 $mainPart = new ezcMailFile( $this->attachments[0][0], $this->attachments[0][2], $this->attachments[0][3] );
             }
+            $mainPart->contentDisposition = $this->attachments[0][4];
         }
         else if ( count( $this->attachments ) > 0 )
         {
@@ -266,17 +272,19 @@ class ezcMailComposer extends ezcMail
                 {
                     if ( is_resource( $attachment[1] ) )
                     {
-                        $mainPart->appendPart( new ezcMailStreamFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] ) );
+                        $part = new ezcMailStreamFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] );
                     }
                     else
                     {
-                        $mainPart->appendPart( new ezcMailVirtualFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] ) );
+                        $part = new ezcMailVirtualFile( $attachment[0], $attachment[1], $attachment[2], $attachment[3] );
                     }
                 }
                 else
                 {
-                    $mainPart->appendPart( new ezcMailFile( $attachment[0], $attachment[2], $attachment[3] ) );
+                    $part = new ezcMailFile( $attachment[0], $attachment[2], $attachment[3] );
                 }
+                $part->contentDisposition = $attachment[4];
+                $mainPart->appendPart( $part );
             }
         }
 
