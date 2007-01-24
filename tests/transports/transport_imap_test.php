@@ -1302,6 +1302,23 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    public function testMessageSize()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $expected = array( 1542, '1539', '1383', '63913' );
+        for ( $i = 0; $i < count( $mail ); $i++ )
+        {
+            $this->assertequals( $expected[$i], $mail[$i]->size );
+        }
+        $parts = $mail[3]->fetchParts();
+        $this->assertEquals( '45177', $parts[1]->size );
+    }
+
     public static function suite()
     {
         self::$ids = array( 15, 16, 17, 18 );

@@ -105,7 +105,7 @@ class ezcMailTextParser extends ezcMailPartParser
         $part->subType = $this->subType;
         $part->setHeaders( $this->headers->getCaseSensitiveArray() );
         ezcMailPartParser::parsePartHeaders( $this->headers, $part );
-
+        $part->size = strlen( $this->text );
         return $part;
     }
 }

@@ -55,6 +55,12 @@ class ezcMailMultipartAlternativeParser extends ezcMailMultipartParser
      */
     public function finishMultipart()
     {
+        $size = 0;
+        foreach ( $this->part->getParts() as $part )
+        {
+            $size += $part->size;
+        }
+        $this->part->size = $size;
         return $this->part;
     }
 }

@@ -384,6 +384,22 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
+    public function testMessageSize()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $set = $pop3->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $expected = array( 1542, '1539', '1383', '63913' );
+        for ( $i = 0; $i < count( $mail ); $i++ )
+        {
+            $this->assertequals( $expected[$i], $mail[$i]->size );
+        }
+        $parts = $mail[3]->fetchParts();
+        $this->assertEquals( '45177', $parts[1]->size );
+    }
+
     public static function suite()
     {
         // small hack because the message IDs keep increasing everyday by 4 on the server

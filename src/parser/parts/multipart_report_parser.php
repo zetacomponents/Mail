@@ -82,6 +82,12 @@ class ezcMailMultipartReportParser extends ezcMailMultipartParser
         {
             $this->report->setOriginalPart( $this->parts[2] );
         }
+        $size = 0;
+        foreach ( $this->report->getParts() as $part )
+        {
+            $size += $part->size;
+        }
+        $this->report->size = $size;
         return $this->report;
     }
 }

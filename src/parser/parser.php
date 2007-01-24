@@ -66,11 +66,22 @@ class ezcMailParser
         {
             $this->partParser = new ezcMailRfc822Parser();
             $data = "";
+            $lastData = "";
+            $size = 0;
             while ( ( $data = $set->getNextLine() ) !== null )
             {
                 $this->partParser->parseBody( $data );
+                $size += strlen( $data );
+                $lastData = $data;
             }
-            $mail[] = $this->partParser->finish( $class );
+            $part = $this->partParser->finish( $class );
+            $part->size = $size;
+            if ( trim( $lastData ) === ')' )
+            {
+                // IMAP: don't consider the last line: ) CR LF
+                $part->size = $part->size - 3;
+            }
+            $mail[] = $part;
         } while ( $set->nextMail() );
         return $mail;
     }

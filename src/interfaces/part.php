@@ -24,6 +24,9 @@
  *           on outgoing mail. Note that the ezcMailFile part sets the
  *           Content-Disposition field itself based on it's own properties
  *           when sending mail.
+ * @property int $size
+ *           The size of the mail part in bytes. It is set when parsing a
+ *           mail {@see ezcMailParser->parseMail()}.
  * @property-read ezcMailHeadersHolder $headers
  *                Contains the header holder object, taking care of the
  *                headers of this part. Can be retreived for reasons of
@@ -79,6 +82,7 @@ abstract class ezcMailPart
         switch ( $name )
         {
             case 'contentDisposition':
+            case 'size':
                 $this->properties[$name] = $value;
                 break;
 
@@ -104,6 +108,7 @@ abstract class ezcMailPart
         switch ( $name )
         {
             case 'contentDisposition':
+            case 'size':
                 return isset( $this->properties[$name] ) ? $this->properties[$name] : null;
 
             case "headers":
@@ -127,6 +132,7 @@ abstract class ezcMailPart
         switch ( $name )
         {
             case 'contentDisposition':
+            case 'size':
                 return isset( $this->properties[$name] );
 
             case "headers":

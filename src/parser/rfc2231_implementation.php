@@ -12,7 +12,7 @@
 /**
  * This class parses header fields that conform to RFC2231.
  *
- * Headers confirming to this specification are Content-Type and Content-Disposition.
+ * Headers conforming to this specification are Content-Type and Content-Disposition.
  *
  * @package Mail
  * @version //autogen//

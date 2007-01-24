@@ -1137,5 +1137,20 @@ END;
         $original = $report->getOriginalPart();
         $this->assertEquals( "[original message goes here]", trim( $original->mail->body->text ) );
     }
+
+    public function testMessageSize()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 7646, $mail->size );
+        $expected = array( 93, 115, 2313, 822 );
+        $parts = $mail->fetchParts();
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertequals( $expected[$i], $parts[$i]->size );
+        }
+    }
 }
 ?>

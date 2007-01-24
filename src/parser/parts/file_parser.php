@@ -274,7 +274,7 @@ class ezcMailFileParser extends ezcMailPartParser
         {
             $filePart->dispositionType = ezcMailFile::DISPLAY_INLINE;
         }
-
+        $filePart->size = filesize( $this->fileName );
         return $filePart;
     }
 }
