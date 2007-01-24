@@ -17,6 +17,8 @@
   if the header contained a too long string without any white spaces.
 - Implemented feature request #8419: added the property size to ezcMailPart,
   which is set when parsing a mail.
+- Implemented feature request #10068: added a list of supported RFCs to the
+  documentation.
 
 
 1.2.1 - [RELEASEDATE]

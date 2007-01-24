@@ -1,0 +1,71 @@
+Mail RFCs
+---------
+
+This document lists various RFCs (Requests For Comments) supported
+by the Mail component. Not all RFCs are fully implemented yet.
+
+Host To Host Mail Transfer
+==========================
+
+1. `RFC 821 - Simple Mail Transfer Protocol`__ (SMTP)
+2. `RFC 2554 - SMTP Service Extension for Authentication`__
+
+__ http://www.faqs.org/rfcs/rfc821.html
+__ http://www.faqs.org/rfcs/rfc2554.html
+
+
+Client To Host Mail Transfer
+============================
+
+1. `RFC 1939 - Post Office Protocol - Version 3`__ (POP3)
+2. `RFC 1730 - Internet Message Access Protocol - Version 4`__ (IMAP4)
+3. `RFC 2060 - Internet Message Access Protocol - Version 4rev1`__ (IMAP4rev1)
+
+__ http://www.faqs.org/rfcs/rfc1939.html
+__ http://www.faqs.org/rfcs/rfc1730.html
+__ http://www.faqs.org/rfcs/rfc2060.html
+
+
+Basic Message Format and Encoding
+=================================
+
+1. `RFC 2822 Internet Message Format`__
+2. `RFC 4021 Registration of Mail and MIME header fields`__
+
+__ http://www.faqs.org/rfcs/rfc2822.html
+__ http://www.faqs.org/rfcs/rfc4021.html
+
+
+Multipurpose Internet Mail Extensions (MIME)
+============================================
+
+1. `RFC 2045 - MIME Part 1 - Format of Internet Message Bodies`__
+2. `RFC 2046 - MIME Part 2 - Media Types`__
+3. `RFC 2047 - MIME Part 3 - Message Header Extensions for Non-ASCII Text`__
+4. `RFC 2557 - MIME Encapsulation of Aggregate Documents`__ such as HTML (MHTML)
+5. `RFC 2183 - The Content-Disposition Header`__
+6. `RFC 2854 - The text html Media Type`__
+7. `RFC 2392 - Content-ID and Message-ID Uniform Resource Locators`__
+8. `RFC 2231 - MIME Parameter Value and Encoded Word Extensions`__ (retrieval only, sending to be implemented)
+9. `RFC 3462 - The Multipart Report Content Type`__
+10. `RFC 3464 - An Extensible Message Format for Delivery Status Notifications`__
+
+__ http://www.faqs.org/rfcs/rfc2045.html
+__ http://www.faqs.org/rfcs/rfc2046.html
+__ http://www.faqs.org/rfcs/rfc2047.html
+__ http://www.faqs.org/rfcs/rfc2557.html
+__ http://www.faqs.org/rfcs/rfc2183.html
+__ http://www.faqs.org/rfcs/rfc2854.html
+__ http://www.faqs.org/rfcs/rfc2392.html
+__ http://www.faqs.org/rfcs/rfc2231.html
+__ http://www.faqs.org/rfcs/rfc3462.html
+__ http://www.faqs.org/rfcs/rfc3464.html
+
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End: 
+   vim: et syn=rst tw=79

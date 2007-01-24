@@ -324,21 +324,6 @@ this is happening and attempt authentication again (for example for a preset
 number of times such as 3).
 
 
-References
-==========
-
-1. `IMAP4`_ (1730) and `IMAP4rev1`_ (2060) RFCs for IMAP transport
-2. `POP3`_ (1939) RFC for IMAP transport
-3. `SMTP`_ (821) and `SMTP authentication`_ (2554) RFCs for SMTP transport
-4. Other mail related RFCs_
-
-.. _IMAP4: http://www.faqs.org/rfcs/rfc1730.html
-.. _IMAP4rev1: http://www.faqs.org/rfcs/rfc2060.html
-.. _POP3: http://www.faqs.org/rfcs/rfc1939.html
-.. _SMTP: http://www.faqs.org/rfcs/rfc821.html
-.. _SMTP authentication: http://www.faqs.org/rfcs/rfc2554.html
-.. _RFCs: http://www.imc.org/rfcs.html
-
 
 ..
    Local Variables:
