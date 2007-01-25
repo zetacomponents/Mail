@@ -45,6 +45,7 @@ class ezcMailAddress extends ezcBaseStruct
      *
      * @param string $email
      * @param string $name
+     * @param string $charset
      */
     public function __construct( $email, $name = '', $charset = 'us-ascii' )
     {
