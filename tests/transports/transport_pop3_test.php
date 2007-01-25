@@ -400,9 +400,51 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $this->assertEquals( '45177', $parts[1]->size );
     }
 
+    public function testTransportProperties()
+    {
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $this->assertEquals( true, isset( $pop3->options ) );
+        $this->assertEquals( false, isset( $pop3->no_such_property ) );
+
+        $options = $pop3->options;
+        $pop3->options = new ezcMailPop3TransportOptions();
+        $this->assertEquals( $options, $pop3->options );
+        $this->assertEquals( ezcMailPop3Transport::AUTH_PLAIN_TEXT, $pop3->options->authenticationMethod );
+        $this->assertEquals( 5, $pop3->options->timeout );
+
+        try
+        {
+            $pop3->options = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'xxx' that you were trying to assign to setting 'options' is invalid. Allowed values are: instanceof ezcMailPop3TransportOptions.", $e->getMessage() );
+        }
+
+        try
+        {
+            $pop3->no_such_property = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+
+        try
+        {
+            $value = $pop3->no_such_property;
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
-        // small hack because the message IDs keep increasing everyday by 4 on the server
         self::$ids = array( '0000000f4420e93a', '000000104420e93a', '000000114420e93a', '000000124420e93a' );
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }

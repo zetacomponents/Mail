@@ -222,7 +222,48 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->assertEquals( true, isset( $this->transport->serverHost ) );
         $this->assertEquals( true, isset( $this->transport->serverPort ) );
         $this->assertEquals( true, isset( $this->transport->timeout ) );
+        $this->assertEquals( true, isset( $this->transport->options ) );
         $this->assertEquals( false, isset( $this->transport->no_such_property ) );
+    }
+
+    public function testTransportProperties()
+    {
+        $smtp = new ezcMailSmtpTransport( ezcMailTransportSmtpTest::HOST, '', '', ezcMailTransportSmtpTest::PORT );
+
+        $options = $smtp->options;
+        $smtp->options = new ezcMailSmtpTransportOptions();
+        $this->assertEquals( $options, $smtp->options );
+        $this->assertEquals( 5, $smtp->options->timeout );
+
+        try
+        {
+            $smtp->options = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'xxx' that you were trying to assign to setting 'options' is invalid. Allowed values are: instanceof ezcMailSmtpTransportOptions.", $e->getMessage() );
+        }
+
+        try
+        {
+            $smtp->no_such_property = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+
+        try
+        {
+            $value = $smtp->no_such_property;
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
     }
 
     public static function suite()

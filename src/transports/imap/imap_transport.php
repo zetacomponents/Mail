@@ -21,6 +21,9 @@
  * @todo listUniqueIdentifiers(): add UIVALIDITY value to UID (like in POP3).
  *       (if necessary).
  *
+ * @property ezcMailImapTransportOptions $options
+ *           Holds the options you can set to the IMAP transport.
+ *
  * @package Mail
  * @version //autogen//
  * @mainclass
@@ -29,62 +32,84 @@ class ezcMailImapTransport
 {
     /**
      * Internal state when the IMAP transport is not connected to a server.
+     *
+     * @access private
      */
     const STATE_NOT_CONNECTED = 1;
 
     /**
      * Internal state when the IMAP transport is connected to a server,
      * but no successful authentication has been performed.
+     *
+     * @access private
      */
     const STATE_NOT_AUTHENTICATED = 2;
 
     /**
      * Internal state when the IMAP transport is connected to a server
      * and authenticated, but no mailbox is selected yet.
+     *
+     * @access private
      */
     const STATE_AUTHENTICATED = 3;
 
     /**
      * Internal state when the IMAP transport is connected to a server,
      * authenticated, and a mailbox is selected.
+     *
+     * @access private
      */
     const STATE_SELECTED = 4;
 
     /**
      * Internal state when the IMAP transport is connected to a server,
      * authenticated, and a mailbox is selected read only.
+     *
+     * @access private
      */
     const STATE_SELECTED_READONLY = 5;
 
     /**
      * Internal state when the LOGOUT command has been issued to the IMAP
      * server, but before the disconnect has taken place.
+     *
+     * @access private
      */
     const STATE_LOGOUT = 6;
 
     /**
      * The response sent from the IMAP server is "OK".
+     *
+     * @access private
      */
     const RESPONSE_OK = 1;
 
     /**
      * The response sent from the IMAP server is "NO".
+     *
+     * @access private
      */
     const RESPONSE_NO = 2;
 
     /**
      * The response sent from the IMAP server is "BAD".
+     *
+     * @access private
      */
     const RESPONSE_BAD = 3;
 
     /**
      * The response sent from the IMAP server is untagged (starts with "*").
+     *
+     * @access private
      */
     const RESPONSE_UNTAGGED = 4;
 
     /**
      * The response sent from the IMAP server requires the client to send
      * information (starts with "+").
+     *
+     * @access private
      */
     const RESPONSE_FEEDBACK = 5;
 
@@ -96,7 +121,7 @@ class ezcMailImapTransport
      *     FLAGGED    Message is "flagged" for urgent/special attention
      *     SEEN       Message has been read
      *
-     * @var array(int=>string)
+     * @var array(string)
      */
     private static $basicFlags = array( 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'SEEN' );
 
@@ -113,7 +138,7 @@ class ezcMailImapTransport
      *     NEW        Equivalent to RECENT + UNSEEN
      *     ALL        All the messages
      *
-     * @var array(int=>string)
+     * @var array(string)
      */
     private static $extendedFlags = array( 'ALL', 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNDRAFT', 'UNFLAGGED', 'UNRECENT', 'UNSEEN' );
 
@@ -194,6 +219,73 @@ class ezcMailImapTransport
     public function __destruct()
     {
         $this->disconnect();
+    }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @throws ezcBaseValueException
+     *         if $value is not accepted for the property $name
+     * @param string $name
+     * @param mixed $value
+     * @ignore
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                if ( !( $value instanceof ezcMailImapTransportOptions ) )
+                {
+                    throw new ezcBaseValueException( 'options', $value, 'instanceof ezcMailImapTransportOptions' );
+                }
+                $this->options = $value;
+                break;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns the value of the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @param string $name
+     * @ignore
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return $this->options;
+            
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @param string $name
+     * @return bool
+     * @ignore
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     /**

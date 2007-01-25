@@ -13,6 +13,9 @@
  * ezcMailTransportConnection is an internal class used to connect to
  * a server and have line based communication with.
  *
+ * @property ezcMailTransportOptions $options
+ *           Holds the options you can set to the transport connection.
+ *
  * @package Mail
  * @version //autogen//
  * @access private
@@ -68,6 +71,73 @@ class ezcMailTransportConnection
         else
         {
             throw new ezcMailTransportException( "Failed to connect to the server: {$server}:{$port}." );
+        }
+    }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @throws ezcBaseValueException
+     *         if $value is not accepted for the property $name
+     * @param string $name
+     * @param mixed $value
+     * @ignore
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                if ( !( $value instanceof ezcMailTransportOptions ) )
+                {
+                    throw new ezcBaseValueException( 'options', $value, 'instanceof ezcMailTransportOptions' );
+                }
+                $this->options = $value;
+                break;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns the value of the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @param string $name
+     * @ignore
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return $this->options;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @param string $name
+     * @return bool
+     * @ignore
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return true;
+
+            default:
+                return false;
         }
     }
 

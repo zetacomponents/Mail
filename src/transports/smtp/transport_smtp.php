@@ -12,7 +12,7 @@
  * This class implements the Simple Mail Transfer Protocol (SMTP)
  * with authentication support.
  *
- * See for further information the RFC's:
+ * See for further information the RFCs:
  * - {@link http://www.faqs.org/rfcs/rfc821.html}
  * - {@link http://www.faqs.org/rfcs/rfc2554.html}
  *
@@ -31,6 +31,8 @@
  * @property string $senderHost
  *           The hostname of the computer that sends the mail. The default is
  *           'localhost'.
+ * @property ezcMailSmtpTransportOptions $options
+ *           Holds the options you can set to the SMTP transport.
  *
  * @package Mail
  * @version //autogen//
@@ -45,18 +47,21 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
     /**
      * We are not connected to a server.
+     *
      * @access private
      */
     const STATUS_NOT_CONNECTED = 1;
 
     /**
      * We are connected to the server, but not authenticated.
+     *
      * @access private
      */
     const STATUS_CONNECTED = 2;
 
     /**
      * We are connected to the server and authenticated.
+     *
      * @access private
      */
     const STATUS_AUTHENTICATED = 3;
@@ -163,7 +168,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Sets the property $name to $value.
      *
      * @throws ezcBasePropertyNotFoundException
-     *         if the property does not exist.
+     *         if the property $name does not exist
+     * @throws ezcBaseValueException
+     *         if $value is not accepted for the property $name
      * @param string $name
      * @param mixed $value
      * @ignore
@@ -181,16 +188,24 @@ class ezcMailSmtpTransport implements ezcMailTransport
                 $this->properties[$name] = $value;
                 break;
 
+            case 'options':
+                if ( !( $value instanceof ezcMailSmtpTransportOptions ) )
+                {
+                    throw new ezcBaseValueException( 'options', $value, 'instanceof ezcMailSmtpTransportOptions' );
+                }
+                $this->options = $value;
+                break;
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
     }
 
     /**
-     * Returns the property $name.
+     * Returns the value of the property $name.
      *
      * @throws ezcBasePropertyNotFoundException
-     *         if the property does not exist.
+     *         if the property $name does not exist
      * @param string $name
      * @return mixed
      * @ignore
@@ -206,6 +221,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'serverPort':
             case 'timeout':
                 return $this->properties[$name];
+
+            case 'options':
+                return $this->options;
 
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
@@ -230,6 +248,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'serverPort':
             case 'timeout':
                 return isset( $this->properties[$name] );
+
+            case 'options':
+                return true;
 
             default:
                 return false;

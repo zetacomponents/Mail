@@ -66,25 +66,6 @@ class ezcMailParser
     }
 
     /**
-     * Returns the value of the property $name.
-     *
-     * @throws ezcBasePropertyNotFoundException
-     *         if the property $name does not exist
-     * @param string $name
-     * @ignore
-     */
-    public function __get( $name )
-    {
-        switch ( $name )
-        {
-            case 'options':
-                return $this->options;
-                break;
-        }
-        throw new ezcBasePropertyNotFoundException( $name );
-    }
-
-    /**
      * Sets the property $name to $value.
      *
      * @throws ezcBasePropertyNotFoundException
@@ -113,6 +94,26 @@ class ezcMailParser
     }
 
     /**
+     * Returns the value of the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @param string $name
+     * @ignore
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return $this->options;
+            
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
      * Returns true if the property $name is set, otherwise false.
      *
      * @param string $name
@@ -121,11 +122,14 @@ class ezcMailParser
      */
     public function __isset( $name )
     {
-        if ( $name === "options" )
+        switch ( $name )
         {
-            return true;
+            case 'options':
+                return true;
+
+            default:
+                return false;
         }
-        return false;
     }
 
     /**

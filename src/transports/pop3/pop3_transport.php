@@ -22,6 +22,9 @@
  * @todo // add support for SSL?
  * @todo // support for signing?
  *
+ * @property ezcMailPop3TransportOptions $options
+ *           Holds the options you can set to the POP3 transport.
+ *
  * @package Mail
  * @version //autogen//
  * @mainclass
@@ -30,24 +33,32 @@ class ezcMailPop3Transport
 {
     /**
      * Internal state set when the POP3 transport is not connected to a server.
+     *
+     * @access private
      */
     const STATE_NOT_CONNECTED = 1;
 
     /**
      * Internal state set when the POP3 transport is connected to the server
      * but no successful authentication has been performed.
+     *
+     * @access private
      */
     const STATE_AUTHORIZATION = 2;
 
     /**
      * Internal state set when the POP3 transport is connected to the server
      * and authenticated.
+     *
+     * @access private
      */
     const STATE_TRANSACTION = 3;
 
     /**
      * Internal state set when the QUIT command has been issued to the POP3 server
      * but before the disconnect has taken place.
+     *
+     * @access private
      */
     const STATE_UPDATE = 4;
 
@@ -130,6 +141,73 @@ class ezcMailPop3Transport
             $this->connection->sendData( 'QUIT' );
             $this->connection->getLine(); // discard
             $this->connection->close();
+        }
+    }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @throws ezcBaseValueException
+     *         if $value is not accepted for the property $name
+     * @param string $name
+     * @param mixed $value
+     * @ignore
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                if ( !( $value instanceof ezcMailPop3TransportOptions ) )
+                {
+                    throw new ezcBaseValueException( 'options', $value, 'instanceof ezcMailPop3TransportOptions' );
+                }
+                $this->options = $value;
+                break;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns the value of the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @param string $name
+     * @ignore
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return $this->options;
+            
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @param string $name
+     * @return bool
+     * @ignore
+     */
+    public function __isset( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return true;
+
+            default:
+                return false;
         }
     }
 

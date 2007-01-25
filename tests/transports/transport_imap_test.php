@@ -1319,6 +1319,91 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( '45177', $parts[1]->size );
     }
 
+    public function testTransportProperties()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $this->assertEquals( true, isset( $imap->options ) );
+        $this->assertEquals( false, isset( $imap->no_such_property ) );
+
+        $options = $imap->options;
+        $imap->options = new ezcMailImapTransportOptions();
+        $this->assertEquals( $options, $imap->options );
+
+        try
+        {
+            $imap->options = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'xxx' that you were trying to assign to setting 'options' is invalid. Allowed values are: instanceof ezcMailImapTransportOptions.", $e->getMessage() );
+        }
+
+        try
+        {
+            $imap->no_such_property = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+
+        try
+        {
+            $value = $imap->no_such_property;
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+    }
+
+    public function testTransportConnectionProperties()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+
+        // hack to get the connection property as it is private
+        $connection = $this->getAttribute( $imap, 'connection' );
+        $this->assertEquals( true, isset( $connection->options ) );
+        $this->assertEquals( false, isset( $connection->no_such_property ) );
+
+        $options = $connection->options;
+        $connection->options = new ezcMailTransportOptions();
+        $this->assertEquals( $options, $connection->options );
+
+        try
+        {
+            $connection->options = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'xxx' that you were trying to assign to setting 'options' is invalid. Allowed values are: instanceof ezcMailTransportOptions.", $e->getMessage() );
+        }
+
+        try
+        {
+            $connection->no_such_property = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+
+        try
+        {
+            $value = $connection->no_such_property;
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
         self::$ids = array( 15, 16, 17, 18 );
