@@ -20,6 +20,8 @@
 - Implemented feature request #10068: added a list of supported RFCs to the
   documentation.
 - Implemented feature request #9308: added option classes for transports.
+- Implemented feature request #10082: added options class ezcMailParserOptions
+  and deprecated second parameter of parseMail() in ezcMailParser.
 
 
 1.2.1 - [RELEASEDATE]

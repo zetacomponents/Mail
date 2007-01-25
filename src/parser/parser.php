@@ -11,10 +11,20 @@
 /**
  * Parses a mail in RFC822 format to an ezcMail structure.
  *
+ * If you want to use your own mail class (extended from ezcMail), use
+ * ezcMailParserOption. Example:
+ * <code>
+ * $parser = new ezcMailParser( array( 'mailClass' => 'MyMailClass' ) );
+ * // if you want to use MyMailClass which extends ezcMail
+ * </code>
+ *
  * File attachments will be written to disk in a temporary directory.
  * This temporary directory and the file attachment will be removed
- * when PHP ends execution.
- * If you want to keep the file you should move it to another directory.
+ * when PHP ends execution. If you want to keep the file you should move it
+ * to another directory.
+ *
+ * @property ezcMailParserOptions $options
+ *           Holds the options you can set to the mail parser.
  *
  * @package Mail
  * @version //autogen//
@@ -37,30 +47,118 @@ class ezcMailParser
     private static $tmpDir = null;
 
     /**
-     * Constructs a new ezcMailParser.
+     * Holds options you can be set to the mail parser.
+     *
+     * @var ezcMailParserOptions
      */
-    public function __construct()
+    private $options;
+
+    /**
+     * Constructs a new ezcMailParser.
+     *
+     * @see ezcMailParserOptions for options you can set to the mail parser.
+     *
+     * @param array(string=>mixed) $options
+     */
+    public function __construct( array $options = array() )
     {
+        $this->options = new ezcMailParserOptions( $options );
+    }
+
+    /**
+     * Returns the value of the property $name.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @param string $name
+     * @ignore
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                return $this->options;
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $name );
+    }
+
+    /**
+     * Sets the property $name to $value.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name does not exist
+     * @throws ezcBaseValueException
+     *         if $value is not accepted for the property $name
+     * @param string $name
+     * @param mixed $value
+     * @ignore
+     */
+    public function __set( $name, $value )
+    {
+        switch ( $name )
+        {
+            case 'options':
+                if ( !( $value instanceof ezcMailParserOptions ) )
+                {
+                    throw new ezcBaseValueException( 'options', $value, 'instanceof ezcMailParserOptions' );
+                }
+                $this->options = $value;
+                break;
+
+            default:
+                throw new ezcBasePropertyNotFoundException( $name );
+        }
+    }
+
+    /**
+     * Returns true if the property $name is set, otherwise false.
+     *
+     * @param string $name
+     * @return bool
+     * @ignore
+     */
+    public function __isset( $name )
+    {
+        if ( $name === "options" )
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Returns an array of ezcMail objects parsed from the mail set $set.
      *
-     * You can optionally provide an alternate class name, which will be
-     * instanciated instead of ezcMail, if you need to extend ezcMail.
+     * You can optionally use ezcMailParserOptions to provide an alternate class
+     * name which will be instantiated instead of ezcMail, if you need to extend
+     * ezcMail.
+     *
+     * Example:
+     * <code>
+     * $parser = new ezcMailParser( array( 'mailClass' => 'MyMailClass' ) );
+     * // if you want to use MyMailClass which extends ezcMail
+     * </code>
+     *
+     * @apichange Remove second parameter
      *
      * @throws ezcBaseFileNotFoundException
      *         if a neccessary temporary file could not be openened.
      * @param ezcMailParserSet $set
-     * @param string $class         A class derived from ezcMail.
+     * @param string $class Deprecated. Use $mailClass in ezcMailParserOptions class instead.
      * @returns array(ezcMail)
      */
-    public function parseMail( ezcMailParserSet $set, $class = "ezcMail" )
+    public function parseMail( ezcMailParserSet $set, $class = null )
     {
         $mail = array();
         if ( !$set->hasData() )
         {
             return $mail;
+        }
+        if ( $class === null )
+        {
+            $class = $this->options->mailClass;
         }
         do
         {

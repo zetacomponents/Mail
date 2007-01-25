@@ -1152,5 +1152,55 @@ END;
             $this->assertequals( $expected[$i], $parts[$i]->size );
         }
     }
+
+    public function testParserOptionsExtendedMail()
+    {
+        $parser = new ezcMailParser( array( 'mailClass' => 'ExtendedMail' ) );
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 'ExtendedMail', get_class( $mail ) );
+    }
+
+    public function testParserProperties()
+    {
+        $parser = new ezcMailParser();
+        $this->assertEquals( true, isset( $parser->options ) );
+        $this->assertEquals( false, isset( $parser->no_such_property ) );
+
+        $options = $parser->options;
+        $parser->options = new ezcMailParserOptions();
+        $this->assertEquals( $options, $parser->options );
+
+        try
+        {
+            $parser->options = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'xxx' that you were trying to assign to setting 'options' is invalid. Allowed values are: instanceof ezcMailParserOptions.", $e->getMessage() );
+        }
+
+        try
+        {
+            $parser->no_such_property = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+
+        try
+        {
+            $value = $parser->no_such_property;
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+    }
 }
 ?>

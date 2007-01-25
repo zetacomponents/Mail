@@ -75,6 +75,7 @@ return array(
     'ezcMailSmtpTransportOptions'   => 'Mail/options/smtp_options.php',
     'ezcMailImapTransportOptions'   => 'Mail/options/imap_options.php',
     'ezcMailPop3TransportOptions'   => 'Mail/options/pop3_options.php',
+    'ezcMailParserOptions'          => 'Mail/options/parser_options.php',
 
     'ezcMailCharsetConverter'       => 'Mail/internal/charset_convert.php',
     'ezcMailHeaderFolder'           => 'Mail/internal/header_folder.php'
