@@ -6,13 +6,13 @@ declare(encoding="latin1");
  *
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @package Mail
  */
 
 /**
  * ezcMailVariableSet is an internal class that can be used to parse mail directly from
- * a variable in your script.
+ * a string variable in your script.
  *
  * The variable should contain the complete mail message in RFC822 format.
  *
@@ -27,7 +27,6 @@ declare(encoding="latin1");
  *
  * @package Mail
  * @version //autogen//
- * @mainclass
  */
 class ezcMailVariableSet implements ezcMailParserSet
 {

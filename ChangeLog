@@ -19,6 +19,7 @@
   which is set when parsing a mail.
 - Implemented feature request #10068: added a list of supported RFCs to the
   documentation.
+- Implemented feature request #9308: added option classes for transports.
 
 
 1.2.1 - [RELEASEDATE]

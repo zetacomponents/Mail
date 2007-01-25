@@ -26,10 +26,10 @@
  * @property string $password
  *           The password used for authentication.
  * @property int $timeout
- *           The timeout value of the connection in seconds.  The default is
- *           five seconds.
+ *           The timeout value of the connection in seconds. The default is
+ *           5 seconds {@see ezcMailTransportOptions}.
  * @property string $senderHost
- *           The hostname of the computer that sends the mail.  the default is
+ *           The hostname of the computer that sends the mail. The default is
  *           'localhost'.
  *
  * @package Mail
@@ -101,7 +101,14 @@ class ezcMailSmtpTransport implements ezcMailTransport
     private $properties = array();
 
     /**
-     * Constructs a new ezcMailTransportSmtp.
+     * Holds the options of this class.
+     *
+     * @var ezcMailSmtpTransportOptions
+     */
+    private $options;
+
+    /**
+     * Constructs a new ezcMailSmtpTransport.
      *
      * The constructor expects, at least, the hostname $host of the SMTP
      * server.
@@ -116,12 +123,15 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * The portnumber $port, default the SMTP standard port, to which will
      * be connected.
      *
+     * @see ezcMailSmtpTransportOptions for options you can specify for SMTP.
+     *
      * @param string $host
      * @param string $user
      * @param string $password
      * @param int $port
+     * @param array(string=>mixed) $options
      */
-    public function __construct( $host, $user = '', $password = '', $port = 25  )
+    public function __construct( $host, $user = '', $password = '', $port = 25, array $options = array() )
     {
         $this->serverHost = $host;
         $this->user = $user;
@@ -130,8 +140,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
         $this->doAuthenticate = $user != '' ? true : false;
 
         $this->status = self::STATUS_NOT_CONNECTED;
-        $this->timeout = 5;
         $this->senderHost = 'localhost';
+        $this->options = new ezcMailSmtpTransportOptions( $options );
+        $this->timeout = $this->options->timeout;
     }
 
     /**
@@ -411,7 +422,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Sends the QUIT command to the server and breaks the connection.
      *
-     * @throws ezcMailTransportException
+     * @throws ezcMailTransportSmtpException
      *         if the QUIT command failed.
      */
     public function disconnect()
@@ -453,7 +464,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * The sender's mail address $from may be enclosed in angle brackets.
      *
-     * @throws ezcMailTransportException
+     * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
      *         or if the MAIL FROM command failed.
      * @param string $from
@@ -480,7 +491,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * The recipient mail address $email may be enclosed in angle brackets.
      *
-     * @throws ezcMailTransportException
+     * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
      *         or if the RCPT TO command failed.
      * @param string $to
@@ -500,7 +511,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Send the DATA command to the SMTP server.
      *
-     * @throws ezcMailTransportException
+     * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
      *         or if the DATA command failed.
      */
@@ -540,7 +551,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Returns data received from the connection stream.
      *
-     * @throws ezcMailTransportSmtpConnection
+     * @throws ezcMailTransportSmtpException
      *         if there is no valid connection.
      * @return string
      */
@@ -585,6 +596,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
  * This class is deprecated. Use ezcMailSmtpTransport instead.
  *
  * @package Mail
+ * @ignore
  */
 class ezcMailTransportSmtp extends ezcMailSmtpTransport
 {

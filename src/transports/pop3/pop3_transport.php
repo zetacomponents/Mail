@@ -21,6 +21,7 @@
  * @todo ignore messages of a certain size?
  * @todo // add support for SSL?
  * @todo // support for signing?
+ *
  * @package Mail
  * @version //autogen//
  * @mainclass
@@ -85,20 +86,30 @@ class ezcMailPop3Transport
     private $greeting = null;
 
     /**
+     * Options for a POP3 transport connection.
+     * 
+     * @var ezcMailPop3TransportOptions
+     */
+    private $options;
+
+    /**
      * Creates a new POP3 transport and connects to the $server at $port.
      *
-     * You can specify the $port if the POP3 server is not on the default port
-     * 110.
+     * You can specify the $port if the POP3 server is not on the default port 110.
+     *
+     * @see ezcMailPop3TransportOptions for options you can specify for POP3.
      *
      * @throws ezcMailTransportException
      *         if it was not possible to connect to the server
      * @param string $server
      * @param int $port
+     * @param array(string=>mixed) $options
      */
-    public function __construct( $server, $port = 110 )
+    public function __construct( $server, $port = 110, array $options = array() )
     {
+        $this->options = new ezcMailPop3TransportOptions( $options );
         // open the connection
-        $this->connection = new ezcMailTransportConnection( $server, $port );
+        $this->connection = new ezcMailTransportConnection( $server, $port, $options );
         $this->greeting = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $this->greeting ) )
         {
@@ -143,7 +154,8 @@ class ezcMailPop3Transport
      * Authenticates the user to the POP3 server with $user and $password.
      *
      * You can choose the authentication method with the $method parameter.
-     * The default is to use plaintext username and password.
+     * The default is to use plaintext username and password (specified in the
+     * ezcMailPop3TransportOptions class).
      *
      * This method should be called directly after the construction of this
      * object.
@@ -157,11 +169,16 @@ class ezcMailPop3Transport
      * @param string $password
      * @param int method
      */
-    public function authenticate( $user, $password, $method = self::AUTH_PLAIN_TEXT )
+    public function authenticate( $user, $password, $method = null )
     {
         if ( $this->state != self::STATE_AUTHORIZATION )
         {
             throw new ezcMailTransportException( "Tried to authenticate when there was no connection or when already authenticated." );
+        }
+
+        if ( is_null( $method ) )
+        {
+            $method = $this->options->authenticationMethod;
         }
 
         if ( $method == self::AUTH_PLAIN_TEXT ) // normal plain text login

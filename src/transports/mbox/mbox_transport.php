@@ -89,8 +89,8 @@ class ezcMailMboxTransport
         do
         {
             $data = fgets( $this->fh );
-        }
-        while ( !feof( $this->fh ) && substr( $data, 0, 5 ) !== "From " );
+        } while ( !feof( $this->fh ) && substr( $data, 0, 5 ) !== "From " );
+
         if ( feof( $this->fh ) )
         {
             return false;
@@ -121,8 +121,8 @@ class ezcMailMboxTransport
             {
                 $messages[] = $position;
             }
-        }
-        while ( $position !== false );
+        } while ( $position !== false );
+
         return $messages;
     }
 

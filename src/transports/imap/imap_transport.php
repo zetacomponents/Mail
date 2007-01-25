@@ -20,6 +20,7 @@
  * @todo // support for signing?
  * @todo listUniqueIdentifiers(): add UIVALIDITY value to UID (like in POP3).
  *       (if necessary).
+ *
  * @package Mail
  * @version //autogen//
  * @mainclass
@@ -88,32 +89,32 @@ class ezcMailImapTransport
     const RESPONSE_FEEDBACK = 5;
 
     /**
-      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
-      *     ANSWERED   Message has been answered
-      *     DELETED    Message is marked to be deleted by later EXPUNGE
-      *     DRAFT      Message has marked as a draft
-      *     FLAGGED    Message is "flagged" for urgent/special attention
-      *     SEEN       Message has been read
-      *
-      * @var array(int=>string)
-      */
+     * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
+     *     ANSWERED   Message has been answered
+     *     DELETED    Message is marked to be deleted by later EXPUNGE
+     *     DRAFT      Message has marked as a draft
+     *     FLAGGED    Message is "flagged" for urgent/special attention
+     *     SEEN       Message has been read
+     *
+     * @var array(int=>string)
+     */
     private static $basicFlags = array( 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'SEEN' );
 
     /**
-      * Extended flags are used by {@link searchByFlag()}
-      *     ANSWERED   Message has been answered
-      *     DELETED    Message is marked to be deleted by later EXPUNGE
-      *     DRAFT      Message has marked as a draft
-      *     FLAGGED    Message is "flagged" for urgent/special attention
-      *     RECENT     Message is recent (cannot be set)
-      *     SEEN       Message has been read
-      *     UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
-      *                Opposites of the above flags
-      *     NEW        Equivalent to RECENT + UNSEEN
-      *     ALL        All the messages
-      *
-      * @var array(int=>string)
-      */
+     * Extended flags are used by {@link searchByFlag()}
+     *     ANSWERED   Message has been answered
+     *     DELETED    Message is marked to be deleted by later EXPUNGE
+     *     DRAFT      Message has marked as a draft
+     *     FLAGGED    Message is "flagged" for urgent/special attention
+     *     RECENT     Message is recent (cannot be set)
+     *     SEEN       Message has been read
+     *     UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     *                Opposites of the above flags
+     *     NEW        Equivalent to RECENT + UNSEEN
+     *     ALL        All the messages
+     *
+     * @var array(int=>string)
+     */
     private static $extendedFlags = array( 'ALL', 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNDRAFT', 'UNFLAGGED', 'UNRECENT', 'UNSEEN' );
 
     /**
@@ -150,6 +151,13 @@ class ezcMailImapTransport
     private $connection = null;
 
     /**
+     * Options for an IMAP transport connection.
+     * 
+     * @var ezcMailImapTransportOptions
+     */
+    private $options;
+
+    /**
      * Creates a new IMAP transport and connects to the $server at $port.
      *
      * You can specify the $port if the IMAP server is not on the default port
@@ -157,14 +165,18 @@ class ezcMailImapTransport
      * the class variables {@link $this->server} and {@link $this->port} to
      * the respective parameters values.
      *
+     * @see ezcMailImapTransportOptions for options you can specify for IMAP.
+     *
      * @throws ezcMailTransportException
-     *         if it was not possible to connect to the server.
+     *         if it was not possible to connect to the server
      * @param string $server
      * @param int $port
+     * @param array(string=>mixed) $options
      */
-    public function __construct( $server, $port = 143 )
+    public function __construct( $server, $port = 143, array $options = array() )
     {
-        $this->connection = new ezcMailTransportConnection( $server, $port );
+        $this->options = new ezcMailImapTransportOptions( $options );
+        $this->connection = new ezcMailTransportConnection( $server, $port, $options );
         // get the server greeting
         $response = $this->connection->getLine();
         if ( strpos( $response, "* OK" ) === false )

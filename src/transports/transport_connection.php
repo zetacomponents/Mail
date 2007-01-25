@@ -20,6 +20,11 @@
 class ezcMailTransportConnection
 {
     /**
+     * The line-break characters to send to the server.
+     */
+    const CRLF = "\r\n";
+
+    /**
      * The connection to the server or null if there is none.
      *
      * @var resource
@@ -27,30 +32,38 @@ class ezcMailTransportConnection
     private $connection = null;
 
     /**
-     * The line-break characters to send to the server.
+     * Options for a transport connection.
+     * 
+     * @var ezcMailTransportOptions
      */
-    const CRLF = "\r\n";
+    private $options;
 
     /**
      * Constructs a new connection to the $server using the port $port.
      *
-     * $timeout controls the amount of seconds before the connection times out.
+     * @see ezcMailTransportOptions for options you can specify for a transport connection.
+     *
+     * @todo The @ should be removed when PHP doesn't throw warnings for connect problems.
+     * @todo Implement SSL support
      *
      * @throws ezcMailTransportException
-     *         if a connection to the server could not be made.
+     *         if a connection to the server could not be made
+     * @param string $server
+     * @param int $port
+     * @param array(string=>mixed) $options
      */
-    public function __construct( $server, $port, $timeout = 5 )
+    public function __construct( $server, $port, array $options = array() )
     {
         $errno = null;
         $errstr = null;
+        $this->options = new ezcMailTransportOptions( $options );
 
-        // FIXME: The @ should be removed when PHP doesn't throw warnings for connect problems
         $this->connection = @stream_socket_client( "tcp://{$server}:{$port}",
-                                                   $errno, $errstr, $timeout );
+                                                   $errno, $errstr, $this->options->timeout );
 
         if ( is_resource( $this->connection ) )
         {
-            stream_set_timeout( $this->connection, $timeout );
+            stream_set_timeout( $this->connection, $this->options->timeout );
         }
         else
         {
@@ -82,11 +95,11 @@ class ezcMailTransportConnection
     /**
      * Returns one line of data from the stream.
      *
-     * The returned lined will have linebreaks removed if the $trim option is set.
+     * The returned line will have linebreaks removed if the $trim option is set.
      *
-     * @param bool $trim
      * @throws ezcMailTransportConnection
-     *         if there is no valid connection.
+     *         if there is no valid connection
+     * @param bool $trim
      * @return string
      */
     public function getLine( $trim = false )
@@ -128,5 +141,4 @@ class ezcMailTransportConnection
         }
     }
 }
-
 ?>

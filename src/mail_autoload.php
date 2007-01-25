@@ -71,6 +71,11 @@ return array(
     'ezcMailParserShutdownHandler'  => 'Mail/parser/shutdown_handler.php',
     'ezcMailRfc2231Implementation'  => 'Mail/parser/rfc2231_implementation.php',
 
+    'ezcMailTransportOptions'       => 'Mail/options/transport_options.php',
+    'ezcMailSmtpTransportOptions'   => 'Mail/options/smtp_options.php',
+    'ezcMailImapTransportOptions'   => 'Mail/options/imap_options.php',
+    'ezcMailPop3TransportOptions'   => 'Mail/options/pop3_options.php',
+
     'ezcMailCharsetConverter'       => 'Mail/internal/charset_convert.php',
     'ezcMailHeaderFolder'           => 'Mail/internal/header_folder.php'
     );
