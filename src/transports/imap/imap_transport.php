@@ -16,7 +16,6 @@
  * http://www.faqs.org/rfcs/rfc2060.html (IMAP4rev1)
  *
  * @todo ignore messages of a certain size?
- * @todo // add support for SSL?
  * @todo // support for signing?
  * @todo listUniqueIdentifiers(): add UIVALIDITY value to UID (like in POP3).
  *       (if necessary).
@@ -186,9 +185,8 @@ class ezcMailImapTransport
      * Creates a new IMAP transport and connects to the $server at $port.
      *
      * You can specify the $port if the IMAP server is not on the default port
-     * 143. The constructor just calls the {@link connect()} method, and sets
-     * the class variables {@link $this->server} and {@link $this->port} to
-     * the respective parameters values.
+     * 993 (for SSL connections) or 143 (for plain connections). Use the $options
+     * parameter to specify an SSL connection.
      *
      * @see ezcMailImapTransportOptions for options you can specify for IMAP.
      *
@@ -198,9 +196,13 @@ class ezcMailImapTransport
      * @param int $port
      * @param array(string=>mixed) $options
      */
-    public function __construct( $server, $port = 143, array $options = array() )
+    public function __construct( $server, $port = null, array $options = array() )
     {
         $this->options = new ezcMailImapTransportOptions( $options );
+        if ( $port === null )
+        {
+            $port = ( $this->options->ssl === true ) ? 993 : 143;
+        }
         $this->connection = new ezcMailTransportConnection( $server, $port, $options );
         // get the server greeting
         $response = $this->connection->getLine();

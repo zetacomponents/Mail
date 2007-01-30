@@ -18,13 +18,16 @@ class ezcMailTransportOptionsTest extends ezcTestCase
     {
         $options = new ezcMailTransportOptions();
         $this->assertEquals( 5, $options->timeout );
+        $this->assertEquals( false, $options->ssl );
     }
 
     public function testTransportOptionsSet()
     {
         $options = new ezcMailTransportOptions();
         $options->timeout = 10;
+        $options->ssl = true;
         $this->assertEquals( 10, $options->timeout );
+        $this->assertEquals( true, $options->ssl );
     }
 
     public function testTransportOptionsSetInvalid()
@@ -42,6 +45,15 @@ class ezcMailTransportOptionsTest extends ezcTestCase
         try
         {
             $options->timeout = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+        }
+
+        try
+        {
+            $options->ssl = 'xxx';
             $this->fail( "Expected exception was not thrown" );
         }
         catch ( ezcBaseValueException $e )

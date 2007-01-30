@@ -14,6 +14,8 @@
  * @property int $timeout
  *           Specifies the time in seconds until the connection is closed if
  *           there is no activity through the connection.
+ * @property bool $ssl
+ *           Specifies whether to use an SSL connection or not.
  *
  * @package Mail
  * @version //autogen//
@@ -28,6 +30,7 @@ class ezcMailTransportOptions extends ezcBaseOptions
     public function __construct( array $options = array() )
     {
         $this->timeout = 5; // default value for timeout is 5 seconds
+        $this->ssl = false; // default value for ssl is false
 
         parent::__construct( $options );
     }
@@ -53,6 +56,14 @@ class ezcMailTransportOptions extends ezcBaseOptions
                     throw new ezcBaseValueException( $name, $value, 'int >= 1' );
                 }
                 $this->properties[$name] = (int) $value;
+                break;
+
+            case 'ssl':
+                if ( !is_bool( $value ) )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'bool' );
+                }
+                $this->properties[$name] = $value;
                 break;
 
             default:

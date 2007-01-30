@@ -47,7 +47,6 @@ class ezcMailTransportConnection
      * @see ezcMailTransportOptions for options you can specify for a transport connection.
      *
      * @todo The @ should be removed when PHP doesn't throw warnings for connect problems.
-     * @todo Implement SSL support
      *
      * @throws ezcMailTransportException
      *         if a connection to the server could not be made
@@ -60,9 +59,20 @@ class ezcMailTransportConnection
         $errno = null;
         $errstr = null;
         $this->options = new ezcMailTransportOptions( $options );
-
-        $this->connection = @stream_socket_client( "tcp://{$server}:{$port}",
-                                                   $errno, $errstr, $this->options->timeout );
+        if ( $this->options->ssl )
+        {
+            if ( ezcBaseFeatures::hasExtensionSupport( 'openssl' ) !== true )
+            {
+                throw new ezcBaseFeatureNotFoundException( "Failed to connect to the server: {$server}:{$port}. PHP not configured --with-openssl." );
+            }
+            $this->connection = @stream_socket_client( "ssl://{$server}:{$port}",
+                                                       $errno, $errstr, $this->options->timeout );
+        }
+        else
+        {
+            $this->connection = @stream_socket_client( "tcp://{$server}:{$port}",
+                                                       $errno, $errstr, $this->options->timeout );
+        }
 
         if ( is_resource( $this->connection ) )
         {

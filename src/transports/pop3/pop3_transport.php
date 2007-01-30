@@ -19,7 +19,6 @@
  * http://www.faqs.org/rfc/rfc1734.txt - auth
  *
  * @todo ignore messages of a certain size?
- * @todo // add support for SSL?
  * @todo // support for signing?
  *
  * @property ezcMailPop3TransportOptions $options
@@ -106,7 +105,9 @@ class ezcMailPop3Transport
     /**
      * Creates a new POP3 transport and connects to the $server at $port.
      *
-     * You can specify the $port if the POP3 server is not on the default port 110.
+     * You can specify the $port if the POP3 server is not on the default
+     * port 995 (for SSL connections) or 110 (for plain connections). Use the
+     * $options parameter to specify an SSL connection.
      *
      * @see ezcMailPop3TransportOptions for options you can specify for POP3.
      *
@@ -116,10 +117,13 @@ class ezcMailPop3Transport
      * @param int $port
      * @param array(string=>mixed) $options
      */
-    public function __construct( $server, $port = 110, array $options = array() )
+    public function __construct( $server, $port = null, array $options = array() )
     {
         $this->options = new ezcMailPop3TransportOptions( $options );
-        // open the connection
+        if ( $port === null )
+        {
+            $port = ( $this->options->ssl === true ) ? 995 : 110;
+        }
         $this->connection = new ezcMailTransportConnection( $server, $port, $options );
         $this->greeting = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $this->greeting ) )

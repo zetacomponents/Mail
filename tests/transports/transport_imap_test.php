@@ -1404,6 +1404,31 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    public function testServerSSL()
+    {
+        $imap = new ezcMailImapTransport( "ezctest.ez.no", null, array( 'ssl' => true ) );
+        $imap->authenticate( "as", "wee123" );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 240, $mail->size );
+    }
+
+    public function testServerSSLInvalidPort()
+    {
+        try
+        {
+            $imap = new ezcMailImapTransport( "ezctest.ez.no", 143, array( 'ssl' => true ) );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( 'An error occured while sending or receiving mail. Failed to connect to the server: ezctest.ez.no:143.', $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
         self::$ids = array( 15, 16, 17, 18 );

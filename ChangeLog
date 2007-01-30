@@ -22,6 +22,8 @@
 - Implemented feature request #9308: added option classes for transports.
 - Implemented feature request #10082: added options class ezcMailParserOptions
   and deprecated second parameter of parseMail() in ezcMailParser.
+- Implemented feature request #9292: added SSL support for IMAP and POP3.
+  Based on a patch from Mikko Koppanen.
 
 
 1.2.1 - [RELEASEDATE]

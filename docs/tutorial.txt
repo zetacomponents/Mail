@@ -71,8 +71,8 @@ For sending mail we support the following protocols:
 
 For mail retrieval we currently support the following protocols:
 
-- POP3 (ezcMailPop3Transport) - old protocol but still used
-- IMAP (ezcMailImapTransport) - handles multiple mailboxes
+- POP3 (ezcMailPop3Transport) - old protocol but still used. SSL is supported.
+- IMAP (ezcMailImapTransport) - handles multiple mailboxes. SSL is supported.
 - MBOX (ezcMailMboxTransport) - handles Unix mailbox file formats
 
 Mail retrieval from other sources:
@@ -97,11 +97,12 @@ when sending or retrieving mails:
 - ezcMailFile - mail attachment from an existing file
 - ezcMailStreamFile - mail attachment from an open stream
 - ezcMailVirtualFile - mail attachment from a string in memory
-- ezcMailMultipart - support for all multipart parts
 - ezcMailMultipartAlternative - used to bundle a group of mail parts where only one should be shown
 - ezcMailMultipartDigest - used to bundle a list of mail objects
 - ezcMailMultipartMixed - used to bundle an ordered list of mail parts
 - ezcMailMultipartRelated - intended for mail parts consisting of several inter-related body parts
+- ezcMailMultipartReport - used for sending delivery status notifications
+- ezcMailDeliveryStatus - used for sending delivery status notifications
 - ezcMailRfc822Digest - used to insert mail into mail
 - ezcMailText - used for plain text
 
@@ -265,6 +266,28 @@ shown how to work with mailboxes and flags.
 .. include:: tutorial_example_11.php
    :literal:
 
+Working with transport options
+------------------------------
+
+The POP3, IMAP and SMTP transports allow options to be specified when calling
+the transport constructors. These options are implemented in the classes
+ezcMailPop3TransportOptions, ezcMailImapTransportOptions and
+ezcMailSmtpTransportOptions. In the following example it is shown how to
+specify options when calling the POP3 transport constructor.
+
+.. include:: tutorial_example_15.php
+   :literal:
+
+Using SSL with POP3 and IMAP
+----------------------------
+
+The POP3 and IMAP transport allow SSL connections, if the mail server supports
+them. In the following example it is shown how to connect to an IMAP server
+using an SSL connection.
+
+.. include:: tutorial_example_14.php
+   :literal:
+
 Retrieving mail from Mbox files
 -------------------------------
 
@@ -290,6 +313,11 @@ For a more detailed example of how to use a mail object please see the
 `display example`_.
 
 .. _display example: Mail_display-example.html
+
+
+For a list of mail-related RFCs that are supported please see the `RFCs list`_.
+
+.. _RFCs list: Mail_rfcs.html
 
 
 Troubleshooting

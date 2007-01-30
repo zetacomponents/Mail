@@ -443,6 +443,30 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
+    public function testServerSSL()
+    {
+        $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", null, array( 'ssl' => true ) );
+        $pop3->authenticate( "as", "wee123" );
+        $set = $pop3->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 240, $mail->size );
+    }
+
+    public function testServerSSLInvalidPort()
+    {
+        try
+        {
+            $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", 110, array( 'ssl' => true ) );
+            $this->fail( "Didn't get exception when expected" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( 'An error occured while sending or receiving mail. Failed to connect to the server: ezctest.ez.no:110.', $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
         self::$ids = array( '0000000f4420e93a', '000000104420e93a', '000000114420e93a', '000000124420e93a' );
