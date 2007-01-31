@@ -422,7 +422,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @throws ezcMailTransportSmtpException
      *         if no connection could be made
      *         or if the login failed
-     * @throws ezcBaseFeatureNotFoundException
+     * @throws ezcBaseExtensionNotFoundException
      *         if trying to use SSL and the openssl extension is not installed
      */
     private function connect()
@@ -432,7 +432,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         if ( $this->options->connectionType !== self::CONNECTION_PLAIN &&
              !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            throw new ezcBaseFeatureNotFoundException( "Failed to connect to the server: {$this->serverHost}:{$this->serverPort}. PHP not configured --with-openssl." );
+            throw new ezcBaseExtensionNotFoundException( 'openssl', null, "PHP not configured --with-openssl." );
         }
         if ( count( $this->options->connectionOptions ) > 0 )
         {

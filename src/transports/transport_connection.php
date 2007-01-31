@@ -50,7 +50,7 @@ class ezcMailTransportConnection
      *
      * @throws ezcMailTransportException
      *         if a connection to the server could not be made
-     * @throws ezcBaseFeatureNotFoundException
+     * @throws ezcBaseExtensionNotFoundException
      *         if trying to use SSL and the extension openssl is not installed
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined
@@ -69,7 +69,7 @@ class ezcMailTransportConnection
         {
             if ( ezcBaseFeatures::hasExtensionSupport( 'openssl' ) !== true )
             {
-                throw new ezcBaseFeatureNotFoundException( "Failed to connect to the server: {$server}:{$port}. PHP not configured --with-openssl." );
+                throw new ezcBaseExtensionNotFoundException( 'openssl', null, "PHP not configured --with-openssl." );
             }
             $this->connection = @stream_socket_client( "ssl://{$server}:{$port}",
                                                        $errno, $errstr, $this->options->timeout );
