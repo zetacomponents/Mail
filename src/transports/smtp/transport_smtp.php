@@ -27,7 +27,8 @@
  *           The password used for authentication.
  * @property int $timeout
  *           The timeout value of the connection in seconds. The default is
- *           5 seconds {@see ezcMailTransportOptions}.
+ *           5 seconds. When setting/getting this option, the timeout option
+ *           from $this->options will be set instead {@see ezcMailTransportOptions}.
  * @property string $senderHost
  *           The hostname of the computer that sends the mail. The default is
  *           'localhost'.
@@ -41,7 +42,34 @@
 class ezcMailSmtpTransport implements ezcMailTransport
 {
     /**
+     * Plain connection.
+     */
+    const CONNECTION_PLAIN = 'tcp';
+
+    /**
+     * SSL connection.
+     */
+    const CONNECTION_SSL = 'ssl';
+
+    /**
+     * SSLv2 connection.
+     */
+    const CONNECTION_SSLV2 = 'sslv2';
+
+    /**
+     * SSLv3 connection.
+     */
+    const CONNECTION_SSLV3 = 'sslv3';
+
+    /**
+     * TLS connection.
+     */
+    const CONNECTION_TLS = 'tls';
+
+    /**
      * The line-break characters to use.
+     *
+     * @access private
      */
     const CRLF = "\r\n";
 
@@ -115,8 +143,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     /**
      * Constructs a new ezcMailSmtpTransport.
      *
-     * The constructor expects, at least, the hostname $host of the SMTP
-     * server.
+     * The constructor expects, at least, the hostname $host of the SMTP server.
      *
      * The username $user will be used for authentication if provided.
      * If it is left blank no authentication will be performed.
@@ -125,29 +152,40 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * if provided. Use this parameter always in combination with the $user
      * parameter.
      *
-     * The portnumber $port, default the SMTP standard port, to which will
-     * be connected.
+     * The value $port specifies on which port to connect to $host. By default
+     * it is 25 for plain connections and 465 for TLS/SSL/SSLv2/SSLv3.
+     *
+     * Note: The ssl option from ezcMailTransportOptions doesn't apply to SMTP.
+     * If you want to connect to SMTP using TLS/SSL/SSLv2/SSLv3 use the connectionType
+     * option in ezcMailSmtpTransportOptions.
      *
      * @see ezcMailSmtpTransportOptions for options you can specify for SMTP.
      *
+     * @throws ezcBasePropertyNotFoundException
+     *         if $options contains a property not defined
+     * @throws ezcBaseValueException
+     *         if $options contains a property with a value not allowed
      * @param string $host
      * @param string $user
      * @param string $password
      * @param int $port
      * @param array(string=>mixed) $options
      */
-    public function __construct( $host, $user = '', $password = '', $port = 25, array $options = array() )
+    public function __construct( $host, $user = '', $password = '', $port = null, array $options = array() )
     {
+        $this->options = new ezcMailSmtpTransportOptions( $options );
         $this->serverHost = $host;
+        if ( $port === null )
+        {
+            $port = ( $this->options->connectionType === self::CONNECTION_PLAIN ) ? 25 : 465;
+        }
+        $this->serverPort = $port;
         $this->user = $user;
         $this->password = $password;
-        $this->serverPort = $port;
         $this->doAuthenticate = $user != '' ? true : false;
 
         $this->status = self::STATUS_NOT_CONNECTED;
         $this->senderHost = 'localhost';
-        $this->options = new ezcMailSmtpTransportOptions( $options );
-        $this->timeout = $this->options->timeout;
     }
 
     /**
@@ -184,8 +222,13 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'senderHost':
             case 'serverHost':
             case 'serverPort':
-            case 'timeout':
                 $this->properties[$name] = $value;
+                break;
+
+            case 'timeout':
+                // the timeout option from $this->options is used instead of
+                // the timeout option of this class
+                $this->options->timeout = $value;
                 break;
 
             case 'options':
@@ -219,8 +262,10 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'senderHost':
             case 'serverHost':
             case 'serverPort':
-            case 'timeout':
                 return $this->properties[$name];
+
+            case 'timeout':
+                return $this->options->timeout;
 
             case 'options':
                 return $this->options;
@@ -246,9 +291,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
             case 'senderHost':
             case 'serverHost':
             case 'serverPort':
-            case 'timeout':
                 return isset( $this->properties[$name] );
 
+            case 'timeout':
             case 'options':
                 return true;
 
@@ -281,7 +326,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * connection to the server open between each mail.
      *
      * @throws ezcMailTransportException
-     *         if the mail could not be sent.
+     *         if the mail could not be sent
+     * @throws ezcBaseFeatureNotFoundException
+     *         if trying to use SSL and the openssl extension is not installed
      * @param ezcMail $mail
      */
     public function send( ezcMail $mail )
@@ -370,19 +417,38 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Creates a connection to the SMTP server and initiates the login
      * procedure.
      *
+     * @todo The @ should be removed when PHP doesn't throw warnings for connect problems
+     *
      * @throws ezcMailTransportSmtpException
      *         if no connection could be made
-     *         or if the login failed.
+     *         or if the login failed
+     * @throws ezcBaseFeatureNotFoundException
+     *         if trying to use SSL and the openssl extension is not installed
      */
     private function connect()
     {
-        // FIXME: The @ should be removed when PHP doesn't throw warnings for connect problems
-        $this->connection = @stream_socket_client( "tcp://{$this->serverHost}:{$this->serverPort}",
-                                                   $errno, $errstr, $this->timeout );
+        $errno = null;
+        $errstr = null;
+        if ( $this->options->connectionType !== self::CONNECTION_PLAIN &&
+             !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            throw new ezcBaseFeatureNotFoundException( "Failed to connect to the server: {$this->serverHost}:{$this->serverPort}. PHP not configured --with-openssl." );
+        }
+        if ( count( $this->options->connectionOptions ) > 0 )
+        {
+            $context = stream_context_create( $this->options->connectionOptions );
+            $this->connection = @stream_socket_client( "{$this->options->connectionType}://{$this->serverHost}:{$this->serverPort}",
+                                                       $errno, $errstr, $this->options->timeout, STREAM_CLIENT_CONNECT, $context );
+        }
+        else
+        {
+            $this->connection = @stream_socket_client( "{$this->options->connectionType}://{$this->serverHost}:{$this->serverPort}",
+                                                       $errno, $errstr, $this->options->timeout );
+        }
 
         if ( is_resource( $this->connection ) )
         {
-            stream_set_timeout( $this->connection, $this->timeout );
+            stream_set_timeout( $this->connection, $this->options->timeout );
             $this->status = self::STATUS_CONNECTED;
             $greeting = $this->getData();
             $this->login();
@@ -399,7 +465,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * constructor.
      *
      * @throws ezcMailTransportSmtpException
-     *         if the HELO/EHLO command or authentication fails.
+     *         if the HELO/EHLO command or authentication fails
      */
     private function login()
     {
@@ -444,7 +510,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Sends the QUIT command to the server and breaks the connection.
      *
      * @throws ezcMailTransportSmtpException
-     *         if the QUIT command failed.
+     *         if the QUIT command failed
      */
     public function disconnect()
     {
@@ -487,7 +553,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
-     *         or if the MAIL FROM command failed.
+     *         or if the MAIL FROM command failed
      * @param string $from
      */
     private function cmdMail( $from )
@@ -514,8 +580,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
-     *         or if the RCPT TO command failed.
-     * @param string $to
+     *         or if the RCPT TO command failed
+     * @param string $email
      */
     protected function cmdRcpt( $email )
     {
@@ -534,7 +600,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
-     *         or if the DATA command failed.
+     *         or if the DATA command failed
      */
     private function cmdData()
     {
@@ -554,7 +620,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * This method appends one line-break at the end of $data.
      *
      * @throws ezcMailTransportSmtpException
-     *         if there is no valid connection.
+     *         if there is no valid connection
      * @param string $data
      */
     private function sendData( $data )
@@ -573,7 +639,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Returns data received from the connection stream.
      *
      * @throws ezcMailTransportSmtpException
-     *         if there is no valid connection.
+     *         if there is no valid connection
      * @return string
      */
     private function getData()
@@ -602,7 +668,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * the error message in case of an error.
      *
      * @throws ezcMailTransportSmtpException
-     *         if it could not fetch data from the stream.
+     *         if it could not fetch data from the stream
      * @param string &$line
      * @return string
      */
@@ -611,7 +677,6 @@ class ezcMailSmtpTransport implements ezcMailTransport
         return substr( trim( $line = $this->getData() ), 0, 3 );
     }
 }
-
 
 /**
  * This class is deprecated. Use ezcMailSmtpTransport instead.

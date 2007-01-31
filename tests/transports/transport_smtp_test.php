@@ -234,6 +234,11 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $smtp->options = new ezcMailSmtpTransportOptions();
         $this->assertEquals( $options, $smtp->options );
         $this->assertEquals( 5, $smtp->options->timeout );
+        $this->assertEquals( 5, $smtp->timeout );
+        $smtp->timeout = 10;
+        $this->assertEquals( 10, $smtp->options->timeout );
+        $this->assertEquals( ezcMailSmtpTransport::CONNECTION_PLAIN, $smtp->options->connectionType );
+        $this->assertEquals( array(), $smtp->options->connectionOptions );
 
         try
         {
@@ -263,6 +268,184 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         catch ( ezcBasePropertyNotFoundException $e )
         {
             $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
+        }
+    }
+
+    public function testConnectionSSL()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSL ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP SSL test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConnectionSSLOptions()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465,
+                        array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSL,
+                               'connectionOptions' => array( 'wrapper_name' => array( 'option_name' => 'value' ) ) ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP SSL test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConnectionSSLv2()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV2 ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP SSLv2 test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConnectionSSLv3()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP SSLv3 test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConnectionTLS()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_TLS ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP TLS test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConnectionTLSWrongPort()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 25, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_TLS ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP TLS test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+
+        }
+    }
+
+    public function testConnectionPlain()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP TLS test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testConstructorPort()
+    {
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+        $this->assertEquals( 25, $smtp->serverPort );
+
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSL ) );
+        $this->assertEquals( 465, $smtp->serverPort );
+
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV2 ) );
+        $this->assertEquals( 465, $smtp->serverPort );
+
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
+        $this->assertEquals( 465, $smtp->serverPort );
+
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_TLS ) );
+        $this->assertEquals( 465, $smtp->serverPort );
+
+        $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+        $this->assertEquals( 465, $smtp->serverPort );
+    }
+
+    public function testConstructorOptions()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465, array( 'connection' => ezcMailSmtpTransport::CONNECTION_TLS ) );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
+
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465, array( 'connectionOptions' => 'xxx' ) );
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
         }
     }
 

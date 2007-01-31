@@ -66,7 +66,8 @@ mail.
 
 For sending mail we support the following protocols:
 
-- SMTP (ezcMailSmtpTransport) - uses an SMTP server to send mail
+- SMTP (ezcMailSmtpTransport) - uses an SMTP server to send mail. Supports
+  plain and TLS/SSL/SSLv2/SSLv3 connections.
 - MTA (ezcMailMtaTransport) - wraps around the PHP mail() function
 
 For mail retrieval we currently support the following protocols:
@@ -159,6 +160,15 @@ As you can see there is not much difference compared to the composer version.
 In the next example we will add an attachment to our manually built mail:
 
 .. include:: tutorial_example_04.php
+   :literal:
+
+Send a mail using SMTP
+----------------------
+
+This example displays how to send a mail with SMTP, by using an SSLv3
+connection.
+
+.. include:: tutorial_example_16.php
    :literal:
 
 Character encoding
