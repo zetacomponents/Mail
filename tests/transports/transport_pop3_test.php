@@ -445,6 +445,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testServerSSL()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", null, array( 'ssl' => true ) );
         $pop3->authenticate( "as", "wee123" );
         $set = $pop3->fetchAll();
@@ -456,6 +460,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testServerSSLInvalidPort()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", 110, array( 'ssl' => true ) );

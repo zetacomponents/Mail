@@ -273,6 +273,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionSSL()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSL ) );
@@ -292,6 +296,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionSSLOptions()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465,
@@ -313,6 +321,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionSSLv2()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV2 ) );
@@ -332,6 +344,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionSSLv3()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 465, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
@@ -351,6 +367,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionTLS()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_TLS ) );
@@ -370,6 +390,10 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testConnectionTLSWrongPort()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $smtp = new ezcMailSmtpTransport( 'ezctest.ez.no', '', '', 25, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_TLS ) );
@@ -384,7 +408,6 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-
         }
     }
 
@@ -396,7 +419,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
             $mail = new ezcMail();
             $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
             $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
-            $mail->subject = "SMTP TLS test";
+            $mail->subject = "SMTP plain test";
             $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
             $mail->generate();
             $smtp->send( $mail );

@@ -1406,6 +1406,10 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testServerSSL()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         $imap = new ezcMailImapTransport( "ezctest.ez.no", null, array( 'ssl' => true ) );
         $imap->authenticate( "as", "wee123" );
         $imap->selectMailbox( 'inbox' );
@@ -1418,6 +1422,10 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testServerSSLInvalidPort()
     {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
+        {
+            $this->markTestSkipped();
+        }
         try
         {
             $imap = new ezcMailImapTransport( "ezctest.ez.no", 143, array( 'ssl' => true ) );
