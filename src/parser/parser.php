@@ -58,6 +58,10 @@ class ezcMailParser
      *
      * @see ezcMailParserOptions for options you can set to the mail parser.
      *
+     * @throws ezcBasePropertyNotFoundException
+     *         if $options contains a property not defined
+     * @throws ezcBaseValueException
+     *         if $options contains a property with a value not allowed
      * @param array(string=>mixed) $options
      */
     public function __construct( array $options = array() )

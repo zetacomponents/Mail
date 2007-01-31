@@ -21,6 +21,10 @@ class ezcMailImapTransportOptions extends ezcMailTransportOptions
     /**
      * Constructs an object with the specified values.
      *
+     * @throws ezcBasePropertyNotFoundException
+     *         if $options contains a property not defined
+     * @throws ezcBaseValueException
+     *         if $options contains a property with a value not allowed
      * @param array(string=>mixed) $options
      */
     public function __construct( array $options = array() )
@@ -31,10 +35,10 @@ class ezcMailImapTransportOptions extends ezcMailTransportOptions
     /**
      * Sets the option $name to $value.
      *
+     * @throws ezcBasePropertyNotFoundException
+     *         if the property $name is not defined
      * @throws ezcBaseValueException
      *         if $value is not correct for the property $name
-     * @throws ezcBasePropertyNotFoundException
-     *         if the propery $name is not defined
      * @param string $name
      * @param mixed $value
      * @ignore

@@ -50,6 +50,12 @@ class ezcMailTransportConnection
      *
      * @throws ezcMailTransportException
      *         if a connection to the server could not be made
+     * @throws ezcBaseFeatureNotFoundException
+     *         if trying to use SSL and the extension openssl is not installed
+     * @throws ezcBasePropertyNotFoundException
+     *         if $options contains a property not defined
+     * @throws ezcBaseValueException
+     *         if $options contains a property with a value not allowed
      * @param string $server
      * @param int $port
      * @param array(string=>mixed) $options
