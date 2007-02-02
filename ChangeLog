@@ -26,8 +26,6 @@
   Based on a patch from Mikko Koppanen.
 - Implemented feature request #10091: added SSL/TLS support for the SMTP
   transport. Based on a patch from Christian Michel. 
-- Fixed bug #010138: Doc of ezcMailMultipartDigest->__construct() incorrect
-  (The documentation was correct, the implementation was wrong.)
 
 	
 1.2.1 - [RELEASEDATE]
@@ -36,6 +34,8 @@
 - Added ezcMailTools::guessContentType to resolve a bug in which the images
   embeded in an html part were treated like application/octet-stream
   attachments.
+- Fixed bug #010138: Doc of ezcMailMultipartDigest->__construct() incorrect
+  (The documentation was correct, the implementation was wrong.)
 
 
 1.2 - Monday 18 December 2006
