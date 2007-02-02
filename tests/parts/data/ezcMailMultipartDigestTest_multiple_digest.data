@@ -1,0 +1,30 @@
+Content-Type: multipart/digest; boundary="boundaryString"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--boundaryString
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+headers-1
+body-1
+--boundaryString
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+headers-2
+body-2
+--boundaryString
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+headers-3
+body-3
+--boundaryString
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+headers-4
+body-4
+--boundaryString--

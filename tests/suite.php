@@ -21,6 +21,7 @@ require_once( "options/smtp_options_test.php" );
 require_once( "options/parser_options_test.php" );
 require_once( "parts/text_part_test.php" );
 require_once( "parts/multipart_test.php" );
+require_once( "parts/multipart_digest_test.php" );
 require_once( "parts/file_part_test.php" );
 require_once( "parts/virtual_file_part_test.php" );
 require_once( "parts/stream_file_part_test.php" );
@@ -66,6 +67,7 @@ class ezcMailSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcMailVirtualFileTest::suite() );
         $this->addTest( ezcMailStreamFileTest::suite() );
         $this->addTest( ezcMailRfc822DigestTest::suite() );
+        $this->addTest( ezcMailMultipartDigestTest::suite() );
         $this->addTest( ezcMailToolsTest::suite() );
         $this->addTest( ezcMailTransportMtaTest::suite() );
         $this->addTest( ezcMailTransportSmtpTest::suite() );

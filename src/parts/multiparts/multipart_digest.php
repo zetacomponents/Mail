@@ -24,11 +24,15 @@ class ezcMailMultipartDigest extends ezcMailMultipart
     /**
      * Constructs a new ezcMailMultipartDigest
      *
-     * The constructor accepts an arbitrary number of ezcMail or arrays with ezcMail objects.
+     * The constructor accepts an arbitrary number of ezcMail/ezcMailRfc822Digest objects
+     * or arrays with objects of these types.
+     *
+     * Objects of the type ezcMail are wrapped into an ezcMailRfc822Digest object.
+     *
      * Parts are added in the order provided. Parameters of the wrong
      * type are ignored.
      *
-     * @param ezcMail|array(ezcMail)
+     * @param ezcMailRfc822Digest|array(ezcMailRfc822Digest)
      */
     public function __construct()
     {
@@ -36,17 +40,25 @@ class ezcMailMultipartDigest extends ezcMailMultipart
         parent::__construct( array() );
         foreach ( $args as $part )
         {
-            if ( $part instanceof ezcMailPart  )
+            if ( $part instanceof ezcMail  )
+            {
+                $this->parts[] = new ezcMailRfc822Digest( $part );
+            }
+            else if( $part instanceof ezcMailRfc822Digest )
             {
                 $this->parts[] = $part;
             }
-            elseif( is_array( $part ) ) // add each and everyone of the parts in the array
+            else if ( is_array( $part ) ) // add each and everyone of the parts in the array
             {
                 foreach ( $part as $array_part )
                 {
-                    if ( $array_part instanceof ezcMailRfc822Digest )
+                    if ( $array_part instanceof ezcMail )
                     {
-                        $this->parts[] = $array_part;;
+                        $this->parts[] = new ezcMailRfc822Digest( $array_part );
+                    }
+                    else if ( $array_part instanceof ezcMailRfc822Digest )
+                    {
+                        $this->parts[] = $array_part;
                     }
                 }
             }

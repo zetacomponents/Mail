@@ -436,7 +436,7 @@ class ezcMailImapTransport
      * from the server), $state revert to STATE_AUTHENTICATED.
      * After successfully selecting a mailbox, $state will be STATE_SELECTED
      * or STATE_SELECTED_READONLY.
-     * Inbox is a special mailbox and can be specified in whatever-case.
+     * Inbox is a special mailbox and can always be specified.
      *
      * @throws ezcMailMailTransportException
      *         if $state is not accepted
