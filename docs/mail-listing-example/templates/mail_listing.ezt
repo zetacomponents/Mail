@@ -1,0 +1,62 @@
+{use $mails, $mailCount, $selected, $pageSize, $numberOfPages, $mailbox, $mailboxes, $debug}
+<html>
+<head>
+	<title>{$mailbox}</title>
+	{literal}
+	<style>
+	th {
+		background: #CCCCCC;
+		border-bottom: 1px solid #999999;
+	}
+	td {
+		border-bottom: 1px solid #CCCCCC;
+	}
+	</style>
+	{/literal}
+</head>
+<body>
+
+{$debug}
+<hr />
+
+Mailboxes: 
+{foreach $mailboxes as $m}
+	{delimiter} | {/delimiter}
+	{if $mailbox == $m}
+		{$mailbox}
+	{else}
+		<a href="?mailbox={$m}">{$m}</a>
+	{/if}
+{/foreach}
+<hr />
+
+{paging_links selected=$selected numberOfPages=$numberOfPages pagesize=$pageSize delimiter="|" mailbox=$mailbox}
+<br /><br >
+
+<table border="0" cellpadding="2" cellspacing="0">
+<tr>
+    <th width="10" align="center"><input type="checkbox" name="mail" value="ALL" /></th>
+    <th width="60" align="left">Sender</th>
+    <th width="150" align="left">Subject</th>
+    <th width="80" align="right">Size</th>
+    <th width="120" align="right">Received</th>
+</tr>
+
+{foreach $mails as $mail}
+{if $mail["subject"] == null}
+	{$mail["subject"] = "[no subject]"}
+{/if}
+{if $mail["from"] == null}
+	{$mail["from"] = "[none]"}
+{/if}
+<tr>
+	<td align="center"><input type="checkbox" name="mail" value"{$mail["id"]}" /></td>
+	<td align="left">{$mail["from"]}</td>
+	<td align="left"><a href="/message.php?mailbox={$mailbox}&id={$mail["id"]}" target="_blank">{$mail["subject"]}</a></td>
+	<td align="right">{str_number( $mail["size"] / 1024, 1, ".", "," )} KB</td>
+	<td align="right">{date_format_timestamp( "D M-d, Y", $mail["received"] )}</td>
+</tr>
+{/foreach}
+
+</table>
+</body>

@@ -1,0 +1,105 @@
+Mail Listing Example
+====================
+
+How to use
+~~~~~~~~~~
+
+This example demonstrates how to display a listing of mails in a fast and
+efficient way. Although IMAP is used here, POP3 and MBOX will be easy to
+implement as well.
+
+The files used by this example are in the mail-listing-example directory inside
+the docs directory of the Mail component. The output of the mail.php script is
+html, so in order to see it in a browser you will have to copy the files in
+your web root directory, and change the include_path variable in the mail.php
+file to point to the directory where the eZ Components are kept.
+
+You will also have to specify a valid IMAP server with a valid username and
+password in the app.ini file.
+
+The compiled_templates directory needs to have write permissions for itself and
+its subdirectories, so be sure to set that.
+
+When clicking on a mail in the mail list, the browser will try to load the
+message.php file with the ID and mailbox of the clicked message. This file is
+not implemented yet.
+
+
+Structure
+~~~~~~~~~
+
+mail.php
+--------
+
+This is the main script. It uses the Mail, Configuration and Template
+components. You have to modify the 3rd line to point to your location of the eZ
+Components. Run it from a browser as http://localhost/mail.php or similar
+depending on your web server.
+
+The current mailbox and the current page in the mail listing are specified
+using GET, and are initial Inbox and 1.
+
+.. include:: mail-listing-example/mail.php
+   :literal:
+
+app.ini
+-------
+
+Contains the settings of this small example. You can set which folders to use
+for the templates, how many mails per page to display, and various IMAP
+settings such as server, username and password and which mailbox is the default
+one.
+
+.. include:: mail-listing-example/app.ini
+   :literal:
+
+app/paging_links.php
+--------------------
+
+Contains a definition of a template custom block used to display links to other
+pages in the mail listing (e.g. 1 | 2 | 3 , where each number is a link to the
+respective page).
+
+.. include:: mail-listing-example/app/paging_links.php
+   :literal:
+
+templates/mail_listing.ezt
+--------------------------
+
+Contains an html template used in mail.php. Uses the custom block paging_links
+defined in the app/paging_links.php file.
+
+.. include:: mail-listing-example/templates/mail_listing.ezt
+   :literal:
+
+
+Speed considerations
+~~~~~~~~~~~~~~~~~~~~
+
+By using paging in a mail listing and parsing only the headers of the mails for
+this (using the method top() instead of fetch*() from IMAP/POP3), the mail
+listing is quite fast, around 0.3 seconds instead of around 1.1 seconds (or
+more if there are large mails in the current mailbox), for a page size of 10
+mails per page.
+
+
+Extending this example
+~~~~~~~~~~~~~~~~~~~~~~
+
+This example shows just a basic way to do a mail listing. More features can be
+added by a developer, for example:
+
+- login with an username and password instead of reading those from an ini file
+- implement sorting of the mails based on date, subject, sender, size
+- implement flags support (with the IMAP methods fetchFlags(), setFlag(),
+  clearFlag())
+- implement mail operations (select all mails, delete, move, copy, set flags)
+
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End:
+   vim: et syn=rst tw=79

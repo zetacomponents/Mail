@@ -324,6 +324,10 @@ For a more detailed example of how to use a mail object please see the
 
 .. _display example: Mail_display-example.html
 
+For an example of how to display a listing of mails please see the
+`mail listing example`_.
+
+.. _mail listing example: Mail_mail-listing-example.html
 
 For a list of mail-related RFCs that are supported please see the `RFCs list`_.
 
