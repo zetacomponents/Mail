@@ -58,13 +58,20 @@ class ezcMailTransportConnection
      *         if $options contains a property with a value not allowed
      * @param string $server
      * @param int $port
-     * @param array(string=>mixed) $options
+     * @param ezcMailTransportOptions $options
      */
-    public function __construct( $server, $port, array $options = array() )
+    public function __construct( $server, $port, ezcMailTransportOptions $options = null )
     {
         $errno = null;
         $errstr = null;
-        $this->options = new ezcMailTransportOptions( $options );
+        if ( $options === null )
+        {
+            $this->options = new ezcMailTransportOptions();
+        }
+        else
+        {
+            $this->options = $options;
+        }
         if ( $this->options->ssl )
         {
             if ( ezcBaseFeatures::hasExtensionSupport( 'openssl' ) !== true )

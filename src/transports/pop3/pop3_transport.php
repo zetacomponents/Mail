@@ -130,7 +130,7 @@ class ezcMailPop3Transport
         {
             $port = ( $this->options->ssl === true ) ? 995 : 110;
         }
-        $this->connection = new ezcMailTransportConnection( $server, $port, $options );
+        $this->connection = new ezcMailTransportConnection( $server, $port, $this->options );
         $this->greeting = $this->connection->getLine();
         if ( !$this->isPositiveResponse( $this->greeting ) )
         {
@@ -491,7 +491,7 @@ class ezcMailPop3Transport
      * @param int $numLines
      * @return string
      */
-    public function top( $msgNum, $numLines )
+    public function top( $msgNum, $numLines = 0 )
     {
         if ( $this->state != self::STATE_TRANSACTION )
         {

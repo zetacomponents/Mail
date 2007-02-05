@@ -443,6 +443,19 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
+    public function testTransportPropertiesBefore()
+    {
+        $options = array( 'authenticationMethod' => ezcMailPop3Transport::AUTH_PLAIN_TEXT );
+        $pop3 = new ezcMailPop3Transport( "dolly.ez.no", null, $options );
+    }
+
+    public function testTransportConnection()
+    {
+        $connection = new ezcMailTransportConnection( "dolly.ez.no", 143 );
+        $expected = new ezcMailTransportOptions();
+        $this->assertEquals( $expected, $connection->options );
+    }
+
     public function testServerSSL()
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )

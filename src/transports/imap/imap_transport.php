@@ -209,7 +209,7 @@ class ezcMailImapTransport
         {
             $port = ( $this->options->ssl === true ) ? 993 : 143;
         }
-        $this->connection = new ezcMailTransportConnection( $server, $port, $options );
+        $this->connection = new ezcMailTransportConnection( $server, $port, $this->options );
         // get the server greeting
         $response = $this->connection->getLine();
         if ( strpos( $response, "* OK" ) === false )
