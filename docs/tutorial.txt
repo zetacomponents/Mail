@@ -189,10 +189,11 @@ results.
 Extending the mail component
 ----------------------------
 
-Even though the mail component supports a lot it does not support
-everything. There is no reason to dispair however, since it is very simple to
-extend. The following example shows how you can insert mail digests as
-attachments to your mail.
+It is possible to extend the mail component if you require part types that are
+not supported by default. The following two examples shows how you can
+implement support for digest mail messages as attachments to your mail. This
+functionality is available through the ezcMailRfc822Digest class. However for
+the sake of this example we will recreate it in the MailRFC822Digest class.
 
 The mail system already supports sending attachments through the
 ezcMailMultipartMixed type. Unfortunately directly inserting an ezcMail object
