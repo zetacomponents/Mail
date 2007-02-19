@@ -1263,6 +1263,11 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->delete( 1 );
         $imap->expunge();
         $this->assertEquals( 3, $imap->countByFlag( "ALL" ) );
+        $set = $imap->fetchByMessageNr( 2, true );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $imap->expunge();
+        $this->assertEquals( 2, $imap->countByFlag( "ALL" ) );
         $imap->selectMailbox( "Inbox" );
         $imap->deleteMailbox( "Guybrush" );
     }
@@ -1370,7 +1375,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( false, isset( $connection->no_such_property ) );
 
         $options = $connection->options;
-        $connection->options = new ezcMailTransportOptions();
+        $connection->options = new ezcMailImapTransportOptions();
         $this->assertEquals( $options, $connection->options );
 
         try
@@ -1435,6 +1440,18 @@ class ezcMailTransportImapTest extends ezcTestCase
         {
             $this->assertEquals( 'An error occured while sending or receiving mail. Failed to connect to the server: ezctest.ez.no:143.', $e->getMessage() );
         }
+    }
+
+    public function testFixTrailingParanthesis()
+    {
+        $transport = new ezcMailImapTransport( "dolly.ez.no" );
+        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport->selectMailbox( "Inbox" );
+        $parser = new ezcMailParser();
+
+        $set = $transport->fetchByMessageNr( 3 );
+        $mail = $parser->parseMail( $set );
+        $this->assertNotEquals( ')', substr( $mail[0]->body->text, strlen( $mail[0]->body->text ) - 3, 3 ) );
     }
 
     public static function suite()

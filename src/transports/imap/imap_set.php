@@ -41,6 +41,13 @@ class ezcMailImapSet implements ezcMailParserSet
     private $currentMessage = null;
 
     /**
+     * Holds the line that will be read-ahead in order to determine the trailing paranthesis.
+     *
+     * @var string
+     */
+    private $nextData = null;
+
+    /**
      * This variable is true if there is more data in the mail that is being fetched.
      *
      * It is false if there is no mail being fetched currently or if all the data of the current mail
@@ -76,7 +83,7 @@ class ezcMailImapSet implements ezcMailParserSet
      * @throws ezcMailTransportException
      *         if the server send a negative response.
      * @param ezcMailTransportConnection $connection
-     * @param array(ezcMail) $messages
+     * @param array(int) $messages
      * @param bool $deleteFromServer
      */
     public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false )
@@ -84,7 +91,7 @@ class ezcMailImapSet implements ezcMailParserSet
         $this->connection = $connection;
         $this->messages = $messages;
         $this->deleteFromServer = $deleteFromServer;
-        $this->nextMail();
+        $this->nextData = null;
     }
 
     /**
@@ -107,21 +114,32 @@ class ezcMailImapSet implements ezcMailParserSet
      */
     public function getNextLine()
     {
+        if ( $this->currentMessage === null )
+        {
+            // Instead of calling $this->nextMail() in the constructor, it is called
+            // here, to avoid sending commands to the server when creating the set, and
+            // instead send the server commands when parsing the set (see ezcMailParser).
+            $this->nextMail();
+        }
         if ( $this->hasMoreMailData )
         {
-            $data = $this->connection->getLine();
-            if ( strpos( $data, $this->currentTag ) !== false && strpos( $data, $this->currentTag ) == 0 )
+            $data = ( $this->nextData === null ) ? $this->connection->getLine() : $this->nextData;
+            if ( strpos( $data, $this->currentTag ) === false )
             {
-                $this->hasMoreMailData = false;
-                // remove the mail if required by the user.
-                if ( $this->deleteFromServer === true )
+                $this->nextData = $this->connection->getLine();
+                if ( trim( $data ) === ')' && strpos( $this->nextData, $this->currentTag ) === 0 )
                 {
-                    $tag = $this->getNextTag();
-                    $this->connection->sendData( "{$tag} STORE {$this->currentMessage} +FLAGS (\\Deleted)" );
-                    // skip OK response ("{$tag} OK Store completed.")
-                    $response = $this->getResponse( $tag );
+                    $this->hasMoreMailData = false;
+                    // remove the mail if required by the user.
+                    if ( $this->deleteFromServer === true )
+                    {
+                        $tag = $this->getNextTag();
+                        $this->connection->sendData( "{$tag} STORE {$this->currentMessage} +FLAGS (\\Deleted)" );
+                        // skip OK response ("{$tag} OK Store completed.")
+                        $response = $this->getResponse( $tag );
+                    }
+                    return null;
                 }
-                return null;
             }
             return $data;
         }
@@ -147,6 +165,7 @@ class ezcMailImapSet implements ezcMailParserSet
         {
             $this->currentMessage = next( $this->messages );
         }
+        $this->nextData = null;
         if ( $this->currentMessage !== false )
         {
             $tag = $this->getNextTag();

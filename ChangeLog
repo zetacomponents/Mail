@@ -36,6 +36,7 @@
   attachments.
 - Fixed bug #010138: Doc of ezcMailMultipartDigest->__construct() incorrect
   (The documentation was correct, the implementation was wrong.)
+- Fixed issue #10283: ImapSet does not return the trailing parenthesis ')'.
 
 
 1.2 - Monday 18 December 2006
