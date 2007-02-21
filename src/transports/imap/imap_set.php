@@ -127,7 +127,9 @@ class ezcMailImapSet implements ezcMailParserSet
             if ( strpos( $data, $this->currentTag ) === false )
             {
                 $this->nextData = $this->connection->getLine();
-                if ( trim( $data ) === ')' && strpos( $this->nextData, $this->currentTag ) === 0 )
+                // the next code checks if the current line ends with ')'
+                // and the next line has the command tag (e.g. 'A0034').
+                if ( substr( trim( $data ), strlen( trim( $data ) ) - 1 ) === ')' && strpos( $this->nextData, $this->currentTag ) === 0 )
                 {
                     $this->hasMoreMailData = false;
                     // remove the mail if required by the user.
