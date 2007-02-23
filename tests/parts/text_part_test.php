@@ -111,7 +111,7 @@ class ezcMailTextTest extends ezcTestCase
     public function testQuotedPrintableEncode()
     {
         $reference = "Content-Type: text/plain; charset=iso-8859-1" . ezcMailTools::lineBreak() .
-            "Content-Transfer-Encoding: quoted_printable"  . ezcMailTools::lineBreak() . ezcMailTools::lineBreak() .
+            "Content-Transfer-Encoding: quoted-printable"  . ezcMailTools::lineBreak() . ezcMailTools::lineBreak() .
             "=E6=F8=E5=0A=F8=E6=E5";
 
         $text = new ezcMailText( "זרו\nרזו", "iso-8859-1", ezcMail::QUOTED_PRINTABLE );

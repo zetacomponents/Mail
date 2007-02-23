@@ -87,7 +87,7 @@ class ezcMail extends ezcMailPart
     /**
      * Quoted printable encoding.
      */
-    const QUOTED_PRINTABLE = "quoted_printable";
+    const QUOTED_PRINTABLE = "quoted-printable";
 
     /**
      * Base 64 encoding.
