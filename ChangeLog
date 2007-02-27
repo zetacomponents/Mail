@@ -38,6 +38,12 @@
   (The documentation was correct, the implementation was wrong.)
 - Fixed issue #10283: ImapSet does not return the trailing parenthesis ')'.
 - Fixed issue #10312: Fixed the value of ezcMail::QUOTED_PRINTABLE constant.
+- Fixed issue #10200 (part 1): Content-Disposition header is no longer created
+  during parsing if it is missing. Also it's disposition type is no longer
+  "attachment" by default (this requires setting $filePart->dispositionType =
+  ezcMailFile::DISPLAY_ATTACHMENT or ezcMailFile::DISPLAY_INLINE explicitly).
+- Fixed issue #10200 (part 2): The value of the generated Content-ID header
+  contains the filename encoded with base64 to avoid problems.
 
 
 1.2 - Monday 18 December 2006

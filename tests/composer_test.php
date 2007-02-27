@@ -625,6 +625,21 @@ class ezcMailComposerTest extends ezcTestCase
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
+    public function testGeneratedContentIdBug()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML only..";
+        $this->mail->htmlText = "<html><i><b>HTML only. Should not have a multipart body.</b></i><img src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\" /></html>";
+        $this->mail->build();
+
+        $parts = $this->mail->body->getRelatedParts();
+        $filePart = $parts[0];
+        $this->assertEquals( 0, strpos( $filePart->contentId, 'Zmx5LmpwZw@' . date( 'His' ) ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );

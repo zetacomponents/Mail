@@ -1,0 +1,57 @@
+From me@mydomain.com  Fri Feb  9 20:52:57 2007
+Return-Path: <me@mydomain.com>
+Received: (qmail 16514 invoked from network); 9 Feb 2007 20:50:01 -0000
+Received: from unknown (HELO TAG2WKS01) (tag2nwhiteley@btinternet.com@86.136.147.243 with plain)
+  by smtp811.mail.ird.yahoo.com with SMTP; 9 Feb 2007 20:50:01 -0000
+X-YMail-OSG: y2.PldwVM1lFsdsyslNcnQOOQ5xB4ze6fnusXNNJbYqflsf6UVD4UtFigyLL2RtkMH2Ls4AWDIJXaWvBbn8hdIEGAFgU8tguDo4g763TSUzxLA--
+Reply-To: <me@mydomain.com>
+From: <me@mydomain.com>
+To: "'You'" <you@yourdomain.com>
+Subject: Test Message
+Date: Fri, 9 Feb 2007 20:49:56 -0000
+Message-ID: <!&!AAAACA5ZWllT5gwAAEAAA==>
+MIME-Version: 1.0
+Content-Type: multipart/related;
+    boundary="----=_NextPart_000_0167_01C74C8B.DC0AD110"
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-gb
+
+This is a multipart message in MIME format.
+
+------=_NextPart_000_0167_01C74C8B.DC0AD110
+Content-Type: multipart/alternative;
+    boundary="----=_NextPart_001_0168_01C74C8B.DC0AD110"
+
+------=_NextPart_001_0168_01C74C8B.DC0AD110
+Content-Type: text/plain;
+    charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+Message text here
+
+------=_NextPart_001_0168_01C74C8B.DC0AD110
+Content-Type: text/html;
+    charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+</head>
+
+<body>
+<p>Message text here</p>
+<img src="cid:image001.png@01C74C8B.D91E3870" alt="" />
+</body>
+</html>
+
+------=_NextPart_001_0168_01C74C8B.DC0AD110--
+
+------=_NextPart_000_0167_01C74C8B.DC0AD110
+Content-Type: image/png;
+    name="image001.png"
+Content-Transfer-Encoding: base64
+Content-ID: <image001.png@01C74C8B.D91E3870>
+
+--IMAGE DATA REMOVED--
+
+------=_NextPart_000_0167_01C74C8B.DC0AD110-- 

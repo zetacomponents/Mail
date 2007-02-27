@@ -274,16 +274,17 @@ class ezcMailTools
      * Returns an unique ID to be used for Content-ID headers.
      *
      * The part $partName is default set to "part". Another value can be used to provide,
-     * for example, a file name of a part.
+     * for example, a file name of a part. $partName will be encoded with base64 to be
+     * compliant with the RFCs.
      *
-     * The formula used is [$partName]."@".[time].[counter]
+     * The formula used is [base64( $partName )]."@".[time].[counter]
      *
      * @param string $partName
      * @return string
      */
     public static function generateContentId( $partName = "part" )
     {
-        return $partName . '@' .  date( 'Hjs' ) . self::$idCounter++;
+        return str_replace( array( '=', '+', '/' ), '', base64_encode( $partName ) ) . '@' .  date( 'His' ) . self::$idCounter++;
     }
 
     /**

@@ -91,8 +91,6 @@ abstract class ezcMailFilePart extends ezcMailPart
         $this->properties['contentId'] = null;
 
         $this->fileName = $fileName;
-        $this->setHeader( 'Content-Transfer-Encoding', 'base64' );
-        $this->dispositionType = self::DISPLAY_ATTACHMENT;
     }
 
     /**
@@ -110,25 +108,25 @@ abstract class ezcMailFilePart extends ezcMailPart
         {
             case 'fileName':
                 $this->properties['fileName'] = $value;
-                $this->setHeaderContentType();
-                $this->setHeaderContentDisposition();
                 break;
+
             case 'mimeType':
                 $this->properties['mimeType'] = $value;
-                $this->setHeaderContentType();
                 break;
+
             case 'contentType':
                 $this->properties['contentType'] = $value;
-                $this->setHeaderContentType();
                 break;
+
             case 'dispositionType':
                 $this->properties['dispositionType'] = $value;
-                $this->setHeaderContentDisposition();
                 break;
+
             case 'contentId':
                 $this->properties['contentId'] = $value;
                 $this->setHeader( 'Content-ID', '<' . $value . '>' );
                 break;
+
             default:
                 return parent::__set( $name, $value );
                 break;
@@ -206,12 +204,29 @@ abstract class ezcMailFilePart extends ezcMailPart
      */
     private function setHeaderContentDisposition()
     {
-        if ( $this->contentDisposition == null )
+        if ( isset( $this->dispositionType ) )
         {
-            $this->contentDisposition = new ezcMailContentDispositionHeader();
+            if ( $this->contentDisposition == null )
+            {
+                $this->contentDisposition = new ezcMailContentDispositionHeader();
+            }
+            $this->contentDisposition->disposition = $this->dispositionType;
+            $this->contentDisposition->fileName = basename( $this->fileName );
         }
-        $this->contentDisposition->disposition = $this->dispositionType;
-        $this->contentDisposition->fileName = basename( $this->fileName );
+    }
+
+    /**
+     * Override of the generate() method from ezcMailPart. Used to set headers before
+     * generating the part.
+     *
+     * @return string
+     */
+    public function generate()
+    {
+        $this->setHeaderContentType();
+        $this->setHeader( 'Content-Transfer-Encoding', 'base64' );
+        $this->setHeaderContentDisposition();
+        return parent::generate();
     }
 }
 ?>

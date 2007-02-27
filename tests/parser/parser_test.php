@@ -1202,5 +1202,16 @@ END;
             $this->assertEquals( "No such property name 'no_such_property'.", $e->getMessage() );
         }
     }
+
+    public function testDefaultDispositionHeaderBug()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/default-disposition-header' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->body->getRelatedParts();
+        $filePart = $parts[0];
+        $this->assertEquals( null, $filePart->contentDisposition );
+    }
 }
 ?>

@@ -274,6 +274,11 @@ class ezcMailFileParser extends ezcMailPartParser
         {
             $filePart->dispositionType = ezcMailFile::DISPLAY_INLINE;
         }
+        if ( preg_match( '/^\s*attachment;?/i',
+                        $this->headers['Content-Disposition'], $matches ) )
+        {
+            $filePart->dispositionType = ezcMailFile::DISPLAY_ATTACHMENT;
+        }
         $filePart->size = filesize( $this->fileName );
         return $filePart;
     }
