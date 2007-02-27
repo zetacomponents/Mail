@@ -27,7 +27,7 @@
  * $mail->subject = "Example of an HTML email with attachments";
  * $plainText = new ezcMailText( "This is the plain text part" );
  * $htmlText = new ezcMailText( "<html>This is the HTML part</html>" );
- * $htmlText->subType 'html';
+ * $htmlText->subType = 'html';
  * $mail->body = new ezcMailMultipartAlternative( $plainText, $htmlText );
  * </code>
  *
