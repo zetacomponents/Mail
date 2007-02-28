@@ -22,7 +22,6 @@ class ezcMailVirtualFileTest extends ezcTestCase
     {
         $filePart = new ezcMailVirtualFile( "fly.jpg", file_get_contents( dirname( __FILE__) . "/data/fly.jpg" ) );
         $filePart->contentType = ezcMailFile::CONTENT_TYPE_IMAGE;
-        $filePart->dispositionType = ezcMailFile::DISPLAY_ATTACHMENT;
         $filePart->mimeType = "jpeg";
         // file_put_contents( dirname( __FILE__ ) . "/data/ezcMailFileTest_testGenerateBase64.data" );
         $this->assertEquals( file_get_contents( dirname( __FILE__ ) . "/data/ezcMailFilePartTest_testGenerateBase64.data" ),

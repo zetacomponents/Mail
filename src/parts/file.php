@@ -204,15 +204,16 @@ abstract class ezcMailFilePart extends ezcMailPart
      */
     private function setHeaderContentDisposition()
     {
-        if ( isset( $this->dispositionType ) )
+        if ( $this->contentDisposition == null )
         {
-            if ( $this->contentDisposition == null )
-            {
-                $this->contentDisposition = new ezcMailContentDispositionHeader();
-            }
-            $this->contentDisposition->disposition = $this->dispositionType;
-            $this->contentDisposition->fileName = basename( $this->fileName );
+            $this->contentDisposition = new ezcMailContentDispositionHeader();
         }
+        if ( !isset( $this->dispositionType ) )
+        {
+            $this->dispositionType = self::DISPLAY_ATTACHMENT;
+        }
+        $this->contentDisposition->disposition = $this->dispositionType;
+        $this->contentDisposition->fileName = basename( $this->fileName );
     }
 
     /**

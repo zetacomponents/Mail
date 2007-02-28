@@ -22,7 +22,6 @@ class ezcMailStreamFileTest extends ezcTestCase
     {
         $filePart = new ezcMailStreamFile( "fly.jpg", fopen( dirname( __FILE__) . "/data/fly.jpg", "r" ) );
         $filePart->contentType = ezcMailFile::CONTENT_TYPE_IMAGE;
-        $filePart->dispositionType = ezcMailFile::DISPLAY_ATTACHMENT;
         $filePart->mimeType = "jpeg";
         // file_put_contents( dirname( __FILE__ ) . "/data/ezcMailFileTest_testGenerateBase64.data" );
         $this->assertEquals( file_get_contents( dirname( __FILE__ ) . "/data/ezcMailFilePartTest_testGenerateBase64.data" ),
