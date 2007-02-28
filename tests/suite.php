@@ -33,6 +33,7 @@ require_once( "transports/transport_pop3_test.php" );
 require_once( "transports/transport_mbox_test.php" );
 require_once( "transports/transport_file_test.php" );
 require_once( "transports/transport_imap_test.php" );
+require_once( "transports/transport_storage_test.php" );
 require_once( "transports/transport_variable_test.php" );
 require_once( "tutorial_examples.php" );
 require_once( "parser/parser_test.php" );
@@ -75,6 +76,7 @@ class ezcMailSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcMailTransportImapTest::suite() );
         $this->addTest( ezcMailTransportMboxTest::suite() );
         $this->addTest( ezcMailTransportFileTest::suite() );
+        $this->addTest( ezcMailTransportStorageTest::suite() );
         $this->addTest( ezcMailTransportVariableTest::suite() );
         $this->addTest( ezcMailTutorialExamples::suite() );
         $this->addTest( ezcMailParserTest::suite() );

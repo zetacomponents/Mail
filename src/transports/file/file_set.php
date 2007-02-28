@@ -45,6 +45,16 @@ class ezcMailFileSet implements ezcMailParserSet
     private $files = array();
 
     /**
+     * This variable is true if there is more data in the mail that is being fetched.
+     *
+     * It is false if there is no mail being fetched currently or if all the data of the current mail
+     * has been fetched.
+     *
+     * @var bool
+     */
+    private $hasMoreMailData = false;
+
+    /**
      * Constructs a new set that servers the files specified by $files.
      *
      * The set will start on the first file in the the array.
@@ -55,8 +65,7 @@ class ezcMailFileSet implements ezcMailParserSet
     {
         $this->files = $files;
         reset( $this->files );
-
-        $this->openFile( true );
+        $this->hasMoreMailData = false;
     }
 
     /**
@@ -80,7 +89,7 @@ class ezcMailFileSet implements ezcMailParserSet
      */
     public function hasData()
     {
-        return count( $this->files );
+        return ( count( $this->files ) >= 1 ) && ( filesize( $this->files[0] ) > 0 );
     }
 
     /**
@@ -93,6 +102,10 @@ class ezcMailFileSet implements ezcMailParserSet
      */
     public function getNextLine()
     {
+        if ( $this->hasMoreMailData === false )
+        {
+            $this->nextMail();
+        }
         // finished?
         if ( $this->fp == null || feof( $this->fp ) )
         {
@@ -122,6 +135,11 @@ class ezcMailFileSet implements ezcMailParserSet
      */
     public function nextMail()
     {
+        if ( $this->hasMoreMailData === false )
+        {
+            $this->hasMoreMailData = true;
+            return $this->openFile( true );
+        }
         return $this->openFile();
     }
 

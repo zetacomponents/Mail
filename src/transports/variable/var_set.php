@@ -88,7 +88,7 @@ class ezcMailVariableSet implements ezcMailParserSet
      */
     public function hasData()
     {
-        return true;
+        return ( count( $this->mail ) > 1 );
     }
 }
 ?>

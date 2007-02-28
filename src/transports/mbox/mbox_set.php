@@ -79,7 +79,6 @@ class ezcMailMboxSet implements ezcMailParserSet
         $this->hasMoreMailData = true;
         $this->messagePositions = $messages;
         $this->currentMessagePosition = 0;
-        $this->nextMail();
     }
 
     /**
@@ -103,6 +102,10 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     public function getNextLine()
     {
+        if ( $this->currentMessagePosition === 0 )
+        {
+            $this->nextMail();
+        }
         if ( $this->hasMoreMailData )
         {
             $data = fgets( $this->fh );
@@ -124,7 +127,7 @@ class ezcMailMboxSet implements ezcMailParserSet
      */
     public function hasData()
     {
-        return $this->hasMoreMailData;
+        return ( $this->hasMoreMailData === true && count( $this->messagePositions ) > 0 );
     }
 
     /**
@@ -147,6 +150,16 @@ class ezcMailMboxSet implements ezcMailParserSet
         $this->hasMoreMailData = true;
 
         return true;
+    }
+
+    /**
+     * Returns message numbers for current set.
+     *
+     * @return array(int=>int)
+     */
+    public function getMessageNumbers()
+    {
+        return array_keys( $this->messagePositions );
     }
 }
 ?>

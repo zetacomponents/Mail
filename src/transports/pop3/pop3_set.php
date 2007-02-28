@@ -52,6 +52,8 @@ class ezcMailPop3Set implements ezcMailParserSet
 
     /**
      * Holds if mail should be deleted from the server after retrieval.
+     *
+     * @var bool
      */
     private $deleteFromServer = false;
 
@@ -75,7 +77,6 @@ class ezcMailPop3Set implements ezcMailParserSet
         $this->connection = $connection;
         $this->messages = $messages;
         $this->deleteFromServer = $deleteFromServer;
-        $this->nextMail();
     }
 
     /**
@@ -98,6 +99,10 @@ class ezcMailPop3Set implements ezcMailParserSet
      */
     public function getNextLine()
     {
+        if ( $this->currentMessage === null )
+        {
+            $this->nextMail();
+        }
         if ( $this->hasMoreMailData )
         {
             $data = $this->connection->getLine();
@@ -110,7 +115,6 @@ class ezcMailPop3Set implements ezcMailParserSet
                     $this->connection->sendData( "DELE {$this->currentMessage}" );
                     $response = $this->connection->getLine(); // ignore response
                 }
-
                 return null;
             }
             return $data;
@@ -137,8 +141,7 @@ class ezcMailPop3Set implements ezcMailParserSet
         {
             $this->currentMessage = next( $this->messages );
         }
-
-        if ( is_integer( $this->currentMessage ) )
+        if ( $this->currentMessage !== false )
         {
             $this->connection->sendData( "RETR {$this->currentMessage}" );
             $response = $this->connection->getLine();
