@@ -79,10 +79,9 @@ class ezcMailAddress extends ezcBaseStruct
      * can simply do echo with an object of type ezcMailAddress or (since PHP 
      * 5.2) explicitly cast it to string using (string) $object.
      * 
-     * @access public
      * @return string String representation of the email address.
      */
-    function __toString()
+    public function __toString()
     {
         return ( !empty( $this->name ) ? "{$this->name} " : "" ) . "<{$this->email}>";
     }
