@@ -1,0 +1,26 @@
+From: Somebody <somebody@server.dom>
+To: Another <another@server.dom>
+Subject: Unknown MIME attached
+MIME-Version: 1.0
+User-Agent: eZ components
+Date: Thu, 01 Mar 2007 14:09:39 +0100
+Message-Id: <200703011414139.13842.0@server.dom>
+Content-Type: multipart/mixed; boundary="200703011414139:13842:0"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--200703011414139:13842:0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+What is the attached MIME?
+--200703011414139:13842:0
+Content-Type: unknown/unknown; name="unknown.dat"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="unknown.dat"
+
+U29tZSBjb250ZW50cw==
+
+--200703011414139:13842:0--
+

@@ -153,7 +153,7 @@ abstract class ezcMailPartParser
             default:
                 // we treat the body as text if no main content type is set
                 // or if it is unknown
-                $bodyParser = new ezcMailTextParser( $headers );
+                $bodyParser = new ezcMailTextParser( $subType, $headers );
                 break;
         }
         return $bodyParser;

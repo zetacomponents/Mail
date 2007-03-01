@@ -1213,5 +1213,29 @@ END;
         $filePart = $parts[0];
         $this->assertEquals( null, $filePart->contentDisposition );
     }
+
+    public function testDefaultUnrecognizedMainTypeParserBug()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-unrecognized-mime' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+        $this->assertEquals( 'ezcMailText', get_class( $parts[1] ) );
+        $this->assertEquals( 'unknown', $parts[1]->subType );
+        $this->assertEquals( 'unknown/unknown; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+    }
+
+    public function testDefaultUnrecognizedMessageSubType()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-unrecognized-subtype' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+        $this->assertEquals( 'ezcMailText', get_class( $parts[1] ) );
+        $this->assertEquals( 'unrecognized', $parts[1]->subType );
+        $this->assertEquals( 'message/unrecognized; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+    }
 }
 ?>
