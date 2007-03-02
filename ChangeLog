@@ -28,8 +28,10 @@
   transport. Based on a patch from Christian Michel. 
 - Implemented feature request #8485: added the ezcMailStorageSet which wraps
   around another set and provides saving of mail sources.
-
-
+- Implemented feature request #10341: MixedPart mail without attachments - 
+  Documentation enhancement
+	
+	
 1.2.1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

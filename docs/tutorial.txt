@@ -162,6 +162,24 @@ In the next example we will add an attachment to our manually built mail:
 .. include:: tutorial_example_04.php
    :literal:
 
+Building MIME structures that work
+----------------------------------
+
+When you build mail mail from scratch most combinations of MailParts will
+produce valid messages. Unfortunately, even though a message is valid 
+structurally that does not mean that all mail clients will display it 
+properly. This section gives a few hints on what to do and what not to do.
+
+1. Ommit Multipart/Mixed parts with only one part. Some mail clients like
+   Mozilla Thunderbird do not display these correctly. Of course, they are not
+   necessary either.
+
+2. Mail with alternative text/HTML parts and common attachments can be
+   implemented in many ways. However, we have only found one structure that
+   seems to work across all clients: 
+   MultipartMixed( MultipartAlternative( TextPart, TextPart ), FilePart, ... )
+
+
 Sending a mail using SMTP
 -------------------------
 
