@@ -116,7 +116,7 @@ abstract class ezcMailPartParser
                         break;
 
                     default:
-                        $bodyParser = new ezcMailTextParser( $subType, $headers );
+                        $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
                         break;
                 }
                 break;
@@ -151,9 +151,9 @@ abstract class ezcMailPartParser
 
                 /* extensions */
             default:
-                // we treat the body as text if no main content type is set
+                // we treat the body as binary if no main content type is set
                 // or if it is unknown
-                $bodyParser = new ezcMailTextParser( $subType, $headers );
+                $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
                 break;
         }
         return $bodyParser;

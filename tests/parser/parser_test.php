@@ -1221,8 +1221,9 @@ END;
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
         $parts = $mail->body->getParts();
-        $this->assertEquals( 'ezcMailText', get_class( $parts[1] ) );
-        $this->assertEquals( 'unknown', $parts[1]->subType );
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+        $this->assertEquals( 'text', $parts[1]->contentType );
+        $this->assertEquals( 'unknown', $parts[1]->mimeType );
         $this->assertEquals( 'unknown/unknown; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
     }
 
@@ -1233,8 +1234,9 @@ END;
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
         $parts = $mail->body->getParts();
-        $this->assertEquals( 'ezcMailText', get_class( $parts[1] ) );
-        $this->assertEquals( 'unrecognized', $parts[1]->subType );
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+        $this->assertEquals( 'text', $parts[1]->contentType );
+        $this->assertEquals( 'unrecognized', $parts[1]->mimeType );
         $this->assertEquals( 'message/unrecognized; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
     }
 }

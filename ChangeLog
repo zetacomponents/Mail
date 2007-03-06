@@ -52,6 +52,8 @@
   case the parsed message contains an unrecognized MIME main type.
 - Fixed issue #10389: tab characters are converted to one space when parsing
   mails with wrapped headers.
+- Fixed issue #10359: unrecognized mail body parts are parsed using the
+  ezcMailFileParser.
 
 
 1.2 - Monday 18 December 2006
