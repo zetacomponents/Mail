@@ -1,0 +1,50 @@
+From dz@example.com Tue Jan 30 10:34:56 2007
+Received: from [10.10.10.5] (helo=email.vms.r00lerz.de)
+	by agavi.vms.r00lerz.de with esmtp (Exim 4.63)
+	(envelope-from <dz@example.com>)
+	id 1HBqKG-00082k-JW; Tue, 30 Jan 2007 10:34:56 +0000
+Received: from wp005.webpack.hosteurope.de ([80.237.132.12])
+	by email.vms.r00lerz.de with esmtp (Exim 4.63)
+	(envelope-from <dz@example.com>)
+	id 1HBqKG-00082h-EW; Tue, 30 Jan 2007 10:34:56 +0000
+Received: from dslb-084-056-028-204.pools.arcor-ip.net ([84.56.28.204]
+	helo=[192.168.0.100]); authenticated
+	by wp005.webpack.hosteurope.de running ExIM  using esmtpa
+	id 1HBpLV-000777-Gr; Tue, 30 Jan 2007 10:32:09 +0100
+In-Reply-To: <EF544976-70F8-44A0-9F5D-D5750906CB76@example.com>
+References: <64B65085-64EE-48B6-8B24-76152D900FB0@example.com>
+	<EF544976-70F8-44A0-9F5D-D5750906CB76@example.com>
+Mime-Version: 1.0 (Apple Message framework v752.2)
+Content-Type: text/plain; charset=ISO-8859-1; delsp=yes; format=flowed
+Message-Id: <7302ED45-6363-4CE6-B0DB-356AD7F533B6@example.com>
+Content-Transfer-Encoding: quoted-printable
+From: =?ISO-8859-1?Q?David_Z=FClke?= <dz@example.com>
+Date: Tue, 30 Jan 2007 10:32:08 +0100
+To: Agavi Users Mailing List <users@example.org>
+X-Mailer: Apple Mail (2.752.2)
+X-bounce-key: webpack.hosteurope.de;dz@example.com;1170149533;4c6ea885;
+Cc: Agavi Dev Mailing List <dev@example.org>
+Subject: Re: [Agavi-Dev] [Agavi-Users] Advanced Layout/Layers example (was:
+	Re: IMPORTANT: Breaking changes in 0.11 branch: tons of new
+	features!)
+X-BeenThere: dev@example.org
+X-Mailman-Version: 2.1.9
+Precedence: list
+Reply-To: Agavi Dev Mailing List <dev@example.org>
+List-Id: Agavi Dev Mailing List <dev.example.org>
+List-Unsubscribe: <http://example.org/mailman/listinfo/dev>,
+	<mailto:dev-request@example.org?subject=unsubscribe>
+List-Archive: <http://example.org/pipermail/dev>
+List-Post: <mailto:dev@example.org>
+List-Help: <mailto:dev-request@example.org?subject=help>
+List-Subscribe: <http://example.org/mailman/listinfo/dev>,
+	<mailto:dev-request@example.org?subject=subscribe>
+X-List-Received-Date: Tue, 30 Jan 2007 10:34:56 -0000
+
+As of http://trac.example.org/changeset/1609, the output of the inner =20
+layer is available via the variable $inner in templates. Also =20
+available are $container for the current execution container and =20
+$view for the template's view. Like with factories, the names of =20
+these assigns ("inner", "container" and "view") can be configured =20
+using the "assigns" parameter of a renderer.
+

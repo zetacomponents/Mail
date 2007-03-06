@@ -215,6 +215,18 @@ class ezcMailTransportMboxTest extends ezcTestCase
         }
     }
 
+    public function testFetchMailTabsInHeaders()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/tab.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $expected = "Re: [Agavi-Dev] [Agavi-Users] Advanced Layout/Layers example (was: Re: IMPORTANT: Breaking changes in 0.11 branch: tons of new features!)";
+        $this->assertEquals( $expected, $mail[0]->subject );
+        $expected = "<http://example.org/mailman/listinfo/dev>, <mailto:dev-request@example.org?subject=subscribe>";
+        $this->assertEquals( $expected, $mail[0]->getHeader( "List-Subscribe" ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportMboxTest" );

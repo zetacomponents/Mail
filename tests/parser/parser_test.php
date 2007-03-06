@@ -812,7 +812,7 @@ END;
 
         // subject string should be the same as in email (with line break)
         $subject = "Re: =?koi8-r?b?7c7FIM7BxM8g1crUySDOwSDewdMg0yAxMi4wMCDQzw==?=" .
-            "\t=?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
+            " =?koi8-r?b?IM/Sx8HOydrBw8nPzs7ZzQ==?= =?koi8-r?b?INfP0NLP08HNLi4u?=";
 
         $this->assertEquals( $subject, $mail[0]->getHeader('Subject' ) );
     }

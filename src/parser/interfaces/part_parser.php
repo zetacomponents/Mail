@@ -175,12 +175,12 @@ abstract class ezcMailPartParser
         preg_match_all( "/^([\w-_]*): (.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
-            $headers[$matches[0][1]] = trim( $matches[0][2] );
+            $headers[$matches[0][1]] = str_replace( "\t", " ", trim( $matches[0][2] ) );
             $this->lastParsedHeader = $matches[0][1];
         }
         else if ( $this->lastParsedHeader !== null ) // take care of folding
         {
-            $headers[$this->lastParsedHeader] .= $line;
+            $headers[$this->lastParsedHeader] .= str_replace( "\t", " ", $line );
         }
         // else -invalid syntax, this should never happen.
     }
