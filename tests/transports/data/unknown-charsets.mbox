@@ -1,0 +1,46 @@
+From root@localhost.localdomain Sat Mar 03 20:07:45 2007
+X-UIDL: 1YC!!;'*!!ndf!!~+]!!
+Return-path: <root@localhost.localdomain>
+Envelope-to: vtiger@localhost.localdomain
+Delivery-date: Sat, 03 Mar 2007 20:07:45 +0200
+Received: from root by localhost.localdomain with local (Exim 4.50)
+	id 1HNYe0-0000FS-Um
+	for vtiger@localhost.localdomain; Sat, 03 Mar 2007 20:07:45 +0200
+Date: Sat, 3 Mar 2007 20:07:44 +0200
+To: vtiger <vtiger@localhost.localdomain>
+Subject: test
+Message-ID: <20070303180744.GA954@localhost.localdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=x-user-defined
+Content-Disposition: inline
+User-Agent: Mutt/1.5.9i
+From: root <root@localhost.localdomain>
+Status: RO
+Content-Length: 7
+Lines: 2
+
+Tämä on testiöö1
+
+
+From root@localhost.localdomain Sat Mar 03 22:03:18 2007
+X-UIDL: :k%#!A~n!!l=*"!1cY!!
+Return-path: <root@localhost.localdomain>
+Envelope-to: vtiger@localhost.localdomain
+Delivery-date: Sat, 03 Mar 2007 22:03:18 +0200
+Received: from root by localhost.localdomain with local (Exim 4.50)
+	id 1HNaRq-0000GP-2g
+	for vtiger@localhost.localdomain; Sat, 03 Mar 2007 22:03:18 +0200
+Date: Sat, 3 Mar 2007 22:03:18 +0200
+To: vtiger <vtiger@localhost.localdomain>
+Subject: Mail test 2
+Message-ID: <20070303200318.GA1013@localhost.localdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=unknown-8bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.9i
+From: root <root@localhost.localdomain>
+Status: RO
+
+Tämä on testiöö2
+

@@ -227,6 +227,20 @@ class ezcMailTransportMboxTest extends ezcTestCase
         $this->assertEquals( $expected, $mail[0]->getHeader( "List-Subscribe" ) );
     }
 
+    public function testFetchMailUnknownCharsets()
+    {
+        $mbox = new ezcMailMboxTransport( dirname( __FILE__ ) . "/data/unknown-charsets.mbox" );
+        $set = $mbox->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( "x-user-defined", $mail[0]->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail[0]->body->charset );
+        $this->assertEquals( "Tämä on testiöö1", trim( $mail[0]->body->text ) );
+        $this->assertEquals( "unknown-8bit", $mail[1]->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail[1]->body->charset );
+        $this->assertEquals( "Tämä on testiöö2", trim( $mail[1]->body->text ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportMboxTest" );
