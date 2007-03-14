@@ -64,6 +64,23 @@ $parser = new ezcMailParser();
 for ( $i = ( $options["currentPage"] - 1 ) * $options["pageSize"]; $i < min( $options["currentPage"] * $options["pageSize"], count( $messages ) ); $i++ )
 {
     $msg = $transport->top( $messages[$i] );
+    $lines = preg_split( "/\r\n|\n/", $msg );
+    $msg = null;
+    foreach ( $lines as $line )
+    {
+        // eliminate the line that contains "Content-Type" at it would throw
+        // a notice for "multipart/related" (because the multipart object cannot
+        // be created due to missing the body)
+        if ( stripos( $line, "Content-Type:" ) === false )
+        {
+            $msg .= $line . PHP_EOL;
+        }
+        else
+        {
+            // insert code to analyse the Content-Type of the mail
+            // and add an "attachment" icon in case it is "multipart"
+        }
+    }
     $set = new ezcMailVariableSet( $msg );
     $mail = $parser->parseMail( $set );
     $mails[] = $mail[0];
