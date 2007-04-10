@@ -275,7 +275,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -298,7 +298,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -323,7 +323,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -346,7 +346,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -369,7 +369,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -392,7 +392,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
