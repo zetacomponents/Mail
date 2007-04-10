@@ -226,7 +226,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages();
-        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
+        $this->assertEquals( array( 1 => '1353', 2 => '1549', 3 => '1390', 4 => '63920' ), $list );
     }
 
     public function testListMessagesWithAttachments()
@@ -235,7 +235,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages( "multipart/mixed" );
-        $this->assertEquals( array( 1 => '1542', 2 => '1539', 4 => '63913' ), $list );
+        $this->assertEquals( array( 2 => '1549', 4 => '63920' ), $list );
     }
 
     public function testFetchByMessageNr1()
@@ -340,7 +340,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
 
     public function testFetchFromOffset5()
@@ -352,7 +352,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
 
     public function testStatus()
@@ -362,7 +362,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->selectMailbox( 'inbox' );
         $imap->status( $num, $size, $recent, $unseen );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 68377, $size );
+        $this->assertEquals( 68212, $size );
         $this->assertEquals( 0, $recent );
         $this->assertEquals( 0, $unseen );
     }
@@ -461,7 +461,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->authenticate( "ezcomponents", "ezcomponents" );
         $imap->selectMailbox( 'inbox', true );
         $list = $imap->listMessages();
-        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
+        $this->assertEquals( array( 1 => '1353', 2 => '1549', 3 => '1390', 4 => '63920' ), $list );
     }
 
     public function testStatusReadOnly()
@@ -471,7 +471,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->selectMailbox( 'inbox', true );
         $imap->status( $num, $size );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 68377, $size );
+        $this->assertEquals( 68212, $size );
     }
 
     public function testTopReadOnly()
@@ -850,8 +850,8 @@ class ezcMailTransportImapTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
-        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[0]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[0]->subject );
+        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[2]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
@@ -920,7 +920,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[1]->subject );
     }
 
     public function testSortFromOffsetNotSelected()
@@ -949,7 +949,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[1]->subject );
     }
 
     public function testSortFromOffsetBySubjectReverse()
@@ -962,7 +962,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[2]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
@@ -977,7 +977,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[0]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
     }
@@ -994,7 +994,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[3]->subject );
     }
 
     public function testSortMessagesBySubject()
@@ -1009,7 +1009,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[2]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[0]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[3]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[1]->subject );
     }
 
     public function testSortMessagesBySubjectReverse()
@@ -1024,7 +1024,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[1]->subject );
         $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
         $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
-        $this->assertEquals( "pine: Mail with attachment", $mail[2]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[2]->subject );
     }
 
     public function testSortMessagesOneElement()
@@ -1036,7 +1036,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 1, count( $mail ) );
-        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: Simple mail with text subject and body", $mail[0]->subject );
     }
 
     public function testSortMessagesEmpty()
@@ -1315,7 +1315,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $set = $imap->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $expected = array( 1542, '1539', '1383', '63913' );
+        $expected = array( 1353, '1549', '1390', '63920' );
         for ( $i = 0; $i < count( $mail ); $i++ )
         {
             $this->assertequals( $expected[$i], $mail[$i]->size );
@@ -1413,7 +1413,7 @@ class ezcMailTransportImapTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         $imap = new ezcMailImapTransport( "ezctest.ez.no", null, array( 'ssl' => true ) );
         $imap->authenticate( "as", "wee123" );
@@ -1429,7 +1429,7 @@ class ezcMailTransportImapTest extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -1456,7 +1456,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public static function suite()
     {
-        self::$ids = array( 15, 16, 17, 18 );
+        self::$ids = array( 20, 21, 22, 23 );
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
     }
 }

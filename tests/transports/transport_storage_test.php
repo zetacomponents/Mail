@@ -26,7 +26,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( 1353, strlen( $source ) );
     }
 
     public function testImapMessageSourceFetchAll()
@@ -41,7 +41,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( 1353, strlen( $source ) );
     }
 
     public function testImapMessageSourceEmptySet()
@@ -70,7 +70,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( 1353, strlen( $source ) );
     }
 
     public function testPop3MessageSourceFetchAll()
@@ -84,7 +84,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( 1353, strlen( $source ) );
     }
 
     public function testMboxMessageSource()
@@ -198,8 +198,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $set = new ezcMailStorageSet( $transport->fetchAll(), $this->tempDir );
         $mail = $parser->parseMail( $set );
         $files = $set->getSourceFiles();
-        $expected = array( "Pine.LNX.4.62.0603161539140.13229@localhost",
-                           "Pine.LNX.4.62.0603160934280.13229@localhost",
+        $expected = array( "Pine.LNX.4.62.0603160928590.13229@localhost",
+                           "Pine.LNX.4.62.0603161539140.13229@localhost",
                            "Pine.LNX.4.62.0603161543230.13229@localhost",
                            "Pine.LNX.4.62.0603160934040.13229@localhost" );
         for ( $i = 0; $i < count( $files ); $i++ )

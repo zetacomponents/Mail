@@ -153,7 +153,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
+        $this->assertEquals( array( 1 => '1353', 2 => '1549', 3 => '1390', 4 => '63920' ), $list );
     }
 
     public function testFetchByMessageNr1()
@@ -251,7 +251,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
 
     public function testfetchFromOffset5()
@@ -262,7 +262,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 4, count( $mail ) );
-        $this->assertEquals( "pine: Mail with attachment", $mail[1]->subject );
+        $this->assertEquals( "pine: Mail with attachment", $mail[3]->subject );
     }
 
     public function testStatus()
@@ -271,7 +271,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( "ezcomponents", "ezcomponents" );
         $pop3->status( $num, $size );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 68377, $size );
+        $this->assertEquals( 68212, $size );
     }
 
     public function testTop()
@@ -391,10 +391,10 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $expected = array( 1542, '1539', '1383', '63913' );
+        $expected = array( 1353, '1549', '1390', '63920' );
         for ( $i = 0; $i < count( $mail ); $i++ )
         {
-            $this->assertequals( $expected[$i], $mail[$i]->size );
+            $this->assertEquals( $expected[$i], $mail[$i]->size );
         }
         $parts = $mail[3]->fetchParts();
         $this->assertEquals( '45177', $parts[1]->size );
@@ -460,7 +460,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", null, array( 'ssl' => true ) );
         $pop3->authenticate( "as", "wee123" );
@@ -475,7 +475,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         if ( !ezcBaseFeatures::hasExtensionSupport( 'openssl' ) )
         {
-            $this->markTestSkipped();
+            $this->markTestSkipped( "No SSL support in PHP." );
         }
         try
         {
@@ -490,7 +490,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public static function suite()
     {
-        self::$ids = array( '0000000f4420e93a', '000000104420e93a', '000000114420e93a', '000000124420e93a' );
+        self::$ids = array( '000000144420e93a', '000000154420e93a', '000000164420e93a', '000000174420e93a' );
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
 }
