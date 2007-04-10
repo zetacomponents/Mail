@@ -11,11 +11,11 @@ declare(encoding="latin1");
  */
 
 /**
- * ezcMailFileSet is an internal class that can be used to parse mail directly from
- * files on disk.
+ * ezcMailFileSet is an internal class that can be used to parse mail directly
+ * from files on disk.
  *
- * Each file should contain only one mail message in RFC822 format. Bad files or
- * non-existing files are ignored.
+ * Each file should contain only one mail message in RFC822 format. Bad files
+ * or non-existing files are ignored.
  *
  * Example:
  *
