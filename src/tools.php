@@ -217,7 +217,8 @@ class ezcMailTools
         $addressesArray = array();
         $inQuote = false;
         $last = 0; // last hit
-        for( $i = 0; $i < strlen( $addresses ); $i++ )
+        $length = strlen( $addresses );
+        for ( $i = 0; $i < $length; $i++ )
         {
             if ( $addresses[$i] == '"' )
             {
