@@ -1214,30 +1214,84 @@ END;
         $this->assertEquals( null, $filePart->contentDisposition );
     }
 
-    public function testDefaultUnrecognizedMainTypeParserBug()
+    public function testDefaultUnrecognizedMainTypeParserBugWithFileInfo()
     {
-        $parser = new ezcMailParser();
-        $set = new SingleFileSet( 'various/test-unrecognized-mime' );
-        $mail = $parser->parseMail( $set );
-        $mail = $mail[0];
-        $parts = $mail->body->getParts();
-        $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
-        $this->assertEquals( 'text', $parts[1]->contentType );
-        $this->assertEquals( 'unknown', $parts[1]->mimeType );
-        $this->assertEquals( 'unknown/unknown; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        if ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        {
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-unrecognized-mime' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $parts = $mail->body->getParts();
+            $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+            $this->assertEquals( 'text', $parts[1]->contentType );
+            $this->assertEquals( 'unknown', $parts[1]->mimeType );
+            $this->assertEquals( 'unknown/unknown; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "With fileinfo extension the Content-Type of this attachment is recognized as 'text'." );
+        }
     }
 
-    public function testDefaultUnrecognizedMessageSubType()
+    public function testDefaultUnrecognizedMainTypeParserBugWithoutFileInfo()
     {
-        $parser = new ezcMailParser();
-        $set = new SingleFileSet( 'various/test-unrecognized-subtype' );
-        $mail = $parser->parseMail( $set );
-        $mail = $mail[0];
-        $parts = $mail->body->getParts();
-        $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
-        $this->assertEquals( 'text', $parts[1]->contentType );
-        $this->assertEquals( 'unrecognized', $parts[1]->mimeType );
-        $this->assertEquals( 'message/unrecognized; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        {
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-unrecognized-mime' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $parts = $mail->body->getParts();
+            $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+            $this->assertEquals( 'application', $parts[1]->contentType );
+            $this->assertEquals( 'unknown', $parts[1]->mimeType );
+            $this->assertEquals( 'unknown/unknown; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "Without fileinfo extension the Content-Type of attachments are assumed to be 'application'." );
+        }
+    }
+
+    public function testDefaultUnrecognizedMessageSubTypeWithFileInfo()
+    {
+        if ( ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        {
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-unrecognized-subtype' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $parts = $mail->body->getParts();
+            $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+            $this->assertEquals( 'text', $parts[1]->contentType );
+            $this->assertEquals( 'unrecognized', $parts[1]->mimeType );
+            $this->assertEquals( 'message/unrecognized; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "With fileinfo extension the Content-Type of this attachment is recognized as 'text'." );
+        }
+    }
+
+    public function testDefaultUnrecognizedMessageSubTypeWithoutFileInfo()
+    {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        {
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-unrecognized-subtype' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $parts = $mail->body->getParts();
+            $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+            $this->assertEquals( 'application', $parts[1]->contentType );
+            $this->assertEquals( 'unrecognized', $parts[1]->mimeType );
+            $this->assertEquals( 'message/unrecognized; name="unknown.dat"', $parts[1]->getHeader( "Content-Type" ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "Without fileinfo extension the Content-Type of attachments are assumed to be 'application'." );
+        }
     }
 }
 ?>
