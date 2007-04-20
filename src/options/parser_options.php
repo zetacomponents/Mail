@@ -43,20 +43,37 @@ class ezcMailParserOptions extends ezcBaseOptions
      *         if the property $name is not defined
      * @throws ezcBaseValueException
      *         if $value is not correct for the property $name
+     * @throws ezcBaseInvalidParentClassException
+     *         if the class name passed as replacement mailClass does not
+     *         inherit from ezcMail.
      * @param string $name
      * @param mixed $value
      * @ignore
      */
-    public function __set( $name, $value )
+    public function __set( $propertyName, $propertyValue )
     {
-        switch ( $name )
+        switch ( $propertyName )
         {
             case 'mailClass':
-                $this->properties[$name] = $value;
+                if ( !is_string( $propertyValue ) )
+                {
+                    throw new ezcBaseValueException( $propertyName, $propertyValue, 'string that contains a class name' );
+                }
+
+                // Check if the passed classname actually implements the
+                // correct parent class. We have to do that with reflection
+                // here unfortunately
+                $parentClass = new ReflectionClass( 'ezcMail' );
+                $handlerClass = new ReflectionClass( $propertyValue );
+                if ( 'ezcMail' !== $propertyValue && !$handlerClass->isSubclassOf( $parentClass ) )
+                {
+                    throw new ezcBaseInvalidParentClassException( 'ezcMail', $propertyValue );
+                }
+                $this->properties[$propertyName] = $propertyValue;
                 break;
 
             default:
-                throw new ezcBasePropertyNotFoundException( $name );
+                throw new ezcBasePropertyNotFoundException( $propertyName );
         }
     }
 }

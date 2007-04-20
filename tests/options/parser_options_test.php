@@ -8,6 +8,8 @@
  * @subpackage Tests
  */
 
+require dirname( __FILE__ ) . '/classes/custom_classes.php';
+
 /**
  * @package Mail
  * @subpackage Tests
@@ -23,8 +25,36 @@ class ezcMailParserOptionsTest extends ezcTestCase
     public function testParserOptionsSet()
     {
         $options = new ezcMailParserOptions();
-        $options->mailClass = 'MyMailClass';
-        $this->assertEquals( 'MyMailClass', $options->mailClass );
+        $options->mailClass = 'myCustomMail';
+        $this->assertEquals( 'myCustomMail', $options->mailClass );
+    }
+
+    public function testWrongCustomClassArgument()
+    {
+        try
+        {
+            $options = new ezcMailParserOptions();
+            $options->mailClass = 1;
+            self::fail( "Expected exception not thrown." );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            self::assertEquals( "The value '1' that you were trying to assign to setting 'mailClass' is invalid. Allowed values are: string that contains a class name.", $e->getMessage() );
+        }
+    }
+
+    public function testWrongCustomClasses()
+    {
+        try
+        {
+            $options = new ezcMailParserOptions();
+            $options->mailClass = 'myFaultyCustomMail';
+            self::fail( "Expected exception not thrown." );
+        }
+        catch ( ezcBaseInvalidParentClassException $e )
+        {
+            self::assertEquals( "Class 'myFaultyCustomMail' does not exist, or does not inherit from the 'ezcMail' class.", $e->getMessage() );
+        }
     }
 
 /*  // wait until the mail parser has options to test
