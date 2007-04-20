@@ -46,8 +46,8 @@ class ezcMailParserOptions extends ezcBaseOptions
      * @throws ezcBaseInvalidParentClassException
      *         if the class name passed as replacement mailClass does not
      *         inherit from ezcMail.
-     * @param string $name
-     * @param mixed $value
+     * @param string $propertyName
+     * @param mixed  $propertyValue
      * @ignore
      */
     public function __set( $propertyName, $propertyValue )
