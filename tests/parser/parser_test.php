@@ -1293,5 +1293,22 @@ END;
             $this->markTestSkipped( "Without fileinfo extension the Content-Type of attachments are assumed to be 'application'." );
         }
     }
+
+    public function testMultipartRelated()
+    {
+        $parser = new ezcMailParser();
+        $fh = fopen( dirname( __FILE__ ) . '/data/various/test-broken-multipart-related', 'r' );
+        $src = '';
+        do
+        {
+            $src .= fgets( $fh );
+        } while ( strstr( $src, 'X-UID' ) === false );
+        fclose( $fh );
+        $set = new ezcMailVariableSet( $src );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 1220, $mail->size );
+        $this->assertEquals( 1219, strlen( $src ) );
+    }
 }
 ?>

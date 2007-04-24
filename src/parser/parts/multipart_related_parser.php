@@ -61,7 +61,11 @@ class ezcMailMultipartRelatedParser extends ezcMailMultipartParser
      */
     public function finishMultipart()
     {
-        $size = $this->part->getMainPart()->size;
+        $size = 0;
+        if ( $this->part->getMainPart() )
+        {
+            $size = $this->part->getMainPart()->size;
+        }
         foreach ( $this->part->getRelatedParts() as $part )
         {
             $size += $part->size;
