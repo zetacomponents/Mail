@@ -1,20 +1,20 @@
-Return-Path: <newsletter@rvr-online.de>
-X-Original-To: thkoch@ruhrgebietswiki.de
-Delivered-To: m00db7b5@dd7718.kasserver.com
-Received: from usermail.freecity.de (usermail.freecity.de [81.88.35.51])
-	by dd7718.kasserver.com (Postfix) with ESMTP id 560CE87569
-	for <thkoch@ruhrgebietswiki.de>; Sat, 12 Aug 2006 09:27:50 +0200 (CEST)
-Received: from hermes.cynapsis.com (hermes.cynapsis.com [195.202.44.4])
-	by usermail.freecity.de (Postfix) with ESMTP id 63BDB140A3E79
-	for <thomas@cluj.de>; Sat, 12 Aug 2006 09:27:45 +0200 (CEST)
+Return-Path: <newsletter@example.com>
+X-Original-To: thomas@example.com
+Delivered-To: m00db7b5@dd7718.example.com
+Received: from usermail.example.com (usermail.example.com [0.0.0.0])
+	by dd7718.example.com (Postfix) with ESMTP id 560CE87569
+	for <thDoe@example.com>; Sat, 12 Aug 2006 09:27:50 +0200 (CEST)
+Received: from hermes.example.com (hermes.example.com [195.202.44.4])
+	by usermail.example.com (Postfix) with ESMTP id 63BDB140A3E79
+	for <thomas@example.com>; Sat, 12 Aug 2006 09:27:45 +0200 (CEST)
 Received: from limanda (unknown [195.202.44.19])
-	by hermes.cynapsis.com (Postfix) with ESMTP id DF74A4916C
-	for <thomas@cluj.de>; Sat, 12 Aug 2006 09:27:42 +0200 (CEST)
-Message-ID: <7017611.1155367663805.JavaMail.support@sitepark.com>
+	by hermes.example.com (Postfix) with ESMTP id DF74A4916C
+	for <thomas@example.com>; Sat, 12 Aug 2006 09:27:42 +0200 (CEST)
+Message-ID: <7017611.1155367663805.JavaMail.support@example.com>
 Date: Sat, 12 Aug 2006 09:27:43 +0200 (CEST)
-From: =?ISO-8859-1?Q?Bewerbungsb=FCro?= <newsletter@rvr-online.de>
-Reply-To: newsletter@rvr-online.de
-To: Thomas Koch <thomas@cluj.de>
+From: =?ISO-8859-1?Q?Bewerbungsb=FCro?= <newsletter@example.com>
+Reply-To: newsletter@example.com
+To: Thomas <thomas@example.com>
 Subject: =?ISO-8859-15?Q?Newsletter_"Essen_f=FCr_das_Ruhrgebiet"?=
 Mime-Version: 1.0
 Content-Type: multipart/related;
@@ -35,7 +35,7 @@ Content-Transfer-Encoding: quoted-printable
 Content-ID: <text>
 
 
-Hallo Herr Koch,
+Hallo Herr Doe,
 
 anliegend erhalten Sie den aktuellen Newsletter des Kulturhauptstadtb=FCros=
  2010 mit neuen Informationen.=20
@@ -166,7 +166,7 @@ men wir diese gerne auf.
 
 Redaktion und Kontakt:
 Kulturhauptstadtb=FCro 2010
-kulturhauptstadt@rvr-online.de
+kulturhauptstadt@example.com
 
 
 
@@ -232,7 +232,7 @@ g" alt=3D"Newsletter" width=3D"503" height=3D"107" border=3D"0"></td>
   </tr><tr>
       <td width=3D"598" class=3D"content" valign=3D"top">
         <!-- Content (Start) -->
-        <h1>Hallo Herr Koch,</h1>
+        <h1>Hallo Herr Doe,</h1>
         anliegend erhalten Sie den aktuellen Newsletter des Kulturhauptstad=
 tb=FCros 2010 mit neuen Informationen. <br>
 Wir w=FCnschen Ihnen viel Vergn=FCgen beim Lesen. <br><br>
@@ -352,7 +352,7 @@ ben, nehmen wir diese gerne auf.<br>
 <br>
 Redaktion und Kontakt:<br>
 Kulturhauptstadtb=FCro 2010<br>
-kulturhauptstadt@rvr-online.de<br><br>
+kulturhauptstadt@example.com<br><br>
         <br><br>
         Wenn Sie den Newsletter abbestellen m=F6chten, klicken Sie auf den =
 nachfolgenden Link.

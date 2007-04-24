@@ -1307,8 +1307,8 @@ END;
         $set = new ezcMailVariableSet( $src );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
-        $this->assertEquals( 1220, $mail->size );
-        $this->assertEquals( 1219, strlen( $src ) );
+        $this->assertEquals( 1194, $mail->size );
+        $this->assertEquals( 1193, strlen( $src ) );
     }
 }
 ?>
