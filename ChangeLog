@@ -32,6 +32,9 @@
   Documentation enhancement
 - Fixed issue #10656: Parsing of incomplete multipart/related mails does not
   trigger a notice anymore.	
+- Implemented feature request #9785: Allow developers to specify their own 
+  character conversion function to UTF-8. Also fixed issue #8369 as developers
+  can ignore the notices thrown by iconv in their own conversion function.
 
 
 1.2.1 - [RELEASEDATE]
@@ -58,8 +61,6 @@
   ezcMailFileParser.
 - Fixed issue #10396: Method convertToUTF8 assumes 'latin1' charset instead of
   'unknown-8bit' and 'x-user-defined'.
-- Fixed issue #8369: Ignoring notices thrown by iconv() in the convertToUTF8()
-  method.
 
 
 1.2 - Monday 18 December 2006

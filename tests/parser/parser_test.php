@@ -63,6 +63,44 @@ class ExtendedMail extends ezcMail
 
 }
 
+class myConverter
+{
+    public static function convertToUTF8Iconv( $text, $originalCharset )
+    {
+        if ( $originalCharset === 'unknown-8bit' || $originalCharset === 'x-user-defined' )
+        {
+            $originalCharset = "latin1";
+        }
+        // '@' is to avoid notices on broken input - see issue #8369
+        return @iconv( $originalCharset, 'utf-8', $text );
+    }
+
+    public static function convertToUTF8IconvIgnore( $text, $originalCharset )
+    {
+        if ( $originalCharset === 'unknown-8bit' || $originalCharset === 'x-user-defined' )
+        {
+            $originalCharset = "latin1";
+        }
+        // '@' is to avoid notices on broken input - see issue #8369
+        return @iconv( $originalCharset, 'utf-8//IGNORE', $text );
+    }
+
+    public static function convertToUTF8IconvTranslit( $text, $originalCharset )
+    {
+        if ( $originalCharset === 'unknown-8bit' || $originalCharset === 'x-user-defined' )
+        {
+            $originalCharset = "latin1";
+        }
+        // '@' is to avoid notices on broken input - see issue #8369
+        return @iconv( $originalCharset, 'utf-8//TRANSLIT', $text );
+    }
+
+    public static function convertToUTF8Mbstring( $text, $originalCharset )
+    {
+        return mb_convert_encoding( $text, "UTF-8", $originalCharset );
+    }
+}
+
 /**
  * @package Mail
  * @subpackage Tests
@@ -1313,20 +1351,106 @@ END;
 
     public function testIconvCharsetConverterIconv1()
     {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8Iconv' ) );
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'various/test-broken-iconv-1' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
         $this->assertEquals( 63, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
 
     public function testIconvCharsetConverterIconv2()
     {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8Iconv' ) );
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'various/test-broken-iconv-2' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
         $this->assertEquals( 38, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+    }
+
+    public function testIconvCharsetConverterIconvIgnore1()
+    {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvIgnore' ) );
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-1' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 450, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+    }
+
+    public function testIconvCharsetConverterIconvIgnore2()
+    {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvIgnore' ) );
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-2' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 97, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+    }
+    
+
+    public function testIconvCharsetConverterIconvTranslit1()
+    {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvTranslit' ) );
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-1' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 63, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+    }
+
+    public function testIconvCharsetConverterIconvTranslit2()
+    {
+        ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvTranslit' ) );
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-2' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 38, strlen( $mail->body->text ) );
+        ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+    }
+
+    public function testMbstringCharsetConverter1()
+    {
+        if ( ezcBaseFeatures::hasExtensionSupport( 'mbstring' ) )
+        {
+            ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8Mbstring' ) );
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-broken-iconv-1' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $this->assertEquals( 468, strlen( $mail->body->text ) );
+            ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "This test doesn't work without the mbstring extension. PHP must be compiled with --enable-mbstring." );
+        }
+
+    }
+
+    public function testMbstringCharsetConverter2()
+    {
+        if ( ezcBaseFeatures::hasExtensionSupport( 'mbstring' ) )
+        {
+            ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8Mbstring' ) );
+            $parser = new ezcMailParser();
+            $set = new SingleFileSet( 'various/test-broken-iconv-2' );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+            $this->assertEquals( 99, strlen( $mail->body->text ) );
+            ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
+        }
+        else
+        {
+            $this->markTestSkipped( "This test doesn't work without the mbstring extension. PHP must be compiled with --enable-mbstring." );
+        }
     }
 }
 ?>
