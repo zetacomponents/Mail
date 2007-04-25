@@ -3,8 +3,8 @@
  * File containing the ezcMailCharsetConverter
  *
  * @package Mail
- * @version //autogen//
- * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
+ * @version //autogentag//
+ * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  * @access private
  */
@@ -13,7 +13,7 @@
  * Small internal class for common character set conversion methods inside Mail.
  *
  * @package Mail
- * @version //autogen//
+ * @version //autogentag//
  * @access private
  */
 class ezcMailCharsetConverter
@@ -34,7 +34,7 @@ class ezcMailCharsetConverter
         {
             $originalCharset = "latin1";
         }
-        return iconv( $originalCharset, 'utf-8', $text );
+        return @iconv( $originalCharset, 'utf-8', $text );
     }
 }
 ?>

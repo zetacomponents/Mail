@@ -58,6 +58,8 @@
   ezcMailFileParser.
 - Fixed issue #10396: Method convertToUTF8 assumes 'latin1' charset instead of
   'unknown-8bit' and 'x-user-defined'.
+- Fixed issue #8369: Ignoring notices thrown by iconv() in the convertToUTF8()
+  method.
 
 
 1.2 - Monday 18 December 2006

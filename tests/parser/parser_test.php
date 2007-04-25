@@ -1310,5 +1310,23 @@ END;
         $this->assertEquals( 1194, $mail->size );
         $this->assertEquals( 1193, strlen( $src ) );
     }
+
+    public function testIconvCharsetConverterIconv1()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-1' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 63, strlen( $mail->body->text ) );
+    }
+
+    public function testIconvCharsetConverterIconv2()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-broken-iconv-2' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 38, strlen( $mail->body->text ) );
+    }
 }
 ?>

@@ -1,0 +1,64 @@
+From mikko.koppanen@example.fi Thu Oct 26 09:56:18 2006
+Return-Path: <mikko.koppanen@example.fi>
+Received: from kossu.home.example.nl (localhost [127.0.0.1])
+	by kossu.home.example.nl (8.13.7/8.13.7/Debian-2) with ESMTP id k9Q7uHWa011688
+	for <derick@localhost>; Thu, 26 Oct 2006 09:56:18 +0200
+X-Spam-Tests: SUB_HELLO,UPPERCASE_25_50
+X-Spam-Score: 1.8 required=8.0
+X-Spam-Flag: NO
+X-Spam-Checker-Version: SpamAssassin 3.1.4 (2006-07-25) on example.nl
+X-Spam-Level: *
+X-Spam-Status: No, score=1.8 required=8.0 tests=SUB_HELLO,UPPERCASE_25_50 
+	autolearn=disabled version=3.1.4
+X-Spam-Summary:  1.8 SUB_HELLO              Subject starts with "Hello"
+	0.0 UPPERCASE_25_50        message body is 25-50% uppercase
+X-Spam-Report: 
+	*  1.8 SUB_HELLO Subject starts with "Hello"
+	*  0.0 UPPERCASE_25_50 message body is 25-50% uppercase
+Received: from 127.0.0.1 [127.0.0.1]
+	by kossu.home.example.nl with POP3 (fetchmail-6.3.4)
+	for <derick@localhost> (single-drop); Thu, 26 Oct 2006 09:56:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by example.nl (8.13.7/8.12.11) with ESMTP id k9Q7sLUN017048
+	for <derick@[127.0.0.1]>; Thu, 26 Oct 2006 09:54:21 +0200
+X-Virus-Scanned: by amavisd-new at example.nl
+Received: from mta.example.no ([85.19.74.75])
+	by example.nl (8.13.7/8.12.11) with ESMTP id k9Q7sKpA004605
+	for <ez@example.nl>; Thu, 26 Oct 2006 09:54:21 +0200
+Received: from mail.example.fi (posti.example.fi [193.211.31.197])
+	by mta.example.no (Postfix) with ESMTP id A207248C037
+	for <dr@example.no>; Thu, 26 Oct 2006 09:54:20 +0200 (CEST)
+Received: by mail.example.fi (Postfix, from userid 5000)
+	id C9C8C16FE3; Thu, 26 Oct 2006 10:54:14 +0300 (EEST)
+Received: from localhost.localdomain (unknown [192.168.0.14])
+	by mail.example.fi (Postfix) with ESMTP id 80BCF16FE0
+	for <dr@example.no>; Thu, 26 Oct 2006 10:54:14 +0300 (EEST)
+Received: by localhost.localdomain (Postfix, from userid 33)
+	id 2C9E882C79; Thu, 26 Oct 2006 10:54:14 +0300 (EEST)
+From: Mikko Koppanen <mikko.koppanen@example.fi>
+To: dr@example.no
+Subject: Hello world
+Message-Id: <20061026075414.2C9E882C79@localhost.localdomain>
+Date: Thu, 26 Oct 2006 10:54:14 +0300 (EEST)
+X-Greylist: Default is to whitelist mail, not delayed by milter-greylist-2.1.12 (example.nl [82.94.239.7]); Thu, 26 Oct 2006 09:54:21 +0200 (CEST)
+X-Bogosity: Unsure, tests=bogofilter, spamicity=0.500266, version=0.96.0
+
+
+*******************************************************
+TIETOJ�JESTELMIEN TOIMITTAJA -- www.example.fi
+YKSI J�JESTELM�TIEDONHALLINTAAN -- www.example.net
+*******************************************************
+
+------
+SENDER
+------
+NAME:    Mikko Koppanen
+COMPANY: Probis Solutions Oy
+EMAIL:   mikko.koppanen@example.fi
+WEB:     www.example.fi
+ADDRESS: PL 92
+        Kilpakorventie 171
+        FIN-42101 JAMSA
+        FINLAND
+PHONE:   +358-14-748 0400
+
