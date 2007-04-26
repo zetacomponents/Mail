@@ -343,7 +343,7 @@ class ezcMailPop3Transport
         $messages = array();
         while ( ( $response = $this->connection->getLine( true ) ) !== "." )
         {
-            list( $num, $size ) = split( ' ', $response );
+            list( $num, $size ) = explode( ' ', $response );
             $messages[$num] = $size;
         }
         return $messages;
