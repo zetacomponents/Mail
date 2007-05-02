@@ -1286,27 +1286,6 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
-    public function tearDown()
-    {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
-        try
-        {
-            $imap->deleteMailbox( "Guybrush" );
-        }
-        catch ( ezcMailTransportException $e )
-        {
-        }
-
-        try
-        {
-            $imap->deleteMailbox( "Elaine" );
-        }
-        catch ( ezcMailTransportException $e )
-        {
-        }
-    }
-
     public function testMessageSize()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );
@@ -1452,6 +1431,43 @@ class ezcMailTransportImapTest extends ezcTestCase
         $set = $transport->fetchByMessageNr( 3 );
         $mail = $parser->parseMail( $set );
         $this->assertNotEquals( ')', substr( $mail[0]->body->text, strlen( $mail[0]->body->text ) - 3, 3 ) );
+    }
+
+    public function testTopAsPeek()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->copyMessages( "1", "Guybrush" );
+        $imap->selectMailbox( "Guybrush" );
+        $imap->clearFlag( "1", "SEEN" );
+        $this->assertEquals( 0, $imap->countByFlag( "SEEN" ) );
+        $src = $imap->top( 1, 1 );
+        $this->assertEquals( 0, $imap->countByFlag( "SEEN" ) );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function tearDown()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        try
+        {
+            $imap->deleteMailbox( "Guybrush" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+
+        try
+        {
+            $imap->deleteMailbox( "Elaine" );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
     }
 
     public static function suite()

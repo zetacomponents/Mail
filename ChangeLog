@@ -35,6 +35,8 @@
 - Implemented feature request #9785: Allow developers to specify their own 
   character conversion function to UTF-8. Also fixed issue #8369 as developers
   can ignore the notices thrown by iconv in their own conversion function.
+- Implemented feature request #10682: The IMAP PEEK command is now supported
+  through the top() method.
 
 
 1.2.1 - [RELEASEDATE]

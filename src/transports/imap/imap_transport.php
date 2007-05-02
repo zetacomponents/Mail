@@ -763,7 +763,8 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns the headers and the first characters from message $msgNum.
+     * Returns the headers and the first characters from message $msgNum,
+     * without setting the \Seen flag.
      *
      * If the command failed or if it was not supported by the server an empty
      * string is returned.
@@ -784,7 +785,7 @@ class ezcMailImapTransport
         }
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} FETCH {$msgNum} (RFC822.HEADER BODY[TEXT]<0.{$chars}>)" );
+        $this->connection->sendData( "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.{$chars}>)" );
         $response = $this->getResponse( 'FETCH (' );
         $message = "";
         if ( strpos( $response, 'FETCH (' ) !== false )
