@@ -677,14 +677,4 @@ class ezcMailSmtpTransport implements ezcMailTransport
         return substr( trim( $line = $this->getData() ), 0, 3 );
     }
 }
-
-/**
- * This class is deprecated. Use ezcMailSmtpTransport instead.
- *
- * @package Mail
- * @ignore
- */
-class ezcMailTransportSmtp extends ezcMailSmtpTransport
-{
-}
 ?>
