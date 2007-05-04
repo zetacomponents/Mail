@@ -44,7 +44,7 @@ class ezcMailMultipartDigest extends ezcMailMultipart
             {
                 $this->parts[] = new ezcMailRfc822Digest( $part );
             }
-            else if( $part instanceof ezcMailRfc822Digest )
+            else if ( $part instanceof ezcMailRfc822Digest )
             {
                 $this->parts[] = $part;
             }
