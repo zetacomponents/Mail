@@ -37,6 +37,7 @@
   can ignore the notices thrown by iconv in their own conversion function.
 - Implemented feature request #10682: The IMAP PEEK command is now supported
   through the top() method.
+- Implemented enhancement 10340: More selective encoding of mail headers.
 
 
 1.2.1 - [RELEASEDATE]

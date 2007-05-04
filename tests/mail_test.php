@@ -89,7 +89,26 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( $expected, $return );
     }
 
-    public function testSubjectWithCharset()
+    public function testSubjectWithCharset7Bit()
+    {
+        $this->mail->from = new ezcMailAddress( 'from@ez.no' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Dette er en test";
+        $this->mail->subjectCharset = 'ISO-8859-1';
+        $expected = "From: from@ez.no" . ezcMailTools::lineBreak() .
+            "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Subject: Dette er en test" . ezcMailTools::lineBreak() .
+            "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
+            "User-Agent: eZ components";
+
+        $return = $this->mail->generate();
+        // cut away the Date and Message-ID headers as there is no way to predict what they will be
+        $return = join( ezcMailTools::lineBreak(), array_slice( explode( ezcMailTools::lineBreak(), $return ), 0, 5 ) );
+
+        $this->assertEquals( $expected, $return );
+    }
+
+    public function testSubjectWithCharset8Bit()
     {
         $this->mail->from = new ezcMailAddress( 'from@ez.no' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
@@ -97,7 +116,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->subjectCharset = 'ISO-8859-1';
         $expected = "From: from@ez.no" . ezcMailTools::lineBreak() .
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Subject: =?ISO-8859-1?B?RPh0dGUgZXIgZW4gdGVzdA==?=" . ezcMailTools::lineBreak() .
+            "Subject: =?ISO-8859-1?Q?D=F8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
             "User-Agent: eZ components";
 
@@ -116,11 +135,11 @@ class ezcMailTest extends ezcTestCase
         $this->mail->addBcc( new ezcMailAddress( 'fh@ez.no', 'Fræderik Hølljen','ISO-8859-1' ) );
         $this->mail->subject = "Døtte er en test";
         $this->mail->subjectCharset = 'ISO-8859-1';
-        $expected = "From: =?ISO-8859-1?B?RnLmZGVyaWsgSPhsbGplbg==?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "To: =?ISO-8859-1?B?RnLmZGVyaWsgSPhsbGplbg==?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Cc: =?ISO-8859-1?B?RnLmZGVyaWsgSPhsbGplbg==?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Bcc: =?ISO-8859-1?B?RnLmZGVyaWsgSPhsbGplbg==?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Subject: =?ISO-8859-1?B?RPh0dGUgZXIgZW4gdGVzdA==?=" . ezcMailTools::lineBreak() .
+        $expected = "From: =?ISO-8859-1?Q?Fr=E6derik=20H=F8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "To: =?ISO-8859-1?Q?Fr=E6derik=20H=F8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Cc: =?ISO-8859-1?Q?Fr=E6derik=20H=F8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Bcc: =?ISO-8859-1?Q?Fr=E6derik=20H=F8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Subject: =?ISO-8859-1?Q?D=F8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
             "User-Agent: eZ components";
 
@@ -130,16 +149,35 @@ class ezcMailTest extends ezcTestCase
 
         $this->assertEquals( $expected, $return );
     }
-    
-    public function testSubjectWithCharsetUtf8()
+
+    public function testSubjectWithCharset7BitUtf8()
     {
         $this->mail->from = new ezcMailAddress( 'from@ez.no' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
-        $this->mail->subject = "Døtte er en test";
-        $this->mail->subjectCharset = 'ISO-8859-1';
+        $this->mail->subject = "Dette er en test";
+        $this->mail->subjectCharset = 'UTF-8';
         $expected = "From: from@ez.no" . ezcMailTools::lineBreak() .
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Subject: =?ISO-8859-1?B?RPh0dGUgZXIgZW4gdGVzdA==?=" . ezcMailTools::lineBreak() .
+            "Subject: Dette er en test" . ezcMailTools::lineBreak() .
+            "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
+            "User-Agent: eZ components";
+
+        $return = $this->mail->generate();
+        // cut away the Date and Message-ID headers as there is no way to predict what they will be
+        $return = join( ezcMailTools::lineBreak(), array_slice( explode( ezcMailTools::lineBreak(), $return ), 0, 5 ) );
+
+        $this->assertEquals( $expected, $return );
+    }
+
+    public function testSubjectWithCharset8BitUtf8()
+    {
+        $this->mail->from = new ezcMailAddress( 'from@ez.no' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "DÃ¸tte er en test";
+        $this->mail->subjectCharset = 'UTF-8';
+        $expected = "From: from@ez.no" . ezcMailTools::lineBreak() .
+            "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Subject: =?UTF-8?Q?D=C3=B8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
             "User-Agent: eZ components";
 
@@ -158,11 +196,11 @@ class ezcMailTest extends ezcTestCase
         $this->mail->addBcc( new ezcMailAddress( 'fh@ez.no', 'FrÃ¦derik HÃ¸lljen','UTF-8' ) );
         $this->mail->subject = "DÃ¤tte er en test";
         $this->mail->subjectCharset = 'UTF-8';
-        $expected = "From: =?UTF-8?B?RnLDpmRlcmlrIEjDuGxsamVu?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "To: =?UTF-8?B?RnLDpmRlcmlrIEjDuGxsamVu?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Cc: =?UTF-8?B?RnLDpmRlcmlrIEjDuGxsamVu?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Bcc: =?UTF-8?B?RnLDpmRlcmlrIEjDuGxsamVu?= <fh@ez.no>" . ezcMailTools::lineBreak() .
-            "Subject: =?UTF-8?B?RMOkdHRlIGVyIGVuIHRlc3Q=?=" . ezcMailTools::lineBreak() .
+        $expected = "From: =?UTF-8?Q?Fr=C3=A6derik=20H=C3=B8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "To: =?UTF-8?Q?Fr=C3=A6derik=20H=C3=B8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Cc: =?UTF-8?Q?Fr=C3=A6derik=20H=C3=B8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Bcc: =?UTF-8?Q?Fr=C3=A6derik=20H=C3=B8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
+            "Subject: =?UTF-8?Q?D=C3=A4tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
             "User-Agent: eZ components";
 
@@ -288,7 +326,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->body = new ezcMailText( "Dette er body ßßæøååå" );
 
         $this->mail->generateHeaders();
-        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.5@ez.no>';
+        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.7@ez.no>';
         $this->assertEquals( $expected, $this->mail->getHeader( 'Message-Id' ) );
     }
 

@@ -46,6 +46,52 @@ class ezcMailToolsTest extends ezcTestCase
                              ezcMailTools::composeEmailAddresses( $addresses ) );
     }
 
+    public function testComposeEmailAddressUsAscii()
+    {
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Ascii' );
+        $this->assertEquals( 'John Ascii <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+
+        // The Ä does not in US ASCII, but we pass it along anyway
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Äscii' );
+        $this->assertEquals( 'John Äscii <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+    }
+
+    public function testComposeEmailAddressLatin1()
+    {
+        // no 8-bit-chars
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Ascii', 'iso-8859-1' );
+        $this->assertEquals( 'John Ascii <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+
+        // with 8-bit chars
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Äscii', 'iso-8859-1' );
+        $this->assertEquals( '=?iso-8859-1?Q?John=20=C4scii?= <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+    }
+
+    public function testComposeEmailAddressOtherLatin()
+    {
+        foreach ( array( 'iso-8859-2', 'iso-8859-6', 'iso-8859-7', 'iso-8859-9', 'iso-8859-15' ) as $charset )
+        {
+            // no 8-bit-chars
+            $address = new ezcMailAddress( 'john-ascii@example.com', 'John Ascii', $charset );
+            $this->assertEquals( 'John Ascii <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+
+            // with 8-bit chars
+            $address = new ezcMailAddress( 'john-ascii@example.com', 'John Äscii', $charset );
+            $this->assertEquals( "=?{$charset}?Q?John=20=C4scii?= <john-ascii@example.com>", ezcMailTools::composeEmailAddress( $address ) );
+        }
+    }
+
+    public function testComposeEmailAddressUTF8()
+    {
+        // no 8-bit-chars
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Ascii', 'UTF-8' );
+        $this->assertEquals( 'John Ascii <john-ascii@example.com>', ezcMailTools::composeEmailAddress( $address ) );
+
+        // with 8-bit chars
+        $address = new ezcMailAddress( 'john-ascii@example.com', 'John Ã„scii','UTF-8' );
+        $this->assertEquals( "=?UTF-8?Q?John=20=C3=84scii?= <john-ascii@example.com>", ezcMailTools::composeEmailAddress( $address ) );
+    }
+
     public function testComposeEmailAddressesSingleFolding()
     {
         $reference = "John Doe <john@example.com>, Harry Doe <harry@example.com>," .
