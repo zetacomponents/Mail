@@ -1,43 +1,43 @@
 1.3beta1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- ezcMailTransportException inherits from ezcMailException, and not directly
-  from ezcBaseException.
-- Added fetchParts() to ezcMail to return the mail parts of a mail (feature
-  request #8303).
 - Added walkParts() to ezcMail and the class ezcMailPartWalkContext which can
   be used to walk through all the parts in a mail and execute a callback
   function on each part (for example save mail parts to disk or a database).
 - Added support for multipart/report and message/delivery-status mail parts,
   connected to issue #8694.
-- Implemented feature request #9068: added support for filename language and
-  filename charset support for the Content-Disposition header.
 - Added header folding for the Content-Disposition header.
 - Fixed an issue with ezcMailHeaderFolder::foldAny() where notices were thrown
   if the header contained a too long string without any white spaces.
-- Implemented feature request #8419: added the property size to ezcMailPart,
-  which is set when parsing a mail.
-- Implemented feature request #10068: added a list of supported RFCs to the
-  documentation.
-- Implemented feature request #9308: added option classes for transports.
-- Implemented feature request #10082: added options class ezcMailParserOptions
-  and deprecated second parameter of parseMail() in ezcMailParser.
-- Implemented feature request #9292: added SSL support for IMAP and POP3.
-  Based on a patch from Mikko Koppanen.
-- Implemented feature request #10091: added SSL/TLS support for the SMTP
-  transport. Based on a patch from Christian Michel. 
-- Implemented feature request #8485: added the ezcMailStorageSet which wraps
-  around another set and provides saving of mail sources.
-- Implemented feature request #10341: MixedPart mail without attachments - 
-  Documentation enhancement
 - Fixed issue #10656: Parsing of incomplete multipart/related mails does not
   trigger a notice anymore.	
-- Implemented feature request #9785: Allow developers to specify their own 
+- Fixed ezcMailTransportException to inherit from ezcMailException, and not
+  directly from ezcBaseException.
+- Implemented feature #8303: Added fetchParts() to ezcMail to return the mail
+  parts of a mail.
+- Implemented feature #8419: added the property size to ezcMailPart,
+  which is set when parsing a mail.
+- Implemented feature #8485: added the ezcMailStorageSet which wraps
+  around another set and provides saving of mail sources.
+- Implemented feature #9068: added support for filename language and
+  filename charset support for the Content-Disposition header.
+- Implemented feature #9292: added SSL support for IMAP and POP3.
+  Based on a patch from Mikko Koppanen.
+- Implemented feature #9308: added option classes for transports.
+- Implemented feature #9785: Allow developers to specify their own 
   character conversion function to UTF-8. Also fixed issue #8369 as developers
   can ignore the notices thrown by iconv in their own conversion function.
-- Implemented feature request #10682: The IMAP PEEK command is now supported
+- Implemented feature #10068: added a list of supported RFCs to the
+  documentation.
+- Implemented feature #10082: added options class ezcMailParserOptions
+  and deprecated second parameter of parseMail() in ezcMailParser.
+- Implemented feature #10091: added SSL/TLS support for the SMTP
+  transport. Based on a patch from Christian Michel. 
+- Implemented feature #10340: More selective encoding of mail headers.
+- Implemented feature #10341: MixedPart mail without attachments - 
+  Documentation enhancement
+- Implemented feature #10682: The IMAP PEEK command is now supported
   through the top() method.
-- Implemented enhancement 10340: More selective encoding of mail headers.
 
 
 1.2.1 - [RELEASEDATE]
