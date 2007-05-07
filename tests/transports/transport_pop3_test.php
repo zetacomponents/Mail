@@ -497,7 +497,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
         for ( $i = 0; $i < count( self::$ids ); $i++ )
         {
-            self::$ids[$i] = sprintf( "000000%2x4420e93a", self::$ids[$i] + 4 * $days );
+            $messageNr = str_pad( sprintf( "%x", self::$ids[$i] + 4 * $days ), 8, '0', STR_PAD_LEFT );
+            self::$ids[$i] = "{$messageNr}4420e93a";
         }
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
