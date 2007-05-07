@@ -1449,6 +1449,22 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->deleteMailbox( "Guybrush" );
     }
 
+    public function testSortWithPeek()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->createMailbox( "Guybrush" );
+        $imap->selectMailbox( "Inbox" );
+        $imap->copyMessages( "1,2", "Guybrush" );
+        $imap->selectMailbox( "Guybrush" );
+        $imap->clearFlag( "1,2", "SEEN" );
+        $this->assertEquals( 0, $imap->countByFlag( "SEEN" ) );
+        $src = $imap->sortMessages( array( 1, 2 ), "Subject" );
+        $this->assertEquals( 0, $imap->countByFlag( "SEEN" ) );
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+    }
+
     public function tearDown()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );

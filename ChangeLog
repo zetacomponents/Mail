@@ -37,7 +37,7 @@
 - Implemented feature #10341: MixedPart mail without attachments - 
   Documentation enhancement
 - Implemented feature #10682: The IMAP PEEK command is now supported
-  through the top() method.
+  through the top() method. Added PEEK support to sortMessages() also.
 
 
 1.2.1 - [RELEASEDATE]

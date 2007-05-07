@@ -1512,7 +1512,7 @@ class ezcMailImapTransport
         $messageNumbers = implode( ',', $messages );
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} FETCH {$messageNumbers} (BODY[HEADER.FIELDS ({$query})])" );
+        $this->connection->sendData( "{$tag} FETCH {$messageNumbers} (BODY.PEEK[HEADER.FIELDS ({$query})])" );
 
         $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
