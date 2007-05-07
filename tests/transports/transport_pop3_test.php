@@ -490,7 +490,15 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public static function suite()
     {
-        self::$ids = array( '000000244420e93a', '000000254420e93a', '000000264420e93a', '000000274420e93a' );
+        self::$ids = array( 36, 37, 38, 39 );
+        // small hack because the message IDs keep increasing everyday by 4 on the server
+        $refDate = mktime( 0, 0, 0, 3, 30, 2007 );
+        $today = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'y' ) );
+        $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
+        for ( $i = 0; $i < count( self::$ids ); $i++ )
+        {
+            self::$ids[$i] = sprintf( "000000%2x4420e93a", self::$ids[$i] + 4 * $days );
+        }
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
 }

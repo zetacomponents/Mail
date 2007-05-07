@@ -1489,6 +1489,14 @@ class ezcMailTransportImapTest extends ezcTestCase
     public static function suite()
     {
         self::$ids = array( 36, 37, 38, 39 );
+        // small hack because the message IDs keep increasing everyday by 4 on the server
+        $refDate = mktime( 0, 0, 0, 3, 30, 2007 );
+        $today = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'y' ) );
+        $days = (int)( ( $today - $refDate ) / ( 24 * 60 * 60 ) );
+        for ( $i = 0; $i < count( self::$ids ); $i++ )
+        {
+            self::$ids[$i] += 4 * $days;
+        }
         return new PHPUnit_Framework_TestSuite( "ezcMailTransportImapTest" );
     }
 }
