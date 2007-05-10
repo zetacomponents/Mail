@@ -736,7 +736,7 @@ class ezcMailImapTransport
      * listMessages().
      * The message is not physically deleted, but has its \Deleted flag set,
      * and can be later undeleted by clearing its \Deleted flag
-     * {@see clearFlag()}.
+     * {@link clearFlag()}.
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected

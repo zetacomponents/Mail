@@ -28,7 +28,7 @@
  * @property int $timeout
  *           The timeout value of the connection in seconds. The default is
  *           5 seconds. When setting/getting this option, the timeout option
- *           from $this->options will be set instead {@see ezcMailTransportOptions}.
+ *           from $this->options will be set instead {@link ezcMailTransportOptions}.
  * @property string $senderHost
  *           The hostname of the computer that sends the mail. The default is
  *           'localhost'.

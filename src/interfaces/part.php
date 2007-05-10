@@ -26,7 +26,7 @@
  *           when sending mail.
  * @property int $size
  *           The size of the mail part in bytes. It is set when parsing a
- *           mail {@see ezcMailParser->parseMail()}.
+ *           mail {@link ezcMailParser->parseMail()}.
  * @property-read ezcMailHeadersHolder $headers
  *                Contains the header holder object, taking care of the
  *                headers of this part. Can be retreived for reasons of
