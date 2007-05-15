@@ -785,7 +785,15 @@ class ezcMailImapTransport
         }
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.{$chars}>)" );
+        if ( $chars === 0 )
+        {
+            $command = "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT])";
+        }
+        else
+        {
+            $command = "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.{$chars}>)";
+        }
+        $this->connection->sendData( $command );
         $response = $this->getResponse( 'FETCH (' );
         $message = "";
         if ( strpos( $response, 'FETCH (' ) !== false )

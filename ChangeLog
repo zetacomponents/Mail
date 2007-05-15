@@ -38,6 +38,8 @@
   Documentation enhancement
 - Implemented feature #10682: The IMAP PEEK command is now supported
   through the top() method. Added PEEK support to sortMessages() also.
+- Fixed a problem with certain IMAP servers which didn't allow the second
+  parameter of top() method from IMAP to be 0.
 
 
 1.2.1 - [RELEASEDATE]

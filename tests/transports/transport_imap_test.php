@@ -377,6 +377,16 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( true, count( explode( "\n", $list ) ) > 1 );
     }
 
+    public function testTopOnlyHeaders()
+    {
+        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap->selectMailbox( 'inbox' );
+        $list = $imap->top( 1 );
+        // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
+        $this->assertEquals( true, count( explode( "\n", $list ) ) > 1 );
+    }
+
     public function testInvalidTop()
     {
         $imap = new ezcMailImapTransport( "dolly.ez.no" );
