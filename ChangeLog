@@ -1,4 +1,4 @@
-1.3beta1 - [RELEASEDATE]
+1.3beta1 - Monday 07 May 2007
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added walkParts() to ezcMail and the class ezcMailPartWalkContext which can
