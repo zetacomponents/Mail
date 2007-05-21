@@ -72,5 +72,29 @@ class ezcMailTransportFileTest extends ezcTestCase
         $this->assertEquals( null, $set->getNextLine() );
         $this->assertEquals( false, $set->nextMail() );
     }
+
+    public function testStdIn()
+    {
+        $dataDir = dirname( __FILE__ ) . "/data/";
+        $phpPath = isset( $_SERVER["_"] ) ? $_SERVER["_"] : "/bin/env php";
+        $scriptFile = "{$dataDir}/parse-script.php";
+        $desc = array(
+            0 => array( "pipe", "r" ),  // stdin
+            1 => array( "pipe", "w" ),  // stdout
+            2 => array( "pipe", "w" )   // stderr
+        );
+        $proc = proc_open("'{$phpPath}' '{$scriptFile}'", $desc, $pipes );
+
+        fwrite( $pipes[0], file_get_contents( dirname( __FILE__ ) . '/../parser/data/gmail/html_mail.mail' ) );
+        fclose( $pipes[0] );
+
+        $ret = '';
+
+        while (!feof( $pipes[1] ) )
+        {
+            $ret .= fgets( $pipes[1] );
+        }
+        self::assertEquals( "Frederik Holljen <sender@gmail.com>\nGmail: HTML mail\n", $ret );
+    }
 }
 ?>

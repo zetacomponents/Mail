@@ -89,7 +89,14 @@ class ezcMailFileSet implements ezcMailParserSet
      */
     public function hasData()
     {
-        return ( count( $this->files ) >= 1 ) && ( filesize( $this->files[0] ) > 0 );
+        if ( count( $this->files ) >= 1 )
+        {
+            if ( $this->files[0] === 'php://stdin' || filesize( $this->files[0] ) > 0 )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -118,7 +125,7 @@ class ezcMailFileSet implements ezcMailParserSet
         }
 
         // get one line
-        $next =  fgets( $this->fp );
+        $next = fgets( $this->fp );
         if ( $next == "" && feof( $this->fp ) )
         {
             return null;
@@ -163,7 +170,7 @@ class ezcMailFileSet implements ezcMailParserSet
         // loop until we can open a file.
         while ( $this->fp == null && $file !== false )
         {
-            if ( file_exists( $file ) )
+            if ( $file === 'php://stdin' || file_exists( $file ) )
             {
                 $fp = fopen( $file, 'r' );
                 if ( $fp !== false )
