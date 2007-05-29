@@ -37,12 +37,12 @@ class ezcMailParserOptions extends ezcBaseOptions
     }
 
     /**
-     * Sets the option $name to $value.
+     * Sets the option $propertyName to $propertyValue.
      *
      * @throws ezcBasePropertyNotFoundException
-     *         if the property $name is not defined
+     *         if the property $propertyName is not defined
      * @throws ezcBaseValueException
-     *         if $value is not correct for the property $name
+     *         if $propertyValue is not correct for the property $propertyName
      * @throws ezcBaseInvalidParentClassException
      *         if the class name passed as replacement mailClass does not
      *         inherit from ezcMail.
