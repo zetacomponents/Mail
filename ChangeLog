@@ -1,4 +1,4 @@
-1.3RC1 - [RELEASEDATE]
+1.3beta2 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #10762: Mail file set does not work with php://stdin.
