@@ -127,6 +127,13 @@ See the ezcMailTools example below for information on how to use these methods.
 Building and sending mail
 =========================
 
+eZ components provides two ways to create mail. The simplest is to use the
+composer class ezcMailComposer. Using the composer you can send plain text
+messages, HTML messages with images and messages with attachments.
+If you require more advanced messages you can also customize them entirely by
+building it from the scratch using the various part types in ezcMail. The part
+types are structured the same way as the underlying mail MIME types.
+
 Sending a mail with the composer
 --------------------------------
 
