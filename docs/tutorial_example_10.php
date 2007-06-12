@@ -53,7 +53,7 @@ $imap->selectMailbox( 'Inbox' );
     $imap->expunge();
 
 // Use this to keep the connection alive
-    $pop3->noop();
+    $imap->noop();
 
 // Create a new mail parser object
 $parser = new ezcMailParser();
