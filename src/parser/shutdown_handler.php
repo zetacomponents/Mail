@@ -9,12 +9,12 @@
  */
 
 /**
- * ezcMailParserShutDownHandler removes temporary files 
+ * ezcMailParserShutDownHandler removes temporary files
  * and directories when PHP shuts down.
  *
  * Example:
  * <code>
- * ezcMailParserShutdownHandler::registerForRemoval( "/tmp/file.txt" ); 
+ * ezcMailParserShutdownHandler::registerForRemoval( "/tmp/file.txt" );
  * </code>
  *
  * The code above will result in file.txt being removed from the system
@@ -64,7 +64,7 @@ class ezcMailParserShutdownHandler
      *
      * Files or directories that can't be deleted are left without warning.
      *
-     * @returns void
+     * @return void
      */
     public static function shutdownCallback()
     {
@@ -75,11 +75,11 @@ class ezcMailParserShutdownHandler
     }
 
     /**
-     * Recursively removes a directory and its contents or files.
+     * Recursively removes a directory and its contents or a file.
      *
      * Returns true on success and false on error.
      *
-     * @param string $dir
+     * @param string $itemName
      * @return bool
      */
     public static function remove( $itemName )

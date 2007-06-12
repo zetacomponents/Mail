@@ -19,7 +19,7 @@
  * @property array(mixed) $connectionOptions
  *           Specifies additional options for the connection. Must be in this format:
  *           array( 'wrapper_name' => array( 'option_name' => 'value' ) ).
- * @property bool ssl
+ * @property bool $ssl
  *           This option belongs to ezcMailTransportOptions, but it is not used in SMTP.
  *           When trying to set this to true the connectionType option will be set to
  *           CONNECTION_SSL value from ezcMailSmtpTransport.

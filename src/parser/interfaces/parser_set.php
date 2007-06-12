@@ -9,6 +9,10 @@
  */
 
 /**
+ * Interface common to all parser sets.
+ *
+ * A parser set provides a simple interface to fetch mail data line by
+ * line from a set of mail.
  *
  * @package Mail
  * @version //autogen//
@@ -36,7 +40,7 @@ interface ezcMailParserSet
     public function nextMail();
 
     /**
-     * Returns whether mails are being available for parsing.
+     * Returns true if mail data is available for parsing.
      *
      * @return bool
      */

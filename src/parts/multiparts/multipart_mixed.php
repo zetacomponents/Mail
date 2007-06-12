@@ -35,7 +35,7 @@ class ezcMailMultipartMixed extends ezcMailMultipart
      * Parts are added in the order provided. Parameters of the wrong
      * type are ignored.
      *
-     * @param ezcMailPart|array(ezcMailPart)
+     * @param ezcMailPart|array(ezcMailPart) $...
      */
     public function __construct()
     {

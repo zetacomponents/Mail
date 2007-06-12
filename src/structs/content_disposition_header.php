@@ -121,6 +121,8 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
      * @param string $readDate
      * @param string $size
      * @param array(string=>string) $additionalParameters
+     * @param string $fileNameLanguage
+     * @param string $fileNameCharSet
      */
     public function __construct( $disposition = 'inline',
                                  $fileName = null,
@@ -153,7 +155,7 @@ class ezcMailContentDispositionHeader extends ezcBaseStruct
      * var_export() generates code, that calls this method when it
      * is parsed with PHP.
      *
-     * @param array(string=>mixed)
+     * @param array(string=>mixed) $array
      * @return ezcMailAddress
      */
     static public function __set_state( array $array )

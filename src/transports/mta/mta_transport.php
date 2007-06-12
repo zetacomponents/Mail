@@ -12,6 +12,7 @@
  * This class is deprecated. Use ezcMailMtaTransport instead.
  *
  * @package Mail
+ * @version //autogen//
  * @ignore
  */
 class ezcMailTransportMta extends ezcMailMtaTransport

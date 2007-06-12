@@ -56,7 +56,7 @@ class ezcMailParser
     /**
      * Constructs a new ezcMailParser.
      *
-     * @see ezcMailParserOptions for options you can set to the mail parser.
+     * For options you can set to the mail parser see: {@link ezcMailParserOptions}
      *
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined
@@ -205,7 +205,7 @@ class ezcMailParser
      * If no temporary directory has been set this method defaults to
      * /tmp/ for linux and c:\tmp\ for windows.
      *
-     * @returns string
+     * @return string
      */
     public static function getTmpDir()
     {

@@ -188,7 +188,7 @@ class ezcMailImapTransport
      * 993 (for SSL connections) or 143 (for plain connections). Use the $options
      * parameter to specify an SSL connection.
      *
-     * @see ezcMailImapTransportOptions for options you can specify for IMAP.
+     * See {@link ezcMailImapTransportOptions} for options you can specify for IMAP.
      *
      * @throws ezcMailTransportException
      *         if it was not possible to connect to the server
@@ -697,10 +697,10 @@ class ezcMailImapTransport
      * Returns information about messages in the selected mailbox.
      *
      * The information returned through parameters is:
-     * $numMessages = number of not deleted messages in the selected mailbox
-     * $sizeMessages = sum of the not deleted messages sizes
-     * $recent = number of recent and not deleted messages
-     * $unseen = number of unseen and not deleted messages
+     * - $numMessages = number of not deleted messages in the selected mailbox
+     * - $sizeMessages = sum of the not deleted messages sizes
+     * - $recent = number of recent and not deleted messages
+     * - $unseen = number of unseen and not deleted messages
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
@@ -741,7 +741,7 @@ class ezcMailImapTransport
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if the server sent a negative response
-     * @param $msgNum
+     * @param int $msgNum
      * @return bool
      */
     public function delete( $msgNum )

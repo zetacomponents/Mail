@@ -153,6 +153,7 @@ class ezcMailFileSet implements ezcMailParserSet
     /**
      * Opens the next file in the set and returns true on success.
      *
+     * @param bool $isFirst
      * @return bool
      */
     private function openFile( $isFirst = false )

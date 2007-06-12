@@ -64,7 +64,7 @@ class ezcMailAddress extends ezcBaseStruct
      * var_export() generates code, that calls this method when it
      * is parsed with PHP.
      *
-     * @param array(string=>mixed)
+     * @param array(string=>mixed) $array
      * @return ezcMailAddress
      */
     static public function __set_state( array $array )
@@ -74,11 +74,12 @@ class ezcMailAddress extends ezcBaseStruct
 
     /**
      * Returns string representation of email address on string cast.
+     *
      * Builds a representation in format "Name <email@example.com>", if name
      * is present, else only "<email@example.com>", if name is not present. You
-     * can simply do echo with an object of type ezcMailAddress or (since PHP 
+     * can simply do echo with an object of type ezcMailAddress or (since PHP
      * 5.2) explicitly cast it to string using (string) $object.
-     * 
+     *
      * @return string String representation of the email address.
      */
     public function __toString()

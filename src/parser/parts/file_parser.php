@@ -115,7 +115,7 @@ class ezcMailFileParser extends ezcMailPartParser
      * @throws ezcBaseFileNotFoundException
      *         if the file could not be opened.
      * @param string $fileName
-     * @returns resource
+     * @return resource
      */
     private function openFile( $fileName )
     {

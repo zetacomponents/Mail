@@ -74,7 +74,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
      *
      * @throws ezcBaseFileNotFoundException
      *         if a neccessary temporary file could not be openened.
-     * @param string $line
+     * @param string $origLine
      */
     public function parseBody( $origLine )
     {

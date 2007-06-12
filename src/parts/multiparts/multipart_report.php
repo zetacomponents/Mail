@@ -50,7 +50,7 @@ class ezcMailMultipartReport extends ezcMailMultipart
     /**
      * Constructs a new ezcMailMultipartReport.
      *
-     * @param ezcMailPart|array(ezcMailPart)
+     * @param ezcMailPart|array(ezcMailPart) $...
      */
     public function __construct()
     {

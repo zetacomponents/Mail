@@ -159,7 +159,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * If you want to connect to SMTP using TLS/SSL/SSLv2/SSLv3 use the connectionType
      * option in ezcMailSmtpTransportOptions.
      *
-     * @see ezcMailSmtpTransportOptions for options you can specify for SMTP.
+     * For options you can specify for SMTP see: {@link ezcMailSmtpTransportOptions}
      *
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined

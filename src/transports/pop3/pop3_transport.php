@@ -109,7 +109,7 @@ class ezcMailPop3Transport
      * port 995 (for SSL connections) or 110 (for plain connections). Use the
      * $options parameter to specify an SSL connection.
      *
-     * @see ezcMailPop3TransportOptions for options you can specify for POP3.
+     * For options you can specify for POP3 see: {@link ezcMailPop3TransportOptions}
      *
      * @throws ezcMailTransportException
      *         if it was not possible to connect to the server
@@ -458,6 +458,7 @@ class ezcMailPop3Transport
      * @throws ezcMailTransportException
      *         if there was no connection to the server
      *         or if the server sent a negative response
+     * @param int $msgNum
      */
     public function delete( $msgNum )
     {

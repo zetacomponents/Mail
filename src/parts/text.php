@@ -58,7 +58,7 @@ class ezcMailText extends ezcMailPart
      *
      * @param string $text
      * @param string $charset
-     * @param int $encoding
+     * @param string $encoding
      * @param string $originalCharset
      */
     public function __construct( $text, $charset = "us-ascii", $encoding = ezcMail::EIGHT_BIT, $originalCharset = 'us-ascii' )

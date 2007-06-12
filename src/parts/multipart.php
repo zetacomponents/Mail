@@ -25,6 +25,11 @@
  */
 abstract class ezcMailMultipart extends ezcMailPart
 {
+    /**
+     * Message displayed to non-MIME capable email clients.
+     *
+     * @var string
+     */
     private static $noMimeMessage = "This message is in MIME format. Since your mail reader does not understand\r\nthis format, some or all of this message may not be legible.";
 
     /**

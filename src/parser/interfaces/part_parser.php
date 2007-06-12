@@ -67,9 +67,9 @@ abstract class ezcMailPartParser
     /**
      * Returns a part parser corresponding to the given $headers.
      *
-     * @todo rename to createPartParser
      * @throws ezcBaseFileNotFoundException
      *         if a neccessary temporary file could not be openened.
+     * @param ezcMailHeadersHolder $headers
      * @return ezcMailPartParser
      */
     static public function createPartParserForHeaders( ezcMailHeadersHolder $headers )

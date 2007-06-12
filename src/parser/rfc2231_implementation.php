@@ -27,6 +27,7 @@ class ezcMailRfc2231Implementation
      * intended for internal usage. Use parseContentDisposition and
      * parseContentType to retrieve the correct header structs directly.
      *
+     * @param string $header
      * @return array( 'argument', array( 'paramName' => array( value => string, charset => string,
      * language => string ) ) );
      */
@@ -120,6 +121,7 @@ class ezcMailRfc2231Implementation
      * will not clear out any old values in the object.
      *
      * @param string $header
+     * @param ezcMailContentDispositionHeader $cd
      * @return ezcMailContentDispositionHeader
      */
     public static function parseContentDisposition( $header, ezcMailContentDispositionHeader $cd = null )

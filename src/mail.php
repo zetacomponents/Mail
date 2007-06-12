@@ -436,7 +436,7 @@ class ezcMail extends ezcMailPart
      * the collectPart() method, or create your own callback function which can
      * for example save the mail parts to disk or to a database.
      *
-     * @see ezcMailPartWalkContext for the properties you can set to the walk context.
+     * For the properties you can set to the walk context see: {@link ezcMailPartWalkContext}
      *
      * Example:
      * <code>

@@ -99,7 +99,7 @@ class ezcMailStorageSet implements ezcMailParserSet
      * exist and must be writable.
      *
      * @param ezcMailParserSet $set
-     * @param array(string=>mixed) $options
+     * @param string $location
      */
     public function __construct( ezcMailParserSet $set, $location )
     {

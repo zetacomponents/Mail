@@ -45,7 +45,7 @@ class ezcMailMultipartRelated extends ezcMailMultipart
      * Parts are added in the order provided and the first part will be recognized
      * as the main body. Parameters of the wrong type are ignored.
      *
-     * @param ezcMailPart|array(ezcMailPart)
+     * @param ezcMailPart|array(ezcMailPart) $...
      */
     public function __construct()
     {

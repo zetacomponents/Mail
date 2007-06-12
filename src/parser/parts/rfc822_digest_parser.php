@@ -69,7 +69,7 @@ class ezcMailRfc822DigestParser extends ezcMailPartParser
     /**
      * Returns a ezcMailRfc822Digest with the digested mail in it.
      *
-     * @returns ezcMailRfc822Digest
+     * @return ezcMailRfc822Digest
      */
     public function finish()
     {

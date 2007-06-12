@@ -32,7 +32,7 @@ class ezcMailMultipartDigest extends ezcMailMultipart
      * Parts are added in the order provided. Parameters of the wrong
      * type are ignored.
      *
-     * @param ezcMailRfc822Digest|array(ezcMailRfc822Digest)
+     * @param ezcMailRfc822Digest|array(ezcMailRfc822Digest) $...
      */
     public function __construct()
     {
@@ -68,7 +68,7 @@ class ezcMailMultipartDigest extends ezcMailMultipart
     /**
      * Appends a part to the list of parts.
      *
-     * @param ezcMailPart $part
+     * @param ezcMailRfc822Digest $part
      */
     public function appendPart( ezcMailRfc822Digest $part )
     {

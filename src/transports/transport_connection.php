@@ -36,7 +36,7 @@ class ezcMailTransportConnection
 
     /**
      * Options for a transport connection.
-     * 
+     *
      * @var ezcMailTransportOptions
      */
     private $options;
@@ -44,7 +44,7 @@ class ezcMailTransportConnection
     /**
      * Constructs a new connection to the $server using the port $port.
      *
-     * @see ezcMailTransportOptions for options you can specify for a transport connection.
+     * {@link ezcMailTransportOptions for options you can specify for a transport connection.}
      *
      * @todo The @ should be removed when PHP doesn't throw warnings for connect problems.
      *

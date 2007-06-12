@@ -12,6 +12,7 @@
  * This class is deprecated. Use ezcMailSmtpTransport instead.
  *
  * @package Mail
+ * @version //autogen//
  * @ignore
  */
 class ezcMailTransportSmtp extends ezcMailSmtpTransport
