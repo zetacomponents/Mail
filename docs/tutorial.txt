@@ -140,7 +140,7 @@ Sending a mail with the composer
 Sending a mail using the composer is very straightforward. This small example
 displays how to send a normal text message.
 
-.. include:: tutorial/tutorial_example_01.php
+.. include:: tutorial/tutorial_composer.php
    :literal:
 
 Sending a mail with HTML, inline images and attachments
@@ -149,7 +149,7 @@ Sending a mail with HTML, inline images and attachments
 This example shows how to send a mail with HTML text, images and attachments
 using the ezcMailComposer class.
 
-.. include:: tutorial/tutorial_example_02.php
+.. include:: tutorial/tutorial_composer_attachments.php
    :literal:
 
 Building a mail from scratch
@@ -160,13 +160,13 @@ means that you can build advanced MIME messages part by part.
 
 The first example displays how to build a similar message to the one above.
 
-.. include:: tutorial/tutorial_example_03.php
+.. include:: tutorial/tutorial_mail_simple.php
    :literal:
 
 As you can see, there is not much difference compared to the composer version.
 In the next example we will add an attachment to our manually built mail:
 
-.. include:: tutorial/tutorial_example_04.php
+.. include:: tutorial/tutorial_mail_attachments.php
    :literal:
 
 Building MIME structures that work
@@ -193,7 +193,7 @@ Sending a mail using SMTP
 This example displays how to send a mail with SMTP, by using an SSLv3
 connection.
 
-.. include:: tutorial/tutorial_example_16.php
+.. include:: tutorial/tutorial_smtp_ssl.php
    :literal:
 
 Character encoding
@@ -204,7 +204,7 @@ advanced character encoding to display mail correctly.
 
 The following example shows how to send a mail entirely encoded with iso-8859-1:
 
-.. include:: tutorial/tutorial_example_05.php
+.. include:: tutorial/tutorial_charset.php
    :literal:
 
 You can of course choose and combine any available character sets. Make sure
@@ -227,7 +227,7 @@ require two extra headers that are separated by the normal mail headers.
 
 To make it work, we create the class RFC822Digest to add these headers:
 
-.. include:: tutorial/tutorial_example_06.php
+.. include:: tutorial/tutorial_extend_create.php
    :literal:
 
 Our new class extends the ezcMailPart class. This is required for all parts of
@@ -243,7 +243,7 @@ since we want to include the full text of the mail digest.
 The new class can be used directly when building a mail. The example assumes
 that a valid ezcMail object is available in the $digest variable.
 
-.. include:: tutorial/tutorial_example_07.php
+.. include:: tutorial/tutorial_extend_use.php
    :literal:
 
 Using the ezcMailTools class
@@ -251,7 +251,7 @@ Using the ezcMailTools class
 
 In this example, we use the various methods from the ezcMailTools class.
 
-.. include:: tutorial/tutorial_example_08.php
+.. include:: tutorial/tutorial_tools.php
    :literal:
 
 
@@ -274,7 +274,7 @@ Retrieving mail using POP3
 The following example shows how to fetch messages from a POP3 account using
 various methods and to parse the messages for use.
 
-.. include:: tutorial/tutorial_example_09.php
+.. include:: tutorial/tutorial_pop3.php
    :literal:
 
 The parser returns an array of ezcMail messages with parts organized according
@@ -286,7 +286,7 @@ Retrieving mail using IMAP
 The following example shows how to fetch messages from an IMAP account using
 various functions and to parse the messages for use.
 
-.. include:: tutorial/tutorial_example_10.php
+.. include:: tutorial/tutorial_imap.php
    :literal:
 
 The parser returns an array of ezcMail messages with parts organized according
@@ -298,7 +298,7 @@ Additional usage of the IMAP transport
 The IMAP transport supports multiple mailboxes. In the following example, we
 work with mailboxes and flags.
 
-.. include:: tutorial/tutorial_example_11.php
+.. include:: tutorial/tutorial_imap_extra.php
    :literal:
 
 Working with transport options
@@ -310,7 +310,7 @@ ezcMailPop3TransportOptions, ezcMailImapTransportOptions and
 ezcMailSmtpTransportOptions. In the following example, we
 specify options when calling the POP3 transport constructor.
 
-.. include:: tutorial/tutorial_example_15.php
+.. include:: tutorial/tutorial_pop3_options.php
    :literal:
 
 Using SSL with POP3 and IMAP
@@ -320,7 +320,7 @@ The POP3 and IMAP transports allow SSL connections (if the mail server supports
 them). In the following example, we connect to an IMAP server
 using an SSL connection.
 
-.. include:: tutorial/tutorial_example_14.php
+.. include:: tutorial/tutorial_imap_ssl.php
    :literal:
 
 Retrieving mail from mbox files
@@ -329,7 +329,7 @@ Retrieving mail from mbox files
 The following example shows how to fetch all messages from an mbox file and
 to parse the messages for use.
 
-.. include:: tutorial/tutorial_example_12.php
+.. include:: tutorial/tutorial_mbox.php
    :literal:
 
 The parser returns an array of ezcMail messages with parts organized according
@@ -341,7 +341,7 @@ Parsing a message set
 The following example shows how to parse a message set retrieved from an IMAP
 or POP3 account, an mbox file, a single mail file or a variable.
 
-.. include:: tutorial/tutorial_example_13.php
+.. include:: tutorial/tutorial_parse.php
    :literal:
 
 For a more detailed example on how to use a mail object, please see the
