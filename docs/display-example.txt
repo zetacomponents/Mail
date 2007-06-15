@@ -6,7 +6,7 @@ argument on the command line. This argument is a file containing one mail file
 which is then read and parsed in line 9 to 11. Line 12 starts the display
 process.
 
-.. include:: display-example.php
+.. include:: display-example/display-example.php
    :literal:
 
 

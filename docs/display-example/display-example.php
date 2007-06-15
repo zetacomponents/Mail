@@ -1,10 +1,10 @@
 <?php
 /**
  * You can run this file for example with:
- * php display-example.php ../tests/parser/data/gmail/mail_with_attachment.mail
+ * php display-example.php ../../tests/parser/data/gmail/mail_with_attachment.mail
  */
 
-require_once "tutorial_autoload.php";
+require_once "../tutorial/tutorial_autoload.php";
 
 $set = new ezcMailFileSet( array( $argv[1] ) );
 $parser = new ezcMailParser();
