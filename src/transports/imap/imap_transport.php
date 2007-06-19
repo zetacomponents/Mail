@@ -1051,16 +1051,16 @@ class ezcMailImapTransport
      * Fetches messages by a certain flag.
      *
      * $flag can be one of:
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      RECENT     Message is recent
-     *      SEEN       Message has been read
-     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
-     *                 Opposites of the above flags
-     *      NEW        Equivalent to RECENT + UNSEEN
-     *      ALL        All the messages
+     * - ANSWERED   Message has been answered
+     * - DELETED    Message is marked to be deleted by later EXPUNGE
+     * - DRAFT      Message is marked as a draft
+     * - FLAGGED    Message is "flagged" for urgent/special attention
+     * - RECENT     Message is recent
+     * - SEEN       Message has been read
+     * - UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     *               Opposites of the above flags
+     * - NEW        Equivalent to RECENT + UNSEEN
+     * - ALL        All the messages
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
@@ -1079,16 +1079,16 @@ class ezcMailImapTransport
      * Wrapper function to fetch count of messages by a certain flag.
      *
      * $flag can be one of:
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      RECENT     Message is recent
-     *      SEEN       Message has been read
-     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     * - ANSWERED   Message has been answered
+     * - DELETED    Message is marked to be deleted by later EXPUNGE
+     * - DRAFT      Message is marked as a draft
+     * - FLAGGED    Message is "flagged" for urgent/special attention
+     * - RECENT     Message is recent
+     * - SEEN       Message has been read
+     * - UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
      *                 Opposites of the above flags
-     *      NEW        Equivalent to RECENT + UNSEEN
-     *      ALL        All the messages
+     * - NEW        Equivalent to RECENT + UNSEEN
+     * - ALL        All the messages
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
