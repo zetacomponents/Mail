@@ -148,7 +148,7 @@ class ezcMailPartTest extends ezcTestCase
                                                    '1024'
                                                    );
         $this->part->contentDisposition = $cd;
-        //var_dump( str_replace( "\r\n", "", $this->part->generateHeaders() ) );
+        // var_dump( str_replace( "\r\n", "", $this->part->generateHeaders() ) );
         $this->assertEquals( trim( $expectedResult ), str_replace( ezcMailTools::lineBreak(), "", $this->part->generateHeaders() ) );
 
     }
