@@ -279,7 +279,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $message );
         $this->assertEquals( 1, count( $mail ) );
-        $this->assertEquals( array( 0 => '1' ), $this->getAttribute( $message, 'messages' ) );
+        $this->assertEquals( array( 0 => '1' ), $this->readAttribute( $message, 'messages' ) );
         $this->assertEquals( 'ezcMailImapSet', get_class( $message ) );
     }
 
@@ -1359,7 +1359,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap = new ezcMailImapTransport( "dolly.ez.no" );
 
         // hack to get the connection property as it is private
-        $connection = $this->getAttribute( $imap, 'connection' );
+        $connection = $this->readAttribute( $imap, 'connection' );
         $this->assertEquals( true, isset( $connection->options ) );
         $this->assertEquals( false, isset( $connection->no_such_property ) );
 

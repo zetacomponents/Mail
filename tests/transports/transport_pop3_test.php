@@ -194,7 +194,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $message );
         $this->assertEquals( 1, count( $mail ) );
-        $this->assertEquals( array( 0 => '1' ), $this->getAttribute( $message, 'messages' ) );
+        $this->assertEquals( array( 0 => '1' ), $this->readAttribute( $message, 'messages' ) );
         $this->assertEquals( 'ezcMailPop3Set', get_class( $message ) );
     }
     
