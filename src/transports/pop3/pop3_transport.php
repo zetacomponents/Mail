@@ -79,21 +79,21 @@ class ezcMailPop3Transport
      *          {@link STATE_TRANSACTION} or
      *          {@link STATE_UPDATE}.
      */
-    private $state = self::STATE_NOT_CONNECTED;
+    protected $state = self::STATE_NOT_CONNECTED;
 
     /**
      * The connection to the POP3 server.
      *
      * @var ezcMailTransportConnection
      */
-    private $connection = null;
+    protected $connection = null;
 
     /**
      * Holds the initial greeting from the POP3 server when connecting.
      *
      * @var string
      */
-    private $greeting = null;
+    protected $greeting = null;
 
     /**
      * Options for a POP3 transport connection.
@@ -631,7 +631,7 @@ class ezcMailPop3Transport
      * @param string $line
      * @return bool
      */
-    private function isPositiveResponse( $line )
+    protected function isPositiveResponse( $line )
     {
         if ( strpos( $line, "+OK" ) === 0 )
         {

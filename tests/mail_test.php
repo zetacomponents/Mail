@@ -358,6 +358,40 @@ class ezcMailTest extends ezcTestCase
         $return = $this->mail->generate();
     }
 
+    public function testContentDispositionHeaderSetState()
+    {
+        $header = ezcMailContentDispositionHeader::__set_state( array(
+                        'disposition' => 'inline',
+                        'fileName' => 'spacer.gif',
+                        'creationDate' => 'Sun, 21 May 2006 16:00:50 +0400',
+                        'modificationDate' => 'Sun, 21 May 2006 16:01:50 +0400',
+                        'readDate' => 'Sun, 21 May 2006 16:02:50 +0400',
+                        'size' => 51,
+                        'additionalParameters' => array( 'foo' => 'bar' ),
+                        'fileNameLanguage' => 'EN',
+                        'fileNameCharSet' => 'ISO-8859-1'
+                ) );
+        $this->assertEquals( 'inline', $header->disposition );
+        $this->assertEquals( 'spacer.gif', $header->fileName );
+        $this->assertEquals( 'Sun, 21 May 2006 16:00:50 +0400', $header->creationDate );
+        $this->assertEquals( 'Sun, 21 May 2006 16:01:50 +0400', $header->modificationDate );
+        $this->assertEquals( 'Sun, 21 May 2006 16:02:50 +0400', $header->readDate );
+        $this->assertEquals( 51, $header->size );
+        $this->assertEquals( array( 'foo' => 'bar' ), $header->additionalParameters );
+        $this->assertEquals( 'EN', $header->fileNameLanguage );
+        $this->assertEquals( 'ISO-8859-1', $header->fileNameCharSet );
+    }
+
+    public function testMailAddressSetState()
+    {
+        $address = ezcMailAddress::__set_state( array(
+                         'email' => 'nospam@example.com',
+                         'name' => 'No Spam'
+                ) );
+        $this->assertEquals( 'nospam@example.com', $address->email );
+        $this->assertEquals( 'No Spam', $address->name );
+    }
+
     public function testIsSet()
     {
         $mail = new ezcMail();

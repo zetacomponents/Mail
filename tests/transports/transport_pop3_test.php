@@ -8,6 +8,8 @@
  * @subpackage Tests
  */
 
+include_once( 'wrappers/pop3_wrapper.php' );
+
 /**
  * @package Mail
  * @subpackage Tests
@@ -15,6 +17,234 @@
 class ezcMailTransportPop3Test extends ezcTestCase
 {
     private static $ids = array();
+
+    private static $server = 'dolly.ez.no';
+    private static $serverSSL = 'ezctest.ez.no';
+    private static $port = 110;
+    private static $portSSL = 955;
+    private static $user = 'ezcomponents';
+    private static $password = 'ezcomponents';
+    private static $userSSL = 'as';
+    private static $passwordSSL = 'wee123';
+
+    public function testWrapperMockConnectionConstructResponseNotOk()
+    {
+        try
+        {
+            $pop3 = $this->getMock( 'ezcMailPop3TransportWrapper', array( 'isPositiveResponse' ), array( self::$server, self::$port ) );
+            $pop3->expects( $this->any() )
+                 ->method( 'isPositiveResponse' )
+                 ->will( $this->returnValue( false ) );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The connection to the POP3 server is ok, but a negative response from server was received: '+OK Welcome'. Try again later.", str_replace( array( "\n", "\r" ), '', $e->getMessage() ) );
+        }
+    }
+
+    public function testWrapperMockConnectionAuthenticateResponseNotOk()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->authenticate( self::$user, self::$password );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server did not accept the username: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateApopFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->setConnection( $connection );
+        $pop3->setGreeting( '+OK POP3 server ready <1896.697170952@dbc.mtview.ca.us>');
+
+        try
+        {
+            $pop3->authenticate( self::$user, self::$password, ezcMailPop3Transport::AUTH_APOP );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server did not accept the APOP login: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateApopOk()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( '+OK custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->setConnection( $connection );
+        $pop3->setGreeting( '+OK POP3 server ready <1896.697170952@dbc.mtview.ca.us>');
+        $pop3->authenticate( self::$user, self::$password, ezcMailPop3Transport::AUTH_APOP );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->disconnect();
+        $this->assertEquals( ezcMailPop3Transport::STATE_NOT_CONNECTED, $pop3->getStatus() );
+    }
+
+    public function testWrapperMockConnectionAuthenticateFailInvalidMethod()
+    {
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+
+        try
+        {
+            $pop3->authenticate( self::$user, self::$password, 'wrong method' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Invalid authentication method provided.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionDeleteOk()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( '+OK custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->setConnection( $connection );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->delete( 1000 );
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateOkListMessagesFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->listMessages();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server sent a negative response to the LIST command: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateOkListUniqueIdentifiersFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->listUniqueIdentifiers();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server sent a negative response to the UIDL command: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateOkListUniqueIdentifiersSingleFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->listUniqueIdentifiers( 1 );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server sent a negative response to the UIDL command: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateOkStatusFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->status( $numMessages, $sizeMessages );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server did not respond with a status message: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateOkNoopFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $pop3 = new ezcMailPop3TransportWrapper( self::$server, self::$port );
+        $pop3->authenticate( self::$user, self::$password );
+        $this->assertEquals( ezcMailPop3Transport::STATE_TRANSACTION, $pop3->getStatus() );
+        $pop3->setConnection( $connection );
+
+        try
+        {
+            $pop3->noop();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The POP3 server sent a negative response to the NOOP command: custom response.", $e->getMessage() );
+        }
+        $pop3->setStatus( ezcMailPop3Transport::STATE_NOT_CONNECTED );
+    }
 
     public function testInvalidServer()
     {
@@ -32,7 +262,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         try
         {
-            $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+            $pop3 = new ezcMailPop3Transport( self::$server );
             $pop3->authenticate( "no_such_user", "ezcomponents" );
             $this->fail( "Didn't get exception when expected" );
         }
@@ -45,7 +275,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         try
         {
-            $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+            $pop3 = new ezcMailPop3Transport( self::$server );
             $pop3->authenticate( "ezcomponents", "no_such_password" );
             $this->fail( "Didn't get exception when expected" );
         }
@@ -56,7 +286,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidCallListMessages()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -70,7 +300,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidCallTop()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -84,7 +314,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidCallStatus()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -98,7 +328,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidCallDelete()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -112,11 +342,11 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testLoginAuthenticated()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
-            $pop3->authenticate( "ezcomponents", "ezcomponents" );
+            $pop3->authenticate( self::$user, self::$password );
             $this->fail( "Didn't get exception when expected" );
         }
         catch ( ezcMailTransportException $e )
@@ -126,7 +356,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidCallListUniqueMessages()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -140,8 +370,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testFetchMail()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
@@ -150,16 +380,16 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testListMessages()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $list = $pop3->listMessages();
         $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
     }
 
     public function testFetchByMessageNr1()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $message = $pop3->fetchByMessageNr( -1 );
@@ -173,8 +403,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testFetchByMessageNr2()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $message = $pop3->fetchByMessageNr( 0 );
@@ -188,8 +418,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testFetchByMessageNr3()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $message = $pop3->fetchByMessageNr( 1 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $message );
@@ -200,8 +430,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
     
     public function testfetchFromOffset1()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $set = $pop3->fetchFromOffset( -1, 10 );
@@ -215,8 +445,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testfetchFromOffset2()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $set = $pop3->fetchFromOffset( 10, 1 );
@@ -230,8 +460,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testfetchFromOffset3()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $set = $pop3->fetchFromOffset( 0, -1 );
@@ -245,8 +475,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testfetchFromOffset4()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $set = $pop3->fetchFromOffset( 1, 4 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
@@ -256,8 +486,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testfetchFromOffset5()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $set = $pop3->fetchFromOffset( 1, 0 );
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
@@ -267,8 +497,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testStatus()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $pop3->status( $num, $size );
         $this->assertEquals( 4, $num );
         $this->assertEquals( 68377, $size );
@@ -276,8 +506,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testTop()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $list = $pop3->top( 1, 1 );
         // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
         $this->assertEquals( true, count( explode( "\n", $list ) ) > 1 );
@@ -285,8 +515,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testInvalidTop()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $pop3->top( 1000, 1 );
@@ -299,8 +529,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testDelete()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         try
         {
             $pop3->delete( 1000 );
@@ -313,15 +543,15 @@ class ezcMailTransportPop3Test extends ezcTestCase
     
     public function testListUniqueIdentifiersSingle()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $this->assertEquals( array( 1 => self::$ids[0] ), $pop3->listUniqueIdentifiers( 1 ) );
     }
 
     public function testListUniqueIdentifiersMultiple()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $this->assertEquals(
             array(
                 1 => self::$ids[0],
@@ -337,8 +567,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
     {
         try
         {
-            $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-            $pop3->authenticate( "ezcomponents", "ezcomponents", ezcMailPop3Transport::AUTH_APOP );
+            $pop3 = new ezcMailPop3Transport( self::$server );
+            $pop3->authenticate( self::$user, self::$password, ezcMailPop3Transport::AUTH_APOP );
             $this->fail( "Did not get excepted exception" );
         }
         catch ( ezcMailTransportException $e )
@@ -348,16 +578,16 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testDisconnect()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $pop3->disconnect();
         $pop3->disconnect();
     }
 
     public function testGetMessageNumbersFromSet()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $set = $pop3->fetchAll();
         $messageNumbers = $set->getMessageNumbers();
         $this->assertEquals( array( 1, 2, 3, 4 ), $messageNumbers );
@@ -365,14 +595,14 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testNoop()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $pop3->noop();
     }
 
     public function testNoopNotConnected()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->disconnect();
         try
         {
@@ -386,8 +616,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testMessageSize()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
-        $pop3->authenticate( "ezcomponents", "ezcomponents" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
+        $pop3->authenticate( self::$user, self::$password );
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
@@ -402,7 +632,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
 
     public function testTransportProperties()
     {
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no" );
+        $pop3 = new ezcMailPop3Transport( self::$server );
         $this->assertEquals( true, isset( $pop3->options ) );
         $this->assertEquals( false, isset( $pop3->no_such_property ) );
 
@@ -446,12 +676,12 @@ class ezcMailTransportPop3Test extends ezcTestCase
     public function testTransportPropertiesBefore()
     {
         $options = array( 'authenticationMethod' => ezcMailPop3Transport::AUTH_PLAIN_TEXT );
-        $pop3 = new ezcMailPop3Transport( "dolly.ez.no", null, $options );
+        $pop3 = new ezcMailPop3Transport( self::$server, null, $options );
     }
 
     public function testTransportConnection()
     {
-        $connection = new ezcMailTransportConnection( "dolly.ez.no", 143 );
+        $connection = new ezcMailTransportConnection( self::$server, 143 );
         $expected = new ezcMailTransportOptions();
         $this->assertEquals( $expected, $connection->options );
     }
@@ -462,8 +692,8 @@ class ezcMailTransportPop3Test extends ezcTestCase
         {
             $this->markTestSkipped();
         }
-        $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", null, array( 'ssl' => true ) );
-        $pop3->authenticate( "as", "wee123" );
+        $pop3 = new ezcMailPop3Transport( self::$serverSSL, null, array( 'ssl' => true ) );
+        $pop3->authenticate( self::$userSSL, self::$passwordSSL );
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
@@ -479,12 +709,51 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         try
         {
-            $pop3 = new ezcMailPop3Transport( "ezctest.ez.no", 110, array( 'ssl' => true ) );
+            $pop3 = new ezcMailPop3Transport( self::$serverSSL, self::$port, array( 'ssl' => true ) );
             $this->fail( "Didn't get exception when expected" );
         }
         catch ( ezcMailTransportException $e )
         {
             $this->assertEquals( 'An error occured while sending or receiving mail. Failed to connect to the server: ezctest.ez.no:110.', $e->getMessage() );
+        }
+    }
+
+    public function testTransportOptionsDefault()
+    {
+        $options = new ezcMailPop3TransportOptions();
+        $this->assertEquals( ezcMailPop3Transport::AUTH_PLAIN_TEXT, $options->authenticationMethod );
+    }
+
+    public function testTransportOptionsSet()
+    {
+        $options = new ezcMailPop3TransportOptions();
+        $options->authenticationMethod = ezcMailPop3Transport::AUTH_APOP;
+        $this->assertEquals( ezcMailPop3Transport::AUTH_APOP, $options->authenticationMethod );
+    }
+
+    public function testTransportOptionsSetInvalid()
+    {
+        $options = new ezcMailPop3TransportOptions();
+        try
+        {
+            $options->authenticationMethod = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+        }
+    }
+
+    public function testTransportOptionsSetNotExistent()
+    {
+        $options = new ezcMailPop3TransportOptions();
+        try
+        {
+            $options->no_such_option = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
         }
     }
 

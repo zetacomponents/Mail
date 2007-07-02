@@ -1452,5 +1452,19 @@ END;
             $this->markTestSkipped( "This test doesn't work without the mbstring extension. PHP must be compiled with --enable-mbstring." );
         }
     }
+
+    public function testShutdownHandler()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'gmail/mail_with_attachment.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+
+        // call the registered shutdown function which deletes the temporary files
+        ezcMailParserShutdownHandler::shutdownCallback();
+
+        // try calling a second time, to account for the case of the temp dir missing
+        ezcMailParserShutdownHandler::shutdownCallback();
+    }
 }
 ?>

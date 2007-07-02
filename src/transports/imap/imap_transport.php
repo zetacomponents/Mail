@@ -114,39 +114,39 @@ class ezcMailImapTransport
 
     /**
      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
-     *     ANSWERED   Message has been answered
-     *     DELETED    Message is marked to be deleted by later EXPUNGE
-     *     DRAFT      Message has marked as a draft
-     *     FLAGGED    Message is "flagged" for urgent/special attention
-     *     SEEN       Message has been read
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message has marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - SEEN       Message has been read
      *
      * @var array(string)
      */
-    private static $basicFlags = array( 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'SEEN' );
+    protected static $basicFlags = array( 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'SEEN' );
 
     /**
      * Extended flags are used by {@link searchByFlag()}
-     *     ANSWERED   Message has been answered
-     *     DELETED    Message is marked to be deleted by later EXPUNGE
-     *     DRAFT      Message has marked as a draft
-     *     FLAGGED    Message is "flagged" for urgent/special attention
-     *     RECENT     Message is recent (cannot be set)
-     *     SEEN       Message has been read
-     *     UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
-     *                Opposites of the above flags
-     *     NEW        Equivalent to RECENT + UNSEEN
-     *     ALL        All the messages
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message has marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - RECENT     Message is recent (cannot be set)
+     *  - SEEN       Message has been read
+     *  - UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     * Opposites of the above flags
+     *  - NEW        Equivalent to RECENT + UNSEEN
+     *  - ALL        All the messages
      *
      * @var array(string)
      */
-    private static $extendedFlags = array( 'ALL', 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNDRAFT', 'UNFLAGGED', 'UNRECENT', 'UNSEEN' );
+    protected static $extendedFlags = array( 'ALL', 'ANSWERED', 'DELETED', 'DRAFT', 'FLAGGED', 'NEW', 'OLD', 'RECENT', 'SEEN', 'UNANSWERED', 'UNDELETED', 'UNDRAFT', 'UNFLAGGED', 'UNRECENT', 'UNSEEN' );
 
     /**
      * Used to generate a tag for sending commands to the IMAP server.
      *
      * @var string
      */
-    private $currentTag = 'A0000';
+    protected $currentTag = 'A0000';
 
     /**
      * Holds the connection state.
@@ -158,21 +158,21 @@ class ezcMailImapTransport
      *          {@link STATE_SELECTED_READONLY} or
      *          {@link STATE_LOGOUT}.
      */
-    private $state = self::STATE_NOT_CONNECTED;
+    protected $state = self::STATE_NOT_CONNECTED;
 
     /**
      * Holds the currently selected mailbox.
      *
      * @var string
      */
-    private $selectedMailbox = null;
+    protected $selectedMailbox = null;
 
     /**
      * The connection to the IMAP server.
      *
      * @var ezcMailTransportConnection
      */
-    private $connection = null;
+    protected $connection = null;
 
     /**
      * Options for an IMAP transport connection.
@@ -344,7 +344,7 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} LOGIN {$user} {$password}" );
         $response = trim( $this->connection->getLine() );
-        if ( strpos( $response, '* OK ' ) !== false )
+        if ( strpos( $response, '* OK' ) !== false )
         {
             // the server is busy waiting for authentication process to
             // respond, so it is a good idea to just close the connection,
@@ -519,7 +519,7 @@ class ezcMailImapTransport
      * @param string $newName
      * @return bool
      */
-    function renameMailbox( $mailbox, $newName )
+    public function renameMailbox( $mailbox, $newName )
     {
         if ( $this->state != self::STATE_AUTHENTICATED &&
              $this->state != self::STATE_SELECTED &&
@@ -1167,11 +1167,11 @@ class ezcMailImapTransport
      * - a message range (eg. 1:4)
      * - a message list (eg. 1,2,4)
      * $flag can be one of:
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      SEEN       Message has been read
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message is marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - SEEN       Message has been read
      * This function automatically adds the '\' in front of the flag when
      * calling the server command.
      *
@@ -1216,11 +1216,11 @@ class ezcMailImapTransport
      * - a message range (eg. 1:4)
      * - a message list (eg. 1,2,4)
      * $flag can be one of:
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      SEEN       Message has been read
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message is marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - SEEN       Message has been read
      * This function automatically adds the '\' in front of the flag when
      * calling the server command.
      *
@@ -1261,16 +1261,16 @@ class ezcMailImapTransport
      * Finds messages in the selected mailbox by a certain flag.
      *
      * $flag can be one of:
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      RECENT     Message is recent
-     *      SEEN       Message has been read
-     *      UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
-     *                 Opposites of the above flags
-     *      NEW        Equivalent to RECENT + UNSEEN
-     *      ALL        All the messages
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message is marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - RECENT     Message is recent
+     *  - SEEN       Message has been read
+     *  - UNANSWERED, UNDELETED, UNDRAFT, UNFLAGGED, OLD, UNSEEN
+     * Opposites of the above flags
+     *  - NEW        Equivalent to RECENT + UNSEEN
+     *  - ALL        All the messages
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
@@ -1279,7 +1279,7 @@ class ezcMailImapTransport
      * @param string $flag
      * @return array(int=>int)
      */
-    private function searchByFlag( $flag )
+    protected function searchByFlag( $flag )
     {
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
@@ -1413,11 +1413,11 @@ class ezcMailImapTransport
      * Draft.
      *
      * $flags is an array of flags to be set to the $mail (if provided):
-     *      ANSWERED   Message has been answered
-     *      DELETED    Message is marked to be deleted by later EXPUNGE
-     *      DRAFT      Message is marked as a draft
-     *      FLAGGED    Message is "flagged" for urgent/special attention
-     *      SEEN       Message has been read
+     *  - ANSWERED   Message has been answered
+     *  - DELETED    Message is marked to be deleted by later EXPUNGE
+     *  - DRAFT      Message is marked as a draft
+     *  - FLAGGED    Message is "flagged" for urgent/special attention
+     *  - SEEN       Message has been read
      * This function automatically adds the '\' in front of each flag when
      * calling the server command.
      *
@@ -1483,7 +1483,7 @@ class ezcMailImapTransport
      * @param string $flag
      * @return string
      */ 
-    private function normalizeFlag( $flag )
+    protected function normalizeFlag( $flag )
     {
         $flag = strtoupper( $flag );
         $flag = str_replace( '\\', '', $flag );
@@ -1507,7 +1507,7 @@ class ezcMailImapTransport
      * @param bool $reverse
      * @return array(int=>string)
      */
-    private function sort( $messages, $sortCriteria, $reverse = false )
+    protected function sort( $messages, $sortCriteria, $reverse = false )
     {
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
@@ -1578,21 +1578,21 @@ class ezcMailImapTransport
     }
 
     /**
-      * Parses $line to return the response code.
-      *
-      * Returns one of the following:
-      *     {@link RESPONSE_OK}
-      *     {@link RESPONSE_NO}
-      *     {@link RESPONSE_BAD}
-      *     {@link RESPONSE_UNTAGGED}
-      *     {@link RESPONSE_FEEDBACK}
-      *
-      * @throws ezcMailTransportException
-      *         if the IMAP response ($line) is not recognized
-      * @param string $line
-      * @return int
-      */
-    private function responseType( $line )
+     * Parses $line to return the response code.
+     *
+     * Returns one of the following:
+     *  - {@link RESPONSE_OK}
+     *  - {@link RESPONSE_NO}
+     *  - {@link RESPONSE_BAD}
+     *  - {@link RESPONSE_UNTAGGED}
+     *  - {@link RESPONSE_FEEDBACK}
+     *
+     * @throws ezcMailTransportException
+     *         if the IMAP response ($line) is not recognized
+     * @param string $line
+     * @return int
+     */
+    protected function responseType( $line )
     {
         if ( strpos( $line, 'OK ' ) !== false && strpos( $line, 'OK ' ) == 6 )
         {
@@ -1618,25 +1618,25 @@ class ezcMailImapTransport
     }
 
     /**
-      * Reads the responses from the server until encountering $tag.
-      *
-      * In IMAP, each command sent by the client is prepended with a
-      * alphanumeric tag like 'A1234'. The server sends the response
-      * to the client command as lines, and the last line in the response
-      * is prepended with the same tag, and it contains the status of
-      * the command completion ('OK', 'NO' or 'BAD').
-      * Sometimes the server sends alerts and response lines from other
-      * commands before sending the tagged line, so this method just
-      * reads all the responses until it encounters $tag.
-      * It returns the tagged line to be processed by the calling method.
-      * If $response is specified, then it will not read the response
-      * from the server before searching for $tag in $response.
-      *
-      * @param string $tag
-      * @param string $response
-      * @return string
-      */
-    private function getResponse( $tag, $response = null )
+     * Reads the responses from the server until encountering $tag.
+     *
+     * In IMAP, each command sent by the client is prepended with a
+     * alphanumeric tag like 'A1234'. The server sends the response
+     * to the client command as lines, and the last line in the response
+     * is prepended with the same tag, and it contains the status of
+     * the command completion ('OK', 'NO' or 'BAD').
+     * Sometimes the server sends alerts and response lines from other
+     * commands before sending the tagged line, so this method just
+     * reads all the responses until it encounters $tag.
+     * It returns the tagged line to be processed by the calling method.
+     * If $response is specified, then it will not read the response
+     * from the server before searching for $tag in $response.
+     *
+     * @param string $tag
+     * @param string $response
+     * @return string
+     */
+    protected function getResponse( $tag, $response = null )
     {
         if ( is_null( $response ) )
         {
@@ -1655,20 +1655,20 @@ class ezcMailImapTransport
     }
 
     /**
-      * Generates the next IMAP tag to prepend to client commands.
-      *
-      * The structure of the IMAP tag is Axxxx, where
-      *     A is a letter (uppercase for conformity)
-      *     x is a digit from 0 to 9
-      * example of generated tag: T5439
-      * It uses the class variable {@link $this->currentTag}.
-      * Everytime it is called, the tag increases by 1.
-      * If it reaches the last tag, it wraps around to the first tag.
-      * By default, the first generated tag is A0001.
-      *
-      * @return string
-      */
-    private function getNextTag()
+     * Generates the next IMAP tag to prepend to client commands.
+     *
+     * The structure of the IMAP tag is Axxxx, where
+     *  - A is a letter (uppercase for conformity)
+     *  - x is a digit from 0 to 9
+     * example of generated tag: T5439
+     * It uses the class variable {@link $this->currentTag}.
+     * Everytime it is called, the tag increases by 1.
+     * If it reaches the last tag, it wraps around to the first tag.
+     * By default, the first generated tag is A0001.
+     *
+     * @return string
+     */
+    protected function getNextTag()
     {
         $tagLetter = substr( $this->currentTag, 0, 1 );
         $tagNumber = intval( substr( $this->currentTag, 1 ) );

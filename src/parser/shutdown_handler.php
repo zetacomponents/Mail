@@ -88,7 +88,12 @@ class ezcMailParserShutdownHandler
         if ( !is_dir( $itemName ) && file_exists( $itemName ) )
         {
             unlink( $itemName );
-            return;
+            return true;
+        }
+
+        if ( !file_exists( $itemName ) )
+        {
+            return true;
         }
 
         $dir = dir( $itemName );

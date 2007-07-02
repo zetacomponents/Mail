@@ -8,6 +8,8 @@
  * @subpackage Tests
  */
 
+include_once( 'wrappers/imap_wrapper.php' );
+
 /**
  * @package Mail
  * @subpackage Tests
@@ -15,6 +17,363 @@
 class ezcMailTransportImapTest extends ezcTestCase
 {
     private static $ids = array();
+
+    private static $server = 'dolly.ez.no';
+    private static $serverSSL = 'ezctest.ez.no';
+    private static $port = 143;
+    private static $portSSL = 993;
+    private static $user = 'ezcomponents';
+    private static $password = 'ezcomponents';
+    private static $userSSL = 'as';
+    private static $passwordSSL = 'wee123';
+
+    public function testWrapperMockConnectionAuthenticateResponseNotOk()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( 'custom response' ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->authenticate( self::$user, self::$password );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Unrecognized IMAP response in line: custom response", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAuthenticateHang()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( '* OK' ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap->setConnection( $connection );
+        $result = $imap->authenticate( self::$user, self::$password );
+        $imap->disconnect();
+        $this->assertEquals( false, $result );
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockListMessagesFail()
+    {
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'responseType' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'responseType' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( ezcMailImapTransport::RESPONSE_OK ),
+                        $this->returnValue( ezcMailImapTransport::RESPONSE_OK ),
+                        $this->returnValue( 'custom response' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        try
+        {
+            $imap->listMessages();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not list messages: A0003 * SEARCH.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockListMessagesNotEmptyFail()
+    {
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX * SEARCH completed' ),
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        try
+        {
+            $imap->listMessages();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not list messages: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockListUniqueIdentifiersSingleFail()
+    {
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX * SEARCH completed' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        try
+        {
+            $imap->listUniqueIdentifiers( 1 );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not fetch the unique identifiers: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionExpungeFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'getLine', 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( "XXXX OK XXXX" ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->expunge();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. EXPUNGE failed: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockNoopFail()
+    {
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        try
+        {
+            $imap->noop();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. NOOP failed: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionAppendFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'getLine', 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->returnValue( "+ XXXX" ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->append( 'Guybrush', 'mail contents' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not append message to mailbox 'Guybrush': XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionCapabilityFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'getLine', 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->onConsecutiveCalls(
+                              $this->returnValue( '+ XXXXX' ),
+                              $this->returnValue( '* XXXXX' )
+                         ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->capability();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server responded negative to the CAPABILITY command: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionSearchByFlagFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX * SEARCH Completed' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->countByFlag( 'RECENT' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not search the messages by flags: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionClearFlagFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->clearFlag( '1000', 'SEEN' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not clear flag 'SEEN' on the messages '1000': XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockConnectionSetFlagFail()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array( 'sendData' ), array( self::$server, self::$port ) );
+        $connection->expects( $this->any() )
+                   ->method( 'sendData' )
+                   ->will( $this->returnValue( false ) );
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $imap->setConnection( $connection );
+
+        try
+        {
+            $imap->setFlag( '1000', 'SEEN' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not set flag 'SEEN' on the messages '1000': XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testGetNextTag()
+    {
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap->setCurrentTag( 'Y9999' );
+        for ( $i = 0; $i ^ 10001; ++$i )
+        {
+            $tag = $imap->getNextTag();
+        }
+        $this->assertEquals( 'A0001', $tag );
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
 
     public function testInvalidServer()
     {
@@ -33,7 +392,7 @@ class ezcMailTransportImapTest extends ezcTestCase
     {
         try
         {
-            $imap = new ezcMailImapTransport( "dolly.ez.no" );
+            $imap = new ezcMailImapTransport( self::$server );
             $imap->authenticate( "no_such_user", "ezcomponents" );
             $this->fail( "Didn't get exception when expected" );
         }
@@ -46,7 +405,7 @@ class ezcMailTransportImapTest extends ezcTestCase
     {
         try
         {
-            $imap = new ezcMailImapTransport( "dolly.ez.no" );
+            $imap = new ezcMailImapTransport( self::$server );
             $imap->authenticate( "ezcomponents", "no_such_password" );
             $this->fail( "Didn't get exception when expected" );
         }
@@ -58,7 +417,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallListMessages()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -73,7 +432,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallTop()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -88,7 +447,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallStatus()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -103,7 +462,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallDelete()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -117,7 +476,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallListMailboxes()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -131,11 +490,11 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testLoginAuthenticated()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
-            $imap->authenticate( "ezcomponents", "ezcomponents" );
+            $imap->authenticate( self::$user, self::$password );
             $this->fail( "Didn't get exception when expected" );
         }
         catch ( ezcMailTransportException $e )
@@ -145,7 +504,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallListUniqueMessages()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -160,7 +519,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidCallSelectMailbox()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -175,8 +534,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidSelectMailbox()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
            $imap->selectMailbox( 'no-such-mailbox' );
@@ -189,16 +548,16 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListMailboxes()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $mailboxes = $imap->listMailboxes();
         $this->assertNotEquals( 0, count( $mailboxes ) );
     }
 
     public function testListMailboxesInvalid()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $mailboxes = $imap->listMailboxes( '"', '*' );
@@ -211,8 +570,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchMail()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->fetchAll();
         $parser = new ezcMailParser();
@@ -222,8 +581,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListMessages()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages();
         $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
@@ -231,8 +590,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListMessagesWithAttachments()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->listMessages( "multipart/mixed" );
         $this->assertEquals( array( 1 => '1542', 2 => '1539', 4 => '63913' ), $list );
@@ -240,8 +599,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByMessageNr1()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -256,8 +615,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByMessageNr2()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -272,8 +631,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByMessageNr3()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $message = $imap->fetchByMessageNr( 1 );
         $parser = new ezcMailParser();
@@ -285,8 +644,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFromOffset1()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -301,8 +660,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFromOffset2()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -317,8 +676,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFromOffset3()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -333,8 +692,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFromOffset4()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->fetchFromOffset( 1, 4 );
         $parser = new ezcMailParser();
@@ -345,8 +704,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFromOffset5()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->fetchFromOffset( 1, 0 );
         $parser = new ezcMailParser();
@@ -357,8 +716,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testStatus()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $imap->status( $num, $size, $recent, $unseen );
         $this->assertEquals( 4, $num );
@@ -369,8 +728,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTop()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->top( 1, 1 );
         // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
@@ -379,8 +738,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTopOnlyHeaders()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $list = $imap->top( 1 );
         // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
@@ -389,8 +748,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidTop()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -404,8 +763,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testDelete()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -419,8 +778,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListUniqueIdentifiersSingle()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers( 1 );
         $this->assertEquals( array( 1 => self::$ids[0] ), $uids );
@@ -428,8 +787,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListUniqueIdentifiersMultiple()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $uids = $imap->listUniqueIdentifiers();
         $this->assertEquals(
@@ -445,8 +804,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testInvalidListUniqueIdentifiersSingle()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         try
         {
@@ -459,16 +818,16 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testDisconnect()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->disconnect();
         $imap->disconnect();
     }
 
     public function testListMessagesReadOnly()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox', true );
         $list = $imap->listMessages();
         $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
@@ -476,8 +835,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testStatusReadOnly()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox', true );
         $imap->status( $num, $size );
         $this->assertEquals( 4, $num );
@@ -486,8 +845,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTopReadOnly()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox', true );
         $list = $imap->top( 1, 1 );
         // we do a simple test here.. Any non-single line reply here is 99.9% certainly a good reply
@@ -496,8 +855,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testDeleteReadOnly()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox', true );
         try
         {
@@ -511,8 +870,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testListUniqueIdentifiersReadOnly()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox', true );
         $uids = $imap->listUniqueIdentifiers( 1 );
         $this->assertEquals( array( 1 => self::$ids[0] ), $uids );
@@ -520,8 +879,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCreateRenameDeleteMailbox()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->renameMailbox( "Guybrush", "Elaine" );
         $imap->deleteMailbox( "Elaine" );
@@ -529,8 +888,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCreateRenameDeleteMailboxInvalidName()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->createMailbox( "Inbox" );
@@ -561,7 +920,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCreateRenameDeleteMailboxNotAuthenticated()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         try
         {
             $imap->createMailbox( "Inbox" );
@@ -592,8 +951,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testRenameDeleteSelectedMailbox()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Guybrush" );
 
@@ -621,8 +980,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCopyMessage()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1", "Guybrush" );
@@ -631,8 +990,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCopyMessageInvalidDestination()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
 
         try
@@ -647,8 +1006,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCopyMessageInvalidMessage()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $imap->createMailbox( "Guybrush" );
 
@@ -666,8 +1025,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCopyMessageMailboxNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
 
         try
@@ -684,8 +1043,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "inbox" );
         $set = $imap->fetchByFlag( "undeleted" );
         $parser = new ezcMailParser();
@@ -695,8 +1054,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByFlagInvalidFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "inbox" );
         try
         {
@@ -710,8 +1069,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchByFlagNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $set = $imap->fetchByFlag( "undeleted" );
@@ -724,16 +1083,16 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCountByFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "inbox" );
         $this->assertEquals( 4, $imap->countByFlag( "seen" ) );
     }
 
     public function tesCountByFlagInvalidFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "inbox" );
         try
         {
@@ -747,8 +1106,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCountByFlagNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $count = $imap->countByFlag( "undeleted" );
@@ -761,8 +1120,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSetFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1:4", "Guybrush" );
@@ -779,8 +1138,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSetFlagInvalidFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -794,8 +1153,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSetFlagNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->setFlag( "1", "ANSWERED" );
@@ -808,8 +1167,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testClearFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1:4", "Guybrush" );
@@ -824,8 +1183,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testClearFlagInvalidFlag()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -839,8 +1198,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testClearFlagNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->clearFlag( "1", "ANSWERED" );
@@ -853,8 +1212,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testUnsorted()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->fetchAll();
         $parser = new ezcMailParser();
@@ -868,8 +1227,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetInvalidCriteria()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'invalid criteria' );
         $parser = new ezcMailParser();
@@ -879,8 +1238,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetDefaultCriteria()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'received' );
         $parser = new ezcMailParser();
@@ -890,8 +1249,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetInvalidOffset()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -905,8 +1264,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetInvalidCount()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -920,8 +1279,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetCountZero()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 0, 'subject' );
         $parser = new ezcMailParser();
@@ -935,8 +1294,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->sortFromOffset( 1, 4, 'subject' );
@@ -949,8 +1308,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetBySubject()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'subject' );
         $parser = new ezcMailParser();
@@ -964,8 +1323,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetBySubjectReverse()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'subject', true );
         $parser = new ezcMailParser();
@@ -979,8 +1338,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetByDate()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'date' );
         $parser = new ezcMailParser();
@@ -994,8 +1353,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortFromOffsetByDateReverse()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortFromOffset( 1, 4, 'date', true );
         $parser = new ezcMailParser();
@@ -1009,8 +1368,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortMessagesBySubject()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject' );
         $parser = new ezcMailParser();
@@ -1024,8 +1383,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortMessagesBySubjectReverse()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject', true );
         $parser = new ezcMailParser();
@@ -1039,8 +1398,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortMessagesOneElement()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->sortMessages( array( 1 ), 'subject' );
         $parser = new ezcMailParser();
@@ -1051,8 +1410,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortMessagesEmpty()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -1066,8 +1425,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortMessagesNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->sortMessages( array( 1, 2, 3, 4 ), 'subject' );
@@ -1080,8 +1439,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFlags()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $flags = $imap->fetchFlags( array( 1, 2, 3, 4 ) );
         $expected = array( 1 => array( '\Seen' ),
@@ -1094,8 +1453,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFlagsEmpty()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         try
         {
@@ -1109,8 +1468,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFetchFlagsNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->fetchFlags( array( 1, 2, 3, 4 ) );
@@ -1123,8 +1482,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testGetMessageNumbersFromSet()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $set = $imap->fetchAll();
         $messageNumbers = $set->getMessageNumbers();
@@ -1133,22 +1492,22 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testNoop()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->noop();
     }
 
     public function testNoopSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $imap->noop();
     }
 
     public function testNoopNotConnected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -1162,16 +1521,16 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCapability()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $capabilities = $imap->capability();
         $this->assertTrue( in_array( 'IMAP4', $capabilities ) || in_array( 'IMAP4rev1', $capabilities ) );
     }
 
     public function testCapabilitySelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $capabilities = $imap->capability();
         $this->assertTrue( in_array( 'IMAP4', $capabilities ) || in_array( 'IMAP4rev1', $capabilities ) );
@@ -1179,7 +1538,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testCapabilityNotConnected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $imap->disconnect();
         try
         {
@@ -1193,8 +1552,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testAppend()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
 
         $mail = new ezcMail();
@@ -1217,8 +1576,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testAppendInvalidDestination()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $mail = new ezcMail();
         try
         {
@@ -1232,8 +1591,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testAppendInvalidMessage()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $mail = null;
         try
@@ -1249,7 +1608,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testAppendNotAuthenticated()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $mail = new ezcMail();
         try
         {
@@ -1263,8 +1622,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testExpunge()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1:4", "Guybrush" );
@@ -1284,8 +1643,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testExpungeNotSelected()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->expunge();
@@ -1298,8 +1657,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testMessageSize()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->fetchAll();
         $parser = new ezcMailParser();
@@ -1315,7 +1674,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTransportProperties()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
         $this->assertEquals( true, isset( $imap->options ) );
         $this->assertEquals( false, isset( $imap->no_such_property ) );
 
@@ -1356,7 +1715,7 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTransportConnectionProperties()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
+        $imap = new ezcMailImapTransport( self::$server );
 
         // hack to get the connection property as it is private
         $connection = $this->readAttribute( $imap, 'connection' );
@@ -1404,8 +1763,8 @@ class ezcMailTransportImapTest extends ezcTestCase
         {
             $this->markTestSkipped();
         }
-        $imap = new ezcMailImapTransport( "ezctest.ez.no", null, array( 'ssl' => true ) );
-        $imap->authenticate( "as", "wee123" );
+        $imap = new ezcMailImapTransport( self::$serverSSL, null, array( 'ssl' => true ) );
+        $imap->authenticate( self::$userSSL, self::$passwordSSL );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->fetchAll();
         $parser = new ezcMailParser();
@@ -1422,7 +1781,7 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         try
         {
-            $imap = new ezcMailImapTransport( "ezctest.ez.no", 143, array( 'ssl' => true ) );
+            $imap = new ezcMailImapTransport( self::$serverSSL, self::$port, array( 'ssl' => true ) );
             $this->fail( "Didn't get exception when expected" );
         }
         catch ( ezcMailTransportException $e )
@@ -1433,8 +1792,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testFixTrailingParanthesis()
     {
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( self::$server );
+        $transport->authenticate( self::$user, self::$password );
         $transport->selectMailbox( "Inbox" );
         $parser = new ezcMailParser();
 
@@ -1445,8 +1804,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testTopAsPeek()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1", "Guybrush" );
@@ -1461,8 +1820,8 @@ class ezcMailTransportImapTest extends ezcTestCase
 
     public function testSortWithPeek()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         $imap->createMailbox( "Guybrush" );
         $imap->selectMailbox( "Inbox" );
         $imap->copyMessages( "1,2", "Guybrush" );
@@ -1475,10 +1834,23 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->deleteMailbox( "Guybrush" );
     }
 
+    public function testTransportOptionsSetNotExistent()
+    {
+        $options = new ezcMailImapTransportOptions();
+        try
+        {
+            $options->no_such_option = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+        }
+    }
+
     public function tearDown()
     {
-        $imap = new ezcMailImapTransport( "dolly.ez.no" );
-        $imap->authenticate( "ezcomponents", "ezcomponents" );
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
         try
         {
             $imap->deleteMailbox( "Guybrush" );

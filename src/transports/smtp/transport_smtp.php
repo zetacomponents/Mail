@@ -99,7 +99,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * @var resource
      */
-    private $connection;
+    protected $connection;
 
     /**
      * Holds the connection status.
@@ -108,7 +108,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *          {@link STATUS_CONNECTED} or
      *          {@link STATUS_AUTHENTICATED}.
      */
-    private $status;
+    protected $status;
 
     /**
      * True if authentication should be performed; otherwise false.
@@ -117,28 +117,28 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * @var bool
      */
-    private $doAuthenticate;
+    protected $doAuthenticate;
 
     /**
      * Holds if the connection should be kept open after sending a mail.
      *
      * @var bool
      */
-    private $keepConnection = false;
+    protected $keepConnection = false;
 
     /**
      * Holds the properties of this class.
      *
      * @var array(string=>mixed)
      */
-    private $properties = array();
+    protected $properties = array();
 
     /**
      * Holds the options of this class.
      *
      * @var ezcMailSmtpTransportOptions
      */
-    private $options;
+    protected $options;
 
     /**
      * Constructs a new ezcMailSmtpTransport.
@@ -425,7 +425,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @throws ezcBaseExtensionNotFoundException
      *         if trying to use SSL and the openssl extension is not installed
      */
-    private function connect()
+    protected function connect()
     {
         $errno = null;
         $errstr = null;
@@ -467,7 +467,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @throws ezcMailTransportSmtpException
      *         if the HELO/EHLO command or authentication fails
      */
-    private function login()
+    protected function login()
     {
         if ( $this->doAuthenticate )
         {
@@ -535,7 +535,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @param string $email
      * $return string
      */
-    private function composeSmtpMailAddress( $email )
+    protected function composeSmtpMailAddress( $email )
     {
         if ( !preg_match( "/<.+>/", $email ) )
         {
@@ -556,9 +556,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *         or if the MAIL FROM command failed
      * @param string $from
      */
-    private function cmdMail( $from )
+    protected function cmdMail( $from )
     {
-        if ( self::STATUS_AUTHENTICATED )
+        if ( $this->status === self::STATUS_AUTHENTICATED )
         {
             $this->sendData( 'MAIL FROM:' . $this->composeSmtpMailAddress( $from ) . '' );
             if ( $this->getReplyCode( $error ) !== '250' )
@@ -585,7 +585,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      */
     protected function cmdRcpt( $email )
     {
-        if ( self::STATUS_AUTHENTICATED )
+        if ( $this->status === self::STATUS_AUTHENTICATED )
         {
             $this->sendData( 'RCPT TO:' . $this->composeSmtpMailAddress( $email ) );
             if ( $this->getReplyCode( $error ) !== '250' )
@@ -596,15 +596,15 @@ class ezcMailSmtpTransport implements ezcMailTransport
     }
 
     /**
-     * Send the DATA command to the SMTP server.
+     * Sends the DATA command to the SMTP server.
      *
      * @throws ezcMailTransportSmtpException
      *         if there is no valid connection
      *         or if the DATA command failed
      */
-    private function cmdData()
+    protected function cmdData()
     {
-        if ( self::STATUS_AUTHENTICATED )
+        if ( $this->status === self::STATUS_AUTHENTICATED )
         {
             $this->sendData( 'DATA' );
             if ( $this->getReplyCode( $error ) !== '354' )
@@ -615,7 +615,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     }
 
     /**
-     * Send $data to the SMTP server through the connection.
+     * Sends $data to the SMTP server through the connection.
      *
      * This method appends one line-break at the end of $data.
      *
@@ -623,7 +623,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *         if there is no valid connection
      * @param string $data
      */
-    private function sendData( $data )
+    protected function sendData( $data )
     {
         if ( is_resource( $this->connection ) )
         {
@@ -642,7 +642,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *         if there is no valid connection
      * @return string
      */
-    private function getData()
+    protected function getData()
     {
         $data = '';
         $line   = '';
@@ -672,7 +672,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @param string &$line
      * @return string
      */
-    private function getReplyCode( &$line )
+    protected function getReplyCode( &$line )
     {
         return substr( trim( $line = $this->getData() ), 0, 3 );
     }
