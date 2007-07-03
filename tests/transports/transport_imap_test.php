@@ -139,6 +139,31 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
     }
 
+    public function testWrapperMockSearchMailboxFail()
+    {
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( 'XXXXX OK XXXXX' ),
+                        $this->returnValue( 'XXXXX * SEARCH completed' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        try
+        {
+            $imap->searchMailbox();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. The IMAP server could not search the messages by the specified criteria: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
     public function testWrapperMockConnectionExpungeFail()
     {
         $connection = $this->getMock( 'ezcMailTransportConnection', array( 'getLine', 'sendData' ), array( self::$server, self::$port ) );
@@ -1832,6 +1857,101 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( 0, $imap->countByFlag( "SEEN" ) );
         $imap->selectMailbox( "Inbox" );
         $imap->deleteMailbox( "Guybrush" );
+    }
+
+    public function testSearchMailboxEmpty()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+
+        $set = $imap->searchMailbox();
+        $this->assertEquals( array( 1, 2, 3, 4 ), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mails ) );
+
+        $set = $imap->searchMailbox( ' ' );
+        $this->assertEquals( array( 1, 2, 3, 4 ), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mails ) );
+    }
+
+    public function testSearchMailboxFlagged()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->searchMailbox( 'FLAGGED' );
+        $this->assertEquals( array(), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 0, count( $mails ) );
+    }
+
+    public function testSearchMailboxSeen()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->searchMailbox( 'SEEN' );
+        $this->assertEquals( array( 1, 2, 3, 4 ), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 4, count( $mails ) );
+    }
+
+    public function testSearchMailboxSubject()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->searchMailbox( 'SUBJECT "norwegian"' );
+        $this->assertEquals( array( 1, 3 ), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 2, count( $mails ) );
+    }
+
+    public function testSearchMailboxCombineSeenSubject()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->searchMailbox( 'SEEN SUBJECT "norwegian"' );
+        $this->assertEquals( array( 1, 3 ), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 2, count( $mails ) );
+    }
+
+    public function testSearchMailboxCombineFlaggedSubject()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'inbox' );
+        $set = $imap->searchMailbox( 'FLAGGED SUBJECT "norwegian"' );
+        $this->assertEquals( array(), $set->getMessageNumbers() );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+        $this->assertEquals( 0, count( $mails ) );
+    }
+
+    public function testSearchMailboxFail()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+
+        try
+        {
+            $set = $imap->searchMailbox( 'SUBJECT "pine"' );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Can't call searchMailbox() on the IMAP transport when a mailbox is not selected.", $e->getMessage() );
+        }
     }
 
     public function testTransportOptionsSetNotExistent()

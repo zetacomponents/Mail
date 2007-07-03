@@ -3,6 +3,8 @@
 
 - Implemented feature request #11061: Added missing conditions for SMTP
   methods.
+- Implemented feature request #10459: Added the searchMailbox() method to the
+  IMAP transport. Based on a patch from Sinisa Dukaric.
 
 
 1.3 - Monday 02 July 2007

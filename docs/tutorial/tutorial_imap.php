@@ -25,7 +25,7 @@ $imap->selectMailbox( 'Inbox' );
 // where the key is an message number and the value is the message unique id
     $messages = $imap->listUniqueIdentifiers();
 
-// Usually you will call one of these 5 fetch functions:
+// Usually you will call one of these fetch functions:
 
     // Fetch all messages on the server
     $set = $imap->fetchAll();
@@ -44,6 +44,13 @@ $imap->selectMailbox( 'Inbox' );
     // Use this to page through a mailbox
     // See the function description for a list of criterias and for how to sort ascending or descending
     $set = $imap->sortFromOffset( 1, 10, "Date" );
+
+    // Fetch messages which match the specified criteria.
+    // See the section 6.4.4. of RFC 1730 or 2060 for a list of criterias
+    // (http://www.faqs.org/rfcs/rfc1730.html)
+    // The following example returns the messages flagged as SEEN and with
+    // 'release' in their Subject
+    $set = $imap->searchMailbox( 'SEEN SUBJECT "release"' );
 
 // Delete a message from the server (message is not physically deleted, but it's
 // list of flags get the "Deleted" flag.

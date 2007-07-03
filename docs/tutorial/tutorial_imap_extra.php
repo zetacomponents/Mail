@@ -34,7 +34,7 @@ $imap->selectMailbox( 'Inbox' );
 
 // Clears a flag from messages
 // See the function description for a list of supported flags
-    $imap->setFlag( "1,2,4", "SEEN" );
+    $imap->clearFlag( "1,2,4", "SEEN" );
 
 // Append a message to a mailbox. $mail must contain the mail as text
 // Use this with a "Sent" or "Drafts" mailbox

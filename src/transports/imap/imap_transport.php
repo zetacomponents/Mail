@@ -980,6 +980,79 @@ class ezcMailImapTransport
     }
 
     /**
+     * Returns an ezcMailImapSet containing the messages which match the
+     * provided $criteria.
+     *
+     * See {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4. (or
+     * {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4.) for criterias
+     * which can be used for searching. The criterias can be combined in the
+     * same search string (separate the criterias with spaces).
+     *
+     * If $criteria is null or empty then it will default to 'ALL' (returns all
+     * messages in the mailbox).
+     *
+     * Examples:
+     * <code>
+     * $imap = new ezcMailImapTransport( 'imap.example.com' );
+     * $imap->authenticate( 'username', 'password' );
+     * $imap->selectMailbox( 'mailbox' ); // Inbox or another mailbox
+     *
+     * // return an ezcMailImapSet containing all messages flagged as 'SEEN'
+     * $set = $imap->searchMailbox( 'SEEN' );
+     *
+     * // return an ezcMailImapSet containing messages with 'release' in their Subject
+     * $set = $imap->searchMailbox( 'SUBJECT "release"' );
+     *
+     * // criterias can be combined:
+     * // return an ezcMailImapSet containing messages flagged as 'SEEN' and
+     * // with 'release' in their Subject
+     * $set = $imap->searchMailbox( 'SEEN SUBJECT "release"' );
+     * </code>
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the server sent a negative response
+     * @param string $criteria
+     * @return ezcMailImapSet
+     */
+    public function searchMailbox( $criteria = null )
+    {
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't call searchMailbox() on the IMAP transport when a mailbox is not selected." );
+        }
+
+        $criteria = trim( $criteria );
+        if ( empty( $criteria ) )
+        {
+            $criteria = 'ALL';
+        }
+
+        $matchingMessages = array();
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} SEARCH {$criteria}" );
+
+        $response = $this->getResponse( '* SEARCH' );
+        if ( strpos( $response, '* SEARCH' ) !== false )
+        {
+            $ids = substr( trim( $response ), 9 );
+            if ( trim( $ids ) !== "" )
+            {
+                $matchingMessages = explode( ' ', $ids );
+            }
+        }
+
+        $response = trim( $this->getResponse( $tag, $response ) );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not search the messages by the specified criteria: {$response}." );
+        }
+
+        return new ezcMailImapSet( $this->connection, array_values( $matchingMessages ) );
+    }
+
+    /**
      * Fetches $count messages from $offset sorted by $sortCriteria.
      *
      * Fetches $count messages starting from the $offset and returns them as a
