@@ -5,6 +5,8 @@
   methods.
 - Implemented feature request #10459: Added the searchMailbox() method to the
   IMAP transport. Based on a patch from Sinisa Dukaric.
+- Implemented feature request #10659: Added the getHierarchyDelimiter() method
+  to the IMAP transport.
 
 
 1.3 - Monday 02 July 2007

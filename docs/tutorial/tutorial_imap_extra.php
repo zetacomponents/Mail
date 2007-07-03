@@ -16,6 +16,9 @@ $imap->selectMailbox( 'Inbox' );
 // List existing mailboxes
     $mailboxes = $imap->listMailboxes( "", "*" );
 
+// Fetch the hierarchy delimiter character (usually "/")
+    $delimiter = $imap->getHierarchyDelimiter();
+
 // Create a new mailbox
     $imap->createMailbox( "Reports 2006" );
 

@@ -425,6 +425,65 @@ class ezcMailImapTransport
     }
 
     /**
+     * Returns the hierarchy delimiter of the IMAP server, useful for handling
+     * nested IMAP folders.
+     *
+     * Example:
+     * <code>
+     * $imap = new ezcMailImapTransport( 'imap.example.com' );
+     * $imap->authenticate( 'username', 'password' );
+     * $delimiter = $imap->getDelimiter();
+     * </code>
+     *
+     * After running the above code, $delimiter should be something like "/".
+     *
+     * Before returning the hierarchy delimiter, the connection state ($state)
+     * must be at least {@link STATE_AUTHENTICATED} or {@link STATE_SELECTED}
+     * or {@link STATE_SELECTED_READONLY}.
+     *
+     * For more information about the hierarchy delimiter, consult the IMAP RFCs
+     * {@link http://www.faqs.org/rfcs/rfc1730.html} or
+     * {@link http://www.faqs.org/rfcs/rfc2060.html}, section 6.3.8.
+     *
+     * @throws ezcMailMailTransportException
+     *         if $state is not accepted
+     *         or if the server sent a negative response
+     * @return string
+     */
+    public function getHierarchyDelimiter()
+    {
+        if ( $this->state != self::STATE_AUTHENTICATED &&
+             $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't call getDelimiter() when not successfully logged in." );
+        }
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} LIST \"\" \"\"" );
+
+        // there should be only one * LIST response line from IMAP
+        $response = trim( $this->getResponse( '* LIST' ) );
+        $parts = explode( '"', $response );
+
+        if ( count( $parts ) >= 2 )
+        {
+            $result = $parts[1];
+        }
+        else
+        {
+            throw new ezcMailTransportException( "Could not retrieve the hierarchy delimiter: {$response}." );
+        }
+
+        $response = $this->getResponse( $tag, $response );
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "Could not retrieve the hierarchy delimiter: {$response}." );
+        }
+        return $result;
+    }
+
+    /**
      * Selects the mailbox $mailbox.
      *
      * This method should be called after authentication, and before fetching

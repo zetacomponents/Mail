@@ -223,6 +223,53 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
     }
 
+    public function testWrapperMockGetHierarchyDelimiterFail()
+    {
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( '* LIST (\Noselect) "/" ""' ),
+                        $this->returnValue( 'XXXXX BAD XXXXX' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+
+        try
+        {
+            $imap->getHierarchyDelimiter();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Could not retrieve the hierarchy delimiter: XXXXX BAD XXXXX.", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    public function testWrapperMockGetHierarchyDelimiterWrongFail()
+    {
+        $imap = new ezcMailImapTransportWrapper( self::$server, self::$port );
+        $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'getResponse' ), array( self::$server, self::$port ) );
+        $imap->expects( $this->any() )
+             ->method( 'getResponse' )
+             ->will( $this->onConsecutiveCalls(
+                        $this->returnValue( '* LIST (\Noselect)' )
+                   ) );
+        $imap->authenticate( self::$user, self::$password );
+
+        try
+        {
+            $imap->getHierarchyDelimiter();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Could not retrieve the hierarchy delimiter: * LIST (\\Noselect).", $e->getMessage() );
+        }
+        $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
     public function testWrapperMockConnectionAppendFail()
     {
         $connection = $this->getMock( 'ezcMailTransportConnection', array( 'getLine', 'sendData' ), array( self::$server, self::$port ) );
@@ -1951,6 +1998,29 @@ class ezcMailTransportImapTest extends ezcTestCase
         catch ( ezcMailTransportException $e )
         {
             $this->assertEquals( "An error occured while sending or receiving mail. Can't call searchMailbox() on the IMAP transport when a mailbox is not selected.", $e->getMessage() );
+        }
+    }
+
+    public function testGetHierarchyDelimiter()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+        $imap->authenticate( self::$user, self::$password );
+        $delimiter = $imap->getHierarchyDelimiter();
+        $this->assertEquals( '/', $delimiter );
+    }
+
+    public function testGetHierarchyDelimiterFail()
+    {
+        $imap = new ezcMailImapTransport( self::$server );
+
+        try
+        {
+            $imap->getHierarchyDelimiter();
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->assertEquals( "An error occured while sending or receiving mail. Can't call getDelimiter() when not successfully logged in.", $e->getMessage() );
         }
     }
 
