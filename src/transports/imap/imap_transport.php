@@ -29,9 +29,9 @@
  * actually sets it's DELETED flag, and a later call to {@link expunge()} will
  * delete all the messages marked with the DELETED flag.
  *
- * Most IMAP commands require that a connection is established and a user
- * is authenticated. Certain commands require in addition that a mailbox is
- * selected.
+ * The IMAP server can be in different states. Most IMAP commands require
+ * that a connection is established and a user is authenticated. Certain
+ * commands require in addition that a mailbox is selected.
  *
  * The IMAP transport class allows developers to interface with an IMAP server.
  *
@@ -511,7 +511,7 @@ class ezcMailImapTransport
      * </code>
      *
      * @throws ezcMailMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if the server sent a negative response
      * @param string $reference
      * @param string $mailbox
@@ -574,7 +574,7 @@ class ezcMailImapTransport
      * After running the above code, $delimiter should be something like "/".
      *
      * @throws ezcMailMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if the server sent a negative response
      * @return string
      */
@@ -632,7 +632,7 @@ class ezcMailImapTransport
      * </code>
      *
      * @throws ezcMailMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if the server sent a negative response
      * @param string $mailbox
      * @param bool $readOnly
@@ -686,7 +686,7 @@ class ezcMailImapTransport
      * established and a user must be authenticated successfully.
      *
      * @throws ezcMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if the server sent a negative response
      * @param string $mailbox
      * @return bool
@@ -719,7 +719,7 @@ class ezcMailImapTransport
      * established and a user must be authenticated successfully.
      *
      * @throws ezcMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if trying to rename the currently selected mailbox
      *         or if the server sent a negative response
      * @param string $mailbox
@@ -759,7 +759,7 @@ class ezcMailImapTransport
      * established and a user must be authenticated successfully.
      *
      * @throws ezcMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if trying to delete the currently selected mailbox
      *         or if the server sent a negative response
      * @param string $mailbox
@@ -815,7 +815,7 @@ class ezcMailImapTransport
      * to Reports 2006.
      *
      * @throws ezcMailTransportException
-     *         if $state is not accepted
+     *         if the current server state is not accepted
      *         or if the server sent a negative response
      * @param string $messages
      * @param string $destination
