@@ -288,7 +288,7 @@ class ezcMailImapSet implements ezcMailParserSet
     }
 
     /**
-     * Returns message numbers for current set.
+     * Returns message numbers from the current set.
      *
      * @return array(int)
      */

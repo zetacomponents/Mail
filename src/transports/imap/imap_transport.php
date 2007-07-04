@@ -39,7 +39,7 @@
  *  - connect to an IMAP server ({@link __construct()})
  *  - authenticate a user with a username and password ({@link authenticate()})
  *  - select a mailbox ({@link selectMailbox()})
- *  - disconnect from an IMAP server ({@link disconnect()})
+ *  - disconnect from the IMAP server ({@link disconnect()})
  *
  * Work with mailboxes:
  *  - get the list of mailboxes of the user ({@link listMailboxes()})
@@ -54,7 +54,6 @@
  * Work with message numbers (on the currently selected mailbox):
  *  - get the message numbers and sizes of all the messages ({@link listMessages()})
  *  - get the message numbers and IDs of all the messages ({@link listUniqueIdentifiers()})
- *  - get the message numbers of a range of sorted messages ({@link sortMessages()})
  *  - get the headers of a certain message ({@link top()})
  *  - copy messages to another mailbox ({@link copyMessages()})
  *  - delete a message ({@link delete()} and {@link expunge()})
@@ -81,10 +80,10 @@
  *
  * The usual operation with an IMAP server is illustrated by this example:
  * <code>
- * // Create a new IMAP transport object by specifying the server name, optional port
+ * // create a new IMAP transport object by specifying the server name, optional port
  * // and optional SSL mode
  * $imap = new ezcMailImapTransport( 'imap.example.com', null, array( 'ssl' => true ) );
- * 
+ *
  * // Authenticate to the IMAP server
  * $imap->authenticate( 'username', 'password' );
  *
@@ -275,7 +274,7 @@ class ezcMailImapTransport
 
     /**
      * Holds the options for an IMAP transport connection.
-     * 
+     *
      * @var ezcMailImapTransportOptions
      */
     private $options;
@@ -301,7 +300,7 @@ class ezcMailImapTransport
      *
      * @throws ezcMailTransportException
      *         if it was not possible to connect to the server
-     * @throws ezcBaseFeatureNotFoundException
+     * @throws ezcBaseExtensionNotFoundException
      *         if trying to use SSL and the extension openssl is not installed
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined
@@ -655,7 +654,7 @@ class ezcMailImapTransport
             $this->connection->sendData( "{$tag} SELECT \"{$mailbox}\"" );
             $state = self::STATE_SELECTED;
         }
-        else 
+        else
         {
             $this->connection->sendData( "{$tag} EXAMINE \"{$mailbox}\"" );
             $state = self::STATE_SELECTED_READONLY;
@@ -1138,7 +1137,7 @@ class ezcMailImapTransport
      * </code>
      *
      * @todo add UIVALIDITY value to UID (like in POP3) (if necessary).
-     * 
+     *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
      *         or if the server sent a negative response
@@ -1661,7 +1660,7 @@ class ezcMailImapTransport
      *         if a mailbox is not selected
      *         or if the server sent a negative response
      * @param array $messages
-     * @return array(int=>mixed)
+     * @return array(mixed)
      */
     public function fetchFlags( $messages )
     {
@@ -1687,7 +1686,7 @@ class ezcMailImapTransport
                 $flags[intval( $matches[1] )] = $parts;
             }
             $response = trim( $this->connection->getLine() );
-        }         
+        }
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
