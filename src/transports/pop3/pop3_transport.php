@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailPop3Transport class
+ * File containing the ezcMailPop3Transport class.
  *
  * @package Mail
  * @version //autogen//
@@ -9,14 +9,58 @@
  */
 
 /**
- * ezcMailPop3Transport implements POP3 for mail retrieval.
+ * The class ezcMailPop3Transport implements functionality for handling POP3
+ * mail servers.
  *
- * The implementation supports most of the basic commands specified in
- * http://www.faqs.org/rfcs/rfc1939.html
+ * The implementation supports most of the commands specified in:
+ *  - {@link http://www.faqs.org/rfcs/rfc1939.html} (POP3)
+ *  - {@link http://www.faqs.org/rfcs/rfc1734.html} (POP3 AUTH)
  *
- * The implementation also supports the following authentication
- * methods:
- * http://www.faqs.org/rfc/rfc1734.txt - auth
+ * The POP3 server can be in different states. Most POP3 commands require
+ * that a connection is established and a user is authenticated.
+ *
+ * The POP3 transport class allows developers to interface with a POP3 server.
+ *
+ * Basic commands:
+ *  - connect to a POP3 server ({@link __construct()})
+ *  - authenticate a user with a username and password ({@link authenticate()})
+ *  - disconnect from the POP3 server ({@link disconnect()})
+ *
+ * Work with message numbers:
+ *  - get the message numbers and sizes of all the messages ({@link listMessages()})
+ *  - get the message numbers and IDs of all the messages ({@link listUniqueIdentifiers()})
+ *  - get the headers of a certain message ({@link top()})
+ *  - delete a message ({@link delete()})
+ *
+ * Work with ezcMailPop3Set sets (parseable with ezcMailParser):
+ *  - create a set from all messages ({@link fetchAll()})
+ *  - create a set from a certain message ({@link fetchByMessageNr()})
+ *  - create a set from a range of messages ({@link fetchFromOffset()})
+ *
+ * Miscellaneous commands:
+ *  - get the status of messages on the server ({@link status()})
+ *  - issue a NOOP command to keep the connection alive ({@link noop()})
+ *
+ * The usual operation with a POP3 server is illustrated by this example:
+ * <code>
+ * // create a new POP3 transport object by specifying the server name, optional port
+ * // and optional SSL mode
+ * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, array( 'ssl' => true ) );
+ *
+ * // Authenticate to the POP3 server
+ * $pop3->authenticate( 'username', 'password' );
+ *
+ * // issue commands to the POP3 server
+ * // for example get the headers of the first message, which can be
+ * // parsed with ezcMailVariableSet and ezcMailParser
+ * $headers = $pop3->top( 1 );
+ *
+ * // see the above list of commands or consult the online documentation for
+ * // the full list of commands you can issue to an POP3 server and examples
+ *
+ * // disconnect from the POP3 server
+ * $pop3->disconnect();
+ * </code>
  *
  * @todo ignore messages of a certain size?
  * @todo // support for signing?
@@ -97,7 +141,7 @@ class ezcMailPop3Transport
 
     /**
      * Options for a POP3 transport connection.
-     * 
+     *
      * @var ezcMailPop3TransportOptions
      */
     private $options;
@@ -109,11 +153,20 @@ class ezcMailPop3Transport
      * port 995 (for SSL connections) or 110 (for plain connections). Use the
      * $options parameter to specify an SSL connection.
      *
-     * For options you can specify for POP3 see: {@link ezcMailPop3TransportOptions}
+     * For options you can specify for POP3 see ezcMailPop3TransportOptions.
+     *
+     * Example of creating a POP3 transport:
+     * <code>
+     * // replace with your POP3 server address
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     *
+     * // if you want to use SSL:
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, array( 'ssl' => true ) );
+     * </code>
      *
      * @throws ezcMailTransportException
      *         if it was not possible to connect to the server
-     * @throws ezcBaseFeatureNotFoundException
+     * @throws ezcBaseExtensionNotFoundException
      *         if trying to use SSL and the extension openssl is not installed
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined
@@ -155,7 +208,7 @@ class ezcMailPop3Transport
     }
 
     /**
-     * Sets the property $name to $value.
+     * Sets the value of the property $name to $value.
      *
      * @throws ezcBasePropertyNotFoundException
      *         if the property $name does not exist
@@ -188,6 +241,7 @@ class ezcMailPop3Transport
      * @throws ezcBasePropertyNotFoundException
      *         if the property $name does not exist
      * @param string $name
+     * @return mixed
      * @ignore
      */
     public function __get( $name )
@@ -247,6 +301,15 @@ class ezcMailPop3Transport
      *
      * This method should be called directly after the construction of this
      * object.
+     *
+     * Example:
+     * <code>
+     * // replace with your POP3 server address
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     *
+     * // replace the values with your username and password for the POP3 server
+     * $pop3->authenticate( 'username', 'password' );
+     * </code>
      *
      * @throws ezcMailTransportException
      *         if there is no connection to the server
@@ -314,15 +377,27 @@ class ezcMailPop3Transport
     }
 
     /**
-     * Returns a list of the messages on the server and the size of the
+     * Returns an array of the message numbers on the server and the size of the
      * messages in bytes.
      *
-     * The format of the returned array is array(message_id=>message_size)
+     * The format of the returned array is:
+     * <code>
+     *   array( message_id => message_size );
+     * </code>
+     *
+     * Example:
+     * <code>
+     *   array( 2 => 1700, 5 => 1450, 6 => 21043 );
+     * </code>
+     *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
      *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
-     * @return array(int=>int)
+     * @return array(int)
      */
     public function listMessages()
     {
@@ -357,17 +432,29 @@ class ezcMailPop3Transport
      *
      * The unique identifier can be used to recognize mail from servers
      * between requests. In contrast to the message numbers the unique numbers
-     * assigned to an email never changes.
-     *
-     * The format of the returned array is array(message_num=>unique_identifier).
+     * assigned to an email usually never changes.
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
+     * The format of the returned array is:
+     * <code>
+     *   array( message_num => unique_id );
+     * </code>
+     *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example:
+     * <code>
+     *   array( 1 => '000001fc4420e93a', 2 => '000001fd4420e93a' );
+     * </code>
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @param int $msgNum
-     * @return array(int=>string)
+     * @return array(string)
      */
     public function listUniqueIdentifiers( $msgNum = null )
     {
@@ -415,12 +502,29 @@ class ezcMailPop3Transport
     }
 
     /**
-     * Returns the number of messages on the server and the combined
-     * size of the messages through the input variables $numMessages and
-     * $sizeMessages.
+     * Returns information about the messages on the server.
+     *
+     * The information returned through the parameters is:
+     *  - $numMessages = number of messages
+     *  - $sizeMessages = sum of the messages sizes
+     *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example of returning the status of messages on the server:
+     * <code>
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     * $pop3->authenticate( 'username', 'password' );
+     *
+     * $pop3->status( $numMessages, $sizeMessages );
+     * </code>
+     *
+     * After running the above code, $numMessages and $sizeMessages will be
+     * populated with values.
      *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @param int &$numMessages
      * @param int &$sizeMessages
@@ -450,13 +554,18 @@ class ezcMailPop3Transport
     /**
      * Deletes the message with the message number $msgNum from the server.
      *
-     * The message number must be a valid identifier fetched with e.g
-     * listMessages().
+     * The message number must be a valid identifier fetched with (example)
+     * {@link listMessages()}.
+     *
      * Any future reference to the message-number associated with the message
      * in a command generates an error.
      *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @param int $msgNum
      */
@@ -485,8 +594,28 @@ class ezcMailPop3Transport
      *
      * Note: POP3 servers are not required to support this command and it may fail.
      *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example of listing the mail headers of all the messages from the server:
+     * <code>
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     * $pop3->authenticate( 'username', 'password' );
+     *
+     * $parser = new ezcMailParser();
+     * $messages = $pop3->listMessages();
+     * foreach ( $messages as $messageNr => $size )
+     * {
+     *     $set = new ezcMailVariableSet( $pop3->top( $messageNr ) );
+     *     $mail = $parser->parseMail( $set );
+     *     $mail = $mail[0];
+     *     echo "From: {$mail->from}, Subject: {$mail->subject}, Size: {$size}\n";
+     * }
+     * </code>
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @param int $msgNum
      * @param int $numLines
@@ -517,13 +646,33 @@ class ezcMailPop3Transport
     }
 
     /**
-     * Returns a parserset with all the messages on the server.
+     * Returns an ezcMailPop3Set with all the messages on the server.
      *
      * If $deleteFromServer is set to true the mail will be removed from the
      * server after retrieval. If not it will be left.
      *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example:
+     * <code>
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     * $pop3->authenticate( 'username', 'password' );
+     *
+     * $set = $pop3->fetchAll();
+     *
+     * // parse $set with ezcMailParser
+     * $parser = new ezcMailParser();
+     * $mails = $parser->parseMail( $set );
+     * foreach ( $mails as $mail )
+     * {
+     *     // process $mail which is an ezcMail object
+     * }
+     * </code>
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @param bool $deleteFromServer
      * @return ezcMailParserSet
@@ -533,17 +682,33 @@ class ezcMailPop3Transport
         $messages = $this->listMessages();
         return new ezcMailPop3Set( $this->connection, array_keys( $messages ), $deleteFromServer );
     }
+
     /**
-     * Returns an ezcMailPop3Set containing only the $number -th message in
-     * the mailbox.
+     * Returns an ezcMailPop3Set containing only the $number -th message from
+     * the server.
      *
      * If $deleteFromServer is set to true the mail will be removed from the
      * server after retrieval. If not it will be left.
+     *
      * Note: for POP3 the first message is 1 (so for $number = 0 the exception
      * will be thrown).
-     * 
+     *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example:
+     * <code>
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     * $pop3->authenticate( 'username', 'password' );
+     *
+     * $set = $pop3->fetchByMessageNr( 1 );
+     *
+     * // $set can be parsed with ezcMailParser
+     * </code>
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @throws ezcMailNoSuchMessageException
      *         if the message $number is out of range
@@ -562,14 +727,29 @@ class ezcMailPop3Transport
     }
 
     /**
-     * Returns an ezcMailPop3Set with $count messages starting from $offset.
+     * Returns an ezcMailPop3Set with $count messages starting from $offset from
+     * the server.
      *
      * Fetches $count messages starting from the $offset and returns them as a
      * ezcMailPop3Set. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
-     * 
+     *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
+     * Example:
+     * <code>
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
+     * $pop3->authenticate( 'username', 'password' );
+     *
+     * $set = $pop3->fetchFromOffset( 1, 10 );
+     *
+     * // $set can be parsed with ezcMailParser
+     * </code>
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      * @throws ezcMailInvalidLimitException
      *         if $count is negative
@@ -605,8 +785,12 @@ class ezcMailPop3Transport
     /**
      * Sends a NOOP command to the server, use it to keep the connection alive.
      *
+     * Before calling this method, a connection to the POP3 server must be
+     * established and a user must be authenticated successfully.
+     *
      * @throws ezcMailTransportException
      *         if there was no connection to the server
+     *         or if not authenticated
      *         or if the server sent a negative response
      */
     public function noop()

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailPop3Set class
+ * File containing the ezcMailPop3Set class.
  *
  * @package Mail
  * @version //autogen//
@@ -12,9 +12,11 @@
  * ezcMailPop3Set is an internal class that fetches a series of mail
  * from the pop3 server.
  *
- * The pop3 set works on an existing connection and a list of the messages that
+ * The POP3 set works on an existing connection and a list of the messages that
  * the user wants to fetch. The user must accept all the data for each mail for
  * correct behaviour.
+ *
+ * The set can be parsed with ezcMailParser.
  *
  * @package Mail
  * @version //autogen//
@@ -39,10 +41,11 @@ class ezcMailPop3Set implements ezcMailParserSet
     private $currentMessage = null;
 
     /**
-     * This variable is true if there is more data in the mail that is being fetched.
+     * This variable is true if there is more data in the mail that is being
+     * fetched.
      *
-     * It is false if there is no mail being fetched currently or if all the data of the current mail
-     * has been fetched.
+     * It is false if there is no mail being fetched currently or if all the
+     * data of the current mail has been fetched.
      *
      * @var bool
      */
@@ -56,16 +59,16 @@ class ezcMailPop3Set implements ezcMailParserSet
     private $deleteFromServer = false;
 
     /**
-     * Constructs a new pop3 parser set that will fetch the messages with the
-     * id's.
+     * Constructs a new POP3 parser set that will fetch the messages $messages.
      *
-     * $connection must hold a valid connection to a pop3 server that is ready to retrieve
-     * the messages.
+     * $connection must hold a valid connection to a POP3 server that is ready
+     * to retrieve the messages.
      *
-     * If $deleteFromServer is set to true the messages will be deleted after retrieval.
+     * If $deleteFromServer is set to true the messages will be deleted after
+     * retrieval.
      *
      * @throws ezcMailTransportException
-     *         if the server sent a negative response.
+     *         if the server sent a negative response
      * @param ezcMailTransportConnection $connection
      * @param array(ezcMail) $messages
      * @param bool $deleteFromServer
@@ -90,8 +93,8 @@ class ezcMailPop3Set implements ezcMailParserSet
     /**
      * Returns one line of data from the current mail in the set.
      *
-     * Null is returned if there is no current mail in the set or
-     * the end of the mail is reached,
+     * Null is returned if there is no current mail in the set or the end of the
+     * mail is reached.
      *
      * @return string
      */
@@ -126,7 +129,7 @@ class ezcMailPop3Set implements ezcMailParserSet
      * False is returned if there are no more mail in the set.
      *
      * @throws ezcMailTransportException
-     *         if the server sent a negative response.
+     *         if the server sent a negative response
      * @return bool
      */
     public function nextMail()
@@ -157,7 +160,7 @@ class ezcMailPop3Set implements ezcMailParserSet
     }
 
     /**
-     * Returns whether the set has mails
+     * Returns whether the set has mails.
      *
      * @return bool
      */
@@ -167,9 +170,9 @@ class ezcMailPop3Set implements ezcMailParserSet
     }
 
     /**
-     * Returns message numbers for current set.
+     * Returns message numbers from the current set.
      *
-     * @return array(int=>int)
+     * @return array(int)
      */
     public function getMessageNumbers()
     {
