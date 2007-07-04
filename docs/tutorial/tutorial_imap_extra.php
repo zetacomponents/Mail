@@ -43,10 +43,4 @@ $imap->selectMailbox( 'Inbox' );
 // Use this with a "Sent" or "Drafts" mailbox
     $imap->append( "Sent", $mail );
 
-// Create a new mail parser object
-$parser = new ezcMailParser();
-
-// Parse the set of messages retrieved from the server earlier
-$mail = $parser->parseMail( $set );
-
 ?>

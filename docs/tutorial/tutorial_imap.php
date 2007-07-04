@@ -40,10 +40,14 @@ $imap->selectMailbox( 'Inbox' );
     // See the function description for a list of supported flags
     $set = $imap->fetchByFlag( "DELETED" );
 
-    // Fetch a range of messages sorted by a criteria
+    // Fetch a range of messages sorted by Date
     // Use this to page through a mailbox
     // See the function description for a list of criterias and for how to sort ascending or descending
     $set = $imap->sortFromOffset( 1, 10, "Date" );
+
+    // Sort the specified messages by Date
+    // See the function description for a list of criterias and for how to sort ascending or descending
+    $set = $imap->sortMessages( "1,2,3,4,5", "Date" );
 
     // Fetch messages which match the specified criteria.
     // See the section 6.4.4. of RFC 1730 or 2060 for a list of criterias

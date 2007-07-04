@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailImapSet class
+ * File containing the ezcMailImapSet class.
  *
  * @package Mail
  * @version //autogen//
@@ -10,9 +10,9 @@
 
 /**
  * ezcMailImapSet is an internal class that fetches a series of mail
- * from the imap server.
+ * from the IMAP server.
  *
- * The imap set works on an existing connection and a list of the messages that
+ * The IMAP set works on an existing connection and a list of the messages that
  * the user wants to fetch. The user must accept all the data for each mail for
  * correct behaviour.
  *
@@ -70,16 +70,15 @@ class ezcMailImapSet implements ezcMailParserSet
     private $currentTag = 'A0000';
 
     /**
-     * Constructs a new imap parser set that will fetch the messages with the
-     * id's.
+     * Constructs a new imap parser set that will fetch the messages with the IDs.
      *
-     * $connection must hold a valid connection to a imap server that is ready to retrieve
-     * the messages.
+     * $connection must hold a valid connection to a imap server that is ready
+     * to retrieve the messages.
      *
      * If $deleteFromServer is set to true the messages will be deleted after retrieval.
      *
      * @throws ezcMailTransportException
-     *         if the server send a negative response.
+     *         if the server send a negative response
      * @param ezcMailTransportConnection $connection
      * @param array(int) $messages
      * @param bool $deleteFromServer
@@ -152,7 +151,7 @@ class ezcMailImapSet implements ezcMailParserSet
      * False is returned if there are no more mail in the set.
      *
      * @throws ezcMailTransportException
-     *         if the server sent a negative response.
+     *         if the server sent a negative response
      * @return bool
      */
     public function nextMail()
@@ -198,24 +197,30 @@ class ezcMailImapSet implements ezcMailParserSet
     }
 
     /**
-      * Reads the responses from the server until encountering $tag.
-      *
-      * In IMAP, each command sent by the client is prepended with a
-      * alphanumeric tag like 'A1234'. The server sends the response
-      * to the client command as lines, and the last line in the response
-      * is prepended with the same tag, and it contains the status of
-      * the command completion ('OK', 'NO' or 'BAD').
-      * Sometimes the server sends alerts and response lines from other
-      * commands before sending the tagged line, so this method just
-      * reads all the responses until it encountering $tag.
-      * It returns the tagged line to be processed by the calling method.
-      * If $response is specified, then it will not read the response
-      * from the server before searching for $tag in $response.
-      *
-      * @param string $tag
-      * @param string $response
-      * @return string
-      */
+     * Reads the responses from the server until encountering $tag.
+     *
+     * In IMAP, each command sent by the client is prepended with a
+     * alphanumeric tag like 'A1234'. The server sends the response
+     * to the client command as lines, and the last line in the response
+     * is prepended with the same tag, and it contains the status of
+     * the command completion ('OK', 'NO' or 'BAD').
+     *
+     * Sometimes the server sends alerts and response lines from other
+     * commands before sending the tagged line, so this method just
+     * reads all the responses until it encounters $tag.
+     *
+     * It returns the tagged line to be processed by the calling method.
+     *
+     * If $response is specified, then it will not read the response
+     * from the server before searching for $tag in $response.
+     *
+     * Before calling this method, a connection to the IMAP server must be
+     * established.
+     *
+     * @param string $tag
+     * @param string $response
+     * @return string
+     */
     private function getResponse( $tag = null, $response = null )
     {
         if ( is_null( $response ) )
@@ -235,19 +240,24 @@ class ezcMailImapSet implements ezcMailParserSet
     }
 
     /**
-      * Generates the next IMAP tag to prepend to client commands.
-      *
-      * The structure of the IMAP tag is Axxxx, where
-      *     A is a letter (uppercase for conformity, it can be lowercase also)
-      *     x is a digit from 0 to 9
-      * example of generated tag: T5439
-      * It uses the class variable {@link $this->currentTag}.
-      * Everytime it is called, the tag increases by 1.
-      * If it reaches the last tag, it wraps around to the first tag.
-      * By default, the first tag is A0001.
-      *
-      * @return string
-      */
+     * Generates the next IMAP tag to prepend to client commands.
+     *
+     * The structure of the IMAP tag is Axxxx, where:
+     *  - A is a letter (uppercase for conformity)
+     *  - x is a digit from 0 to 9
+     *
+     * example of generated tag: T5439
+     *
+     * It uses the class variable $this->currentTag.
+     *
+     * Everytime it is called, the tag increases by 1.
+     *
+     * If it reaches the last tag, it wraps around to the first tag.
+     *
+     * By default, the first generated tag is A0001.
+     *
+     * @return string
+     */
     private function getNextTag()
     {
         $tagLetter = substr( $this->currentTag, 0, 1 );
@@ -268,7 +278,7 @@ class ezcMailImapSet implements ezcMailParserSet
     }
 
     /**
-     * Returns whether the set has mails
+     * Returns whether the set has mails.
      *
      * @return bool
      */
@@ -280,7 +290,7 @@ class ezcMailImapSet implements ezcMailParserSet
     /**
      * Returns message numbers for current set.
      *
-     * @return array(int=>int)
+     * @return array(int)
      */
     public function getMessageNumbers()
     {
