@@ -25,6 +25,11 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     const HOST_SSL = 'ezctest.ez.no';
     const PORT_SSL = 465;
 
+    const HOST_MTA = 'mta1.ez.no';
+    const PORT_MTA = 25;
+    const USER_MTA = 'ezcomponents@mail.ez.no';
+    const PASS_MTA = 'ezcomponents';
+
     protected function setUp()
     {
         if ( @fsockopen( self::HOST, self::PORT, $errno, $errstr, 1 ) === false )
@@ -40,7 +45,6 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         $this->mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
     }
 
-    
     public function testWrapperMockLoginAuthenticateFail250()
     {
         $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST, 'user', 'password', self::PORT ) );
@@ -641,6 +645,63 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         catch ( ezcMailTransportException $e )
         {
             $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testAuthLogin()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( self::HOST_MTA, self::USER_MTA, self::PASS_MTA, self::PORT_MTA, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP plain test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+
+    public function testAuthLoginWrongUsername()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( self::HOST_MTA, 'this user could not possible exist', self::PASS_MTA, self::PORT_MTA, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP plain test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+            $this->fail( 'Expected message was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+        }
+    }
+
+    public function testAuthLoginWrongPassword()
+    {
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( self::HOST_MTA, self::USER_MTA, 'wrong password', self::PORT_MTA, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_PLAIN ) );
+            $mail = new ezcMail();
+            $mail->from = new ezcMailAddress( 'nospam@ez.no', 'From' );
+            $mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'To' ) );
+            $mail->subject = "SMTP plain test";
+            $mail->body = new ezcMailText( "It doesn't look as if it's ever used." );
+            $mail->generate();
+            $smtp->send( $mail );
+            $this->fail( 'Expected message was not thrown.' );
+        }
+        catch ( ezcMailTransportException $e )
+        {
         }
     }
 
