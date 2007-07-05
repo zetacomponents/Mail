@@ -70,9 +70,23 @@ class ezcMailImapSet implements ezcMailParserSet
     private $currentTag = 'A0000';
 
     /**
-     * Constructs a new imap parser set that will fetch the messages with the IDs.
+     * Holds the mode in which the IMAP commands operate.
      *
-     * $connection must hold a valid connection to a imap server that is ready
+     * @var string
+     */
+    private $uid;
+
+    /**
+     * Holds the options for an IMAP mail set.
+     *
+     * @var ezcMailImapSetOptions
+     */
+    private $options;
+
+    /**
+     * Constructs a new IMAP parser set that will fetch the messages $messages.
+     *
+     * $connection must hold a valid connection to a IMAP server that is ready
      * to retrieve the messages.
      *
      * If $deleteFromServer is set to true the messages will be deleted after retrieval.
@@ -82,13 +96,16 @@ class ezcMailImapSet implements ezcMailParserSet
      * @param ezcMailTransportConnection $connection
      * @param array(int) $messages
      * @param bool $deleteFromServer
+     * @param array(string=>mixed) $options
      */
-    public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false )
+    public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false, array $options = array() )
     {
         $this->connection = $connection;
         $this->messages = $messages;
         $this->deleteFromServer = $deleteFromServer;
         $this->nextData = null;
+        $this->options = new ezcMailImapSetOptions( $options );
+        $this->uid = ( $this->options->uidReferencing ) ? ezcMailImapTransport::UID : ezcMailImapTransport::NO_UID;
     }
 
     /**
@@ -113,7 +130,7 @@ class ezcMailImapSet implements ezcMailParserSet
     {
         if ( $this->currentMessage === null )
         {
-            // Instead of calling $this->nextMail() in the constructor, it is called
+            // instead of calling $this->nextMail() in the constructor, it is called
             // here, to avoid sending commands to the server when creating the set, and
             // instead send the server commands when parsing the set (see ezcMailParser).
             $this->nextMail();
@@ -133,7 +150,7 @@ class ezcMailImapSet implements ezcMailParserSet
                     if ( $this->deleteFromServer === true )
                     {
                         $tag = $this->getNextTag();
-                        $this->connection->sendData( "{$tag} STORE {$this->currentMessage} +FLAGS (\\Deleted)" );
+                        $this->connection->sendData( "{$tag} {$this->uid}STORE {$this->currentMessage} +FLAGS (\\Deleted)" );
                         // skip OK response ("{$tag} OK Store completed.")
                         $response = $this->getResponse( $tag );
                     }
@@ -168,7 +185,7 @@ class ezcMailImapSet implements ezcMailParserSet
         if ( $this->currentMessage !== false )
         {
             $tag = $this->getNextTag();
-            $this->connection->sendData( "{$tag} FETCH {$this->currentMessage} RFC822" );
+            $this->connection->sendData( "{$tag} {$this->uid}FETCH {$this->currentMessage} RFC822" );
             $response = $this->connection->getLine();
             if ( strpos( $response, ' NO ' ) !== false ||
                  strpos( $response, ' BAD ') !== false )

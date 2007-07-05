@@ -301,6 +301,20 @@ work with mailboxes and flags.
 .. include:: tutorial/tutorial_imap_extra.php
    :literal:
 
+Refering messages by their unique IDs in IMAP
+---------------------------------------------
+
+With IMAP it is possible to refer to messages using their unique IDs, which
+usually never change, unlike message numbers. Unfortunately this is not
+possible yet in POP3.
+
+The next example shows how to enable refering to messages by their unique IDs.
+To see the list of the methods which support unique IDs referencing, consult
+the documentation for the ezcMailImapTransport class.
+
+.. include:: tutorial/tutorial_imap_uids.php
+   :literal:
+
 Working with transport options
 ------------------------------
 

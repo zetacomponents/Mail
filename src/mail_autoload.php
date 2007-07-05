@@ -39,6 +39,7 @@ return array(
     'ezcMailHeaderFolder'               => 'Mail/internal/header_folder.php',
     'ezcMailHeadersHolder'              => 'Mail/parser/headers_holder.php',
     'ezcMailImapSet'                    => 'Mail/transports/imap/imap_set.php',
+    'ezcMailImapSetOptions'             => 'Mail/transports/imap/imap_set_options.php',
     'ezcMailImapTransport'              => 'Mail/transports/imap/imap_transport.php',
     'ezcMailImapTransportOptions'       => 'Mail/transports/imap/imap_options.php',
     'ezcMailMboxSet'                    => 'Mail/transports/mbox/mbox_set.php',

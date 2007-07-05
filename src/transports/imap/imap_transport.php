@@ -22,8 +22,8 @@
  *
  * Messages are organized in mailboxes, and are identified by a message number
  * (which can change over time) and a unique ID (which does not change under
- * normal circumstances). Commands which handle messages usually use message
- * numbers to identify messages.
+ * normal circumstances). The commands operating on messages can handle both
+ * modes (message numbers or unique IDs).
  *
  * Messages are marked by certain flags (SEEN, DRAFT, etc). Deleting a message
  * actually sets it's DELETED flag, and a later call to {@link expunge()} will
@@ -34,6 +34,9 @@
  * commands require in addition that a mailbox is selected.
  *
  * The IMAP transport class allows developers to interface with an IMAP server.
+ * The commands which support unique IDs to refer to messages (see
+ * ezcMailImapTransportOptions to find out how to enable unique IDs referencing)
+ * are marked with [*]:
  *
  * Basic commands:
  *  - connect to an IMAP server ({@link __construct()})
@@ -54,24 +57,25 @@
  * Work with message numbers (on the currently selected mailbox):
  *  - get the message numbers and sizes of all the messages ({@link listMessages()})
  *  - get the message numbers and IDs of all the messages ({@link listUniqueIdentifiers()})
- *  - get the headers of a certain message ({@link top()})
- *  - copy messages to another mailbox ({@link copyMessages()})
- *  - delete a message ({@link delete()} and {@link expunge()})
+ *  - [*] get the headers of a certain message ({@link top()})
+ *  - [*] delete a message ({@link delete()} and {@link expunge()})
+ *  - [*] copy messages to another mailbox ({@link copyMessages()})
+ *  - [*] get the sizes of the specified messages ({@link fetchSizes()})
+ *
+ * Work with flags (on the currently selected mailbox):
+ *  - [*] get the flags of the specified messages ({@link fetchFlags()})
+ *  - [*] set a flag on the specified messages ({@link setFlag()})
+ *  - [*] clear a flag from the specified messages ({@link clearFlag()})
  *
  * Work with ezcMailImapSet sets (parseable with ezcMailParser) (on the
  * currently selected mailbox):
- *  - create a set from all messages ({@link fetchAll()})
- *  - create a set from a certain message ({@link fetchByMessageNr()})
- *  - create a set from a range of messages ({@link fetchFromOffset()})
- *  - create a set from messages with a certain flag ({@link fetchByFlag()})
- *  - create a set from a sorted range of messages ({@link sortFromOffset()})
- *  - create a set from a sorted list of messages ({@link sortMessages()})
- *  - create a set from a free-form search ({@link searchMailbox()})
- *
- * Work with flags (on the currently selected mailbox):
- *  - get the flags of the specified messages ({@link fetchFlags()})
- *  - set a flag on the specified messages ({@link setFlag()})
- *  - clear a flag from the specified messages ({@link clearFlag()})
+ *  - [*] create a set from all messages ({@link fetchAll()})
+ *  - [*] create a set from a certain message ({@link fetchByMessageNr()})
+ *  - [*] create a set from a range of messages ({@link fetchFromOffset()})
+ *  - [*] create a set from messages with a certain flag ({@link fetchByFlag()})
+ *  - [*] create a set from a sorted range of messages ({@link sortFromOffset()})
+ *  - [*] create a set from a sorted list of messages ({@link sortMessages()})
+ *  - [*] create a set from a free-form search ({@link searchMailbox()})
  *
  * Miscellaneous commands:
  *  - get the capabilities of the IMAP server ({@link capability()})
@@ -197,6 +201,20 @@ class ezcMailImapTransport
      * @access private
      */
     const RESPONSE_FEEDBACK = 5;
+
+    /**
+     * Use UID commands (access messages by their unique ID).
+     *
+     * @access private
+     */
+    const UID = 'UID ';
+
+    /**
+     * Use message number commands (access messages by their message numbers).
+     *
+     * @access private
+     */
+    const NO_UID = '';
 
     /**
      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
@@ -792,6 +810,14 @@ class ezcMailImapTransport
      * Copies message(s) from the currently selected mailbox to mailbox
      * $destination.
      *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     *
+     * Warning! When using unique IDs referencing and trying to copy a message
+     * with an ID that does not exist, this method will not throw an exception.
+     *
+     * @todo Find out if it is possible to catch this IMAP bug.
+     *
      * $messages can be:
      *  - a single message number (eg: '1')
      *  - a message range (eg. '1:4')
@@ -822,6 +848,8 @@ class ezcMailImapTransport
      */
     public function copyMessages( $messages, $destination )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -829,7 +857,7 @@ class ezcMailImapTransport
         }
     
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} COPY {$messages} \"{$destination}\"" );
+        $this->connection->sendData( "{$tag} {$uid}COPY {$messages} \"{$destination}\"" );
         
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
@@ -934,6 +962,92 @@ class ezcMailImapTransport
     }
 
     /**
+     * Fetches the sizes in bytes for messages $messages.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     *
+     * $messages is an array of message numbers, for example:
+     * <code>
+     *   array( 1, 2, 4 );
+     * </code>
+     *
+     * The format of the returned array is:
+     * <code>
+     *   array( message_number => size )
+     * </code>
+     *
+     * Before calling this method, a connection to the IMAP server must be
+     * established and a user must be authenticated successfully, and a mailbox
+     * must be selected.
+     *
+     * Example:
+     * <code>
+     * $imap = new ezcMailImapTransport( 'imap.example.com' );
+     * $imap->authenticate( 'username', 'password' );
+     * $imap->selectMailbox( 'mailbox' ); // Inbox or another mailbox
+     *
+     * $sizes = $imap->fetchSizes( array( 1, 2, 4 ) );
+     * </code>
+     *
+     * The returned array $sizes will be something like:
+     * <code>
+     *   array( 1 => 1043,
+     *          2 => 203901,
+     *          4 => 14277
+     *        );
+     * </code>
+     *
+     * @throws ezcMailTransportException
+     *         if a mailbox is not selected
+     *         or if the server sent a negative response
+     * @param array $messages
+     * @return array(int)
+     */
+    public function fetchSizes( $messages )
+    {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
+        if ( $this->state != self::STATE_SELECTED &&
+             $this->state != self::STATE_SELECTED_READONLY )
+        {
+            throw new ezcMailTransportException( "Can't call fetchSizes() on the IMAP transport when a mailbox is not selected." );
+        }
+
+        $sizes = array();
+        $ids = implode( $messages, ',' );
+
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (RFC822.SIZE)" );
+
+        $response = trim( $this->connection->getLine() );
+        while ( strpos( $response, $tag ) === false )
+        {
+            if ( strpos( $response, ' FETCH (' ) !== false )
+            {
+                if ( $this->options->uidReferencing )
+                {
+                    preg_match( '/\*\s.*\sFETCH\s\(RFC822\.SIZE\s(.*)\sUID\s(.*)\)/U', $response, $matches );
+                    $sizes[intval( $matches[2] )] = (int) $matches[1];
+                }
+                else
+                {
+                    preg_match( '/\*\s(.*)\sFETCH\s\(RFC822\.SIZE\s(.*)\)/U', $response, $matches );
+                    $sizes[intval( $matches[1] )] = (int) $matches[2];
+                }
+
+            }
+            $response = trim( $this->connection->getLine() );
+        }
+
+        if ( $this->responseType( $response ) != self::RESPONSE_OK )
+        {
+            throw new ezcMailTransportException( "The IMAP server could not fetch flags for the messages '{$messages}': {$response}." );
+        }
+        return $sizes;
+    }
+
+    /**
      * Returns information about the messages in the current mailbox.
      *
      * The information returned through the parameters is:
@@ -988,9 +1102,8 @@ class ezcMailImapTransport
     /**
      * Deletes the message with the message number $msgNum from the current mailbox.
      *
-     * Before calling this method, a connection to the IMAP server must be
-     * established and a user must be authenticated successfully, and a mailbox
-     * must be selected.
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * The message number $msgNum must be a valid identifier fetched with e.g.
      * {@link listMessages()}.
@@ -998,6 +1111,10 @@ class ezcMailImapTransport
      * The message is not physically deleted, but has its DELETED flag set,
      * and can be later undeleted by clearing its DELETED flag with
      * {@link clearFlag()}.
+     *
+     * Before calling this method, a connection to the IMAP server must be
+     * established and a user must be authenticated successfully, and a mailbox
+     * must be selected.
      *
      * @throws ezcMailTransportException
      *         if a mailbox is not selected
@@ -1007,12 +1124,14 @@ class ezcMailImapTransport
      */
     public function delete( $msgNum )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED )
         {
             throw new ezcMailTransportException( "Can't call delete() when a mailbox is not selected." );
         }
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} STORE {$msgNum} +FLAGS (\\Deleted)" );
+        $this->connection->sendData( "{$tag} {$uid}STORE {$msgNum} +FLAGS (\\Deleted)" );
 
         // get the response (should be "{$tag} OK Store completed.")
         $response = trim( $this->getResponse( $tag ) );
@@ -1027,9 +1146,8 @@ class ezcMailImapTransport
      * Returns the headers and the first characters from message $msgNum,
      * without setting the SEEN flag.
      *
-     * Before calling this method, a connection to the IMAP server must be
-     * established and a user must be authenticated successfully, and a mailbox
-     * must be selected.
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * If the command failed or if it was not supported by the server an empty
      * string is returned.
@@ -1038,6 +1156,10 @@ class ezcMailImapTransport
      * mailbox as strings, which can be later parsed with ezcMailParser
      * and ezcMailVariableSet. In this way the retrieval of the full
      * messages from the server is avoided when building a list of messages.
+     *
+     * Before calling this method, a connection to the IMAP server must be
+     * established and a user must be authenticated successfully, and a mailbox
+     * must be selected.
      *
      * Example of listing the mail headers of all the messages in the current
      * mailbox:
@@ -1069,6 +1191,8 @@ class ezcMailImapTransport
      */
     public function top( $msgNum, $chars = 0 )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -1076,16 +1200,29 @@ class ezcMailImapTransport
         }
 
         $tag = $this->getNextTag();
+
         if ( $chars === 0 )
         {
-            $command = "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT])";
+            $command = "{$tag} {$uid}FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT])";
         }
         else
         {
-            $command = "{$tag} FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.{$chars}>)";
+            $command = "{$tag} {$uid}FETCH {$msgNum} (BODY.PEEK[HEADER] BODY.PEEK[TEXT]<0.{$chars}>)";
         }
         $this->connection->sendData( $command );
-        $response = $this->getResponse( 'FETCH (' );
+        if ( $this->options->uidReferencing )
+        {
+            // special case (BUG?) where "UID FETCH {$msgNum}" returns nothing
+            $response = trim( $this->connection->getLine() );
+            if ( $this->responseType( $response ) === self::RESPONSE_OK )
+            {
+                throw new ezcMailTransportException( "The IMAP server could not fetch the message '{$msgNum}': {$response}." );
+            }
+        }
+        else
+        {
+            $response = $this->getResponse( 'FETCH (' );
+        }
         $message = "";
         if ( strpos( $response, 'FETCH (' ) !== false )
         {
@@ -1118,10 +1255,6 @@ class ezcMailImapTransport
      * You can fetch the unique identifier for a specific message by
      * providing the $msgNum parameter.
      *
-     * Before calling this method, a connection to the IMAP server must be
-     * established and a user must be authenticated successfully, and a mailbox
-     * must be selected.
-     *
      * The unique identifier can be used to recognize mail from servers
      * between requests. In contrast to the message numbers the unique
      * numbers assigned to an email usually never changes.
@@ -1135,6 +1268,10 @@ class ezcMailImapTransport
      * <code>
      *   array( 1 => 216, 2 => 217, 3 => 218, 4 => 219 );
      * </code>
+     *
+     * Before calling this method, a connection to the IMAP server must be
+     * established and a user must be authenticated successfully, and a mailbox
+     * must be selected.
      *
      * @todo add UIVALIDITY value to UID (like in POP3) (if necessary).
      *
@@ -1195,6 +1332,9 @@ class ezcMailImapTransport
     /**
      * Returns an ezcMailImapSet with all the messages from the current mailbox.
      *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     *
      * If $deleteFromServer is set to true the mail will be marked for deletion
      * after retrieval. If not it will be left intact.
      *
@@ -1229,13 +1369,24 @@ class ezcMailImapTransport
      */
     public function fetchAll( $deleteFromServer = false )
     {
-        $messages = $this->listMessages();
-        return new ezcMailImapSet( $this->connection, array_keys( $messages ), $deleteFromServer );
+        if ( $this->options->uidReferencing )
+        {
+            $messages = array_values( $this->listUniqueIdentifiers() );
+        }
+        else
+        {
+            $messages = array_keys( $this->listMessages() );
+        }
+
+        return new ezcMailImapSet( $this->connection, $messages, $deleteFromServer, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet containing only the $number -th message in
      * the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * If $deleteFromServer is set to true the mail will be marked for deletion
      * after retrieval. If not it will be left intact.
@@ -1269,20 +1420,29 @@ class ezcMailImapTransport
      */
     public function fetchByMessageNr( $number, $deleteFromServer = false )
     {
-        $messages = $this->listMessages();
+        if ( $this->options->uidReferencing )
+        {
+            $messages = array_flip( $this->listUniqueIdentifiers() );
+        }
+        else
+        {
+            $messages = $this->listMessages();
+        }
+
         if ( !isset( $messages[$number] ) )
         {
             throw new ezcMailNoSuchMessageException( $number );
         }
-        else
-        {
-            return new ezcMailImapSet( $this->connection, array( 0 => $number ), $deleteFromServer );
-        }
+
+        return new ezcMailImapSet( $this->connection, array( 0 => $number ), $deleteFromServer, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet with $count messages starting from $offset from
      * the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * Fetches $count messages starting from the $offset and returns them as a
      * ezcMailImapSet. If $count is not specified or if it is 0, it fetches
@@ -1307,7 +1467,7 @@ class ezcMailImapTransport
      *         if a mailbox is not selected
      *         or if the server sent a negative response
      * @throws ezcMailInvalidLimitException
-     *         if $count is negative.
+     *         if $count is negative
      * @throws ezcMailOffsetOutOfRangeException
      *         if $offset is outside of the existing range of messages
      * @param int $offset
@@ -1321,25 +1481,54 @@ class ezcMailImapTransport
         {
             throw new ezcMailInvalidLimitException( $offset, $count );
         }
-        $messages = array_keys( $this->listMessages() );
-        if ( $count == 0 )
+
+        if ( $this->options->uidReferencing )
         {
-            $range = array_slice( $messages, $offset - 1, count( $messages ), true );
+            $messages = array_values( $this->listUniqueIdentifiers() );
+            $ids = array_flip( $messages );
+
+            if ( $count === 0 )
+            {
+                $count = count( $messages );
+            }
+
+            if ( !isset( $ids[$offset] ) )
+            {
+                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+            }
+
+            $range = array();
+            for ( $i = $ids[$offset]; $i < min( $count, count( $messages ) ); $i++ )
+            {
+                $range[] = $messages[$i];
+            }
         }
         else
         {
+            $messages = array_keys( $this->listMessages() );
+
+            if ( $count === 0 )
+            {
+                $count = count( $messages );
+            }
+
             $range = array_slice( $messages, $offset - 1, $count, true );
+
+            if ( !isset( $range[$offset - 1] ) )
+            {
+                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+            }
         }
-        if ( !isset( $range[$offset - 1] ) )
-        {
-            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
-        }
-        return new ezcMailImapSet( $this->connection, $range, $deleteFromServer );
+
+        return new ezcMailImapSet( $this->connection, $range, $deleteFromServer, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet containing the messages which match the
      * provided $criteria from the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * See {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4. (or
      * {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4.) for criterias
@@ -1381,6 +1570,8 @@ class ezcMailImapTransport
      */
     public function searchMailbox( $criteria = null )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -1395,7 +1586,7 @@ class ezcMailImapTransport
 
         $matchingMessages = array();
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} SEARCH {$criteria}" );
+        $this->connection->sendData( "{$tag} {$uid}SEARCH {$criteria}" );
 
         $response = $this->getResponse( '* SEARCH' );
         if ( strpos( $response, '* SEARCH' ) !== false )
@@ -1413,12 +1604,15 @@ class ezcMailImapTransport
             throw new ezcMailTransportException( "The IMAP server could not search the messages by the specified criteria: {$response}." );
         }
 
-        return new ezcMailImapSet( $this->connection, array_values( $matchingMessages ) );
+        return new ezcMailImapSet( $this->connection, array_values( $matchingMessages ), false, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet containing $count messages starting from $offset
      * sorted by $sortCriteria from the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * It is useful for paging through a mailbox.
      *
@@ -1464,27 +1658,59 @@ class ezcMailImapTransport
             throw new ezcMailInvalidLimitException( $offset, $count );
         }
 
-        $messageCount = $this->countByFlag( 'ALL' );
-        $messages = array_keys( $this->sort( range( 1, $messageCount ), $sortCriteria, $reverse ) );
-
-        if ( $count == 0 )
+        if ( $this->options->uidReferencing )
         {
-            $range = array_slice( $messages, $offset - 1, count( $messages ), true );
+            $uids = array_values( $this->listUniqueIdentifiers() );
+
+            $flip = array_flip( $uids );
+            if ( !isset( $flip[$offset] ) )
+            {
+                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+            }
+
+            $start = $flip[$offset];
+
+            $messages = $this->sort( $uids, $sortCriteria, $reverse );
+
+            if ( $count === 0 )
+            {
+                $count = count( $messages );
+            }
+
+            $ids = array_keys( $messages );
+
+            for ( $i = $start; $i < $count; $i++ )
+            {
+                $range[] = $ids[$i];
+            }
         }
         else
         {
+            $messageCount = $this->countByFlag( 'ALL' );
+            $messages = array_keys( $this->sort( range( 1, $messageCount ), $sortCriteria, $reverse ) );
+
+            if ( $count === 0 )
+            {
+                $count = count( $messages );
+            }
+
             $range = array_slice( $messages, $offset - 1, $count, true );
+
+            if ( !isset( $range[$offset - 1] ) )
+            {
+                throw new ezcMailOffsetOutOfRangeException( $offset, $count );
+            }
         }
-        if ( !isset( $range[$offset - 1] ) )
-        {
-            throw new ezcMailOffsetOutOfRangeException( $offset, $count );
-        }
-        return new ezcMailImapSet( $this->connection, $range );
+
+        return new ezcMailImapSet( $this->connection, $range, false, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet containing messages $messages sorted by
      * $sortCriteria from the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * $messages is an array of message numbers, for example:
      * <code>
@@ -1521,12 +1747,15 @@ class ezcMailImapTransport
     public function sortMessages( $messages, $sortCriteria, $reverse = false )
     {
         $messages = $this->sort( $messages, $sortCriteria, $reverse );
-        return new ezcMailImapSet( $this->connection, array_keys ( $messages ) );
+        return new ezcMailImapSet( $this->connection, array_keys ( $messages ), false, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
      * Returns an ezcMailImapSet containing messages with a certain flag from
      * the current mailbox.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * $flag can be one of:
      *
@@ -1576,7 +1805,7 @@ class ezcMailImapTransport
     public function fetchByFlag( $flag )
     {
         $messages = $this->searchByFlag( $flag );
-        return new ezcMailImapSet( $this->connection, $messages );
+        return new ezcMailImapSet( $this->connection, $messages, false, array( 'uidReferencing' => $this->options->uidReferencing ) );
     }
 
     /**
@@ -1625,6 +1854,9 @@ class ezcMailImapTransport
     /**
      * Fetches IMAP flags for messages $messages.
      *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     *
      * $messages is an array of message numbers, for example:
      * <code>
      *   array( 1, 2, 4 );
@@ -1664,6 +1896,8 @@ class ezcMailImapTransport
      */
     public function fetchFlags( $messages )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -1674,16 +1908,25 @@ class ezcMailImapTransport
         $ids = implode( $messages, ',' );
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} FETCH {$ids} (FLAGS)" );
+        $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (FLAGS)" );
 
         $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
         {
             if ( strpos( $response, ' FETCH (' ) !== false )
             {
-                preg_match( '/\*\s(.*)\sFETCH\s\(FLAGS \((.*)\)/U', $response, $matches );
-                $parts = explode( ' ', $matches[2] );
-                $flags[intval( $matches[1] )] = $parts;
+                if ( $this->options->uidReferencing )
+                {
+                    preg_match( '/\*\s.*\sFETCH\s\(FLAGS \((.*)\)\sUID\s(.*)\)/U', $response, $matches );
+                    $parts = explode( ' ', $matches[1] );
+                    $flags[intval( $matches[2] )] = $parts;
+                }
+                else
+                {
+                    preg_match( '/\*\s(.*)\sFETCH\s\(FLAGS \((.*)\)/U', $response, $matches );
+                    $parts = explode( ' ', $matches[2] );
+                    $flags[intval( $matches[1] )] = $parts;
+                }
             }
             $response = trim( $this->connection->getLine() );
         }
@@ -1697,6 +1940,9 @@ class ezcMailImapTransport
 
     /**
      * Sets $flag on $messages.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * $messages can be:
      *  - a single message number (eg. 1)
@@ -1736,6 +1982,8 @@ class ezcMailImapTransport
      */
     public function setFlag( $messages, $flag )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED )
         {
             throw new ezcMailTransportException( "Can't call setFlag() when a mailbox is not selected." );
@@ -1745,7 +1993,7 @@ class ezcMailImapTransport
         if ( in_array( $flag, self::$basicFlags ) )
         {
             $tag = $this->getNextTag();
-            $this->connection->sendData( "{$tag} STORE {$messages} +FLAGS (\\{$flag})" );
+            $this->connection->sendData( "{$tag} {$uid}STORE {$messages} +FLAGS (\\{$flag})" );
             $response = trim( $this->getResponse( $tag ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
@@ -1761,6 +2009,9 @@ class ezcMailImapTransport
 
     /**
      * Clears $flag from $messages.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * $messages can be:
      *  - a single message number (eg. '1')
@@ -1800,6 +2051,8 @@ class ezcMailImapTransport
      */
     public function clearFlag( $messages, $flag )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED )
         {
             throw new ezcMailTransportException( "Can't call clearFlag() when a mailbox is not selected." );
@@ -1809,7 +2062,7 @@ class ezcMailImapTransport
         if ( in_array( $flag, self::$basicFlags ) )
         {
             $tag = $this->getNextTag();
-            $this->connection->sendData( "{$tag} STORE {$messages} -FLAGS (\\{$flag})" );
+            $this->connection->sendData( "{$tag} {$uid}STORE {$messages} -FLAGS (\\{$flag})" );
             $response = trim( $this->getResponse( $tag ) );
             if ( $this->responseType( $response ) != self::RESPONSE_OK )
             {
@@ -1826,6 +2079,9 @@ class ezcMailImapTransport
     /**
      * Returns an array of message numbers from the selected mailbox which have a
      * certain flag set.
+     *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
      *
      * $flag can be one of:
      *
@@ -1867,6 +2123,8 @@ class ezcMailImapTransport
      */
     protected function searchByFlag( $flag )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -1878,7 +2136,7 @@ class ezcMailImapTransport
         if ( in_array( $flag, self::$extendedFlags ) )
         {
             $tag = $this->getNextTag();
-            $this->connection->sendData( "{$tag} SEARCH ({$flag})" );
+            $this->connection->sendData( "{$tag} {$uid}SEARCH ({$flag})" );
             $response = $this->getResponse( '* SEARCH' );
 
             if ( strpos( $response, '* SEARCH' ) !== false )
@@ -2103,6 +2361,9 @@ class ezcMailImapTransport
     /**
      * Sorts message numbers array $messages by the specified $sortCriteria.
      *
+     * This method supports unique IDs instead of message numbers, see
+     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     *
      * $messages is an array of message numbers, for example:
      * <code>
      *   array( 1, 2, 4 );
@@ -2127,6 +2388,8 @@ class ezcMailImapTransport
      */
     protected function sort( $messages, $sortCriteria, $reverse = false )
     {
+        $uid = ( $this->options->uidReferencing ) ? self::UID : self::NO_UID;
+
         if ( $this->state != self::STATE_SELECTED &&
              $this->state != self::STATE_SELECTED_READONLY )
         {
@@ -2138,14 +2401,21 @@ class ezcMailImapTransport
         $messageNumbers = implode( ',', $messages );
 
         $tag = $this->getNextTag();
-        $this->connection->sendData( "{$tag} FETCH {$messageNumbers} (BODY.PEEK[HEADER.FIELDS ({$query})])" );
+        $this->connection->sendData( "{$tag} {$uid}FETCH {$messageNumbers} (BODY.PEEK[HEADER.FIELDS ({$query})])" );
 
         $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
         {
             if ( strpos( $response, ' FETCH (' ) !== false )
             {
-                preg_match('/^\* ([0-9]+) FETCH/', $response, $matches );
+                if ( $this->options->uidReferencing )
+                {
+                    preg_match('/^\* [0-9]+ FETCH \(UID ([0-9]+)/', $response, $matches );
+                }
+                else
+                {
+                    preg_match('/^\* ([0-9]+) FETCH/', $response, $matches );
+                }
                 $messageNumber = $matches[1];
             }
 

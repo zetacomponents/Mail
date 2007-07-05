@@ -7,6 +7,10 @@
   IMAP transport. Based on a patch from Sinisa Dukaric.
 - Implemented feature request #10659: Added the getHierarchyDelimiter() method
   to the IMAP transport.
+- Implemented feature request #10999: Added the possibility to refer to
+  messages by their unique IDs in IMAP.
+- Added the fetchSizes() method in IMAP which returns the sizes of the
+  specified messages.
 
 
 1.3 - Monday 02 July 2007

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailImapTransportOptions class.
+ * File containing the ezcMailImapSetOptions class.
  *
  * @package Mail
  * @version //autogen//
@@ -9,25 +9,7 @@
  */
 
 /**
- * Class containing the options for IMAP transport.
- *
- * The options from ezcMailTransportOptions are inherited.
- *
- * Example of how to use IMAP transport options:
- * <code>
- * $imap = new ezcMailImapTransport( 'imap.example.com', null,
- *                array( 'ssl' => true, 'uidReferencing' => true ) );
- * </code>
- *
- * Alternatively you can specify the options using an options object:
- * <code>
- * $options = new ezcMailImapTransportOptions();
- * $options->ssl = true;
- * $options->uidReferencing = true;
- *
- * $imap = new ezcMailImapTransport( 'imap.example.com' );
- * $imap->options = $options;
- * </code>
+ * Class containing the options for IMAP mail set.
  *
  * @property bool $uidReferencing
  *           Specifies if the IMAP commands will operate with message unique
@@ -36,7 +18,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailImapTransportOptions extends ezcMailTransportOptions
+class ezcMailImapSetOptions extends ezcBaseOptions
 {
     /**
      * Constructs an object with the specified values.
@@ -78,7 +60,7 @@ class ezcMailImapTransportOptions extends ezcMailTransportOptions
                 break;
 
             default:
-                parent::__set( $name, $value );
+                throw new ezcBasePropertyNotFoundException( $name );
         }
     }
 }
