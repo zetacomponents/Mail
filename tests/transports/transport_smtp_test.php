@@ -43,7 +43,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     
     public function testWrapperMockLoginAuthenticateFail250()
     {
-        $smtp = $this->getMock( 'ezcMailSmtpTransport', array( 'getReplyCode', 'sendData' ), array( self::HOST, 'user', 'password', self::PORT ) );
+        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST, 'user', 'password', self::PORT ) );
         $smtp->expects( $this->any() )
              ->method( 'getReplyCode' )
              ->will( $this->onConsecutiveCalls(
