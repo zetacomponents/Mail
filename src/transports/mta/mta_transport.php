@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailTransportMta class
+ * File containing the ezcMailMtaTransport class
  *
  * @package Mail
  * @version //autogen//
@@ -9,13 +9,57 @@
  */
 
 /**
- * This class is deprecated. Use ezcMailMtaTransport instead.
+ * Implementation of the mail transport interface using the system MTA.
+ *
+ * The system MTA translates to sendmail on most Linux distributions.
+ *
+ * Qmail insists it should only have "\n" linebreaks and will send
+ * garbled messages with the default "\r\n" setting.
+ * Use ezcMailTools::setLineBreak( "\n" ) before sending mail to fix this issue.
  *
  * @package Mail
  * @version //autogen//
- * @ignore
+ * @mainclass
  */
-class ezcMailTransportMta extends ezcMailMtaTransport
+class ezcMailMtaTransport implements ezcMailTransport
 {
+    /**
+     * Constructs a new ezcMailMtaTransport.
+     */
+    public function __construct(  )
+    {
+    }
+
+    /**
+     * Sends the mail $mail using the PHP mail method.
+     *
+     * Note that a message may not arrive at the destination even though
+     * it was accepted for delivery.
+     *
+     * @throws ezcMailTransportException
+     *         if the mail was not accepted for delivery by the MTA.
+     * @param ezcMail $mail
+     */
+    public function send( ezcMail $mail )
+    {
+        $mail->appendExcludeHeaders( array( 'to', 'subject' ) );
+        $headers = rtrim( $mail->generateHeaders() ); // rtrim removes the linebreak at the end, mail doesn't want it.
+
+        if ( ( count( $mail->to ) + count( $mail->cc ) + count( $mail->bcc ) ) < 1 )
+        {
+            throw new ezcMailTransportException( 'No recipient addresses found in message header.' );
+        }
+        $additionalParameters = "";
+        if ( isset( $mail->returnPath ) )
+        {
+            $additionalParameters = "-f{$mail->returnPath->email}";
+        }
+        $success = mail( ezcMailTools::composeEmailAddresses( $mail->to ),
+                         $mail->getHeader( 'Subject' ), $mail->generateBody(), $headers, $additionalParameters );
+        if ( $success === false )
+        {
+            throw new ezcMailTransportException( 'The email could not be sent by sendmail' );
+        }
+    }
 }
 ?>
