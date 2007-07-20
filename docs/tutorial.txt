@@ -404,6 +404,72 @@ authenticate() method will return false. The application should detect when
 this occurs and attempt authentication again (for example, for a preset
 number of times such as three).
 
+Parsing: iconv() notices
+------------------------
+
+If the mail that you try to parse is not encoded properly, the `iconv`_()
+function will throw notices (from the function convertToUTF8Iconv() in
+ezcMailCharsetConverter).
+
+To avoid the notices you can use your own conversion function:
+
+1. Create a new function which is similar to convertToUTF8Iconv() from 
+ezcMailCharsetConverter, but which supresses notices and errors (with @ in
+front of `iconv`_()): ::
+
+  class myConverter
+  {
+       public static function convertToUTF8IconvNoNotices( $text, $originalCharset )
+       {
+           if ( $originalCharset === 'unknown-8bit' || $originalCharset === 'x-user-defined' )
+           {
+               $originalCharset = "latin1";
+           }
+           return @iconv( $originalCharset, 'utf-8', $text );
+       }
+  }
+
+2. Use the created function instead of the normal one (set this before parsing
+mail): ::
+
+  ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvNoNotices' ) );
+
+Parsing: missing characters
+---------------------------
+
+If the mail that you try to parse is not encoded properly, the `iconv`_()
+function will throw notices (from the function convertToUTF8Iconv() in
+ezcMailCharsetConverter).
+
+To avoid the missing characters you can use your own conversion function:
+
+1. Create a new function which is similar to convertToUTF8Iconv() from 
+ezcMailCharsetConverter, but which uses one of the options //IGNORE or
+//TRANSLIT for `iconv`_(): ::
+
+  class myConverter
+  {
+      public static function convertToUTF8IconvIgnore( $text, $originalCharset )
+      {
+          if ( $originalCharset === 'unknown-8bit' || $originalCharset === 'x-user-defined' )
+          {
+              $originalCharset = "latin1";
+          }
+          return iconv( $originalCharset, 'utf-8//TRANSLIT', $text );
+      }
+  }
+
+2. Use the created function instead of the normal one (set this before parsing
+mail): ::
+
+  ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvIgnore' ) );
+
+See the other examples in ezcMailCharsetConverter, and see also the
+documentation for the `iconv`_() function to find out how //IGNORE and
+//TRANSLIT work.
+
+.. _iconv: http://php.net/manual/en/function.iconv.php
+
 
 
 ..
