@@ -24,6 +24,23 @@
 class ezcMailSmtpTransportWrapper extends ezcMailSmtpTransport
 {
     /**
+     * Creates a connection to the SMTP server and initiates the login
+     * procedure.
+     *
+     * @todo The @ should be removed when PHP doesn't throw warnings for connect problems
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if no connection could be made
+     *         or if the login failed
+     * @throws ezcBaseExtensionNotFoundException
+     *         if trying to use SSL and the openssl extension is not installed
+     */
+    public function connect()
+    {
+        parent::connect();
+    }
+
+    /**
      * Performs the initial handshake with the SMTP server and
      * authenticates the user, if login data is provided to the
      * constructor.

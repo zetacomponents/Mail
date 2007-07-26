@@ -44,6 +44,7 @@ class ezcMailSmtpTransportOptions extends ezcMailTransportOptions
     {
         $this->connectionType = ezcMailSmtpTransport::CONNECTION_PLAIN; // default is plain connection
         $this->connectionOptions = array(); // default is no extra connection options
+        $this->preferredAuthMethod = null; // default is to try the AUTH methods supported by the SMTP server
 
         parent::__construct( $options );
     }
@@ -81,6 +82,16 @@ class ezcMailSmtpTransportOptions extends ezcMailTransportOptions
                     throw new ezcBaseValueException( $name, $value, 'bool' );
                 }
                 $this->properties['connectionType'] = ( $value === true ) ? ezcMailSmtpTransport::CONNECTION_SSL : ezcMailSmtpTransport::CONNECTION_PLAIN;
+                break;
+
+            case 'preferredAuthMethod':
+                $supportedAuthMethods = ezcMailSmtpTransport::getSupportedAuthMethods();
+                $supportedAuthMethods[] = ezcMailSmtpTransport::AUTH_AUTO;
+                if ( !in_array( $value, $supportedAuthMethods ) )
+                {
+                    throw new ezcBaseValueException( $name, $value, implode( ' | ', $supportedAuthMethods ) );
+                }
+                $this->properties[$name] = $value;
                 break;
 
             default:

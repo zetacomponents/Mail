@@ -11,6 +11,8 @@
   messages by their unique IDs in IMAP.
 - Added the fetchSizes() method in IMAP which returns the sizes of the
   specified messages.
+- Implemented feature request #10996: Added support for the SMTP authentication
+  methods DIGEST-MD5, CRAM-MD5, NTLM and LOGIN.
 
 
 1.3 - Monday 02 July 2007

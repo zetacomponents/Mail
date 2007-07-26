@@ -190,10 +190,33 @@ properly. This section gives a few hints on what to do and what not to do.
 Sending a mail using SMTP
 -------------------------
 
-This example displays how to send a mail with SMTP, by using an SSLv3
-connection.
+This example shows how to send a mail with SMTP, by using an SSLv3
+connection:
 
 .. include:: tutorial/tutorial_smtp_ssl.php
+   :literal:
+
+
+Using stronger authentication methods with the SMTP transports
+--------------------------------------------------------------
+
+The SMTP transports supports various authentication methods: DIGEST-MD5,
+CRAM-MD5, NTLM, LOGIN, PLAIN. Not all methods are supported by all servers, and
+some servers don't support authentication at all. NTLM authentication requires
+the mcrypt PHP extension.
+
+By default, the SMTP transport tries to login anonymously to the SMTP server
+(if an empty username and password have been provided), or to authenticate with
+the strongest method supported by the server (if username and password have
+been provided). The preferred authentication method can be changed with the
+option preferredAuthMethod. See the ezcMailSmtpTransport class for a list of
+supported authentication methods.
+
+If the preferred method is specified via options, only that authentication
+method will be attempted on the SMTP server. If it fails, an exception will be
+thrown.
+
+.. include:: tutorial/tutorial_smtp_auth.php
    :literal:
 
 Character encoding

@@ -13,8 +13,65 @@
  * with authentication support.
  *
  * The implementation supports most of the commands specified in:
- *  - {@link http://www.faqs.org/rfcs/rfc821.html} (SMTP)
- *  - {@link http://www.faqs.org/rfcs/rfc2554.html} (SMTP Authentication)
+ *  - {@link http://www.faqs.org/rfcs/rfc821.html RFC821 - SMTP}
+ *  - {@link http://www.faqs.org/rfcs/rfc2554.html RFC2554 - SMTP Authentication}
+ *  - {@link http://www.faqs.org/rfcs/rfc2831.html RFC2831 - DIGEST-MD5 Authentication}
+ *  - {@link http://www.faqs.org/rfcs/rfc2195.html RFC2195 - CRAM-MD5 Authentication}
+ *  - {@link http://davenport.sourceforge.net/ntlm.html NTLM Authentication}
+ *
+ * By default, the SMTP transport tries to login anonymously to the SMTP server
+ * (if an empty username and password have been provided), or to authenticate
+ * with the strongest method supported by the server (if username and password
+ * have been provided). The default behaviour can be changed with the option
+ * preferredAuthMethod.
+ *
+ * If the preferred method is specified via options, only that authentication
+ * method will be attempted on the SMTP server. If it fails, an exception will
+ * be thrown.
+ *
+ * Supported authentication methods (from strongest to weakest):
+ *  - DIGEST-MD5
+ *  - CRAM-MD5
+ *  - NTLM (requires the PHP mcrypt extension)
+ *  - LOGIN
+ *  - PLAIN
+ *
+ * Not all SMTP servers support these methods, and some SMTP servers don't
+ * support authentication at all.
+ *
+ * Example send mail:
+ * <code>
+ * $mail = new ezcMailComposer();
+ *
+ * $mail->from = new ezcMailAddress( 'sender@example.com', 'Adrian Ripburger' );
+ * $mail->addTo( new ezcMailAddress( 'receiver@example.com', 'Maureen Corley' ) );
+ * $mail->subject = "This is the subject of the example mail";
+ * $mail->plainText = "This is the body of the example mail.";
+ * $mail->build();
+ *
+ * // Create a new SMTP transport object with an SSLv3 connection.
+ * // The port will be 465 by default, use the 4th argument to change it.
+ * // Username and password (2nd and 3rd arguments) are left blank, which means
+ * // the mail host does not need authentication.
+ * // Omit the 5th parameter if you want to use a plain connection
+ * // (or set connectionType to ezcMailSmtpTransport::CONNECTION_PLAIN).
+ * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
+ *
+ * // Use the SMTP transport to send the created mail object
+ * $transport->send( $mail );
+ * </code>
+ *
+ * Example require NTLM authentication:
+ * <code>
+ * // Create an SMTP transport and demand NTLM authentication.
+ * // Username and password must be specified, otherwise no authentication
+ * // will be attempted.
+ * // If NTLM authentication fails, an exception will be thrown.
+ * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', 'username', 'password', null, array( 'preferredAuthMethod' => ezcMailSmtpTransport::AUTH_NTLM ) );
+ *
+ * // The option can also be specified via the option property:
+ * $transport->options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
+ * </code>
  *
  * @property string $serverHost
  *           The SMTP server host to connect to.
@@ -65,6 +122,39 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * TLS connection.
      */
     const CONNECTION_TLS = 'tls';
+
+    /**
+     * Authenticate with 'AUTH PLAIN'.
+     */
+    const AUTH_PLAIN = 'PLAIN';
+
+    /**
+     * Authenticate with 'AUTH LOGIN'.
+     */
+    const AUTH_LOGIN = 'LOGIN';
+
+    /**
+     * Authenticate with 'AUTH CRAM-MD5'.
+     */
+    const AUTH_CRAM_MD5 = 'CRAM-MD5';
+
+    /**
+     * Authenticate with 'AUTH DIGEST-MD5'.
+     */
+    const AUTH_DIGEST_MD5 = 'DIGEST-MD5';
+
+    /**
+     * Authenticate with 'AUTH NTLM'.
+     */
+    const AUTH_NTLM = 'NTLM';
+
+    /**
+     * No authentication method. Specifies that the transport should try to
+     * authenticate using the methods supported by the SMTP server in their
+     * decreasing strength order. If one method fails an exception will be
+     * thrown.
+     */
+    const AUTH_AUTO = null;
 
     /**
      * The line-break characters to use.
@@ -477,33 +567,362 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             $this->sendData( 'HELO ' . $this->senderHost );
         }
-        if ( $this->getReplyCode( $error ) !== '250' )
+
+        if ( $this->getReplyCode( $response ) !== '250' )
         {
-                throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: $error." );
+            throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: {$response}." );
         }
 
         // do authentication
         if ( $this->doAuthenticate )
         {
-            $this->sendData( 'AUTH LOGIN' );
-            if ( $this->getReplyCode( $error ) !== '334' )
+            if ( $this->options->preferredAuthMethod !== self::AUTH_AUTO )
             {
-                throw new ezcMailTransportSmtpException( 'SMTP server does not accept AUTH LOGIN.' );
+                $this->auth( $this->options->preferredAuthMethod );
             }
-
-            $this->sendData( base64_encode( $this->user ) );
-            if ( $this->getReplyCode( $error ) !== '334' )
+            else
             {
-                throw new ezcMailTransportSmtpException( "SMTP server does not accept login: {$this->user}." );
-            }
+                preg_match( "/250-AUTH[= ](.*)/", $response, $matches );
+                if ( count( $matches ) > 0 )
+                {
+                    $methods = explode( ' ', trim( $matches[1] ) );
+                }
+                if ( count( $matches ) === 0 || count( $methods ) === 0 )
+                {
+                    throw new ezcMailTransportSmtpException( 'SMTP server does not accept the AUTH command.' );
+                }
 
-            $this->sendData( base64_encode( $this->password ) );
-            if ( $this->getReplyCode( $error ) !== '235' )
-            {
-                throw new ezcMailTransportSmtpException( 'SMTP server does not accept the password.' );
+                $authenticated = false;
+                $methods = $this->sortAuthMethods( $methods );
+                foreach ( $methods as $method )
+                {
+                    if ( $this->auth( $method ) === true )
+                    {
+                        $authenticated = true;
+                        break;
+                    }
+                }
+
+                if ( $authenticated === false )
+                {
+                    throw new ezcMailTransportSmtpException( 'SMTP server did not respond correctly to any of the authentication methods ' . implode( ', ', $methods ) . '.' );
+                }
             }
         }
         $this->status = self::STATUS_AUTHENTICATED;
+    }
+
+    /**
+     * Returns an array with the authentication methods supported by the
+     * SMTP transport class (not by the SMTP server!).
+     *
+     * The returned array has the methods sorted by their relative strengths,
+     * so stronger methods are first in the array.
+     *
+     * @return array(string)
+     */
+    public static function getSupportedAuthMethods()
+    {
+        return array(
+            ezcMailSmtpTransport::AUTH_DIGEST_MD5,
+            ezcMailSmtpTransport::AUTH_CRAM_MD5,
+            ezcMailSmtpTransport::AUTH_NTLM,
+            ezcMailSmtpTransport::AUTH_LOGIN,
+            ezcMailSmtpTransport::AUTH_PLAIN,
+            );
+    }
+
+    /**
+     * Sorts the specified array of AUTH methods $methods by strength, so higher
+     * strength methods will be used first.
+     *
+     * For example, if the server supports:
+     * <code>
+     *   $methods = array( 'PLAIN', 'LOGIN', 'CRAM-MD5' );
+     * </code>
+     *
+     * then this method will return:
+     * <code>
+     *   $methods = array( 'CRAM-MD5', 'LOGIN', 'PLAIN' );
+     * </code>
+     *
+     * @param array(string) $methods
+     * @return array(string)
+     */
+    protected function sortAuthMethods( array $methods )
+    {
+        $result = array();
+        $unsupported = array();
+        $supportedAuthMethods = self::getSupportedAuthMethods();
+        foreach ( $methods as $method )
+        {
+            if ( in_array( $method, $supportedAuthMethods ) )
+            {
+                $result[] = $method;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Calls the appropiate authentication method based on $method.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if $method is not supported by the transport class
+     * @return bool
+     */
+    protected function auth( $method )
+    {
+        switch ( $method )
+        {
+            case self::AUTH_DIGEST_MD5:
+                $authenticated = $this->authDigestMd5();
+                break;
+
+            case self::AUTH_CRAM_MD5:
+                $authenticated = $this->authCramMd5();
+                break;
+
+            case self::AUTH_NTLM:
+                $authenticated = $this->authNtlm();
+                break;
+
+            case self::AUTH_LOGIN:
+                $authenticated = $this->authLogin();
+                break;
+
+            case self::AUTH_PLAIN:
+                $authenticated = $this->authPlain();
+                break;
+
+            default:
+                throw new ezcMailTransportSmtpException( "Unsupported AUTH method '{$method}'." );
+        }
+
+        return $authenticated;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH DIGEST-MD5' and returns true if
+     * successful.
+     *
+     * @todo implement auth-int and auth-conf quality of protection (qop) modes
+     * @todo support other algorithms than md5-sess?
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authDigestMd5()
+    {
+        $this->sendData( 'AUTH DIGEST-MD5' );
+        if ( $this->getReplyCode( $serverResponse ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server does not accept AUTH DIGEST-MD5.' );
+        }
+
+        $serverDigest = base64_decode( trim( substr( $serverResponse, 4 ) ) );
+        $parts = explode( ',', $serverDigest );
+        foreach ( $parts as $part )
+        {
+            $args = explode( '=', $part, 2 );
+            $params[trim( $args[0] )] = trim( $args[1] );
+        }
+
+        if ( !isset( $params['nonce'] ) ||
+             !isset( $params['algorithm'] ) )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not send a correct DIGEST-MD5 challenge.' );
+        }
+
+        $nonce = trim( $params['nonce'], '"' );
+        $algorithm = trim( $params['algorithm'], '"' );
+
+        $qop = 'auth';
+        $realm = isset( $params['realm'] ) ? trim( $params['realm'], '"' ) : $this->serverHost;
+        $cnonce = $this->generateNonce( 32 );
+        $digestUri = "smtp/{$this->serverHost}";
+        $nc = '00000001';
+        $charset = isset( $params['charset'] ) ? trim( $params['charset'], '"' ) : 'utf-8';
+        $maxbuf = isset( $params['maxbuf'] ) ? trim( $params['maxbuf'], '"' ) : 65536;
+
+        $response = '';
+        $A2 = "AUTHENTICATE:{$digestUri}";
+        $A1 = pack( 'H32', md5( "{$this->user}:{$realm}:{$this->password}" ) ) . ":{$nonce}:{$cnonce}";
+        $response = md5( md5( $A1 ) . ":{$nonce}:{$nc}:{$cnonce}:{$qop}:" . md5( $A2 ) );
+
+        $loginParams = array(
+            'username' => "\"{$this->user}\"",
+            'cnonce' => "\"{$cnonce}\"",
+            'nonce' => "\"{$nonce}\"",
+            'nc' => $nc,
+            'qop' => $qop,
+            'digest-uri' => "\"{$digestUri}\"",
+            'charset' => $charset,
+            'realm' => "\"{$realm}\"",
+            'response' => $response,
+            'maxbuf' => $maxbuf
+            );
+
+        $parts = array();
+        foreach ( $loginParams as $key => $value )
+        {
+            $parts[] = "{$key}={$value}";
+        }
+        $login = base64_encode( implode( ',', $parts ) );
+
+        $this->sendData( $login );
+        if ( $this->getReplyCode( $serverResponse ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided username and password.' );
+        }
+
+        $serverResponse = base64_decode( trim( substr( $serverResponse, 4 ) ) );
+        $parts = explode( '=', $serverResponse );
+        $rspauthServer = trim( $parts[1] );
+
+        $A2 = ":{$digestUri}";
+        $rspauthClient = md5( md5( $A1 ) . ":{$nonce}:{$nc}:{$cnonce}:{$qop}:" . md5( $A2 ) );
+
+        if ( $rspauthServer !== $rspauthClient )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not responded correctly to the DIGEST-MD5 authentication.' );
+        }
+
+        $this->sendData( '' );
+        if ( $this->getReplyCode( $serverResponse ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not allow DIGEST-MD5 authentication.' );
+        }
+
+        return true;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH CRAM-MD5' and returns true if
+     * successful.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authCramMd5()
+    {
+        $this->sendData( 'AUTH CRAM-MD5' );
+        if ( $this->getReplyCode( $response ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server does not accept AUTH CRAM-MD5.' );
+        }
+
+        $serverDigest = trim( substr( $response, 4 ) );
+        $clientDigest = hash_hmac( 'md5', base64_decode( $serverDigest ), $this->password );
+        $login = base64_encode( "{$this->user} {$clientDigest}" );
+
+        $this->sendData( $login );
+        if ( $this->getReplyCode( $error ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided username and password.' );
+        }
+
+        return true;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH NTLM' and returns true if
+     * successful.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authNtlm()
+    {
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'mcrypt' ) )
+        {
+            throw new ezcBaseExtensionNotFoundException( 'mcrypt', null, "PHP not compiled with --with-mcrypt." );
+        }
+
+        // Send NTLM type 1 message
+        $msg1 = base64_encode( $this->authNtlmMessageType1( $this->senderHost, $this->serverHost ) );
+
+        $this->sendData( "AUTH NTLM {$msg1}" );
+        if ( $this->getReplyCode( $serverResponse ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server does not accept AUTH NTLM.' );
+        }
+
+        // Parse NTLM type 2 message
+        $msg2 = base64_decode( trim( substr( $serverResponse, 4 ) ) );
+        $parts = array(
+                        substr( $msg2, 0, 8 ),  // Signature ("NTLMSSP\0")
+                        substr( $msg2, 8, 4 ),  // Message type
+                        substr( $msg2, 12, 8 ), // Target name (security buffer)
+                        substr( $msg2, 20, 4 ), // Flags
+                        substr( $msg2, 24, 8 ), // Challenge
+                        substr( $msg2, 32 )     // The rest of information
+                      );
+
+        $challenge = $parts[4];
+
+        // Send NTLM type 3 message
+        $msg3 = base64_encode( $this->authNtlmMessageType3( $challenge, $this->user, $this->password, $this->senderHost, $this->serverHost ) );
+
+        $this->sendData( $msg3 );
+        if ( $this->getReplyCode( $serverResponse ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not allow NTLM authentication.' );
+        }
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH LOGIN' and returns true if
+     * successful.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authLogin()
+    {
+        $this->sendData( 'AUTH LOGIN' );
+        if ( $this->getReplyCode( $error ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server does not accept AUTH LOGIN.' );
+        }
+
+        $this->sendData( base64_encode( $this->user ) );
+        if ( $this->getReplyCode( $error ) !== '334' )
+        {
+            throw new ezcMailTransportSmtpException( "SMTP server did not accept login: {$this->user}." );
+        }
+
+        $this->sendData( base64_encode( $this->password ) );
+        if ( $this->getReplyCode( $error ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided username and password.' );
+        }
+
+        return true;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH PLAIN' and returns true if
+     * successful.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authPlain()
+    {
+        $digest = base64_encode( "\0{$this->user}\0{$this->password}" );
+        $this->sendData( "AUTH PLAIN {$digest}" );
+        if ( $this->getReplyCode( $error ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided username and password.' );
+        }
+
+        return true;
     }
 
     /**
@@ -675,6 +1094,167 @@ class ezcMailSmtpTransport implements ezcMailTransport
     protected function getReplyCode( &$line )
     {
         return substr( trim( $line = $this->getData() ), 0, 3 );
+    }
+
+    /**
+     * Generates an alpha-numeric random string with the specified $length.
+     *
+     * Used in the DIGEST-MD5 authentication method.
+     *
+     * @param int $length
+     * @return string
+     */
+    protected function generateNonce( $length = 32 )
+    {
+        $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $result = '';
+        for ( $i = 0; $i < $length; $i++ )
+        {
+            $result .= $chars[mt_rand( 0, strlen( $chars ) - 1 )];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generates an NTLM type 1 message.
+     *
+     * @param string $workstation
+     * @param string $domain
+     * @return string
+     */
+    protected function authNtlmMessageType1( $workstation, $domain )
+    {
+        $parts = array(
+                        "NTLMSSP\x00",
+                        "\x01\x00\x00\x00",
+                        "\x07\x32\x00\x00",
+                        $this->authNtlmSecurityBuffer( $domain, 32 + strlen( $workstation ) ),
+                        $this->authNtlmSecurityBuffer( $workstation, 32 ),
+                        $workstation,
+                        $domain
+                      );
+
+        return implode( "", $parts );
+    }
+
+    /**
+     * Generates an NTLM type 3 message from the $challenge sent by the SMTP
+     * server in an NTLM type 2 message.
+     *
+     * @param string $challenge
+     * @param string $user
+     * @param string $password
+     * @param string $workstation
+     * @param string $domain
+     * @return string
+     */
+    protected function authNtlmMessageType3( $challenge, $user, $password, $workstation, $domain )
+    {
+        $domain = chunk_split( $domain, 1, "\x00" );
+        $user = chunk_split( $user, 1, "\x00" );
+        $workstation = chunk_split( $workstation, 1, "\x00" );
+        $lm = '';
+        $ntlm = $this->authNtlmResponse( $challenge, $password );
+        $session = '';
+
+        $domainOffset = 64;
+        $userOffset = $domainOffset + strlen( $domain );
+        $workstationOffset = $userOffset + strlen( $user );
+        $lmOffset = $workstationOffset + strlen( $workstation );
+        $ntlmOffset = $lmOffset + strlen( $lm );
+        $sessionOffset = $ntlmOffset + strlen( $ntlm );
+
+        $parts = array(
+                        "NTLMSSP\x00",
+                        "\x03\x00\x00\x00",
+                        $this->authNtlmSecurityBuffer( $lm, $lmOffset ),
+                        $this->authNtlmSecurityBuffer( $ntlm, $ntlmOffset ),
+                        $this->authNtlmSecurityBuffer( $domain, $domainOffset ),
+                        $this->authNtlmSecurityBuffer( $user, $userOffset ),
+                        $this->authNtlmSecurityBuffer( $workstation, $workstationOffset ),
+                        $this->authNtlmSecurityBuffer( $session, $sessionOffset ),
+                        "\x01\x02\x00\x00",
+                        $domain,
+                        $user,
+                        $workstation,
+                        $lm,
+                        $ntlm
+                      );
+
+        return implode( '', $parts );
+    }
+
+    /**
+     * Calculates an NTLM response to be used in the creation of the NTLM type 3
+     * message.
+     *
+     * @param string $challenge
+     * @param string $password
+     * @return string
+     */
+    protected function authNtlmResponse( $challenge, $password )
+    {
+        $password = chunk_split( $password, 1, "\x00" );
+        $password = hash( 'md4', $password, true );
+        $password .= str_repeat( "\x00", 21 - strlen( $password ) );
+
+        $td = mcrypt_module_open( 'des', '', 'ecb', '' );
+        $iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_RAND );
+
+        $response = '';        
+        for ( $i = 0; $i < 21; $i += 7 )
+        {
+            $packed = '';
+            for ( $p = $i; $p < $i + 7; $p++ )
+            {
+                $packed .= str_pad( decbin( ord( substr( $password, $p, 1 ) ) ), 8, '0', STR_PAD_LEFT );
+            }
+
+            $key = '';
+            for ( $p = 0; $p < strlen( $packed ); $p += 7 )
+            {
+                $s = substr( $packed, $p, 7 );
+                $b = $s . ( ( substr_count( $s, '1' ) % 2 ) ? '0' : '1' );
+                $key .= chr( bindec( $b ) );
+            }
+
+            mcrypt_generic_init( $td, $key, $iv );
+            $response .= mcrypt_generic( $td, $challenge );
+            mcrypt_generic_deinit( $td );
+        }
+        mcrypt_module_close($td);
+
+        return $response;
+    }
+
+    /**
+     * Creates an NTLM security buffer information string.
+     *
+     * The structure of the security buffer is:
+     *  - a short containing the length of the buffer content in bytes (may be
+     *    zero).
+     *  - a short containing the allocated space for the buffer in bytes (greater
+     *    than or equal to the length; typically the same as the length).
+     *  - a long containing the offset to the start of the buffer in bytes (from
+     *    the beginning of the NTLM message).
+     *
+     * Example:
+     *  - buffer content length: 1234 bytes (0xd204 in hexa)
+     *  - allocated space: 1234 bytes( 0xd204 in hexa)
+     *  - offset: 4321 bytes (0xe1100000 in hexa)
+     *
+     * then the security buffer would be 0xd204d204e1100000 (in hexa).
+     *
+     * @param string $text
+     * @param int $offset
+     * @return string
+     */
+    protected function authNtlmSecurityBuffer( $text, $offset )
+    {
+        return pack( 'v', strlen( $text ) ) .
+               pack( 'v', strlen( $text ) ) .
+               pack( 'V', $offset );
     }
 }
 ?>

@@ -9,9 +9,15 @@ Host To Host Mail Transfer
 
 1. `RFC 821 - Simple Mail Transfer Protocol`__ (SMTP)
 2. `RFC 2554 - SMTP Service Extension for Authentication`__
+3. `RFC 2831 - DIGEST-MD5 Authentication`__
+4. `RFC 2195 - CRAM-MD5 Authentication`__
+5. `NTLM Authentication`__
 
 __ http://www.faqs.org/rfcs/rfc821.html
 __ http://www.faqs.org/rfcs/rfc2554.html
+__ http://www.faqs.org/rfcs/rfc2831.html
+__ http://www.faqs.org/rfcs/rfc2195.html
+__ http://davenport.sourceforge.net/ntlm.html
 
 
 Client To Host Mail Transfer
