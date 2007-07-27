@@ -342,6 +342,24 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( '<test-ezc-message-id@ezc.ez.no>', $this->mail->getHeader( 'Message-Id' ) );
     }
 
+    // test for issue #11174
+    public function testMailHeaderFolding76Char()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'john@example.com', 'John Doe' );
+        $mail->addTo( new ezcMailAddress( 'john@example.com', 'John Doe' ) );
+        $mail->body = new ezcMailText( 'Text' );
+
+        // test some subject sizes
+        for ( $i = 1; $i < 300; $i++ )
+        {
+            $mail->subject = str_repeat( '1', $i );
+            $source = $mail->generate();
+            preg_match( '/Subject:\s[0-9]+/', $source, $matches );
+            $this->assertEquals( 1, count( $matches ), "Subject is folded incorrectly for length {$i}." );
+        }
+    }
+
     public function testMailAddressToString()
     {
         $addr = new ezcMailAddress( "test@example.com", "John Doe" );

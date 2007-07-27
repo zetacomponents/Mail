@@ -87,7 +87,7 @@ class ezcMailHeaderFolder
     static public function foldAny( $text )
     {
         // Don't fold unless we have to.
-        if ( strlen( $text ) < self::$limit )
+        if ( strlen( $text ) <= self::$limit )
         {
             return $text;
         }

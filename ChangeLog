@@ -20,6 +20,8 @@
 
 - Fixed issue #11175: ezcMailTools::composeEmailAddress quotes the name part
   if it contains special characters ( , @ < > : ; ' " ).
+- Fixed issue #11174: ezcMailHeaderFolder::foldAny doesn't add a line break in
+  front of the header value if it is exactly 76 characters.
 
 
 1.3 - Monday 02 July 2007
