@@ -150,8 +150,8 @@ class ezcMailToolsTest extends ezcTestCase
         $addressesQuoted = array(
             array( "\"Doe, John\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'Doe, John' ) ),
             array( "\"<Doe John>\" <john@example.com>", new ezcMailAddress( 'john@example.com', '<Doe John>' ) ), // double bad character < and >
-            array( "\"alex.stanoi@gmail.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'alex.stanoi@gmail.com' ) ),
-            array( "\"John, alex.stanoi@gmail.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John, alex.stanoi@gmail.com' ) ), // double bad character , and @
+            array( "\"john.doe@example.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'john.doe@example.com' ) ),
+            array( "\"John, john.doe@example.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John, john.doe@example.com' ) ), // double bad character , and @
             array( "\"John \\\"Doe\\\"\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John "Doe"' ) ),
             array( "\":sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', ':sysmail' ) ),
             array( "\";sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', ';sysmail' ) ),
