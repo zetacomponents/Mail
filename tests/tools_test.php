@@ -122,6 +122,57 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( $reference, $result );
     }
 
+    public function testComposeEmailAddressNameNotQuoted()
+    {
+        $addressesNotQuoted = array(
+            array( "Doe John <john@example.com>", new ezcMailAddress( 'john@example.com', 'Doe John' ) ),
+            array( "\"Doe, John\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"Doe, John"' ) ), // already quoted
+            array( "\"<Doe John>\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"<Doe John>"' ) ), // already quoted
+            array( "\"Doe@John.example.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"Doe@John.example.com"' ) ), // already quoted
+            array( "\"John, Doe@John.example.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"John, Doe@John.example.com"' ) ), // already quoted
+            array( "\":sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', '":sysmail"' ) ), // already quoted
+            array( "\";sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', '";sysmail"' ) ), // already quoted
+            array( "sysmail <john@example.com>", new ezcMailAddress( 'john@example.com', 'sysmail' ) ),
+            array( "\"John 'Doe'\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John \'Doe\'' ) ),
+            );
+
+        foreach ( $addressesNotQuoted as $address )
+        {
+            $reference = $address[0];
+            $result = ezcMailTools::composeEmailAddress( $address[1] );
+
+            $this->assertEquals( $reference, $result );
+        }
+    }
+        
+    public function testComposeEmailAddressNameQuoted()
+    {
+        $addressesQuoted = array(
+            array( "\"Doe, John\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'Doe, John' ) ),
+            array( "\"<Doe John>\" <john@example.com>", new ezcMailAddress( 'john@example.com', '<Doe John>' ) ), // double bad character < and >
+            array( "\"alex.stanoi@gmail.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'alex.stanoi@gmail.com' ) ),
+            array( "\"John, alex.stanoi@gmail.com\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John, alex.stanoi@gmail.com' ) ), // double bad character , and @
+            array( "\"John \\\"Doe\\\"\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John "Doe"' ) ),
+            array( "\":sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', ':sysmail' ) ),
+            array( "\";sysmail\" <john@example.com>", new ezcMailAddress( 'john@example.com', ';sysmail' ) ),
+            array( "\"John \\\"Doe\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John "Doe' ) ),
+            array( "\"John 'Doe\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John \'Doe' ) ),
+            array( "\"John \\\\\\\"Doe\" <john@example.com>", new ezcMailAddress( 'john@example.com', 'John \"Doe' ) ), // already escaped quotes
+            array( "\"John \\\"Doe\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"John "Doe"' ) ),
+            array( "\"\\\"Doe\\\" \\\"John\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"Doe" "John' ) ),
+            array( "\"Doe\\\" John\" <john@example.com>", new ezcMailAddress( 'john@example.com', '"Doe" John"' ) ),
+            array( "\"'Doe' 'John\" <john@example.com>", new ezcMailAddress( 'john@example.com', "'Doe' 'John" ) ),
+            );
+
+        foreach ( $addressesQuoted as $key => $address )
+        {
+            $reference = $address[0];
+            $result = ezcMailTools::composeEmailAddress( $address[1] );
+
+            $this->assertEquals( $reference, $result );
+        }
+    }
+
     public function testParseEmailAddressMimeGood()
     {
         $add = ezcMailTools::parseEmailAddress( '"John Doe" <john@example.com>' );
