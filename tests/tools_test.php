@@ -20,7 +20,6 @@ class ezcMailExtended extends ezcMail
  */
 class ezcMailToolsTest extends ezcTestCase
 {
-
     /**
      * Tests if ezcMailTools::composeEmailAddress works as it should
      * @todo test if no 'email' is given.
@@ -237,6 +236,57 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( 'test@example.com', $add[1]->email );
     }
 
+    public function testValidateEmailAddressCorrect()
+    {
+        $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_correct.txt' );
+        $addresses = split( "\n", $data );
+        foreach ( $addresses as $address )
+        {
+            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            {
+                $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is correct." );
+            }
+        }
+    }
+
+    public function testValidateEmailAddressCorrectMX()
+    {
+        $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_correct_mx.txt' );
+        $addresses = split( "\n", $data );
+        foreach ( $addresses as $address )
+        {
+            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            {
+                $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is correct with MX." );
+            }
+        }
+    }
+
+    public function testValidateEmailAddressIncorrect()
+    {
+        $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_incorrect.txt' );
+        $addresses = split( "\n", $data );
+        foreach ( $addresses as $address )
+        {
+            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            {
+                $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is incorrect." );
+            }
+        }
+    }
+
+    public function testValidateEmailAddressIncorrectMX()
+    {
+        $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_incorrect_mx.txt' );
+        $addresses = split( "\n", $data );
+        foreach ( $addresses as $address )
+        {
+            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            {
+                $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is incorrect with MX." );
+            }
+        }
+    }
 
     /**
      * Tests if generateContentId works as it should.

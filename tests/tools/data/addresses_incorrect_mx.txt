@@ -1,0 +1,14 @@
+# Enter email addresses which should be validated as "incorrect with MX".
+#
+# Enter one email address per line.
+#
+# An email address has this form:
+#     localpart@domainpart
+#
+# Valid email addresses should follow RFC822 and RFC2822.
+#
+# Comments are entered as "# comment", and comments are useful for disabling
+# an email address.
+
+thisaddresscannotpossiblyexist@hotmail.com
+thisaddresscannotpossiblyexist@gmail.com

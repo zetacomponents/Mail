@@ -15,11 +15,18 @@ var_dump( ezcMailTools::composeEmailAddresses( $mailAddresses ) );
 var_dump( ezcMailTools::parseEmailAddress( $addresses ) );
 var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 
+// Validate an email address
+$isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com' );
+
+// Validate an email address with MX records check
+$isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com', true );
+
 // Create a new mail object
 $mail = new ezcMail();
 $mail->from = $mailAddresses[1];
 $mail->addTo( $mailAddresses[0] );
 $mail->subject = "Top secret";
+
 // Use the lineBreak() method
 $mail->body = new ezcMailText( "Confidential" . ezcMailTools::lineBreak() . "DO NOT READ" );
 $mail->generate();

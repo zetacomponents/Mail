@@ -281,6 +281,160 @@ class ezcMailTools
     }
 
     /**
+     * Returns true if $address is a valid email address, false otherwise.
+     *
+     * By default it will only validate against the same regular expression
+     * used in ext/filter. It follows
+     * {@link http://www.faqs.org/rfcs/rfc821.html RFC822} and
+     * {@link http://www.faqs.org/rfcs/rfc821.html RFC2822}.
+     *
+     * If $checkMxRecords is true, then an MX records check will be performed
+     * also, by sending a test mail (RCPT TO) to $address using the MX records
+     * found for the domain part of $address.
+     *
+     * The input email address $address should be trimmed from white spaces
+     * and/or quotes around it before calling this function (if needed).
+     *
+     * An email address has this form:
+     * <code>
+     *   localpart@domainpart
+     * </code>
+     *
+     * The localpart has these rules:
+     *  - allowed characters: . + ~ / ' - _ ` ^ $ % & ! ' | {
+     *  - the dot (.) cannot be the first or the last character
+     *  - the double-quote character (") can only surround the localpart (so
+     *    if it appears it must be the first and the last character of localpart)
+     *  - spaces are allowed if the localpart is surrounded in double-quotes
+     *  - other ASCII characters (even from the extended-ASCII set) are allowed
+     *    if the localparts is surrounded in double-quotes
+     *  - the double-quotes character (") cannot be escaped to appear in a
+     *    localpart surrounded by double quotes (so "john"doe"@example.com is not
+     *    a valid email address)
+     *
+     * The domainpart has the same rules as a domain name, as defined in
+     * {@link http://www.faqs.org/rfcs/rfc821.html RFC822} and
+     * {@link http://www.faqs.org/rfcs/rfc821.html RFC2822}.
+     *
+     * See also the test files (in the "Mail/tests/tools/data" directory) for
+     * examples of correct and incorrect email addresses.
+     *
+     * @param string $address
+     * @param bool checkMxRecords
+     * @return bool
+     */
+    public static function validateEmailAddress( $address, $checkMxRecords = false )
+    {
+        $pattern = '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,}))$/';
+
+        if ( preg_match( $pattern, $address ) )
+        {
+            if ( $checkMxRecords )
+            {
+                return self::validateEmailAddressMx( $address );
+            }
+            else
+            {
+                // $address passed through regexp, with no MX checks
+                return true;
+            }
+        }
+        else
+        {
+            // $address did not pass through regexp
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the email address $address is valid based on its MX records.
+     *
+     * Steps:
+     *  - the MX records are fetched for the domain part of $address, along with
+     *    their weights
+     *  - the MX records are sorted based on the weights
+     *  - for each MX record a connection is open
+     *  - a test mail (RCPT TO) is tried to be sent to $address
+     *  - if one test mail succeeds, then the address is valid, else invalid
+     *
+     * @param string $address
+     * @return bool
+     */
+    protected static function validateEmailAddressMx( $address )
+    {
+        $timeoutOpen = 3; // for fsockopen()
+        $timeoutConnection = 5; // for stream_set_timeout()
+
+        list( $local, $domain ) = explode( '@', $address );
+        if ( !empty( $domain ) )
+        {
+            if ( getmxrr( $domain, $hosts, $weights ) )
+            {
+                for ( $i = 0; $i < count( $hosts ); $i++ )
+                {
+                    $mx[$hosts[$i]] = $weights[$i];
+                }
+
+                asort( $mx );
+                $mx = array_keys( $mx );
+            }
+            elseif ( checkdnsrr( $domain, 'A' ) )
+            {
+                $mx[0] = gethostbyname( $domain );
+            }
+            else
+            {
+                $mx = array();
+            }
+
+            if ( ( $numberOfMx = count( $mx ) ) > 0 )
+            {
+                $smtp = array(
+                               "HELO smtp.ez.no",
+                               "MAIL FROM: <postmaster@ez.no>",
+                               "RCPT TO: <{$address}>",
+                               "QUIT",
+                             );
+
+                for( $i = 0; $i < $numberOfMx; $i++ )
+                {
+                    if ( $socket = @fsockopen( $mx[$i], 25, $errno = 0, $errstr = 0, $timeoutOpen ) )
+                    {
+                        $response = fgets( $socket );
+                        stream_set_timeout( $socket, $timeoutConnection );
+                        $meta = stream_get_meta_data( $socket );
+                        if( !$meta['timed_out'] && !preg_match( '/^2\d\d[ -]/', $response ) )
+                        {
+                            return false;
+                        }
+                        foreach ( $smtp as $command )
+                        {
+                            fputs( $socket, "{$command}\r\n" );
+                            $response = fgets( $socket, 4096 );
+                            if( !$meta['timed_out'] && preg_match( '/^5\d\d[ -]/', $response ) )
+                            {
+                                return false;
+                            }
+                        }
+                        fclose( $socket );
+                        return true;
+                    }
+                    elseif ( $i === $numberOfMx - 1 )
+                    {
+                        // none of the mail servers could be contacted
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                // no mail servers found
+                return false;
+            }
+        }
+    }
+
+    /**
      * Returns an unique message ID to be used for a mail message.
      *
      * The hostname $hostname will be added to the unique ID as required by RFC822.
