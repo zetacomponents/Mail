@@ -285,8 +285,8 @@ class ezcMailTools
      *
      * By default it will only validate against the same regular expression
      * used in ext/filter. It follows
-     * {@link http://www.faqs.org/rfcs/rfc821.html RFC822} and
-     * {@link http://www.faqs.org/rfcs/rfc821.html RFC2822}.
+     * {@link http://www.faqs.org/rfcs/rfc822.html RFC822} and
+     * {@link http://www.faqs.org/rfcs/rfc2822.html RFC2822}.
      *
      * If $checkMxRecords is true, then an MX records check will be performed
      * also, by sending a test mail (RCPT TO) to $address using the MX records
@@ -313,8 +313,8 @@ class ezcMailTools
      *    a valid email address)
      *
      * The domainpart has the same rules as a domain name, as defined in
-     * {@link http://www.faqs.org/rfcs/rfc821.html RFC822} and
-     * {@link http://www.faqs.org/rfcs/rfc821.html RFC2822}.
+     * {@link http://www.faqs.org/rfcs/rfc822.html RFC822} and
+     * {@link http://www.faqs.org/rfcs/rfc2822.html RFC2822}.
      *
      * See also the test files (in the "Mail/tests/tools/data" directory) for
      * examples of correct and incorrect email addresses.
