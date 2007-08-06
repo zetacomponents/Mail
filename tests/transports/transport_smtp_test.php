@@ -159,9 +159,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testWrapperMockCmdMailFail()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_NO_AUTH, self::USER_NO_AUTH, self::PASS_NO_AUTH, self::PORT_NO_AUTH ) );
+        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN ) );
 
         $smtp->expects( $this->any() )
              ->method( 'getReplyCode' )
@@ -189,9 +187,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testWrapperMockCmdRpctFail()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_NO_AUTH, self::USER_NO_AUTH, self::PASS_NO_AUTH, self::PORT_NO_AUTH ) );
+        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN ) );
 
         $smtp->expects( $this->any() )
              ->method( 'getReplyCode' )
@@ -219,9 +215,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
 
     public function testWrapperMockCmdDataFail()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_NO_AUTH, self::USER_NO_AUTH, self::PASS_NO_AUTH, self::PORT_NO_AUTH ) );
+        $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'getReplyCode', 'sendData' ), array( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN ) );
 
         $smtp->expects( $this->any() )
              ->method( 'getReplyCode' )
@@ -250,9 +244,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message.
     public function testFullMail()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
@@ -267,9 +259,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with CCs.
     public function testFullMailCc()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
         try
         {
@@ -285,9 +275,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with BCCs.
     public function testFullMailBcc()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
         try
         {
@@ -303,9 +291,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with CCs and BCCs.
     public function testFullMailCcBcc()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
         $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
         try
@@ -322,9 +308,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending several complete mail messages.
     public function testFullMailMultiple()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
@@ -340,9 +324,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending several complete mail messages with keep connection.
     public function testFullMailMultipleKeepConnection()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $transport->keepConnection();
@@ -375,9 +357,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail to an existing host with an invalid port.
     public function testInvalidPort()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', 26 ); // wrong port
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, 26 ); // wrong port
 
         try
         {
@@ -395,9 +375,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail with empty to field.
     public function testInvalidMailToEmptyArray()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->to = array();
         try
         {
@@ -414,9 +392,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail with to not set.
     public function testInvalidMailToNull()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->to = null;
         try
         {
@@ -433,9 +409,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with Return-Path set.
     public function testFullMailReturnPath()
     {
-        $this->skipIfNotInNetwork( self::HOST_NO_AUTH, self::PORT_NO_AUTH );
-
-        $transport = new ezcMailTransportSmtp( self::HOST_NO_AUTH, '', '', self::PORT_NO_AUTH );
+        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->returnPath = new ezcMailAddress( 'returnpath@ez.no' );
         try
         {
