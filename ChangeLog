@@ -15,6 +15,8 @@
   methods DIGEST-MD5, CRAM-MD5, NTLM and LOGIN.
 - Implemented feature request #8436: Added the method validateEmailAddress()
   in ezcMailTools.
+- Implemented feature request #11299: Added an optional argument to the
+  setHeader() method in ezcMailPart to assign a charset to a header.
 
 
 1.3.1 - Monday 30 July 2007

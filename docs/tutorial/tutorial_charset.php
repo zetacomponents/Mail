@@ -16,6 +16,12 @@ $mail->subject = 'Oslo ligger sør i Norge og har vært landets hovedstad i over 6
 // Specify the charset of the subject
 $mail->subjectCharset = 'iso-8859-1';
 
+// Add a header with the default charset (us-ascii)
+$mail->setHeader( 'X-Related-City', 'Moscow' );
+
+// Add a header with a custom charset (iso-8859-5)
+$mail->setHeader( 'X-Related-Movie', 'James Bond - ¿¿ ¿¿¿¿¿¿ ¿ ¿¿¿¿¿¿¿', 'iso-8859-5' );
+
 // Specify the body as a text part, also specifying it's charset
 $mail->body = new ezcMailText( 'Oslo be grunnlagt rundt 1048 av Harald Hardråde.', 'iso-8859-1' );
 

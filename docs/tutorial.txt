@@ -225,7 +225,8 @@ Character encoding
 Most of the world does not speak and write US ASCII and thus requires more
 advanced character encoding to display mail correctly.
 
-The following example shows how to send a mail entirely encoded with iso-8859-1:
+The following example shows how to send a mail with the body and subject
+encoded with iso-8859-1 and a custom header encoded with iso-8859-5:
 
 .. include:: tutorial/tutorial_charset.php
    :literal:
