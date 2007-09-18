@@ -3,7 +3,7 @@
  * File containing the ezcMail class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -64,7 +64,7 @@
  * @apichange Remove the support for the deprecated property messageID.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @mainclass
  */
 class ezcMail extends ezcMailPart

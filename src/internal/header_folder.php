@@ -3,7 +3,7 @@
  * File containing the ezcMailHeaderFolder class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  * @access private
@@ -29,7 +29,7 @@
  * This is described in more detail in section 3.2.3.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @access private
  */
 class ezcMailHeaderFolder

@@ -3,7 +3,7 @@
  * File containing the ezcMailText class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -38,7 +38,7 @@
  *                the conversion to UTF-8 when parsing incomming mail.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  */
 class ezcMailText extends ezcMailPart
 {

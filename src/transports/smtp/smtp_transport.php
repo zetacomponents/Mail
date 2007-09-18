@@ -3,7 +3,7 @@
  * File containing the ezcMailSmtpTransport class.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -93,7 +93,7 @@
  *           Holds the options you can set to the SMTP transport.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @mainclass
  */
 class ezcMailSmtpTransport implements ezcMailTransport

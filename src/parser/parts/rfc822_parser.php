@@ -3,7 +3,7 @@
  * File containing the ezcMailRfc822Parser class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -15,7 +15,7 @@
  * Use the RFC822DigestParser to these.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.4alpha1
  * @access private
  */
 class ezcMailRfc822Parser extends ezcMailPartParser
