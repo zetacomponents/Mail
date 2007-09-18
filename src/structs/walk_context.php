@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version 1.4alpha1
+ * @version //autogentag//
  * @filesource
  * @package Mail
  */
@@ -41,7 +41,7 @@
  *           The current level in the mail part walk (0 = first level).
  *
  * @package Mail
- * @version 1.4alpha1
+ * @version //autogentag//
  */
 class ezcMailPartWalkContext
 {

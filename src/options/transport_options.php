@@ -3,7 +3,7 @@
  * File containing the ezcMailTransportOption class
  *
  * @package Mail
- * @version 1.4alpha1
+ * @version //autogen//
  * @copyright Copyright (C) 2005-2007 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -18,7 +18,7 @@
  *           Specifies whether to use an SSL connection or not.
  *
  * @package Mail
- * @version 1.4alpha1
+ * @version //autogen//
  */
 class ezcMailTransportOptions extends ezcBaseOptions
 {
