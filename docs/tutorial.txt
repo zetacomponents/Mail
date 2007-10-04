@@ -431,7 +431,7 @@ number of times such as three).
 Parsing: iconv() notices
 ------------------------
 
-If the mail that you try to parse is not encoded properly, the `iconv`_()
+If the mail that you try to parse is not encoded properly, the `iconv`_ ()
 function will throw notices (from the function convertToUTF8Iconv() in
 ezcMailCharsetConverter).
 
@@ -439,7 +439,7 @@ To avoid the notices you can use your own conversion function:
 
 1. Create a new function which is similar to convertToUTF8Iconv() from 
 ezcMailCharsetConverter, but which supresses notices and errors (with @ in
-front of `iconv`_()): ::
+front of `iconv`_ ()): ::
 
   class myConverter
   {
@@ -461,7 +461,7 @@ mail): ::
 Parsing: missing characters
 ---------------------------
 
-If the mail that you try to parse is not encoded properly, the `iconv`_()
+If the mail that you try to parse is not encoded properly, the `iconv`_ ()
 function will throw notices (from the function convertToUTF8Iconv() in
 ezcMailCharsetConverter).
 
@@ -469,7 +469,7 @@ To avoid the missing characters you can use your own conversion function:
 
 1. Create a new function which is similar to convertToUTF8Iconv() from 
 ezcMailCharsetConverter, but which uses one of the options //IGNORE or
-//TRANSLIT for `iconv`_(): ::
+//TRANSLIT for `iconv`_ (): ::
 
   class myConverter
   {
@@ -489,7 +489,7 @@ mail): ::
   ezcMailCharsetConverter::setConvertMethod( array( 'myConverter', 'convertToUTF8IconvIgnore' ) );
 
 See the other examples in ezcMailCharsetConverter, and see also the
-documentation for the `iconv`_() function to find out how //IGNORE and
+documentation for the `iconv`_ () function to find out how //IGNORE and
 //TRANSLIT work.
 
 .. _iconv: http://php.net/manual/en/function.iconv.php
