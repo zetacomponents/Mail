@@ -2135,6 +2135,36 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    public function testTagInHeadersAndBody()
+    {
+        $imap = new ezcMailImapTransport( self::$server, self::$port );
+        $imap->authenticate( self::$user, self::$password );
+
+        $imap->createMailbox( "Guybrush" );
+
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'from@example.com', 'From' );
+        $mail->addTo( new ezcMailAddress( 'to@example.com', 'To' ) );
+        $mail->subject = "A0000 A0001 A0002 A0003 A0004 A0005 A0006 A0007";
+        $mail->body = new ezcMailText( "A0000\nA0001\nA0002\nA0003\nA0004\nA0005\nA0006\nA0007" );
+        $data = $mail->generate();
+
+        $imap->append( "Guybrush", $data );
+        $imap->append( "Guybrush", $data, array( 'Answered' ) );
+
+        $imap->selectMailbox( "Guybrush" );
+
+        $set = $imap->fetchAll();
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        $imap->selectMailbox( "Inbox" );
+        $imap->deleteMailbox( "Guybrush" );
+
+        $this->assertEquals( 'A0000 A0001 A0002 A0003 A0004 A0005 A0006 A0007', $mail->subject );
+    }
+
     public function testTransportOptions()
     {
         $options = new ezcMailImapTransportOptions();

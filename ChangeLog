@@ -1,3 +1,10 @@
+1.4alpha2 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed issue #11582: ezcMailImapSet won't be caught in an infinite loop if
+  the mail headers or body contain an IMAP tag.
+
+
 1.4alpha1 - Tuesday 18 September 2007
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -84,6 +84,22 @@ class ezcMailImapSet implements ezcMailParserSet
     private $options;
 
     /**
+     * Holds the number of bytes to read from the IMAP server.
+     *
+     * It is set before starting to read a message from the information
+     * returned by the IMAP server in this form:
+     *
+     * <code>
+     * * 2 FETCH (FLAGS (\Answered \Seen) RFC822 {377}
+     * </code>
+     *
+     * In this example, $this->bytesToRead will be set to 377.
+     *
+     * @var int
+     */
+    private $bytesToRead = false;
+
+    /**
      * Constructs a new IMAP parser set that will fetch the messages $messages.
      *
      * $connection must hold a valid connection to a IMAP server that is ready
@@ -138,9 +154,10 @@ class ezcMailImapSet implements ezcMailParserSet
         if ( $this->hasMoreMailData )
         {
             $data = ( $this->nextData === null ) ? $this->connection->getLine() : $this->nextData;
-            if ( strpos( $data, $this->currentTag ) === false )
+            if ( $this->bytesToRead !== false && $this->bytesToRead >= 0 )
             {
                 $this->nextData = $this->connection->getLine();
+                $this->bytesToRead -= strlen( $this->nextData );
                 // the next code checks if the current line ends with ')'
                 // and the next line has the command tag (e.g. 'A0034').
                 if ( substr( trim( $data ), strlen( trim( $data ) ) - 1 ) === ')' && strpos( $this->nextData, $this->currentTag ) === 0 )
@@ -182,6 +199,7 @@ class ezcMailImapSet implements ezcMailParserSet
             $this->currentMessage = next( $this->messages );
         }
         $this->nextData = null;
+        $this->bytesToRead = false;
         if ( $this->currentMessage !== false )
         {
             $tag = $this->getNextTag();
@@ -198,6 +216,14 @@ class ezcMailImapSet implements ezcMailParserSet
                 if ( strpos( $response, 'FETCH (' ) !== false )
                 {
                     $this->hasMoreMailData = true;
+                    // retrieve the message size from $response, eg. if $response is:
+                    // * 2 FETCH (FLAGS (\Answered \Seen) RFC822 {377}
+                    // then $this->bytesToRead will be 377
+                    preg_match( '/\{(.*)\}/', $response, $matches );
+                    if ( count( $matches ) > 0 )
+                    {
+                        $this->bytesToRead = (int) $matches[1];
+                    }
                     return true;
                 }
                 else
