@@ -34,9 +34,9 @@
  * commands require in addition that a mailbox is selected.
  *
  * The IMAP transport class allows developers to interface with an IMAP server.
- * The commands which support unique IDs to refer to messages (see
- * ezcMailImapTransportOptions to find out how to enable unique IDs referencing)
- * are marked with [*]:
+ * The commands which support unique IDs to refer to messages are marked with
+ * [*] (see {@link ezcMailImapTransportOptions} to find out how to enable
+ * unique IDs referencing):
  *
  * Basic commands:
  *  - connect to an IMAP server ({@link __construct()})
@@ -67,8 +67,8 @@
  *  - [*] set a flag on the specified messages ({@link setFlag()})
  *  - [*] clear a flag from the specified messages ({@link clearFlag()})
  *
- * Work with ezcMailImapSet sets (parseable with ezcMailParser) (on the
- * currently selected mailbox):
+ * Work with {@link ezcMailImapSet} sets (parseable with {@link ezcMailParser})
+ * (on the currently selected mailbox):
  *  - [*] create a set from all messages ({@link fetchAll()})
  *  - [*] create a set from a certain message ({@link fetchByMessageNr()})
  *  - [*] create a set from a range of messages ({@link fetchFromOffset()})
@@ -86,7 +86,9 @@
  * <code>
  * // create a new IMAP transport object by specifying the server name, optional port
  * // and optional SSL mode
- * $imap = new ezcMailImapTransport( 'imap.example.com', null, array( 'ssl' => true ) );
+ * $options = new ezcMailImapTransportOptions();
+ * $options->ssl = true;
+ * $imap = new ezcMailImapTransport( 'imap.example.com', null, $options );
  *
  * // Authenticate to the IMAP server
  * $imap->authenticate( 'username', 'password' );
@@ -104,6 +106,9 @@
  * // disconnect from the IMAP server
  * $imap->disconnect();
  * </code>
+ *
+ * See {@link ezcMailImapTransportOptions} for other options you can specify
+ * for IMAP.
  *
  * @todo ignore messages of a certain size?
  * @todo // support for signing?
@@ -304,7 +309,7 @@ class ezcMailImapTransport
      * 993 (for SSL connections) or 143 (for plain connections). Use the $options
      * parameter to specify an SSL connection.
      *
-     * See ezcMailImapTransportOptions for options you can specify for
+     * See {@link ezcMailImapTransportOptions} for options you can specify for
      * IMAP.
      *
      * Example of creating an IMAP transport:
@@ -313,7 +318,10 @@ class ezcMailImapTransport
      * $imap = new ezcMailImapTransport( 'imap.example.com' );
      *
      * // if you want to use SSL:
-     * $imap = new ezcMailImapTransport( 'imap.example.com', null, array( 'ssl' => true ) );
+     * $options = new ezcMailImapTransportOptions();
+     * $options->ssl = true;
+     *
+     * $imap = new ezcMailImapTransport( 'imap.example.com', null, $options );
      * </code>
      *
      * @throws ezcMailTransportException
@@ -326,11 +334,23 @@ class ezcMailImapTransport
      *         if $options contains a property with a value not allowed
      * @param string $server
      * @param int $port
-     * @param array(string=>mixed) $options
+     * @param ezcMailImapTransportOptions|array(string=>mixed) $options
      */
-    public function __construct( $server, $port = null, array $options = array() )
+    public function __construct( $server, $port = null, $options = array() )
     {
-        $this->options = new ezcMailImapTransportOptions( $options );
+        if ( $options instanceof ezcMailImapTransportOptions )
+        {
+            $this->options = $options;
+        }
+        else if ( is_array( $options ) )
+        {
+            $this->options = new ezcMailImapTransportOptions( $options );
+        }
+        else
+        {
+            throw new ezcBaseValueException( "options", $options, "ezcMailImapTransportOptions|array" );
+        }
+
         if ( $port === null )
         {
             $port = ( $this->options->ssl === true ) ? 993 : 143;
@@ -810,8 +830,9 @@ class ezcMailImapTransport
      * Copies message(s) from the currently selected mailbox to mailbox
      * $destination.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * Warning! When using unique IDs referencing and trying to copy a message
      * with an ID that does not exist, this method will not throw an exception.
@@ -964,8 +985,9 @@ class ezcMailImapTransport
     /**
      * Fetches the sizes in bytes for messages $messages.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages is an array of message numbers, for example:
      * <code>
@@ -1102,8 +1124,9 @@ class ezcMailImapTransport
     /**
      * Deletes the message with the message number $msgNum from the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * The message number $msgNum must be a valid identifier fetched with e.g.
      * {@link listMessages()}.
@@ -1146,15 +1169,16 @@ class ezcMailImapTransport
      * Returns the headers and the first characters from message $msgNum,
      * without setting the SEEN flag.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * If the command failed or if it was not supported by the server an empty
      * string is returned.
      *
      * This method is useful for retrieving the headers of messages from the
-     * mailbox as strings, which can be later parsed with ezcMailParser
-     * and ezcMailVariableSet. In this way the retrieval of the full
+     * mailbox as strings, which can be later parsed with {@link ezcMailParser}
+     * and {@link ezcMailVariableSet}. In this way the retrieval of the full
      * messages from the server is avoided when building a list of messages.
      *
      * Before calling this method, a connection to the IMAP server must be
@@ -1330,15 +1354,16 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet with all the messages from the current mailbox.
+     * Returns an {@link ezcMailImapSet} with all the messages from the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * If $deleteFromServer is set to true the mail will be marked for deletion
      * after retrieval. If not it will be left intact.
      *
-     * The set returned can be parsed with ezcMailParser.
+     * The set returned can be parsed with {@link ezcMailParser}.
      *
      * Before calling this method, a connection to the IMAP server must be
      * established and a user must be authenticated successfully, and a mailbox
@@ -1382,11 +1407,12 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet containing only the $number -th message in
+     * Returns an {@link ezcMailImapSet} containing only the $number -th message in
      * the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * If $deleteFromServer is set to true the mail will be marked for deletion
      * after retrieval. If not it will be left intact.
@@ -1438,14 +1464,15 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet with $count messages starting from $offset from
+     * Returns an {@link ezcMailImapSet} with $count messages starting from $offset from
      * the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * Fetches $count messages starting from the $offset and returns them as a
-     * ezcMailImapSet. If $count is not specified or if it is 0, it fetches
+     * {@link ezcMailImapSet}. If $count is not specified or if it is 0, it fetches
      * all messages starting from the $offset.
      *
      * Before calling this method, a connection to the IMAP server must be
@@ -1524,11 +1551,12 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet containing the messages which match the
+     * Returns an {@link ezcMailImapSet} containing the messages which match the
      * provided $criteria from the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * See {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4. (or
      * {@link http://www.faqs.org/rfcs/rfc1730.html} - 6.4.4.) for criterias
@@ -1608,17 +1636,18 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet containing $count messages starting from $offset
-     * sorted by $sortCriteria from the current mailbox.
+     * Returns an {@link ezcMailImapSet} containing $count messages starting
+     * from $offset sorted by $sortCriteria from the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * It is useful for paging through a mailbox.
      *
      * Fetches $count messages starting from the $offset and returns them as a
-     * ezcMailImapSet. If $count is is 0, it fetches all messages starting from
-     * the $offset.
+     * {@link ezcMailImapSet}. If $count is is 0, it fetches all messages
+     * starting from the $offset.
      *
      * $sortCriteria is an email header like: Subject, To, From, Date, Sender, etc.
      *
@@ -1706,11 +1735,12 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet containing messages $messages sorted by
+     * Returns an {@link ezcMailImapSet} containing messages $messages sorted by
      * $sortCriteria from the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages is an array of message numbers, for example:
      * <code>
@@ -1751,11 +1781,12 @@ class ezcMailImapTransport
     }
 
     /**
-     * Returns an ezcMailImapSet containing messages with a certain flag from
+     * Returns an {@link ezcMailImapSet} containing messages with a certain flag from
      * the current mailbox.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $flag can be one of:
      *
@@ -1854,8 +1885,9 @@ class ezcMailImapTransport
     /**
      * Fetches IMAP flags for messages $messages.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages is an array of message numbers, for example:
      * <code>
@@ -1941,8 +1973,9 @@ class ezcMailImapTransport
     /**
      * Sets $flag on $messages.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages can be:
      *  - a single message number (eg. 1)
@@ -2010,8 +2043,9 @@ class ezcMailImapTransport
     /**
      * Clears $flag from $messages.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages can be:
      *  - a single message number (eg. '1')
@@ -2080,8 +2114,9 @@ class ezcMailImapTransport
      * Returns an array of message numbers from the selected mailbox which have a
      * certain flag set.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $flag can be one of:
      *
@@ -2361,8 +2396,9 @@ class ezcMailImapTransport
     /**
      * Sorts message numbers array $messages by the specified $sortCriteria.
      *
-     * This method supports unique IDs instead of message numbers, see
-     * ezcMailImapTransportOptions for how to enable unique IDs referencing.
+     * This method supports unique IDs instead of message numbers. See
+     * {@link ezcMailImapTransportOptions} for how to enable unique IDs
+     * referencing.
      *
      * $messages is an array of message numbers, for example:
      * <code>

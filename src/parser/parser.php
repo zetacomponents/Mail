@@ -11,10 +11,13 @@
 /**
  * Parses a mail in RFC822 format to an ezcMail structure.
  *
- * If you want to use your own mail class (extended from ezcMail), use
- * ezcMailParserOption. Example:
+ * If you want to use your own mail class (extended from {@link ezcMail}),
+ * use {@link ezcMailParserOption}. Example:
  * <code>
- * $parser = new ezcMailParser( array( 'mailClass' => 'MyMailClass' ) );
+ * $options = new ezcMailParserOptions();
+ * $options->mailClass = 'MyMailClass';
+ *
+ * $parser = new ezcMailParser( $options );
  * // if you want to use MyMailClass which extends ezcMail
  * </code>
  *
@@ -35,7 +38,7 @@ class ezcMailParser
     /**
      * Holds the parser of the current mail.
      *
-     * @var ezcMailPart
+     * @var ezcMailPartParser
      */
     private $partParser = null;
 
@@ -54,19 +57,30 @@ class ezcMailParser
     private $options;
 
     /**
-     * Constructs a new ezcMailParser.
+     * Constructs a new mail parser.
      *
-     * For options you can set to the mail parser see: {@link ezcMailParserOptions}
+     * For options you can set to the mail parser see {@link ezcMailParserOptions}.
      *
      * @throws ezcBasePropertyNotFoundException
      *         if $options contains a property not defined
      * @throws ezcBaseValueException
      *         if $options contains a property with a value not allowed
-     * @param array(string=>mixed) $options
+     * @param ezcMailParserOptions|array(string=>mixed) $options
      */
-    public function __construct( array $options = array() )
+    public function __construct( $options = array() )
     {
-        $this->options = new ezcMailParserOptions( $options );
+        if ( $options instanceof ezcMailParserOptions )
+        {
+            $this->options = $options;
+        }
+        else if ( is_array( $options ) )
+        {
+            $this->options = new ezcMailParserOptions( $options );
+        }
+        else
+        {
+            throw new ezcBaseValueException( "options", $options, "ezcMailParserOptions|array" );
+        }
     }
 
     /**
@@ -145,7 +159,10 @@ class ezcMailParser
      *
      * Example:
      * <code>
-     * $parser = new ezcMailParser( array( 'mailClass' => 'MyMailClass' ) );
+     * $options = new ezcMailParserOptions();
+     * $options->mailClass = 'MyMailClass';
+     *
+     * $parser = new ezcMailParser( $options );
      * // if you want to use MyMailClass which extends ezcMail
      * </code>
      *

@@ -664,6 +664,22 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         catch ( ezcBaseValueException $e )
         {
         }
+
+        $options = new ezcMailSmtpTransportOptions();
+        $options->connectionType = ezcMailSmtpTransport::CONNECTION_SSL;
+        $smtp = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN, $options );
+        $this->assertEquals( ezcMailSmtpTransport::CONNECTION_SSL, $smtp->options->connectionType );
+
+        $options = new stdClass();
+        try
+        {
+            $smtp = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN, $options );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'O:8:\"stdClass\":0:{}' that you were trying to assign to setting 'options' is invalid. Allowed values are: ezcMailSmtpTransportOptions|array.", $e->getMessage() );
+        }
     }
 
     public function testTransportOptionsDefault()

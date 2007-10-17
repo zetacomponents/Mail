@@ -5,13 +5,13 @@ require_once 'tutorial_autoload.php';
 $mail = new ezcMail();
 
 // Specify the "from" mail address
-$mail->from = new ezcMailAddress( 'sender@example.com', 'Norwegian characters: Ê¯Â', 'iso-8859-1' );
+$mail->from = new ezcMailAddress( 'sender@example.com', 'Norwegian characters: √¶√∏√•', 'iso-8859-1' );
 
 // Add one "to" mail address (multiple can be added)
-$mail->addTo( new ezcMailAddress( 'reciever@example.com', 'More norwegian characters: Ê¯Â', 'iso-8859-1' ) );
+$mail->addTo( new ezcMailAddress( 'reciever@example.com', 'More norwegian characters: √¶√∏√•', 'iso-8859-1' ) );
 
 // Specify the subject of the mail
-$mail->subject = 'Oslo ligger s¯r i Norge og har vÊrt landets hovedstad i over 600 Âr.';
+$mail->subject = 'Oslo ligger s√∏r i Norge og har v√¶rt landets hovedstad i over 600 √•r.';
 
 // Specify the charset of the subject
 $mail->subjectCharset = 'iso-8859-1';
@@ -20,10 +20,10 @@ $mail->subjectCharset = 'iso-8859-1';
 $mail->setHeader( 'X-Related-City', 'Moscow' );
 
 // Add a header with a custom charset (iso-8859-5)
-$mail->setHeader( 'X-Related-Movie', 'James Bond - øø øøøøøø ø øøøøøøø', 'iso-8859-5' );
+$mail->setHeader( 'X-Related-Movie', 'James Bond - √Ö leve og la d√∏', 'iso-8859-1' );
 
 // Specify the body as a text part, also specifying it's charset
-$mail->body = new ezcMailText( 'Oslo be grunnlagt rundt 1048 av Harald HardrÂde.', 'iso-8859-1' );
+$mail->body = new ezcMailText( 'Oslo be grunnlagt rundt 1048 av Harald Hardr√•de.', 'iso-8859-1' );
 
 // Create a new MTA transport object
 $transport = new ezcMailMtaTransport();

@@ -3,7 +3,10 @@ require_once 'tutorial_autoload.php';
 
 // Create a new IMAP transport object by specifying the server name, default port
 // and that the IMAP commands will work with unique IDs instead of message numbers
-$imap = new ezcMailImapTransport( "imap.example.com", null, array( 'uidReferencing' => true ) );
+$options = new ezcMailImapTransportOptions();
+$options->uidReferencing = true;
+
+$imap = new ezcMailImapTransport( "imap.example.com", null, $options );
 
 // Authenticate to the IMAP server
 $imap->authenticate( "user", "password" );

@@ -43,9 +43,12 @@
  *
  * The usual operation with a POP3 server is illustrated by this example:
  * <code>
- * // create a new POP3 transport object by specifying the server name, optional port
- * // and optional SSL mode
- * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, array( 'ssl' => true ) );
+ * // create a new POP3 transport object by specifying the server name, optional
+ * // port and optional SSL mode
+ * $options = new ezcMailPop3TransportOptions();
+ * $options->ssl = true;
+ *
+ * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, $options );
  *
  * // Authenticate to the POP3 server
  * $pop3->authenticate( 'username', 'password' );
@@ -61,6 +64,8 @@
  * // disconnect from the POP3 server
  * $pop3->disconnect();
  * </code>
+ *
+ * See {@link ezcMailPop3TransportOptions} for options you can specify for POP3.
  *
  * @todo ignore messages of a certain size?
  * @todo // support for signing?
@@ -153,7 +158,7 @@ class ezcMailPop3Transport
      * port 995 (for SSL connections) or 110 (for plain connections). Use the
      * $options parameter to specify an SSL connection.
      *
-     * For options you can specify for POP3 see ezcMailPop3TransportOptions.
+     * For options you can specify for POP3 see {@link ezcMailPop3TransportOptions}.
      *
      * Example of creating a POP3 transport:
      * <code>
@@ -161,7 +166,10 @@ class ezcMailPop3Transport
      * $pop3 = new ezcMailPop3Transport( 'pop3.example.com' );
      *
      * // if you want to use SSL:
-     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, array( 'ssl' => true ) );
+     * $options = new ezcMailPop3TransportOptions();
+     * $options->ssl = true;
+     *
+     * $pop3 = new ezcMailPop3Transport( 'pop3.example.com', null, $options );
      * </code>
      *
      * @throws ezcMailTransportException
@@ -174,11 +182,23 @@ class ezcMailPop3Transport
      *         if $options contains a property with a value not allowed
      * @param string $server
      * @param int $port
-     * @param array(string=>mixed) $options
+     * @param ezcMailPop3TransportOptions|array(string=>mixed) $options
      */
-    public function __construct( $server, $port = null, array $options = array() )
+    public function __construct( $server, $port = null, $options = array() )
     {
-        $this->options = new ezcMailPop3TransportOptions( $options );
+        if ( $options instanceof ezcMailPop3TransportOptions )
+        {
+            $this->options = $options;
+        }
+        else if ( is_array( $options ) )
+        {
+            $this->options = new ezcMailPop3TransportOptions( $options );
+        }
+        else
+        {
+            throw new ezcBaseValueException( "options", $options, "ezcMailPop3TransportOptions|array" );
+        }
+
         if ( $port === null )
         {
             $port = ( $this->options->ssl === true ) ? 995 : 110;

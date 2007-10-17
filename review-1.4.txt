@@ -1,13 +1,21 @@
-[ ] Options should always be done through an options class, and no longer
+[X] Options should always be done through an options class, and no longer
     through arrays like is shown in trunk/Mail/docs/tutorial/tutorial_smtp_auth.php.
 	See: http://ez.no/ezcomponents/contributing/coding_standards#id45
 	As in this case there are options before, the functionality should stay,
 	but the array() way of passing objects should not be documented.
 
-[ ] The same in ezcMailImapSet but as that did not have options before, the
+	- The IMAP, POP3 and SMTP transports and the ezcMailParser class can receive
+	options objects in the constructor. They can still receive options as arrays
+	to keep compatibility.
+
+[X] The same in ezcMailImapSet but as that did not have options before, the
     array way should not be supported at all.
 
-[ ] The "James Bond" header looks broken to me in the tutorial.
+	- To keep consistency in the whole package array options were used.
+
+[X] The "James Bond" header looks broken to me in the tutorial.
+
+	- Fixed.
 
 [ ] Shouldn't the charset for headers default to "Utf-8" instead of "us-ascii"?
     I am not sure what we do in other cases, it of course has to be consistent.
@@ -16,12 +24,20 @@
 	"$value = substr( $value, 7 ); // "dummy: " + 1" bit copied from somewhere?
 	If so, we should make this a new (private) method somewhere.
 
-[ ] In ezcMailImapTransport, why did you change many properties to protected
+[X] In ezcMailImapTransport, why did you change many properties to protected
     (from private)?
 
-[ ] I see some strange things with ezcMailTransportMta vs ezcMailMtaTransport 
+	- I think it makes more sense to have protected properties, and also makes
+	it easier to test.
+
+[X] I see some strange things with ezcMailTransportMta vs ezcMailMtaTransport 
     in the trunk/Mail/src/transports/mta/mta_transport.php file... are you 
 	sure you didn't swap something? Or was it fucked up before? :)
 
-[ ] The same thing seems to be going on with ezcMailTransportSmtp vs
+	- ezcMailTransportMta is a wrong name so it is deprecated in transport_mta.php
+	ezcMailMtaTransport is correct and it is in mta_transport.php
+
+[X] The same thing seems to be going on with ezcMailTransportSmtp vs
     ezcMailSmtpTransport.
+
+	- The same thing above.

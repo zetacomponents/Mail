@@ -1200,6 +1200,29 @@ END;
         $this->assertEquals( 'ExtendedMail', get_class( $mail ) );
     }
 
+    public function testParserConstructorOptions()
+    {
+        $options = new ezcMailParserOptions();
+        $options->mailClass = 'ExtendedMail';
+
+        $parser = new ezcMailParser( $options );
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( 'ExtendedMail', get_class( $mail ) );
+
+        $options = new stdClass();
+        try
+        {
+            $parser = new ezcMailParser( $options );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'O:8:\"stdClass\":0:{}' that you were trying to assign to setting 'options' is invalid. Allowed values are: ezcMailParserOptions|array.", $e->getMessage() );
+        }
+    }
+
     public function testParserProperties()
     {
         $parser = new ezcMailParser();

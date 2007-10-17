@@ -2165,6 +2165,24 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( 'A0000 A0001 A0002 A0003 A0004 A0005 A0006 A0007', $mail->subject );
     }
 
+    public function testTransportConstructorOptions()
+    {
+        $options = new ezcMailImapTransportOptions();
+        $options->timeout = 10;
+        $imap = new ezcMailImapTransport( self::$server, self::$port, $options );
+
+        $options = new stdClass();
+        try
+        {
+            $pop3 = new ezcMailImapTransport( self::$server, self::$port, $options );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'O:8:\"stdClass\":0:{}' that you were trying to assign to setting 'options' is invalid. Allowed values are: ezcMailImapTransportOptions|array.", $e->getMessage() );
+        }
+    }
+
     public function testTransportOptions()
     {
         $options = new ezcMailImapTransportOptions();
@@ -2208,6 +2226,24 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
         catch ( ezcBasePropertyNotFoundException $e )
         {
+        }
+
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+
+        $options = new ezcMailImapSetOptions();
+        $options->uidReferencing = true;
+
+        $set = new ezcMailImapSet( $connection, array(), false, $options );
+
+        $options = new stdClass();
+        try
+        {
+            $set = new ezcMailImapSet( $connection, array(), false, $options );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'O:8:\"stdClass\":0:{}' that you were trying to assign to setting 'options' is invalid. Allowed values are: ezcMailImapSetOptions|array.", $e->getMessage() );
         }
     }
 }

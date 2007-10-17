@@ -382,6 +382,10 @@ or POP3 account, an mbox file, a single mail file or a variable.
 .. include:: tutorial/tutorial_parse.php
    :literal:
 
+Because the parser will delete the temporary attachments after the script ends,
+it is needed to save those files to another directory. On lines 19-26 a way of
+how to do this is shown.
+
 For a more detailed example on how to use a mail object, please see the
 `display example`_.
 

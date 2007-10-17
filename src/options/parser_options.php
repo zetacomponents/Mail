@@ -11,6 +11,14 @@
 /**
  * Class containing the basic options for the mail parser.
  *
+ * Example of how to use the parser options:
+ * <code>
+ * $options = new ezcMailParserOptions();
+ * $options->mailClass = 'ezcMail';
+ *
+ * $parser = new ezcMailParser( $options );
+ * </code>
+ *
  * @property int $mailClass
  *           Specifies a class descending from ezcMail which can be returned by the
  *           parser if you plan to use another class instead of ezcMail.

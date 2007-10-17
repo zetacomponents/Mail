@@ -11,20 +11,41 @@
 /**
  * Class containing the options for SMTP transport.
  *
- * The options from ezcMailTransportOptions are inherited.
+ * The options from {@link ezcMailTransportOptions} are inherited.
+ *
+ * Example of how to use SMTP transport options:
+ * <code>
+ * $options = new ezcMailSmtpTransportOptions();
+ * $options->timeout = 3;
+ * $options->connectionType = ezcMailSmtpTransport::CONNECTION_SSL;
+ * $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
+ *
+ * $smtp = new ezcMailSmtpTransport( 'smtp.example.com', 'user', 'password', null, $options );
+ *
+ * // the options can also be set via the options property of the SMTP transport:
+ * $smtp->options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
+ * </code>
  *
  * @property string $connectionType
  *           Specifies the protocol used to connect to the SMTP server. See the
- *           CONNECTION_* constants in the ezcMailSmtpTransport class.
+ *           CONNECTION_* constants in the {@link ezcMailSmtpTransport} class.
  * @property array(mixed) $connectionOptions
  *           Specifies additional options for the connection. Must be in this format:
  *           array( 'wrapper_name' => array( 'option_name' => 'value' ) ).
  * @property bool $ssl
- *           This option belongs to ezcMailTransportOptions, but it is not used in SMTP.
+ *           This option belongs to {@link ezcMailTransportOptions}, but it is
+ *           not used in SMTP.
  *           When trying to set this to true the connectionType option will be set to
- *           CONNECTION_SSL value from ezcMailSmtpTransport.
+ *           {@link ezcMailSmtpTransport::CONNECTION_SSL}.
  *           When trying to set this to false the connectionType option will be set to
- *           CONNECTION_PLAIN value from ezcMailSmtpTransport.
+ *           {@link ezcMailSmtpTransport::CONNECTION_PLAIN}.
+ * @property string $preferredAuthMethod
+ *           Specifies which authentication method should be attempted. Default is
+ *           null which means that that the transport should try to
+ *           authenticate using the methods supported by the SMTP server in their
+ *           decreasing strength order. If one method fails an exception will be
+ *           thrown. See the AUTH_* constants in the {@link ezcMailSmtpTransport}
+ *           class.
  *
  * @package Mail
  * @version //autogen//

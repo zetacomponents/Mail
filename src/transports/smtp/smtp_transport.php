@@ -23,7 +23,7 @@
  * (if an empty username and password have been provided), or to authenticate
  * with the strongest method supported by the server (if username and password
  * have been provided). The default behaviour can be changed with the option
- * preferredAuthMethod.
+ * preferredAuthMethod (see {@link ezcMailSmtpTransportOptions}).
  *
  * If the preferred method is specified via options, only that authentication
  * method will be attempted on the SMTP server. If it fails, an exception will
@@ -53,9 +53,11 @@
  * // The port will be 465 by default, use the 4th argument to change it.
  * // Username and password (2nd and 3rd arguments) are left blank, which means
  * // the mail host does not need authentication.
- * // Omit the 5th parameter if you want to use a plain connection
- * // (or set connectionType to ezcMailSmtpTransport::CONNECTION_PLAIN).
- * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
+ * // The 5th parameter is the optional $options object.
+ * $options = new ezcMailSmtpTransportOptions();
+ * $options->connectionType = ezcMailSmtpTransport::CONNECTION_SSLV3;
+ *
+ * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', '', '', null, $options );
  *
  * // Use the SMTP transport to send the created mail object
  * $transport->send( $mail );
@@ -67,11 +69,16 @@
  * // Username and password must be specified, otherwise no authentication
  * // will be attempted.
  * // If NTLM authentication fails, an exception will be thrown.
- * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', 'username', 'password', null, array( 'preferredAuthMethod' => ezcMailSmtpTransport::AUTH_NTLM ) );
+ * $options = new ezcMailSmtpTransportOptions();
+ * $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
+ *
+ * $transport = new ezcMailSmtpTransport( 'mailhost.example.com', 'username', 'password', null, $options );
  *
  * // The option can also be specified via the option property:
  * $transport->options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
  * </code>
+ *
+ * See {@link ezcMailSmtpTransportOptions} for options you can specify for SMTP.
  *
  * @property string $serverHost
  *           The SMTP server host to connect to.
@@ -259,11 +266,23 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * @param string $user
      * @param string $password
      * @param int $port
-     * @param array(string=>mixed) $options
+     * @param ezcMailSmtpTransportOptions|array(string=>mixed) $options
      */
-    public function __construct( $host, $user = '', $password = '', $port = null, array $options = array() )
+    public function __construct( $host, $user = '', $password = '', $port = null, $options = array() )
     {
-        $this->options = new ezcMailSmtpTransportOptions( $options );
+        if ( $options instanceof ezcMailSmtpTransportOptions )
+        {
+            $this->options = $options;
+        }
+        else if ( is_array( $options ) )
+        {
+            $this->options = new ezcMailSmtpTransportOptions( $options );
+        }
+        else
+        {
+            throw new ezcBaseValueException( "options", $options, "ezcMailSmtpTransportOptions|array" );
+        }
+
         $this->serverHost = $host;
         if ( $port === null )
         {

@@ -3,6 +3,9 @@
 
 - Fixed issue #11582: ezcMailImapSet won't be caught in an infinite loop if
   the mail headers or body contain an IMAP tag.
+- The IMAP, POP3 and SMTP transports and the ezcMailParser class can receive
+  options objects in the constructor. They can still receive options as arrays
+  to keep compatibility.
 
 
 1.4alpha1 - Tuesday 18 September 2007

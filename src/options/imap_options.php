@@ -11,22 +11,16 @@
 /**
  * Class containing the options for IMAP transport.
  *
- * The options from ezcMailTransportOptions are inherited.
+ * The options from {@link ezcMailTransportOptions} are inherited.
  *
  * Example of how to use IMAP transport options:
  * <code>
- * $imap = new ezcMailImapTransport( 'imap.example.com', null,
- *                array( 'ssl' => true, 'uidReferencing' => true ) );
- * </code>
- *
- * Alternatively you can specify the options using an options object:
- * <code>
  * $options = new ezcMailImapTransportOptions();
  * $options->ssl = true;
+ * $options->timeout = 3;
  * $options->uidReferencing = true;
  *
- * $imap = new ezcMailImapTransport( 'imap.example.com' );
- * $imap->options = $options;
+ * $imap = new ezcMailImapTransport( 'imap.example.com', null, $options );
  * </code>
  *
  * @property bool $uidReferencing

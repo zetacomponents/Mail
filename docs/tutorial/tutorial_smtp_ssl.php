@@ -23,9 +23,15 @@ $mail->build();
 // The port will be 465 by default, use the 4th argument to change it.
 // Username and password (2nd and 3rd arguments) are left blank, which means
 // the mail host does not need authentication.
-// Omit the 5th parameter if you want to use a plain connection
-// (or set connectionType to ezcMailSmtpTransport::CONNECTION_PLAIN).
-$transport = new ezcMailSmtpTransport( 'mailhost.example.com', '', '', null, array( 'connectionType' => ezcMailSmtpTransport::CONNECTION_SSLV3 ) );
+// The 5th parameter is the $options object which specifies a SSLV3 connection
+// (default is ezcMailSmtpTransport::CONNECTION_PLAIN).
+$options = new ezcMailSmtpTransportOptions();
+$options->connectionType = ezcMailSmtpTransport::CONNECTION_SSLV3;
+
+$transport = new ezcMailSmtpTransport( 'mailhost.example.com', '', '', null, $options );
+
+// The option can also be specified via the option property:
+$transport->options->connectionType = ezcMailSmtpTransport::CONNECTION_SSLV3;
 
 // Use the SMTP transport to send the created mail object
 $transport->send( $mail );

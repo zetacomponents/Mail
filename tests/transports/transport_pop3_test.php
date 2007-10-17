@@ -718,6 +718,24 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
     }
 
+    public function testTransportConstructorOptions()
+    {
+        $options = new ezcMailPop3TransportOptions();
+        $options->authenticationMethod = ezcMailPop3Transport::AUTH_APOP;
+        $pop3 = new ezcMailPop3Transport( self::$server, self::$port, $options );
+
+        $options = new stdClass();
+        try
+        {
+            $pop3 = new ezcMailPop3Transport( self::$server, self::$port, $options );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'O:8:\"stdClass\":0:{}' that you were trying to assign to setting 'options' is invalid. Allowed values are: ezcMailPop3TransportOptions|array.", $e->getMessage() );
+        }
+    }
+
     public function testTransportOptionsDefault()
     {
         $options = new ezcMailPop3TransportOptions();

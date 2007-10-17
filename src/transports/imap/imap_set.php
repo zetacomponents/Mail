@@ -107,20 +107,35 @@ class ezcMailImapSet implements ezcMailParserSet
      *
      * If $deleteFromServer is set to true the messages will be deleted after retrieval.
      *
+     * See {@link ezcMailImapSetOptions} for options you can set to IMAP sets.
+     *
      * @throws ezcMailTransportException
      *         if the server sent a negative response
      * @param ezcMailTransportConnection $connection
      * @param array(int) $messages
      * @param bool $deleteFromServer
-     * @param array(string=>mixed) $options
+     * @param ezcMailImapSetOptions|array(string=>mixed) $options
      */
-    public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false, array $options = array() )
+    public function __construct( ezcMailTransportConnection $connection, array $messages, $deleteFromServer = false, $options = array() )
     {
+        if ( $options instanceof ezcMailImapSetOptions )
+        {
+            $this->options = $options;
+        }
+        else if ( is_array( $options ) )
+        {
+            $this->options = new ezcMailImapSetOptions( $options );
+        }
+        else
+        {
+            throw new ezcBaseValueException( "options", $options, "ezcMailImapSetOptions|array" );
+        }
+
         $this->connection = $connection;
         $this->messages = $messages;
         $this->deleteFromServer = $deleteFromServer;
         $this->nextData = null;
-        $this->options = new ezcMailImapSetOptions( $options );
+        
         $this->uid = ( $this->options->uidReferencing ) ? ezcMailImapTransport::UID : ezcMailImapTransport::NO_UID;
     }
 

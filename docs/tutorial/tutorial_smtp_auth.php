@@ -6,7 +6,10 @@ require_once 'tutorial_autoload.php';
 // will be attempted.
 // If NTLM authentication fails, an exception will be thrown.
 // See the ezcMailSmtpTransport class for a list of supported methods.
-$transport = new ezcMailSmtpTransport( 'mailhost.example.com', 'username', 'password', null, array( 'preferredAuthMethod' => ezcMailSmtpTransport::AUTH_NTLM ) );
+$options = new ezcMailSmtpTransportOptions();
+$options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;
+
+$transport = new ezcMailSmtpTransport( 'mailhost.example.com', 'username', 'password', null, $options );
 
 // The option can also be specified via the option property:
 $transport->options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_NTLM;

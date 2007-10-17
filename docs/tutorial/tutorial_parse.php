@@ -14,6 +14,16 @@ for ( $i = 0; $i < count( $mail ); $i++ )
 {
     // Process $mail[$i] such as use $mail[$i]->subject, $mail[$i]->body
     echo "From: {$mail[$i]->from}, Subject: {$mail[$i]->subject}\n";
+
+    // Save the attachments to another folder
+    $parts = $mail[$i]->fetchParts();
+    foreach ( $parts as $part )
+    {
+        if ( $part instanceof ezcMailFile )
+        {
+            rename( $part->fileName, '/path/to/save/to/' . basename( $part->fileName ) );
+        }
+    }
 }
 
 ?>
