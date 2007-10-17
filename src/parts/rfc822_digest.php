@@ -24,7 +24,7 @@
  *
  * $mail->body = new ezcMailMultipartMixed( $textPart, new ezcMailRfc822Digest( $digest ) );
  *
- * $transport = new ezcMailTransportMta();
+ * $transport = new ezcMailMtaTransport();
  * $transport->send( $mail );
  * </code>
  *

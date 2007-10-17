@@ -22,7 +22,7 @@
  * $mail->addTo( new ezcMailAddress( 'receiver@example.com', 'Maureen Corley' ) );
  * $mail->subject = "Hi";
  * $mail->body = new ezcMailText( "I just mail to say I love you!" );
- * $transport = new ezcMailTransportMta();
+ * $transport = new ezcMailMtaTransport();
  * $transport->send( $mail );
  * </code>
  *

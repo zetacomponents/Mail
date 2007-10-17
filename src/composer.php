@@ -35,7 +35,7 @@
  * $mail->htmlText = "<html>Here is the HTML version of your mail with an image: <img src='file://path_to_image.jpg' /></html>";
  * $mail->addAttachment( 'path_to_attachment.file' );
  * $mail->build();
- * $transport = new ezcMailTransportMta();
+ * $transport = new ezcMailMtaTransport();
  * $transport->send( $mail );
  * </code>
  *

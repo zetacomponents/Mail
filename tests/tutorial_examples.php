@@ -43,7 +43,7 @@ class ezcMailTutorialExamples extends ezcTestCase
         $mail->subject = "This is the subject of the example mail";
         $mail->plainText = "This is the body of the example mail.";
         $mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $mail );
     }
 
@@ -54,7 +54,7 @@ class ezcMailTutorialExamples extends ezcTestCase
         $mail->addTo( new ezcMailAddress( 'receiver@example.com', 'Maggie Robbins' ) );
         $mail->subject = "This is the subject of the example mail";
         $mail->body = new ezcMailText( "This is the body of the example mail." );
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $mail );
     }
 
@@ -69,7 +69,7 @@ class ezcMailTutorialExamples extends ezcTestCase
         $fileAttachment = new ezcMailFile( dirname( __FILE__) . "/parts/data/fly.jpg" );
 
         $mail->body = new ezcMailMultipartMixed( $textPart, $fileAttachment );
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $mail );
     }
 
@@ -93,7 +93,7 @@ class ezcMailTutorialExamples extends ezcTestCase
 
         $mail->body = new ezcMailMultipartMixed( $textPart,
                                                   new RFC822Digest( $digest ) );
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $mail );
     }
 
@@ -105,7 +105,7 @@ class ezcMailTutorialExamples extends ezcTestCase
         $mail->subject = 'Oslo ligger sør i Norge og har vært landets hovedstad i over 600 år.';
         $mail->subjectCharset = 'iso-8859-1';
         $mail->body = new ezcMailText( 'Oslo be grunnlagt rundt 1048 av Harald Hardråde.', 'iso-8859-1' );
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $mail );
     }
 

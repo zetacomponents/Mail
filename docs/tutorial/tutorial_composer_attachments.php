@@ -26,7 +26,7 @@ $mail->addAttachment( 'path_to_attachment.file' );
 $mail->build();
 
 // Create a new MTA transport object
-$transport = new ezcMailTransportMta();
+$transport = new ezcMailMtaTransport();
 
 // Use the MTA transport to send the created mail object
 $transport->send( $mail ); 

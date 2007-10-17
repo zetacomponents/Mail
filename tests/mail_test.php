@@ -222,7 +222,7 @@ class ezcMailTest extends ezcTestCase
 //        echo $this->mail->generate();
 //        echo "---------------\n";
         // let's try to send the thing
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
 //        $transport->send( $this->mail );
     }
 
@@ -240,7 +240,7 @@ class ezcMailTest extends ezcTestCase
 //        echo $this->mail->generate();
 //        echo "---------------\n";
         // let's try to send the thing
-//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+//        $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
 //        $transport->send( $this->mail );
     }
 
@@ -259,7 +259,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->body = new ezcMailMultipartMixed( new ezcMailText( "Dette er body ßßæøååå", "iso-8859-1" ),
                                                        new ezcMailRfc822Digest( $digest ) );
 
-//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+//        $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
 //        $transport->send( $this->mail );
     }
 
@@ -278,7 +278,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->body = new ezcMailMultipartMixed( new ezcMailText( "Dette er body ßßæøååå", "iso-8859-1" ),
                                                        new ezcMailMultipartDigest( new ezcMailRfc822Digest( $digest ) ) );
 
-//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+//        $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
 //        $transport->send( $this->mail );
     }
 
@@ -297,7 +297,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->body = new ezcMailMultipartMixed( new ezcMailText( "Dette er body ßßæøååå", "iso-8859-1" ),
                                                        new ezcMailMultipartDigest( array( new ezcMailRfc822Digest( $digest ) ) ) );
 
-//        $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+//        $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
 //        $transport->send( $this->mail );
     }
 

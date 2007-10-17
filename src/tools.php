@@ -403,7 +403,7 @@ class ezcMailTools
                         $response = fgets( $socket );
                         stream_set_timeout( $socket, $timeoutConnection );
                         $meta = stream_get_meta_data( $socket );
-                        if( !$meta['timed_out'] && !preg_match( '/^2\d\d[ -]/', $response ) )
+                        if ( !$meta['timed_out'] && !preg_match( '/^2\d\d[ -]/', $response ) )
                         {
                             return false;
                         }
@@ -411,7 +411,7 @@ class ezcMailTools
                         {
                             fputs( $socket, "{$command}\r\n" );
                             $response = fgets( $socket, 4096 );
-                            if( !$meta['timed_out'] && preg_match( '/^5\d\d[ -]/', $response ) )
+                            if ( !$meta['timed_out'] && preg_match( '/^5\d\d[ -]/', $response ) )
                             {
                                 return false;
                             }

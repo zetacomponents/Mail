@@ -244,7 +244,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message.
     public function testFullMail()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
@@ -259,7 +259,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with CCs.
     public function testFullMailCc()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
         try
         {
@@ -275,7 +275,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with BCCs.
     public function testFullMailBcc()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
         try
         {
@@ -291,7 +291,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with CCs and BCCs.
     public function testFullMailCcBcc()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->addCc( new ezcMailAddress( 'nospam@ez.no', 'Foster Cc' ) );
         $this->mail->addBcc( new ezcMailAddress( 'nospam@ez.no', 'Foster Bcc' ) );
         try
@@ -308,7 +308,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending several complete mail messages.
     public function testFullMailMultiple()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
@@ -324,7 +324,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending several complete mail messages with keep connection.
     public function testFullMailMultipleKeepConnection()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         try
         {
             $transport->keepConnection();
@@ -341,7 +341,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail to an invalid host.
     public function testInvalidHost()
     {
-        $transport = new ezcMailTransportSmtp( "invalidhost.online.no" );
+        $transport = new ezcMailSmtpTransport( "invalidhost.online.no" );
         try
         {
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
@@ -357,7 +357,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail to an existing host with an invalid port.
     public function testInvalidPort()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, 26 ); // wrong port
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, 26 ); // wrong port
 
         try
         {
@@ -375,7 +375,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail with empty to field.
     public function testInvalidMailToEmptyArray()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->to = array();
         try
         {
@@ -392,7 +392,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a mail with to not set.
     public function testInvalidMailToNull()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->to = null;
         try
         {
@@ -409,7 +409,7 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     // Tests sending a complete mail message with Return-Path set.
     public function testFullMailReturnPath()
     {
-        $transport = new ezcMailTransportSmtp( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
+        $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
         $this->mail->returnPath = new ezcMailAddress( 'returnpath@ez.no' );
         try
         {

@@ -152,7 +152,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "Text only.";
         $this->mail->plainText = "Text only. Should not have a multipart body.";
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -166,7 +166,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "HTML only..";
         $this->mail->htmlText = "<html><i><b>HTML only. Should not have a multipart body.</b></i></html>";
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -180,7 +180,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "One attachments only.";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -195,7 +195,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -210,7 +210,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
         $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -241,7 +241,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-        $transport = new ezcMailTransportMta();
+        $transport = new ezcMailMtaTransport();
         // $transport->send( $this->mail );
     }
 
@@ -261,7 +261,7 @@ class ezcMailComposerTest extends ezcTestCase
                                    . "/parts/data/fly.jpg\">file.</a></html>";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
-        // $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+        // $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
     }
 
     /**
@@ -285,7 +285,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $this->mail->build();
         $this->removeTempDir();
-        // $transport = new ezcMailTransportSmtp( "smtp.ez.no" );
+        // $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
     }
 
     /**
