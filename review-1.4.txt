@@ -8,6 +8,12 @@
 	options objects in the constructor. They can still receive options as arrays
 	to keep compatibility.
 
+	- TS: Actually we should not even document anymore, that an array also
+	  works as options. Just the option class itself should be documented so
+	  no new users start with the deprecated way of handling options. The
+	  default value for $options in ctors should also be null, not array()
+	  then.
+
 [X] The same in ezcMailImapSet but as that did not have options before, the
     array way should not be supported at all.
 
@@ -19,6 +25,9 @@
 
 [ ] Shouldn't the charset for headers default to "Utf-8" instead of "us-ascii"?
     I am not sure what we do in other cases, it of course has to be consistent.
+	
+	- TS: I think we should default to UTF-8 everywhere we need to define a
+	  default charset.
 
 [ ] Isn't the "$charset = $this->getHeaderCharset" to
 	"$value = substr( $value, 7 ); // "dummy: " + 1" bit copied from somewhere?
@@ -41,3 +50,15 @@
     ezcMailSmtpTransport.
 
 	- The same thing above.
+
+[ ] In ezcMailTools::validateEmailAddressMx() we are using smtp.ez.no in the
+    HELO command. This will be incorrect for most of the use cases, since HELO
+	should identify the server that is opening the communication. We should
+	either rely on $_SERVER['SERVER_NAME'] or let the user supply the domain
+	to use in HELO. Same applies for the sender email address. This should
+	either be "postmaster@{$_SERVER['SERVER_NAME']}" or also configurable.
+
+[ ] On my system several failures and warnings occur. I guess this is mostly
+    because test cases don't get skipped that are only working inside the eZ
+	network, but some seem to have real problems. For details, please check
+	http://home.schlitt.info:8080/buildresults/Mail.
