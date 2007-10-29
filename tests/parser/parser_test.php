@@ -1167,7 +1167,7 @@ END;
         $mail = $parser->parseMail( $set );
         $report = $mail[0]->body;
         $this->assertEquals( "ezcMailMultipartReport", get_class( $report ) );
-        $this->assertEquals( true, strpos( $report->getReadablePart()->text, "arathib@vnet.ibm.com" ) );
+        $this->assertEquals( 62, strpos( $report->getReadablePart()->text, "arathib@vnet.ibm.com" ) );
         $delivery = $report->getMachinePart();
         $this->assertEquals( "dns; cs.utk.edu", $delivery->message["Reporting-MTA"] );
         $this->assertEquals( "rfc822;arathib@vnet.ibm.com", $delivery->recipients[0]["Final-Recipient"] );
