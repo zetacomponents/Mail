@@ -1,4 +1,4 @@
-1.4alpha2 - [RELEASEDATE]
+1.4alpha2 - Monday 29 October 2007
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #11582: ezcMailImapSet won't be caught in an infinite loop if
