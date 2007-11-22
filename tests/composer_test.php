@@ -264,6 +264,20 @@ class ezcMailComposerTest extends ezcTestCase
         // $transport = new ezcMailSmtpTransport( "smtp.ez.no" );
     }
 
+    public function testMailHtmlWithImagesAndFilesOutsideImg()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: file://" . dirname( __FILE__  ) . "/parts/data/fly.jpg </html>";
+        $this->mail->build();
+        $set = new ezcMailVariableSet( $this->mail->generate() );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $this->assertEquals( "<html>Some text before the image: file://" . dirname( __FILE__ ) . "/parts/data/fly.jpg </html>", $mail->body->text );
+    }
+
     /**
      * Tests a complete mail with html images and files
      * http://www.apps.ietf.org/msglint.html - validator

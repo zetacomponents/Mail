@@ -309,7 +309,7 @@ class ezcMailComposer extends ezcMail
         if ( $this->htmlText != '' )
         {
             // recognize file:// and file:///, pick out the image, add it as a part and then..:)
-            preg_match_all( "/file:\/\/([^ >\'\"]+)/i", $this->htmlText, $matches );
+            preg_match_all( "/<img[\s\*\s]src=[\'\"]file:\/\/([^ >\'\"]+)/i", $this->htmlText, $matches );
             // pictures/files can be added multiple times. We only need them once.
             $matches = array_unique( $matches[1] );
 
