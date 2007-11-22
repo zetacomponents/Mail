@@ -11,4 +11,3 @@
 # an email address.
 
 nospam@ez.no
-postmaster@hotmail.com
