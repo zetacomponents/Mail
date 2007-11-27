@@ -200,15 +200,15 @@ class ezcMailTransportConnection
     {
         $data = '';
         $line   = '';
-        $loops  = 0;
 
         if ( is_resource( $this->connection ) )
         {
-            while ( ( strpos( $line, self::CRLF ) === false ) && $loops < 100 )
+            // in case there is a problem with the connection fgets() returns false
+            while ( $line !== false
+                    && strpos( $line, self::CRLF ) === false )
             {
                 $line = fgets( $this->connection, 512 );
                 $data .= $line;
-                $loops++;
             }
 
             if ( $trim == false )

@@ -5,6 +5,8 @@
   composed email.
 - Fixed issue #12062: Mails with no space or tabs after the colon in headers
   are parsed correctly now.
+- Fixed issue #11965: Reading from a transport connection is stopped at CRLF
+  or a problem in the connection, and not after a hard-coded number of loops.
 
 
 1.4alpha2 - Monday 29 October 2007
