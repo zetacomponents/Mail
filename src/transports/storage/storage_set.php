@@ -147,7 +147,7 @@ class ezcMailStorageSet implements ezcMailParserSet
         {
             // Temporary value in case the Message-ID cannot be extracted from $line
             $this->id = $this->file;
-            preg_match_all( "/^([\w-_]*):[\s]{0,1}(.*)/", $line, $matches, PREG_SET_ORDER );
+            preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
             if ( count( $matches ) > 0 )
             {
                 $this->id = trim( trim( $matches[0][2] ), '<>' );
