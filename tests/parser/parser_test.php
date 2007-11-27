@@ -1489,5 +1489,27 @@ END;
         // try calling a second time, to account for the case of the temp dir missing
         ezcMailParserShutdownHandler::shutdownCallback();
     }
+
+    public function testHeaderNoSpace()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-header-no-space' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertNotNull( $mail->from );
+        $this->assertEquals( '5551112222@messaging.sprintpcs.com', $mail->from->email );
+    }
+
+    public function testHeaderWithTab()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-header-with-tab' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertNotNull( $mail->from );
+        $this->assertEquals( '5551112222@messaging.sprintpcs.com', $mail->from->email );
+    }
 }
 ?>

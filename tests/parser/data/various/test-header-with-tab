@@ -1,0 +1,20 @@
+Return-Path: <5551112222@messaging.sprintpcs.com>
+Delivered-To: someone@mydomain.com
+Received: (qmail 15735 invoked from network); 14 Sep 2007 19:43:21 -0400
+Received: from smtp1.mo.bulk.sprintpcs.com (HELO  
+mx.messaging.sprintpcs.com) (10.1.1.1)
+   by mydomain.com with SMTP; 14 Sep 2007 19:43:21 -0400
+Received-SPF: none (mydomain.com: domain at messaging.sprintpcs.com  
+does not designate permitted sender hosts)
+Received: from messaging.sprintpcs.com (lxnsmssf5- 
+vip.nmcc.sprintspectrum.com [10.1.1.1])
+	by mx.messaging.sprintpcs.com (Postfix) with SMTP id DDEC3F83CC
+	for <someone@mydomain.com>; Fri, 14 Sep 2007 18:40:49 -0500 (CDT)
+From:	5551112222@messaging.sprintpcs.com
+To: someone@mydomain.com
+Subject: 
+X-OPWV-Extra-Message-Type: MO
+Message-Id: <20070914234049.DDDDC3F83CC@mx.messaging.sprintpcs.com>
+Date: Fri, 14 Sep 2007 18:40:49 -0500 (CDT)
+
+Some message here 
