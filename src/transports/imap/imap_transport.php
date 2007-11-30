@@ -2594,26 +2594,18 @@ class ezcMailImapTransport
      */
     protected function getResponse( $tag, $response = null )
     {
-        try
+        if ( is_null( $response ) )
         {
-            if ( is_null( $response ) )
-            {
-                $response = $this->getLine();
-            }
-            while ( strpos( $response, $tag ) === false )
-            {
-                if ( strpos( $response, ' BAD ' ) !== false ||
-                     strpos( $response, ' NO ' ) !== false )
-                {
-                    break;
-                }
-                $response = $this->getLine();
-            }
+            $response = $this->getLine();
         }
-        catch ( ezcMailTransportException $e )
+        while ( strpos( $response, $tag ) === false )
         {
-            $this->state = self::STATE_NOT_CONNECTED;
-            throw $e;
+            if ( strpos( $response, ' BAD ' ) !== false ||
+                 strpos( $response, ' NO ' ) !== false )
+            {
+                break;
+            }
+            $response = $this->getLine();
         }
         return $response;
     }
