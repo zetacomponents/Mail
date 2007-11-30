@@ -2513,11 +2513,11 @@ class ezcMailImapTransport
      * @param bool $trim
      * @return string
      */
-    protected function getLine()
+    protected function getLine( $trim = false )
     {
         try
         {
-            return $this->connection->getLine();
+            return $this->connection->getLine( $trim );
         }
         catch ( ezcMailTransportException $e )
         {
