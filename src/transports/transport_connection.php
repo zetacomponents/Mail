@@ -204,10 +204,18 @@ class ezcMailTransportConnection
         if ( is_resource( $this->connection ) )
         {
             // in case there is a problem with the connection fgets() returns false
-            while ( $line !== false
-                    && strpos( $line, self::CRLF ) === false )
+            while ( strpos( $line, self::CRLF ) === false )
             {
                 $line = fgets( $this->connection, 512 );
+
+                /* If the mail server aborts the connection, fgets() will
+                 * return false. We need to throw an exception here to prevent
+                 * the calling code from looping indefinitely. */
+                if ( $line === false )
+                {
+                    throw new ezcMailTransportException( 'Could not read from the stream. It was probably terminated by the host.' );
+                }
+
                 $data .= $line;
             }
 
