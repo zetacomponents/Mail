@@ -357,7 +357,7 @@ class ezcMailImapTransport
         }
         $this->connection = new ezcMailTransportConnection( $server, $port, $this->options );
         // get the server greeting
-        $response = $this->getLine();
+        $response = $this->connection->getLine();
         if ( strpos( $response, "* OK" ) === false )
         {
             throw new ezcMailTransportException( "The connection to the IMAP server is ok, but a negative response from server was received. Try again later." );
@@ -447,7 +447,8 @@ class ezcMailImapTransport
      */
     public function disconnect()
     {
-        if ( $this->state != self::STATE_NOT_CONNECTED )
+        if ( $this->state !== self::STATE_NOT_CONNECTED
+             && $this->connection->isConnected() === true )
         {
             $tag = $this->getNextTag();
             $this->connection->sendData( "{$tag} LOGOUT" );
@@ -497,7 +498,7 @@ class ezcMailImapTransport
 
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} LOGIN {$user} {$password}" );
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
         if ( strpos( $response, '* OK' ) !== false )
         {
             // the server is busy waiting for authentication process to
@@ -566,7 +567,7 @@ class ezcMailImapTransport
         $result = array();
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} LIST \"{$reference}\" \"{$mailbox}\"" );
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
         while ( strpos( $response, '* LIST (' ) !== false )
         {
             // only consider the selectable mailboxes
@@ -578,7 +579,7 @@ class ezcMailImapTransport
                 $result[] = $response;
 
             }
-            $response = $this->getLine();
+            $response = $this->connection->getLine();
         }
 
         $response = $this->getResponse( $tag, $response );
@@ -970,7 +971,7 @@ class ezcMailImapTransport
                 $line = substr( $line, 0, strlen( $line ) - 1 );
                 $messages[$currentMessage] = intval( $line );
                 $currentMessage = next( $messageList );
-                $response = $this->getLine();
+                $response = $this->connection->getLine();
             }
             // skip the OK response ("{$tag} OK Fetch completed.")
             $response = trim( $this->getResponse( $tag, $response ) );
@@ -1042,7 +1043,7 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (RFC822.SIZE)" );
 
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
         {
             if ( strpos( $response, ' FETCH (' ) !== false )
@@ -1059,7 +1060,7 @@ class ezcMailImapTransport
                 }
 
             }
-            $response = trim( $this->getLine() );
+            $response = trim( $this->connection->getLine() );
         }
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
@@ -1237,7 +1238,7 @@ class ezcMailImapTransport
         if ( $this->options->uidReferencing )
         {
             // special case (BUG?) where "UID FETCH {$msgNum}" returns nothing
-            $response = trim( $this->getLine() );
+            $response = trim( $this->connection->getLine() );
             if ( $this->responseType( $response ) === self::RESPONSE_OK )
             {
                 throw new ezcMailTransportException( "The IMAP server could not fetch the message '{$msgNum}': {$response}." );
@@ -1254,14 +1255,14 @@ class ezcMailImapTransport
             while ( strpos( $response, 'BODY[TEXT]' ) === false )
             {
                 $message .= $response;
-                $response = $this->getLine();
+                $response = $this->connection->getLine();
             }
 
-            $response = $this->getLine();
+            $response = $this->connection->getLine();
             while ( strpos( $response, $tag ) === false )
             {
                 $message .= $response;
-                $response = $this->getLine();
+                $response = $this->connection->getLine();
             }
         }
         // skip the OK response ("{$tag} OK Fetch completed.")
@@ -1942,7 +1943,7 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (FLAGS)" );
 
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
         {
             if ( strpos( $response, ' FETCH (' ) !== false )
@@ -1960,7 +1961,7 @@ class ezcMailImapTransport
                     $flags[intval( $matches[1] )] = $parts;
                 }
             }
-            $response = trim( $this->getLine() );
+            $response = trim( $this->connection->getLine() );
         }
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
@@ -2256,11 +2257,11 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} CAPABILITY" );
 
-        $response = $this->getLine();
+        $response = $this->connection->getLine();
         while ( $this->responseType( $response ) != self::RESPONSE_UNTAGGED &&
                 strpos( $response, '* CAPABILITY ' ) === false )
         {
-            $response = $this->getLine();
+            $response = $this->connection->getLine();
         }
         $result = trim( $response );
 
@@ -2358,7 +2359,7 @@ class ezcMailImapTransport
         }
 
         $this->connection->sendData( $command );
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
 
         if ( strpos( $response, 'TRYCREATE' ) !== false )
         {
@@ -2439,7 +2440,7 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}FETCH {$messageNumbers} (BODY.PEEK[HEADER.FIELDS ({$query})])" );
 
-        $response = trim( $this->getLine() );
+        $response = trim( $this->connection->getLine() );
         while ( strpos( $response, $tag ) === false )
         {
             if ( strpos( $response, ' FETCH (' ) !== false )
@@ -2481,7 +2482,7 @@ class ezcMailImapTransport
                 $result[$messageNumber] = '';
             }
 
-            $response = trim( $this->getLine() );
+            $response = trim( $this->connection->getLine() );
         }
 
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
@@ -2499,32 +2500,6 @@ class ezcMailImapTransport
             natcasesort( $result );
         }
         return $result;
-    }
-
-    /**
-     * Returns one line of data from the stream.
-     *
-     * The returned line will have linebreaks removed if the $trim option is
-     * set, internally it calls the transport's getLine(), but with a wrapper
-     * to account for broken connections.
-     *
-     * @throws ezcMailTransportConnection
-     *         if there is no valid connection
-     * @param bool $trim
-     * @return string
-     */
-    protected function getLine( $trim = false )
-    {
-        try
-        {
-            return $this->connection->getLine( $trim );
-        }
-        catch ( ezcMailTransportException $e )
-        {
-            /* Catch the exception, set the state and rethrow */
-            $this->state = self::STATE_NOT_CONNECTED;
-            throw $e;
-        }
     }
 
     /**
@@ -2596,7 +2571,7 @@ class ezcMailImapTransport
     {
         if ( is_null( $response ) )
         {
-            $response = $this->getLine();
+            $response = $this->connection->getLine();
         }
         while ( strpos( $response, $tag ) === false )
         {
@@ -2605,7 +2580,7 @@ class ezcMailImapTransport
             {
                 break;
             }
-            $response = $this->getLine();
+            $response = $this->connection->getLine();
         }
         return $response;
     }

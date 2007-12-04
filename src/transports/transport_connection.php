@@ -213,6 +213,7 @@ class ezcMailTransportConnection
                  * the calling code from looping indefinitely. */
                 if ( $line === false )
                 {
+                    $this->connection = null;
                     throw new ezcMailTransportException( 'Could not read from the stream. It was probably terminated by the host.' );
                 }
 
@@ -229,6 +230,16 @@ class ezcMailTransportConnection
             }
         }
         throw new ezcMailTransportException( 'Could not read from the stream. It was probably terminated by the host.' );
+    }
+
+    /**
+     * Returns if the connection is open.
+     *
+     * @return bool
+     */
+    public function isConnected()
+    {
+        return is_resource( $this->connection );
     }
 
     /**
