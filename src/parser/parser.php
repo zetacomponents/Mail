@@ -172,7 +172,7 @@ class ezcMailParser
      *         if a neccessary temporary file could not be openened.
      * @param ezcMailParserSet $set
      * @param string $class Deprecated. Use $mailClass in ezcMailParserOptions class instead.
-     * @returns array(ezcMail)
+     * @return array(ezcMail)
      */
     public function parseMail( ezcMailParserSet $set, $class = null )
     {

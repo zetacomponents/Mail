@@ -338,7 +338,7 @@ class ezcMailPop3Transport
      *         or if the provided username/password combination did not work
      * @param string $user
      * @param string $password
-     * @param int method
+     * @param int $method
      */
     public function authenticate( $user, $password, $method = null )
     {

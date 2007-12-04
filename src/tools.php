@@ -320,7 +320,7 @@ class ezcMailTools
      * examples of correct and incorrect email addresses.
      *
      * @param string $address
-     * @param bool checkMxRecords
+     * @param bool $checkMxRecords
      * @return bool
      */
     public static function validateEmailAddress( $address, $checkMxRecords = false )
