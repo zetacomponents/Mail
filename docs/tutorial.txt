@@ -432,6 +432,14 @@ authenticate() method will return false. The application should detect when
 this occurs and attempt authentication again (for example, for a preset
 number of times such as three).
 
+IMAP: Could not read from the stream
+------------------------------------
+
+While using the IMAP methods, it is possible that an ezcMailTransportException
+is thrown, in which case the connection to the IMAP server is closed. The
+application should catch this exception and decide how to handle this
+situation (show an error, reconnect).
+
 Parsing: iconv() notices
 ------------------------
 
