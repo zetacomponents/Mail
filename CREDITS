@@ -18,6 +18,10 @@ eZ Components team
 Contributors
 ------------
 
+- Sinisa Dukaric
+
+  * searchMailbox addition for IMAP transport
+
 - Mikko Koppanen
 
   * various IMAP transport enhancements
