@@ -19,7 +19,10 @@ Contributors
 ------------
 
 - Mikko Koppanen
+
   * various IMAP transport enhancements
   * SSL support for IMAP and POP3
+
 - Christial Michel
+
   * SSL/TLS support for SMTP transport
