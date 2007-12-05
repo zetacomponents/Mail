@@ -1,4 +1,4 @@
-1.4rc1 - [RELEASEDATE]
+1.4rc1 - Wednesday 05 December 2007
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #12138: Mail's IMAP transport can hang when connection gets
