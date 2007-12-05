@@ -27,6 +27,6 @@ Contributors
   * various IMAP transport enhancements
   * SSL support for IMAP and POP3
 
-- Christial Michel
+- Christian Michel
 
   * SSL/TLS support for SMTP transport
