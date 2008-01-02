@@ -1511,5 +1511,16 @@ END;
         $this->assertNotNull( $mail->from );
         $this->assertEquals( '5551112222@messaging.sprintpcs.com', $mail->from->email );
     }
+
+    public function testAttachmentWithSlash()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/attachment_with_slash.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+        $this->assertEquals( 'cam_data_photo067.jpg', basename( $parts[1]->fileName ) );
+    }
 }
 ?>

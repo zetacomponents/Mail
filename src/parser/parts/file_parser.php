@@ -103,6 +103,9 @@ class ezcMailFileParser extends ezcMailPartParser
             $fileName = "filename";
         }
 
+        // clean file name (replace unsafe characters with underscores)
+        $fileName = strtr( $fileName, "/\\\0\"|?*<:;>+[]", '______________' );
+
         $this->fp = $this->openFile( $fileName ); // propagate exception
     }
 
