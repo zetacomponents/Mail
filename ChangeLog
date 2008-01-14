@@ -1,4 +1,4 @@
-1.4.1 - [RELEASEDATE]
+1.4.1 - Monday 14 January 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #12318: Unsafe characters are replaces by underscores in
