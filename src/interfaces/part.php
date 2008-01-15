@@ -313,45 +313,48 @@ abstract class ezcMailPart
         $text = "";
         foreach ( $this->headers->getCaseSensitiveArray() as $header => $value )
         {
-            if ( in_array( strtolower( $header ), $this->excludeHeaders ) === false )
+            // here we encode every header, even the ones that we don't add to
+            // the header set directly. We do that so that transports sill see
+            // all the encoded headers which they then can use accordingly.
+            $charset = $this->getHeaderCharset( $header );
+            switch ( strtolower( $charset ) )
             {
-                $charset = $this->getHeaderCharset( $header );
-                switch ( strtolower( $charset ) )
-                {
-                    case 'us-ascii':
+                case 'us-ascii':
+                    $value = ezcMailHeaderFolder::foldAny( $value );
+                    break;
+
+                case 'iso-8859-1': case 'iso-8859-2': case 'iso-8859-3': case 'iso-8859-4':
+                case 'iso-8859-5': case 'iso-8859-6': case 'iso-8859-7': case 'iso-8859-8':
+                case 'iso-8859-9': case 'iso-8859-10': case 'iso-8859-11': case 'iso-8859-12':
+                case 'iso-8859-13': case 'iso-8859-14': case 'iso-8859-15' :case 'iso-8859-16':
+                case 'windows-1250': case 'windows-1251': case 'windows-1252':
+                case 'utf-8':
+                    if ( strpbrk( $value, "\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff" ) === false )
+                    {
                         $value = ezcMailHeaderFolder::foldAny( $value );
                         break;
+                    }
+                    // break intentionally missing
 
-                    case 'iso-8859-1': case 'iso-8859-2': case 'iso-8859-3': case 'iso-8859-4':
-                    case 'iso-8859-5': case 'iso-8859-6': case 'iso-8859-7': case 'iso-8859-8':
-                    case 'iso-8859-9': case 'iso-8859-10': case 'iso-8859-11': case 'iso-8859-12':
-                    case 'iso-8859-13': case 'iso-8859-14': case 'iso-8859-15' :case 'iso-8859-16':
-                    case 'windows-1250': case 'windows-1251': case 'windows-1252':
-                    case 'utf-8':
-                        if ( strpbrk( $value, "\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff" ) === false )
-                        {
-                            $value = ezcMailHeaderFolder::foldAny( $value );
-                            break;
-                        }
-                        // break intentionally missing
+                default:
+                    $preferences = array(
+                        'input-charset' => $charset,
+                        'output-charset' => $charset,
+                        'line-length' => ezcMailHeaderFolder::getLimit(),
+                        'scheme' => 'Q',
+                        'line-break-chars' => ezcMailTools::lineBreak()
+                    );
+                    $value = iconv_mime_encode( 'dummy', $value, $preferences );
+                    $value = substr( $value, 7 ); // "dummy: " + 1
 
-                    default:
-                        $preferences = array(
-                            'input-charset' => $charset,
-                            'output-charset' => $charset,
-                            'line-length' => ezcMailHeaderFolder::getLimit(),
-                            'scheme' => 'Q',
-                            'line-break-chars' => ezcMailTools::lineBreak()
-                        );
-                        $value = iconv_mime_encode( 'dummy', $value, $preferences );
-                        $value = substr( $value, 7 ); // "dummy: " + 1
+                    // just to keep compatibility with code which might read
+                    // the headers after generateHeaders() has been called
+                    $this->setHeader( $header, $value, $charset );
+                    break;
+            }
 
-                        // just to keep compatibility with code which might read
-                        // the headers after generateHeaders() has been called
-                        $this->setHeader( $header, $value, $charset );
-                        break;
-                }
-
+            if ( in_array( strtolower( $header ), $this->excludeHeaders ) === false )
+            {
                 $text .= "$header: $value" . ezcMailTools::lineBreak();
             }
         }

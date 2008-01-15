@@ -105,6 +105,20 @@ class ezcMailTransportMtaTest extends ezcTestCase
         }
     }
 
+    // Test with utf8 chars in to/from and subject
+    public function testEncodedHeaders()
+    {
+        $m = new ezcMailComposer;
+        $m->from = new ezcMailAddress( 'freya@ez.no', 'Frøya', 'utf-8' );
+        $m->addTo( new ezcMailAddress( 'nospam@ez.no', 'Óðinn', 'utf-8' ) );
+        $m->subject = "Blót";
+        $m->subjectCharset = 'utf-8';
+
+        $this->transport->send( $m );
+
+        $this->assertEquals( "=?utf-8?Q?Bl=C3=B3t?=", $m->getHeader( 'Subject' ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTransportMtaTest" );
