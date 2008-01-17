@@ -1,4 +1,4 @@
-1.4.2 - [RELEASEDATE]
+1.4.2 - Thursday 17 January 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #12372: MTA transport does not encode subject.
