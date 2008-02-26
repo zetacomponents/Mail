@@ -316,18 +316,15 @@ class ezcMail extends ezcMailPart
 
         if ( $this->to !== null )
         {
-            $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to,
-                                                                         ezcMailHeaderFolder::getLimit()) );
+            $this->setHeader( "To", ezcMailTools::composeEmailAddresses( $this->to ) );
         }
         if ( count( $this->cc ) )
         {
-            $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc,
-                                                                         ezcMailHeaderFolder::getLimit()) );
+            $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc ) );
         }
         if ( count( $this->bcc ) )
         {
-            $this->setHeader( "Bcc", ezcMailTools::composeEmailAddresses( $this->bcc,
-                                                                          ezcMailHeaderFolder::getLimit()) );
+            $this->setHeader( "Bcc", ezcMailTools::composeEmailAddresses( $this->bcc ) );
         }
 
         $this->setHeader( 'Subject', $this->subject, $this->subjectCharset );

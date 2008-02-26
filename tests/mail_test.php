@@ -361,6 +361,33 @@ class ezcMailTest extends ezcTestCase
         }
     }
 
+    // test for issue #12595: the Bcc line would have had an empty line underneath before the fix
+    // similar for To and Cc headers
+    public function testFoldingAddresses()
+    {
+        $this->mail->from = new ezcMailAddress( 'from@ez.no' );
+        $addresses = array( 'nospam1@ez.no', 'nospam2@ez.no', 'nospam3@ez.no',
+            'nospam4@ez.no', 'nospam5@ez.no', 'nospam6@ez.no', 'nospam7@ez.no' );
+
+        foreach ( $addresses as $address )
+        {
+            $this->mail->addBcc( new ezcMailAddress( $address ) );
+        }
+
+        $expected = "From: from@ez.no" . ezcMailTools::lineBreak() .
+            "To: " . ezcMailTools::lineBreak() .
+            "Bcc: nospam1@ez.no, nospam2@ez.no, nospam3@ez.no, nospam4@ez.no, nospam5@ez.no," . ezcMailTools::lineBreak() .
+            " nospam6@ez.no, nospam7@ez.no" . ezcMailTools::lineBreak() .
+            "Subject: " . ezcMailTools::lineBreak() .
+            "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
+            "User-Agent: eZ Components";
+
+        $return = $this->mail->generate();
+        // cut away the Date and Message-ID headers as there is no way to predict what they will be
+        $return = join( ezcMailTools::lineBreak(), array_slice( explode( ezcMailTools::lineBreak(), $return ), 0, 7 ) );
+        $this->assertEquals( $expected, $return );
+    }
+
     public function testMailAddressToString()
     {
         $addr = new ezcMailAddress( "test@example.com", "John Doe" );
