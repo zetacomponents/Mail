@@ -229,7 +229,7 @@ class ezcMailParser
         if ( self::$tmpDir === null )
         {
             $uname = php_uname();
-            if ( strtoupper( substr( $uname, 0, 3 ) == "WIN" ) )
+            if ( strtoupper( substr( $uname, 0, 3 ) ) == 'WIN' )
             {
                 self::$tmpDir = "c:\\tmp\\";
             }

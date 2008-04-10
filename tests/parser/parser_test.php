@@ -1522,5 +1522,28 @@ END;
         $parts = $mail->body->getParts();
         $this->assertEquals( 'cam_data_photo067.jpg', basename( $parts[1]->fileName ) );
     }
+
+    // tests for bug #12844
+    public function testTempDirWindows()
+    {
+        if ( ezcBaseFeatures::os() !== 'Windows' )
+        {
+            self::markTestSkipped( 'Test is for Windows only' );
+        }
+
+        ezcMailParser::setTmpDir( null );
+        $this->assertEquals( 'c:\\tmp\\', ezcMailParser::getTmpDir() );
+    }
+
+    public function testTempDirNonWindows()
+    {
+        if ( ezcBaseFeatures::os() === 'Windows' )
+        {
+            self::markTestSkipped( 'Test is for non-Windows only' );
+        }
+
+        ezcMailParser::setTmpDir( null );
+        $this->assertEquals( '/tmp/', ezcMailParser::getTmpDir() );
+    }
 }
 ?>
