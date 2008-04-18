@@ -69,11 +69,8 @@ class ezcMailParserOptions extends ezcBaseOptions
                 }
 
                 // Check if the passed classname actually implements the
-                // correct parent class. We have to do that with reflection
-                // here unfortunately
-                $parentClass = new ReflectionClass( 'ezcMail' );
-                $handlerClass = new ReflectionClass( $propertyValue );
-                if ( 'ezcMail' !== $propertyValue && !$handlerClass->isSubclassOf( $parentClass ) )
+                // correct parent class.
+                if ( 'ezcMail' !== $propertyValue && !in_array( 'ezcMail', class_parents( $propertyValue ) ) )
                 {
                     throw new ezcBaseInvalidParentClassException( 'ezcMail', $propertyValue );
                 }

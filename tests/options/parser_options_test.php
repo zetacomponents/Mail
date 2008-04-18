@@ -22,6 +22,13 @@ class ezcMailParserOptionsTest extends ezcTestCase
         $this->assertEquals( 'ezcMail', $options->mailClass );
     }
 
+    public function testParserOptionsSetDefault()
+    {
+        $options = new ezcMailParserOptions();
+        $options->mailClass = 'ezcMail';
+        $this->assertEquals( 'ezcMail', $options->mailClass );
+    }
+
     public function testParserOptionsSet()
     {
         $options = new ezcMailParserOptions();

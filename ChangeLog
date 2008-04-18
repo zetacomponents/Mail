@@ -1,6 +1,8 @@
 1.4.4 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Implemented issue #12694: Replace reflection test for class type with SPL
+  function.
 - Fixed issue #12844: getTmpDir() not properly set in Windows.
 
 
