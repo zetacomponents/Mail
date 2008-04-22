@@ -4,6 +4,7 @@
 - Implemented issue #12694: Replace reflection test for class type with SPL
   function.
 - Fixed issue #12844: getTmpDir() not properly set in Windows.
+- Fixed issue #12903: The mail digest size is not calculated twice anymore.
 
 
 1.4.3 - Monday 03 March 2008

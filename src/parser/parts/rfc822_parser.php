@@ -66,7 +66,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     public function __construct()
     {
         $this->headers = new ezcMailHeadersHolder();
-        $this->size = 0;
     }
 
     /**
@@ -79,7 +78,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     public function parseBody( $origLine )
     {
         $line = rtrim( $origLine, "\r\n" );
-        $this->size += strlen( $line );
         if ( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
         {
             $this->parserState = self::PARSE_STATE_BODY;
@@ -168,7 +166,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
         {
             $mail->body = $this->bodyParser->finish();
         }
-        $mail->size = $this->size;
         return $mail;
     }
 }

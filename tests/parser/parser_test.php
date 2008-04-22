@@ -892,7 +892,29 @@ END;
         $parts = $parts[1]->mail->body->getParts();
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
         $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
+    }
 
+    /**
+     * Test for issue #12903: Size of a mail is calculated twice
+     */
+    public function testDigestInDigest()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-digest-in-digest' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $this->assertEquals( 26865, $mail[0]->size );
+
+        $parts = $mail[0]->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
+        $this->assertEquals( 24860, $parts[1]->size );
+
+        // check the digest
+        $parts = $parts[1]->mail->body->getParts();
+        $this->assertEquals( true, $parts[0] instanceof ezcMailText );
+        $this->assertEquals( true, $parts[1] instanceof ezcMailRfc822Digest );
+        $this->assertEquals( 23563, $parts[1]->size );
     }
 
     public function testVarious10()
