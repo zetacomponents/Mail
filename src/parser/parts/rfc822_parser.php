@@ -54,13 +54,6 @@ class ezcMailRfc822Parser extends ezcMailPartParser
     private $bodyParser = null;
 
     /**
-     * Hold the size of the mail part.
-     *
-     * @var int
-     */
-    private $size;
-
-    /**
      * Constructs a new ezcMailRfc822Parser.
      */
     public function __construct()

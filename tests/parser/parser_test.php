@@ -897,7 +897,7 @@ END;
     /**
      * Test for issue #12903: Size of a mail is calculated twice
      */
-    public function testDigestInDigest()
+    public function testDigestInDigestCalculateSizes()
     {
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'various/test-digest-in-digest' );
