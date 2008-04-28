@@ -7,6 +7,8 @@
   function.
 - Implemented feature request #11937: Switch to turn off automatic inclusion
   of files with the Mail Composer.
+- Implemented feature request #12203: Replaced hard-coded paths for temporary
+  directory with the PHP 5.2.1 function sys_get_temp_dir().
 
 
 1.4.3 - Monday 03 March 2008

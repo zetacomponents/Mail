@@ -219,8 +219,12 @@ class ezcMailParser
     /**
      * Returns the temporary directory.
      *
-     * If no temporary directory has been set this method defaults to
-     * /tmp/ for linux and c:\tmp\ for windows.
+     * Uses the PHP 5.2.1 function sys_get_temp_dir(). If this function is not
+     * available or if no temporary directory has been set this method defaults
+     * to /tmp/ for Linux and c:\tmp\ for Windows.
+     *
+     * Note that the directory name returned will have a "slash" at the end
+     * ("/" for Linux and "\" for Windows).
      *
      * @return string
      */
@@ -228,14 +232,25 @@ class ezcMailParser
     {
         if ( self::$tmpDir === null )
         {
-            $uname = php_uname();
-            if ( strtoupper( substr( $uname, 0, 3 ) ) == 'WIN' )
+            if ( function_exists( 'sys_get_temp_dir' ) === true )
             {
-                self::$tmpDir = "c:\\tmp\\";
+                self::$tmpDir = sys_get_temp_dir();
+                if ( substr( self::$tmpDir, strlen( self::$tmpDir ) - 1 ) !== DIRECTORY_SEPARATOR )
+                {
+                    self::$tmpDir = self::$tmpDir . DIRECTORY_SEPARATOR;
+                }
             }
             else
             {
-                self::$tmpDir = "/tmp/";
+                $uname = php_uname();
+                if ( strtoupper( substr( $uname, 0, 3 ) ) == 'WIN' )
+                {
+                    self::$tmpDir = "c:\\tmp\\";
+                }
+                else
+                {
+                    self::$tmpDir = "/tmp/";
+                }
             }
 
         }
