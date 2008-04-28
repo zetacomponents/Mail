@@ -152,6 +152,35 @@ using the ezcMailComposer class.
 .. include:: tutorial/tutorial_composer_attachments.php
    :literal:
 
+Securing HTML mails which include file:// in image tags
+-------------------------------------------------------
+
+By default, if the htmlText property contains an HTML image tag with file://
+in href, that file will be included in the created message.
+
+Example::
+
+  <img src="file:///home/me/image.jpg" />
+
+This can be a security risk if a user links to another file, for example logs
+or password files. With the safeIncludes option from ezcMailComposerOptions,
+the automatic inclusion of files can be turned off.
+
+Example::
+
+  $options = new ezcMailComposerOptions();
+  $options->safeIncludes = true;
+
+  $mail = new ezcMailComposer( $options );
+
+  // ... add To, From, Subject, etc to $mail
+  $mail->htmlText = "<html>Here is the image: <img src="file:///etc/passwd" /></html>";
+
+  // ... send $mail
+
+After running the above code, the sent mail will not contain the file specified
+in the htmlText property.
+
 Building a mail from scratch
 ----------------------------
 

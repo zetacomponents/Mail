@@ -33,6 +33,10 @@ class ezcMailComposerTest extends ezcTestCase
                                   array( "That thing's WATCHING me... Good thing I'm naturally PHOTOGENIC!" ) );
         $this->assertSetProperty( $this->mail, 'charset',
                                   array( "us-ascii" ) );
+
+        $this->assertSetPropertyFails( $this->mail, 'options', array( 'wrong value' ) );
+        $this->assertSetProperty( $this->mail, 'options', array( new ezcMailComposerOptions() ) );
+        $this->assertEquals( true, isset( $this->mail->options ) );
     }
 
     /**
@@ -652,6 +656,86 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $this->mail->body->getRelatedParts();
         $filePart = $parts[0];
         $this->assertEquals( 0, strpos( $filePart->contentId, 'Zmx5LmpwZw@' . date( 'His' ) ) );
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testMailSafeModeComposerSafeIncludesTrue()
+    {
+        $this->mail->options->safeIncludes = true;
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'No Spam' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://" . dirname( __FILE__  ) . "/parts/data/fly.jpg\" /> Here is the picture.";
+        $this->mail->build();
+        $this->assertEquals( true, 459 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 489 );
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testMailSafeModeComposerSafeIncludesDefault()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'No Spam' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://" . dirname( __FILE__  ) . "/parts/data/fly.jpg\" /> Here is the picture.";
+        $this->mail->build();
+        $this->assertEquals( true, 62701 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 62733 );
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testComposerOptionsDefault()
+    {
+        $options = new ezcMailComposerOptions();
+        $this->assertEquals( false, $options->safeIncludes );
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testComposerOptionsSet()
+    {
+        $options = new ezcMailComposerOptions();
+        $options->safeIncludes = true;
+        $this->assertEquals( true, $options->safeIncludes );
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testComposerOptionsSetInvalid()
+    {
+        $options = new ezcMailComposerOptions();
+        try
+        {
+            $options->safeIncludes = "wrong value";
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'wrong value' that you were trying to assign to setting 'safeIncludes' is invalid. Allowed values are: bool.", $e->getMessage() );
+        }
+    }
+
+    /**
+     * Tests for feature request #11937.
+     */
+    public function testComposerOptionsSetNotExistent()
+    {
+        $options = new ezcMailComposerOptions();
+        try
+        {
+            $options->no_such_option = 'xxx';
+            $this->fail( "Expected exception was not thrown" );
+        }
+        catch ( ezcBasePropertyNotFoundException $e )
+        {
+            $this->assertEquals( "No such property name 'no_such_option'.", $e->getMessage() );
+        }
     }
 
     public static function suite()

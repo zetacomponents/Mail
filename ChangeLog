@@ -1,10 +1,12 @@
-1.4.4 - [RELEASEDATE]
+1.5alpha1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Implemented issue #12694: Replace reflection test for class type with SPL
-  function.
 - Fixed issue #12844: getTmpDir() not properly set in Windows.
 - Fixed issue #12903: The mail digest size is not calculated twice anymore.
+- Implemented issue #12694: Replace reflection test for class type with SPL
+  function.
+- Implemented feature request #11937: Switch to turn off automatic inclusion
+  of files with the Mail Composer.
 
 
 1.4.3 - Monday 03 March 2008
