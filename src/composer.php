@@ -107,7 +107,7 @@ class ezcMailComposer extends ezcMail
     /**
      * Holds the options for this class.
      *
-     * @var ezcMailOptions
+     * @var ezcMailComposerOptions
      */
     protected $options;
 
