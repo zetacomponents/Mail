@@ -24,7 +24,6 @@ return array(
     'ezcMailMtaTransport'               => 'Mail/transports/mta/mta_transport.php',
     'ezcMailMultipart'                  => 'Mail/parts/multipart.php',
     'ezcMailMultipartParser'            => 'Mail/parser/parts/multipart_parser.php',
-    'ezcMailOptions'                    => 'Mail/options/mail_options.php',
     'ezcMailParserSet'                  => 'Mail/parser/interfaces/parser_set.php',
     'ezcMailSmtpTransport'              => 'Mail/transports/smtp/smtp_transport.php',
     'ezcMailTransportOptions'           => 'Mail/options/transport_options.php',

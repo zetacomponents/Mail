@@ -33,7 +33,7 @@
  * @package Mail
  * @version //autogen//
  */
-class ezcMailComposerOptions extends ezcMailOptions
+class ezcMailComposerOptions extends ezcBaseOptions
 {
     /**
      * Constructs an object with the specified values.
@@ -76,7 +76,7 @@ class ezcMailComposerOptions extends ezcMailOptions
                 break;
 
             default:
-                parent::__set( $propertyName, $propertyValue );
+                throw new ezcBasePropertyNotFoundException( $propertyName );
         }
     }
 }

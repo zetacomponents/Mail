@@ -86,6 +86,8 @@
  * @property string $charset
  *           Contains the character set for both $plainText and $htmlText.
  *           Default value is 'us-ascii'.
+ * @property ezcMailComposerOptions $options
+ *           Options for composing mail. See {@link ezcMailComposerOptions}.
  *
  * @package Mail
  * @version //autogen//
@@ -101,6 +103,13 @@ class ezcMailComposer extends ezcMail
      * @var array(string)
      */
     private $attachments = array();
+
+    /**
+     * Holds the options for this class.
+     *
+     * @var ezcMailOptions
+     */
+    protected $options;
 
     /**
      * Holds the properties of this class.
@@ -124,7 +133,9 @@ class ezcMailComposer extends ezcMail
             $options = new ezcMailComposerOptions();
         }
 
-        parent::__construct( $options );
+        $this->options = $options;
+
+        parent::__construct();
     }
 
     /**
@@ -144,6 +155,15 @@ class ezcMailComposer extends ezcMail
             case 'htmlText':
             case 'charset':
                 $this->properties[$name] = $value;
+                break;
+
+            case 'options':
+                if ( !$value instanceof ezcMailOptions )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'ezcMailOptions' );
+                }
+
+                $this->options = $value;
                 break;
 
             default:
@@ -169,6 +189,9 @@ class ezcMailComposer extends ezcMail
             case 'charset':
                 return $this->properties[$name];
 
+            case 'options':
+                return $this->options;
+
             default:
                 return parent::__get( $name );
         }
@@ -189,6 +212,9 @@ class ezcMailComposer extends ezcMail
             case 'htmlText':
             case 'charset':
                 return isset( $this->properties[$name] );
+
+            case 'options':
+                return isset( $this->options );
 
             default:
                 return parent::__isset( $name );

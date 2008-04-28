@@ -33,10 +33,6 @@ class ezcMailComposerTest extends ezcTestCase
                                   array( "That thing's WATCHING me... Good thing I'm naturally PHOTOGENIC!" ) );
         $this->assertSetProperty( $this->mail, 'charset',
                                   array( "us-ascii" ) );
-
-        $this->assertSetPropertyFails( $this->mail, 'options', array( 'wrong value' ) );
-        $this->assertSetProperty( $this->mail, 'options', array( new ezcMailComposerOptions() ) );
-        $this->assertEquals( true, isset( $this->mail->options ) );
     }
 
     /**

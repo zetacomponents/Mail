@@ -60,10 +60,6 @@
  *                                       sent as Unix Timestamp.
  * @property ezcMailAddress        $returnPath Contains the Return-Path address as an
  *                                             ezcMailAddress object.
- * @property ezcMailOptions        $options
- *                                       Options for creating mail. There are none
- *                                       for ezcMail, but {@link ezcMailComposer} uses
- *                                       options. See {@link ezcMailComposerOptions}.
  *
  * @apichange Remove the support for the deprecated property messageID.
  *
@@ -106,18 +102,9 @@ class ezcMail extends ezcMailPart
     private $properties = array();
 
     /**
-     * Holds the options for this class.
-     *
-     * @var ezcMailOptions
-     */
-    protected $options;
-
-    /**
      * Constructs an empty ezcMail object.
-     *
-     * @param ezcMailOptions $options
      */
-    public function __construct( ezcMailOptions $options = null )
+    public function __construct()
     {
         parent::__construct();
 
@@ -130,13 +117,6 @@ class ezcMail extends ezcMailPart
         $this->properties['body'] = null;
         $this->properties['messageId'] = null;
         $this->properties['returnPath'] = null;
-
-        if ( $options === null )
-        {
-            $options = new ezcMailOptions();
-        }
-
-        $this->options = $options;
     }
 
     /**
@@ -195,15 +175,6 @@ class ezcMail extends ezcMailPart
                 $this->properties['returnPath'] = $value;
                 break;
 
-            case 'options':
-                if ( !$value instanceof ezcMailOptions )
-                {
-                    throw new ezcBaseValueException( $name, $value, 'ezcMailOptions' );
-                }
-
-                $this->options = $value;
-                break;
-
             default:
                 parent::__set( $name, $value );
                 break;
@@ -242,9 +213,6 @@ class ezcMail extends ezcMailPart
             case 'timestamp':
                 return strtotime( $this->getHeader( "Date" ) );
 
-            case 'options':
-                return $this->options;
-
             default:
                 return parent::__get( $name );
         }
@@ -277,9 +245,6 @@ class ezcMail extends ezcMailPart
 
             case 'timestamp':
                 return $this->getHeader( "Date" ) != null;
-
-            case 'options':
-                return isset( $this->options );
 
             default:
                 return parent::__isset( $name );
