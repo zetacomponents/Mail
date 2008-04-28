@@ -158,9 +158,9 @@ class ezcMailComposer extends ezcMail
                 break;
 
             case 'options':
-                if ( !$value instanceof ezcMailOptions )
+                if ( !$value instanceof ezcMailComposerOptions )
                 {
-                    throw new ezcBaseValueException( $name, $value, 'ezcMailOptions' );
+                    throw new ezcBaseValueException( $name, $value, 'ezcMailComposerOptions' );
                 }
 
                 $this->options = $value;
