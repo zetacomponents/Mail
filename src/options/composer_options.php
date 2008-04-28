@@ -14,7 +14,7 @@
  * Example of how to use the composer options:
  * <code>
  * $options = new ezcMailComposerOptions();
- * $options->safeIncludes = true;
+ * $options->automaticImageInclude = false; // default value is true
  *
  * $mail = new ezcMailComposer( $options );
  * </code>
@@ -22,13 +22,13 @@
  * Alternatively, you can set the options direcly:
  * <code>
  * $mail = new ezcMailComposer();
- * $mail->options->safeIncludes = true;
+ * $mail->options->automaticImageInclude = false;
  * </code>
  *
- * @property bool $safeIncludes
+ * @property bool $automaticImageInclude
  *           Specifies whether to include in the generated mail the content of
  *           the files specified with "file://" in image tags. Default value
- *           is false (the contents are included).
+ *           is true (the contents are included).
  *
  * @package Mail
  * @version //autogen//
@@ -46,7 +46,7 @@ class ezcMailComposerOptions extends ezcMailOptions
      */
     public function __construct( array $options = array() )
     {
-        $this->safeIncludes = false; // default is to include the contents of "file://" from image tags
+        $this->automaticImageInclude = true; // default is to include the contents of "file://" from image tags
 
         parent::__construct( $options );
     }
@@ -66,7 +66,7 @@ class ezcMailComposerOptions extends ezcMailOptions
     {
         switch ( $propertyName )
         {
-            case 'safeIncludes':
+            case 'automaticImageInclude':
                 if ( !is_bool( $propertyValue ) )
                 {
                     throw new ezcBaseValueException( $propertyName, $propertyValue, 'bool' );

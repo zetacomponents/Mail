@@ -661,9 +661,9 @@ class ezcMailComposerTest extends ezcTestCase
     /**
      * Tests for feature request #11937.
      */
-    public function testMailSafeModeComposerSafeIncludesTrue()
+    public function testMailSafeModeComposerAutomaticImageIncludeFalse()
     {
-        $this->mail->options->safeIncludes = true;
+        $this->mail->options->automaticImageInclude = false;
         $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'No Spam' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
@@ -675,7 +675,7 @@ class ezcMailComposerTest extends ezcTestCase
     /**
      * Tests for feature request #11937.
      */
-    public function testMailSafeModeComposerSafeIncludesDefault()
+    public function testMailSafeModeComposerAutomaticImageIncludeDefault()
     {
         $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'nospam@ez.no', 'No Spam' ) );
@@ -691,7 +691,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testComposerOptionsDefault()
     {
         $options = new ezcMailComposerOptions();
-        $this->assertEquals( false, $options->safeIncludes );
+        $this->assertEquals( true, $options->automaticImageInclude );
     }
 
     /**
@@ -700,8 +700,8 @@ class ezcMailComposerTest extends ezcTestCase
     public function testComposerOptionsSet()
     {
         $options = new ezcMailComposerOptions();
-        $options->safeIncludes = true;
-        $this->assertEquals( true, $options->safeIncludes );
+        $options->automaticImageInclude = false;
+        $this->assertEquals( false, $options->automaticImageInclude );
     }
 
     /**
@@ -712,12 +712,12 @@ class ezcMailComposerTest extends ezcTestCase
         $options = new ezcMailComposerOptions();
         try
         {
-            $options->safeIncludes = "wrong value";
+            $options->automaticImageInclude = "wrong value";
             $this->fail( "Expected exception was not thrown" );
         }
         catch ( ezcBaseValueException $e )
         {
-            $this->assertEquals( "The value 'wrong value' that you were trying to assign to setting 'safeIncludes' is invalid. Allowed values are: bool.", $e->getMessage() );
+            $this->assertEquals( "The value 'wrong value' that you were trying to assign to setting 'automaticImageInclude' is invalid. Allowed values are: bool.", $e->getMessage() );
         }
     }
 

@@ -48,14 +48,14 @@
  * </code>
  *
  * This can be a security risk if a user links to another file, for example logs
- * or password files. With the safeIncludes option from
- * {@link ezcMailComposerOptions}, the automatic inclusion of files can be
+ * or password files. With the automaticImageInclude option (default value true)
+ * from {@link ezcMailComposerOptions}, the automatic inclusion of files can be
  * turned off.
  *
  * Example:
  * <code>
  * $options = new ezcMailComposerOptions();
- * $options->safeIncludes = true;
+ * $options->automaticImageInclude = false; // default value is true
  *
  * $mail = new ezcMailComposer( $options );
  *
@@ -80,7 +80,8 @@
  *           local images and/or files these will be included into the mail
  *           when generateBody is called. Links to local files must start with
  *           "file://" in order to be recognized. You can use the option
- *           safeIncludes from {@link ezcMailComposerOptions} to turn off the
+ *           automaticImageInclude (default value is true) from
+ *           {@link ezcMailComposerOptions} to turn off the
  *           automatic inclusion of files in the generated mail.
  * @property string $charset
  *           Contains the character set for both $plainText and $htmlText.
@@ -347,7 +348,7 @@ class ezcMailComposer extends ezcMail
         if ( $this->htmlText != '' )
         {
             $matches = array();
-            if ( $this->options->safeIncludes === false )
+            if ( $this->options->automaticImageInclude === true )
             {
                 // recognize file:// and file:///, pick out the image, add it as a part and then..:)
                 preg_match_all( "/<img[\s\*\s]src=[\'\"]file:\/\/([^ >\'\"]+)/i", $this->htmlText, $matches );

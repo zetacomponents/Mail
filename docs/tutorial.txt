@@ -163,13 +163,14 @@ Example::
   <img src="file:///home/me/image.jpg" />
 
 This can be a security risk if a user links to another file, for example logs
-or password files. With the safeIncludes option from ezcMailComposerOptions,
-the automatic inclusion of files can be turned off.
+or password files. With the automaticImageInclude option (default value true)
+from ezcMailComposerOptions, the automatic inclusion of files can be turned
+off.
 
 Example::
 
   $options = new ezcMailComposerOptions();
-  $options->safeIncludes = true;
+  $options->automaticImageInclude = false; // default value is true
 
   $mail = new ezcMailComposer( $options );
 
