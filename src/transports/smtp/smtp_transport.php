@@ -673,9 +673,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
         $result = array();
         $unsupported = array();
         $supportedAuthMethods = self::getSupportedAuthMethods();
-        foreach ( $methods as $method )
+        foreach ( $supportedAuthMethods as $method )
         {
-            if ( in_array( $method, $supportedAuthMethods ) )
+            if ( in_array( $method, $methods ) )
             {
                 $result[] = $method;
             }
