@@ -219,9 +219,7 @@ class ezcMailParser
     /**
      * Returns the temporary directory.
      *
-     * Uses the PHP 5.2.1 function sys_get_temp_dir(). If this function is not
-     * available or if no temporary directory has been set this method defaults
-     * to /tmp/ for Linux and c:\tmp\ for Windows.
+     * Uses the PHP 5.2.1 function sys_get_temp_dir().
      *
      * Note that the directory name returned will have a "slash" at the end
      * ("/" for Linux and "\" for Windows).
@@ -232,38 +230,11 @@ class ezcMailParser
     {
         if ( self::$tmpDir === null )
         {
-            if ( function_exists( 'sys_get_temp_dir' ) === true )
+            self::$tmpDir = sys_get_temp_dir();
+            if ( substr( self::$tmpDir, strlen( self::$tmpDir ) - 1 ) !== DIRECTORY_SEPARATOR )
             {
-                self::$tmpDir = sys_get_temp_dir();
-                if ( substr( self::$tmpDir, strlen( self::$tmpDir ) - 1 ) !== DIRECTORY_SEPARATOR )
-                {
-                    self::$tmpDir = self::$tmpDir . DIRECTORY_SEPARATOR;
-                }
+                self::$tmpDir = self::$tmpDir . DIRECTORY_SEPARATOR;
             }
-            else
-            {
-                $uname = php_uname();
-                if ( strtoupper( substr( $uname, 0, 3 ) ) == 'WIN' )
-                {
-                    self::$tmpDir = getenv( "TEMP" );
-                    if ( self::$tmpDir === false )
-                    {
-                        self::$tmpDir = "c:\\tmp\\";
-                    }
-                    else
-                    {
-                        if ( substr( self::$tmpDir, strlen( self::$tmpDir ) - 1 ) !== DIRECTORY_SEPARATOR )
-                        {
-                            self::$tmpDir = self::$tmpDir . DIRECTORY_SEPARATOR;
-                        }
-                    }
-                }
-                else
-                {
-                    self::$tmpDir = "/tmp/";
-                }
-            }
-
         }
         return self::$tmpDir;
     }
