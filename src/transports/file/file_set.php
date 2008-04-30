@@ -75,7 +75,7 @@ class ezcMailFileSet implements ezcMailParserSet
      */
     public function __destruct()
     {
-        if ( $this->fp != null )
+        if ( is_resource( $this->fp ) )
         {
             fclose( $this->fp );
             $this->fp = null;

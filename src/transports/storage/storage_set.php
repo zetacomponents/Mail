@@ -116,7 +116,7 @@ class ezcMailStorageSet implements ezcMailParserSet
      */
     public function __destruct()
     {
-        if ( $this->writer !== null )
+        if ( is_resource( $this->writer ) )
         {
             fclose( $this->writer );
             $this->writer = null;
