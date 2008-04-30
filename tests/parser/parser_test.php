@@ -1545,7 +1545,9 @@ END;
         $this->assertEquals( 'cam_data_photo067.jpg', basename( $parts[1]->fileName ) );
     }
 
-    // tests for bug #12844
+    /**
+     * Test for bug #12844.
+     */
     public function testTempDirWindows()
     {
         if ( ezcBaseFeatures::os() !== 'Windows' )
@@ -1554,9 +1556,17 @@ END;
         }
 
         ezcMailParser::setTmpDir( null );
-        $this->assertEquals( 'c:\\tmp\\', ezcMailParser::getTmpDir() );
+        $dir = getenv( "TEMP" );
+        if ( substr( $dir, strlen( $dir ) - 1 ) !== DIRECTORY_SEPARATOR )
+        {
+            $dir = $dir . DIRECTORY_SEPARATOR;
+        }
+        $this->assertEquals( $dir, ezcMailParser::getTmpDir() );
     }
 
+    /**
+     * Test for bug #12844.
+     */
     public function testTempDirNonWindows()
     {
         if ( ezcBaseFeatures::os() === 'Windows' )

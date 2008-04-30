@@ -245,7 +245,18 @@ class ezcMailParser
                 $uname = php_uname();
                 if ( strtoupper( substr( $uname, 0, 3 ) ) == 'WIN' )
                 {
-                    self::$tmpDir = "c:\\tmp\\";
+                    self::$tmpDir = getenv( "TEMP" );
+                    if ( self::$tmpDir === false )
+                    {
+                        self::$tmpDir = "c:\\tmp\\";
+                    }
+                    else
+                    {
+                        if ( substr( self::$tmpDir, strlen( self::$tmpDir ) - 1 ) !== DIRECTORY_SEPARATOR )
+                        {
+                            self::$tmpDir = self::$tmpDir . DIRECTORY_SEPARATOR;
+                        }
+                    }
                 }
                 else
                 {
