@@ -5,12 +5,12 @@
 - Fixed issue #12903: The mail digest size is not calculated twice anymore.
 - Fixed issue #12930: The SMTP authentication methods are used in correct
   strength order now.
-- Implemented issue #12694: Replace reflection test for class type with SPL
-  function.
 - Implemented feature request #11937: Switch to turn off automatic inclusion
   of files with the Mail Composer.
 - Implemented feature request #12203: Replaced hard-coded paths for temporary
   directory with the PHP 5.2.1 function sys_get_temp_dir().
+- Implemented feature request #12694: Replace reflection test for class type
+  with SPL function.
 
 
 1.4.3 - Monday 03 March 2008
