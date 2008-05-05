@@ -1,4 +1,4 @@
-1.5alpha1 - [RELEASEDATE]
+1.5alpha1 - Monday 05 May 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #12844: getTmpDir() not properly set in Windows.
