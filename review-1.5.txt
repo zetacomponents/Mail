@@ -1,0 +1,11 @@
+ezcMailComposerOptions
+======================
+
+- Cast to bool is not necessary in Mail/src/options/composer_options.php +75.
+
+SMTP Auth methods
+=================
+
+- Why is there only a failure case tested? I don't see (at a first glance)
+  that the sorting is really tested at all. If I'm wrong with that: Please add
+  a comment to the test. Thanks!
