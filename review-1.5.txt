@@ -3,12 +3,16 @@ ezcMailComposerOptions
 
 - Cast to bool is not necessary in Mail/src/options/composer_options.php +75.
 
+# Done.
+
 SMTP Auth methods
 =================
 
 - Why is there only a failure case tested? I don't see (at a first glance)
   that the sorting is really tested at all. If I'm wrong with that: Please add
   a comment to the test. Thanks!
+
+# I added a comment to the test.
 
 Testing
 =======
@@ -22,6 +26,16 @@ Testing
 
 - Some failures and nasty output on my local maschine (maybe these tests can be
   conditionally skipped?): ::
+
+# I don't know anything about this behaviour in MTA. What system do you have on
+  your PC? Do you have sendmail? The MTA transport uses the mail() function which
+  is not easy to control and which can output text to the console. Not much to do
+  here unless somebody knows something. (Note: is hartes-php.de functional?
+  I cannot connect to it with telnet)
+
+# About the ezcMailToolsTest failure: there was a bug in the getmxrr() PHP
+  function and I think the failure is caused by that. But we could not find which
+  bug was it and in which version it was fixed. With what version of PHP did you test?
 
 	ezcUnitTest uses the PHPUnit @package_version@ framework from Sebastian Bergmann.
 

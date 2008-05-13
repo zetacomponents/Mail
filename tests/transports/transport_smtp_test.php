@@ -158,12 +158,16 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     }
 
     /**
-     * Test for issue #12930 (wrong sorting of SMTP authentication methods)
+     * Test for issue #12930: test that the sorting of the SMTP authentication
+     * methods supported by the SMTP server is done properly in decreasing order
+     * of strength.
      */
     public function testWrapperMockAuthLoginFailSortMethods()
     {
         $smtp = $this->getMock( 'ezcMailSmtpTransportWrapper', array( 'auth', 'getData' ), array( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN ) );
 
+        // mock that the SMTP server will return the supported authentication methods
+        // in this order: PLAIN LOGIN DIGEST-MD5 NTLM CRAM-MD5
         $smtp->expects( $this->any() )
              ->method( 'getData' )
              ->will( $this->returnValue( '250-AUTH PLAIN LOGIN DIGEST-MD5 NTLM CRAM-MD5' ) );
@@ -179,6 +183,11 @@ class ezcMailTransportSmtpTest extends ezcTestCase
         }
         catch ( ezcMailTransportSmtpException $e )
         {
+            // compare the exception message with the one returned from the SMTP transport
+            // in order to see if the sorting of the supported authentication methods
+            // was done properly in decreasing order of strength.
+            // initially supported (from mock): PLAIN LOGIN DIGEST-MD5 NTLM CRAM-MD5
+            // SMTP transport sorted: DIGEST-MD5, CRAM-MD5, NTLM, LOGIN, PLAIN
             $this->assertEquals( "SMTP server did not respond correctly to any of the authentication methods DIGEST-MD5, CRAM-MD5, NTLM, LOGIN, PLAIN.", $e->getMessage() );
         }
         $smtp->setStatus( ezcMailSmtpTransport::STATUS_NOT_CONNECTED );

@@ -72,7 +72,7 @@ class ezcMailComposerOptions extends ezcBaseOptions
                     throw new ezcBaseValueException( $propertyName, $propertyValue, 'bool' );
                 }
 
-                $this->properties[$propertyName] = (bool) $propertyValue;
+                $this->properties[$propertyName] = $propertyValue;
                 break;
 
             default:
