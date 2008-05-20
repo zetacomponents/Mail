@@ -199,12 +199,12 @@ class ezcMailTransportConnection
     public function getLine( $trim = false )
     {
         $data = '';
-        $line   = '';
+        $line = '';
 
         if ( is_resource( $this->connection ) )
         {
             // in case there is a problem with the connection fgets() returns false
-            while ( strpos( $line, self::CRLF ) === false )
+            while ( strpos( $data, self::CRLF ) === false )
             {
                 $line = fgets( $this->connection, 512 );
 
