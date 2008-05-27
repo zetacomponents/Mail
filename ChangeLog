@@ -1,4 +1,4 @@
-1.5beta1 - [RELEASEDATE]
+1.5beta1 - Tuesday 27 May 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #13010: The transport connection handles correcly cases where
