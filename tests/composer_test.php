@@ -550,6 +550,9 @@ class ezcMailComposerTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $file->contentDisposition->displayFileName = 'fly.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -571,6 +574,9 @@ class ezcMailComposerTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $file->contentDisposition->displayFileName = 'fly.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -598,6 +604,9 @@ class ezcMailComposerTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $contentDisposition->displayFileName = 'fly.jpg';
         $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -618,6 +627,9 @@ class ezcMailComposerTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $contentDisposition->displayFileName = 'fly.jpg';
         $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -639,6 +651,9 @@ class ezcMailComposerTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $file->contentDisposition->displayFileName = 'fly.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 

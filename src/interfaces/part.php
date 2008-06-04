@@ -270,6 +270,12 @@ abstract class ezcMailPart
                     {
                         $fileInfo .= "'{$cdHeader->fileNameLanguage}'";
                     }
+                    else
+                    {
+                        // RFC 2184: the single quote delimiters MUST be present
+                        // even when one of the field values is omitted
+                        $fileInfo .= "''";
+                    }
                 }
                 if ( $fileInfo !== null )
                 {
@@ -306,7 +312,7 @@ abstract class ezcMailPart
                 $cd .="; {$addKey}=\"{$addValue}\"";
             }
 
-            $this->setHeader( 'Content-Disposition', ezcMailHeaderFolder::foldAny( $cd ) );
+            $this->setHeader( 'Content-Disposition', $cd );
         }
 
         // generate headers

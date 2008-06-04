@@ -415,7 +415,9 @@ class ezcMailTest extends ezcTestCase
                         'size' => 51,
                         'additionalParameters' => array( 'foo' => 'bar' ),
                         'fileNameLanguage' => 'EN',
-                        'fileNameCharSet' => 'ISO-8859-1'
+                        'fileNameCharSet' => 'ISO-8859-1',
+                        // for issue #13038
+                        'displayFileName' => null
                 ) );
         $this->assertEquals( 'inline', $header->disposition );
         $this->assertEquals( 'spacer.gif', $header->fileName );

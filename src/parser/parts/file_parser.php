@@ -70,7 +70,7 @@ class ezcMailFileParser extends ezcMailPartParser
 
     /**
      * Constructs a new ezcMailFileParser with maintype $mainType subtype $subType
-     * and headers $headers..
+     * and headers $headers.
      *
      * @throws ezcBaseFileNotFoundException
      *         if the file attachment file could not be openened.
@@ -125,7 +125,10 @@ class ezcMailFileParser extends ezcMailPartParser
         // The filename is now relative, we need to extend it with the absolute path.
         // To provide uniqueness we put the file in a directory based on processID and rand.
         $dirName = ezcMailParser::getTmpDir() . getmypid() . '-' . self::$counter++ . '/';
-        mkdir( $dirName, 0700 );
+        if ( !is_dir( $dirName ) )
+        {
+            mkdir( $dirName, 0700 );
+        }
 
         // remove the directory and the file when PHP shuts down
         ezcMailParserShutdownHandler::registerForRemoval( $dirName );
