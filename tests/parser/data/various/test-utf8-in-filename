@@ -1,0 +1,68 @@
+From derick@example.nl Mon May 26 13:57:41 2008
+Return-path: <derick@example.nl>
+Envelope-to: derick@localhost
+Delivery-date: Mon, 26 May 2008 13:57:41 +0200
+Received: from localhost ([127.0.0.1] helo=kossu.ez.no)
+	by kossu.ez.no with esmtp (Exim 4.69)
+	(envelope-from <derick@example.nl>)
+	id 1K0bKf-000891-4O
+	for derick@localhost; Mon, 26 May 2008 13:57:41 +0200
+X-Spam-Tests: ALL_TRUSTED
+X-Spam-Score: -1.4 required=8.0
+X-Spam-Flag: NO
+X-Spam-Checker-Version: SpamAssassin 3.2.4 (2008-01-01) on example.nl
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.4 required=8.0 tests=ALL_TRUSTED
+	autolearn=disabled version=3.2.4
+X-Spam-Summary: -1.4 ALL_TRUSTED            Passed through trusted hosts only
+	via SMTP
+X-Spam-Report: 
+	* -1.4 ALL_TRUSTED Passed through trusted hosts only via SMTP
+Received: from 127.0.0.1 [127.0.0.1]
+	by kossu.ez.no with POP3 (fetchmail-6.3.8)
+	for <derick@localhost> (single-drop); Mon, 26 May 2008 13:57:41 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.jdi-ict.nl (8.13.7/8.12.11) with ESMTP id m4QBvXv8015210
+	for <derick@example.nl>; Mon, 26 May 2008 13:57:34 +0200
+Date: Mon, 26 May 2008 13:57:34 +0200 (CEST)
+From: Derick Rethans <derick@example.nl>
+X-X-Sender: derick@kossu.ez.no
+To: Derick Rethans <derick@example.nl>
+Subject: test mail
+Message-ID: <alpine.DEB.0.98.0805261357030.27351@kossu.ez.no>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="8323329-1160011201-1211803054=:27351"
+X-Bogosity: No, tests=bogofilter, spamicity=0.088475, version=1.1.7
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1160011201-1211803054=:27351
+Content-Type: TEXT/PLAIN; charset=UTF-8
+
+Test
+
+
+-- 
+Derick Rethans
+http://example.nl | http://ezcomponents.org | http://xdebug.org
+--8323329-1160011201-1211803054=:27351
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name*=UTF-8''tr%C3%A9e.php
+Content-Transfer-Encoding: BASE64
+Content-Description: 
+content-disposition: attachment;
+    filename*=ISO-8859-1''CV%20Robert%20Dom%E9nie.doc
+
+PD9waHANCmFic3RyYWN0IGNsYXNzIGV6Y1RyZWUNCnsNCiAgICBwdWJsaWMg
+ZnVuY3Rpb24gY29tbWl0KCkNCiAgICB7DQogICAgICAgIGZvcmVhY2ggKCAk
+dGhpcy0+dHJhbnNhY3Rpb25MaXN0IGFzICR0cmFuc2FjdGlvbkl0ZW0gKQ0K
+ICAgICAgICB7DQogICAgICAgICAgICBzd2l0Y2ggKCAkdHJhbnNhY3Rpb25J
+dGVtLT50eXBlICkNCiAgICAgICAgICAgIHsNCiAgICAgICAgICAgICAgICBj
+YXNlIGV6Y1RyZWVUcmFuc2FjdGlvbkl0ZW06OkFERDoNCiAgICAgICAgICAg
+ICAgICAgICAgYnJlYWs7DQoNCiAgICAgICAgICAgICAgICBjYXNlIGV6Y1Ry
+ZWVUcmFuc2FjdGlvbkl0ZW06OkRFTEVURToNCiAgICAgICAgICAgICAgICAg
+ICAgYnJlYWs7DQoNCiAgICAgICAgICAgICAgICBjYXNlIGV6Y1RyZWVUcmFu
+c2FjdGlvbkl0ZW06Ok1PVkU6DQogICAgICAgICAgICAgICAgICAgIGJyZWFr
+Ow0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KfQ0KPz4NCg==
+
+--8323329-1160011201-1211803054=:27351--

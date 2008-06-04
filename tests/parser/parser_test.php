@@ -1577,5 +1577,70 @@ END;
         ezcMailParser::setTmpDir( null );
         $this->assertEquals( '/tmp/', ezcMailParser::getTmpDir() );
     }
+
+    /**
+     * Test for issue #13038: Error parsing non us-ascii attachment files names.
+     */
+    public function testUtf8InFileName()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-utf8-in-filename' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        // check the body
+        $this->assertEquals( "CV Robert Dom" . chr( 0xE9 ) . "nie.doc", $parts[1]->contentDisposition->fileName );
+        $this->assertEquals( "CV Robert Doménie.doc", $parts[1]->contentDisposition->displayFileName );
+    }
+
+    /**
+     * Test for issue #13038: Error parsing non us-ascii attachment files names.
+     */
+    public function testUtf8InFileName2()
+    {
+        $parser = new ezcMailParser();
+        $messages = array(
+            array( "content-disposition: attachment;
+                    filename*=ISO-8859-1''CV%20Robert%20Dom%E9nie.doc",
+                   "CV Robert Doménie.doc" ),
+
+            array( 'Content-disposition: attachment;
+                    filename="=?iso-8859-1?Q?Val=E9rie_TEST_CV=2Epdf?="',
+                   "Valérie TEST CV.pdf" ),
+
+            array( 'Content-Disposition: attachment;
+                    filename="=?iso-8859-1?q?Lettre=20de=20motivation=20directeur=20de=20client=E8le.doc?="',
+                   "Lettre de motivation directeur de clientèle.doc" ),
+
+            // broken header, not tested
+            /*
+            array( 'Content-Disposition: attachment;
+                    filename="=?iso-8859-1?q?Lettre=20de=20motivation=20directeur=20de=20client=E8le.do?=
+                    c?="',
+                   "Lettre de motivation directeur de clientèle.doc" ),
+            */
+
+            // not supported yet
+            /*
+            array( "Content-Type: application/x-stuff;
+                    title*1*=us-ascii'en'This%20is%20even%20more%20
+                    title*2*=%2A%2A%2Afun%2A%2A%2A%20
+                    title*3=\"isn't it!",
+                    "CV" ),
+            */
+        );
+
+        foreach ( $messages as $msg )
+        {
+            $set = new ezcMailVariableSet( $msg[0] );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+
+            // check the body
+            $this->assertEquals( $msg[1], $mail->contentDisposition->displayFileName );
+        }
+    }
 }
 ?>
