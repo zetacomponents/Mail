@@ -46,13 +46,13 @@
  *
  * Work with mailboxes:
  *  - get the list of mailboxes of the user ({@link listMailboxes()})
- *  - create a mailbox ({@link createMailbox()}
- *  - rename a mailbox ({@link renameMailbox()}
- *  - delete a mailbox ({@link deleteMailbox()}
- *  - append a message to a mailbox ({@link append()}
+ *  - create a mailbox ({@link createMailbox()})
+ *  - rename a mailbox ({@link renameMailbox()})
+ *  - delete a mailbox ({@link deleteMailbox()})
+ *  - append a message to a mailbox ({@link append()})
  *  - select a mailbox ({@link selectMailbox()})
  *  - get the status of messages in the current mailbox ({@link status()})
- *  - get the number of messages with a certain flag ({@link countByFlag()}
+ *  - get the number of messages with a certain flag ({@link countByFlag()})
  *
  * Work with message numbers (on the currently selected mailbox):
  *  - get the message numbers and sizes of all the messages ({@link listMessages()})
