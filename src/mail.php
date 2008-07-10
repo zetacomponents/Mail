@@ -432,7 +432,10 @@ class ezcMail extends ezcMailPart
         {
             case 'ezcMail':
             case 'ezcMailComposer':
-                $this->walkParts( $context, $mail->body );
+                if ( $mail->body !== null )
+                {
+                    $this->walkParts( $context, $mail->body );
+                }
                 break;
 
             case 'ezcMailMultipartMixed':

@@ -1642,5 +1642,19 @@ END;
             $this->assertEquals( $msg[1], $mail->contentDisposition->displayFileName );
         }
     }
+
+    /**
+     * Test for issue #13329: ezcMail fetchParts() generates an error when parsing a mail with an empty body
+     */
+    public function testFetchPartsEmptyBody()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-fetch-parts-empty-body' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts();
+        $this->assertEquals( array(), $mail->fetchParts() );
+    }
 }
 ?>

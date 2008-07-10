@@ -1,0 +1,19 @@
+Received: (qmail 27779 invoked from network); 5 Jul 2008 17:02:35 -0400
+Received: from mailgate1.domain.com (HELO domain.com) (xx.xxx.xx.xxx)
+  by mydomain.com with (DHE-RSA-AES256-SHA encrypted) SMTP; 5 Jul 2008  
+17:02:35 -0400
+Received-SPF: pass (mydomain.com: local policy designates  
+xx.xxx.xx.xxx as permitted sender)
+Received: from ([12.165.36.249])
+	by mailgate1.domain.com with ESMTP  id KP-BPZGN.208254597;
+	Sat, 05 Jul 2008 17:02:15 -0400
+Subject: Yes
+From: jcscates@domain.com
+Date: Sat, 5 Jul 2008 17:02:19 -0400
+To: sub.4dbd248a@mydomain.com
+Importance: Normal
+Message-ID: <OF10DA4E02.450C9DFC-ON8525747D.007391CC@domain.com>
+X-MIMETrack: Serialize by Router on ETCSPLNG103/MAIL/CCE(Release 7.0.3| 
+September 26, 2007) at
+07/05/2008 05:02:22 PM
+MIME-Version: 1.0
