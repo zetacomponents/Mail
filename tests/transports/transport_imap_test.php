@@ -18,11 +18,11 @@ class ezcMailTransportImapTest extends ezcTestCase
 {
     private static $ids = array();
 
-    private static $server = 'dolly.ez.no';
+    private static $server = 'mta1.ez.no';
     private static $serverSSL = 'ezctest.ez.no';
     private static $port = 143;
     private static $portSSL = 993;
-    private static $user = 'ezcomponents';
+    private static $user = 'ezcomponents@mail.ez.no';
     private static $password = 'ezcomponents';
     private static $userSSL = 'as';
     private static $passwordSSL = 'wee123';

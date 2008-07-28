@@ -16,8 +16,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 {
     public function testImapMessageSource()
     {
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $transport->selectMailbox( "Inbox" );
         $parser = new ezcMailParser();
 
@@ -31,8 +31,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     public function testImapMessageSourceFetchAll()
     {
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $transport->selectMailbox( "Inbox" );
         $parser = new ezcMailParser();
 
@@ -46,8 +46,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     public function testImapMessageSourceEmptySet()
     {
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $transport->createMailbox( "Guybrush" );
         $transport->selectMailbox( "Guybrush" );
         $parser = new ezcMailParser();
@@ -61,8 +61,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     public function testPop3MessageSource()
     {
-        $transport = new ezcMailPop3Transport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailPop3Transport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $parser = new ezcMailParser();
 
         $set = new ezcMailStorageSet( $transport->fetchByMessageNr( 1 ), $this->tempDir );
@@ -75,8 +75,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     public function testPop3MessageSourceFetchAll()
     {
-        $transport = new ezcMailPop3Transport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailPop3Transport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $parser = new ezcMailParser();
 
         $set = new ezcMailStorageSet( $transport->fetchAll(), $this->tempDir );
@@ -190,8 +190,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     public function testGetSourceFileNames()
     {
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         $transport->selectMailbox( "Inbox" );
         $parser = new ezcMailParser();
 
@@ -217,8 +217,8 @@ class ezcMailTransportStorageTest extends ezcTestCase
     {
         $this->removeTempDir();
 
-        $transport = new ezcMailImapTransport( "dolly.ez.no" );
-        $transport->authenticate( "ezcomponents", "ezcomponents" );
+        $transport = new ezcMailImapTransport( "mta1.ez.no" );
+        $transport->authenticate( "ezcomponents@mail.ez.no", "ezcomponents" );
         try
         {
             $transport->deleteMailbox( "Guybrush" );
