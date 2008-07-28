@@ -1688,6 +1688,7 @@ class ezcMailImapTransport
             throw new ezcMailInvalidLimitException( $offset, $count );
         }
 
+        $range = array();
         if ( $this->options->uidReferencing )
         {
             $uids = array_values( $this->listUniqueIdentifiers() );

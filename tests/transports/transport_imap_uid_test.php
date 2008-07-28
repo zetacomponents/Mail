@@ -287,6 +287,22 @@ class ezcMailTransportImapUidTest extends ezcTestCase
         $this->assertEquals( 4, count( $mail ) );
     }
 
+    // Test for fixing sortFromOffset() undefined $range variable
+    public function testUidSortFromOffsetInvalidCriteriaCountZero()
+    {
+        $imap = $this->getMock( 'ezcMailImapTransport', array( 'sort' ), array( self::$server, self::$port, array( 'uidReferencing' => true ) ) );
+        $imap->expects( $this->any() )
+             ->method( 'sort' )
+             ->will( $this->returnValue( array() ) );
+
+        $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( "Inbox" );
+        $set = $imap->sortFromOffset( self::$ids[0], 0, 'invalid criteria' );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 0, count( $mail ) );
+    }
+
     public function testUidSortFromOffsetDefaultCriteria()
     {
         $imap = new ezcMailImapTransport( self::$server, self::$port, array( 'uidReferencing' => true ) );
