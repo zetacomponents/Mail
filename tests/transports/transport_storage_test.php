@@ -14,6 +14,15 @@
  */
 class ezcMailTransportStorageTest extends ezcTestCase
 {
+    private static $sizes = array();
+
+    public static function suite()
+    {
+        self::$sizes = array( 1539, 64072, 1696, 1725 );
+
+        return new PHPUnit_Framework_TestSuite( __CLASS__ );
+    }
+
     public function testImapMessageSource()
     {
         $transport = new ezcMailImapTransport( "mta1.ez.no" );
@@ -26,7 +35,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( self::$sizes[0], strlen( $source ) );
     }
 
     public function testImapMessageSourceFetchAll()
@@ -41,7 +50,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( self::$sizes[0], strlen( $source ) );
     }
 
     public function testImapMessageSourceEmptySet()
@@ -70,7 +79,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( self::$sizes[0], strlen( $source ) );
     }
 
     public function testPop3MessageSourceFetchAll()
@@ -84,7 +93,7 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $files = $set->getSourceFiles();
 
         $source = file_get_contents( $files[0] );
-        $this->assertEquals( 1542, strlen( $source ) );
+        $this->assertEquals( self::$sizes[0], strlen( $source ) );
     }
 
     public function testMboxMessageSource()
@@ -198,10 +207,11 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $set = new ezcMailStorageSet( $transport->fetchAll(), $this->tempDir );
         $mail = $parser->parseMail( $set );
         $files = $set->getSourceFiles();
-        $expected = array( "Pine.LNX.4.62.0603161539140.13229@localhost",
+        $expected = array( "Pine.LNX.4.62.0603161543230.13229@localhost",
+                           "Pine.LNX.4.62.0603160934040.13229@localhost",
                            "Pine.LNX.4.62.0603160934280.13229@localhost",
-                           "Pine.LNX.4.62.0603161543230.13229@localhost",
-                           "Pine.LNX.4.62.0603160934040.13229@localhost" );
+                           "Pine.LNX.4.62.0603161539140.13229@localhost", );
+
         for ( $i = 0; $i < count( $files ); $i++ )
         {
             $this->assertEquals( $expected[$i], basename( $files[$i] ) );
@@ -226,11 +236,6 @@ class ezcMailTransportStorageTest extends ezcTestCase
         catch ( ezcMailTransportException $e )
         {
         }
-    }
-
-    public static function suite()
-    {
-        return new PHPUnit_Framework_TestSuite( "ezcMailTransportStorageTest" );
     }
 }
 ?>

@@ -17,6 +17,7 @@ include_once( 'wrappers/pop3_wrapper.php' );
 class ezcMailTransportPop3Test extends ezcTestCase
 {
     private static $ids = array();
+    private static $sizes = array();
 
     private static $server = 'mta1.ez.no';
     private static $serverSSL = 'ezctest.ez.no';
@@ -26,6 +27,20 @@ class ezcMailTransportPop3Test extends ezcTestCase
     private static $password = 'ezcomponents';
     private static $userSSL = 'as';
     private static $passwordSSL = 'wee123';
+
+    public static function suite()
+    {
+        self::$ids = array( 23, 24, 25, 26 );
+        self::$sizes = array( 1539, 64072, 1696, 1725 );
+
+        for ( $i = 0; $i < count( self::$ids ); $i++ )
+        {
+            $messageNr = str_pad( sprintf( "%x", self::$ids[$i] ), 8, '0', STR_PAD_LEFT );
+            self::$ids[$i] = "{$messageNr}468e011a";
+        }
+
+        return new PHPUnit_Framework_TestSuite( __CLASS__ );
+    }
 
     public function testWrapperMockConnectionConstructResponseNotOk()
     {
@@ -39,7 +54,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         }
         catch ( ezcMailTransportException $e )
         {
-            $this->assertEquals( "An error occured while sending or receiving mail. The connection to the POP3 server is ok, but a negative response from server was received: '+OK Welcome'. Try again later.", str_replace( array( "\n", "\r" ), '', $e->getMessage() ) );
+            $this->assertEquals( "An error occured while sending or receiving mail. The connection to the POP3 server is ok, but a negative response from server was received: '+OK eZ.no'. Try again later.", str_replace( array( "\n", "\r" ), '', $e->getMessage() ) );
         }
     }
 
@@ -383,7 +398,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3 = new ezcMailPop3Transport( self::$server );
         $pop3->authenticate( self::$user, self::$password );
         $list = $pop3->listMessages();
-        $this->assertEquals( array( 1 => '1542', 2 => '1539', 3 => '1383', 4 => '63913' ), $list );
+        $this->assertEquals( array( 1 => self::$sizes[0], 2 => self::$sizes[1], 3 => self::$sizes[2], 4 => self::$sizes[3] ), $list );
     }
 
     public function testFetchByMessageNr1()
@@ -501,7 +516,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $pop3->authenticate( self::$user, self::$password );
         $pop3->status( $num, $size );
         $this->assertEquals( 4, $num );
-        $this->assertEquals( 68377, $size );
+        $this->assertEquals( self::$sizes[0] + self::$sizes[1] + self::$sizes[2] + self::$sizes[3], $size );
     }
 
     public function testTop()
@@ -621,12 +636,12 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $set = $pop3->fetchAll();
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
-        $expected = array( 1542, '1539', '1383', '63913' );
+        $expected = self::$sizes;
         for ( $i = 0; $i < count( $mail ); $i++ )
         {
             $this->assertequals( $expected[$i], $mail[$i]->size );
         }
-        $parts = $mail[3]->fetchParts();
+        $parts = $mail[1]->fetchParts();
         $this->assertEquals( '45177', $parts[1]->size );
     }
 
@@ -773,18 +788,6 @@ class ezcMailTransportPop3Test extends ezcTestCase
         catch ( ezcBasePropertyNotFoundException $e )
         {
         }
-    }
-
-    public static function suite()
-    {
-        self::$ids = array( 508, 509, 510, 511 );
-        for ( $i = 0; $i < count( self::$ids ); $i++ )
-        {
-            $messageNr = str_pad( sprintf( "%x", self::$ids[$i] ), 8, '0', STR_PAD_LEFT );
-            self::$ids[$i] = "{$messageNr}4420e93a";
-        }
-
-        return new PHPUnit_Framework_TestSuite( "ezcMailTransportPop3Test" );
     }
 }
 ?>

@@ -17,6 +17,7 @@ include_once( 'wrappers/imap_wrapper.php' );
 class ezcMailTransportImapUidTest extends ezcTestCase
 {
     private static $ids = array();
+    private static $sizes = array();
 
     private static $server = 'mta1.ez.no';
     private static $serverSSL = 'ezctest.ez.no';
@@ -29,7 +30,8 @@ class ezcMailTransportImapUidTest extends ezcTestCase
 
     public static function suite()
     {
-        self::$ids = array( 508, 509, 510, 511 );
+        self::$ids = array( 23, 24, 25, 26 );
+        self::$sizes = array( 1539, 64072, 1696, 1725 );
 
         return new PHPUnit_Framework_TestSuite( __CLASS__ );
     }
@@ -230,7 +232,7 @@ class ezcMailTransportImapUidTest extends ezcTestCase
         $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->searchMailbox( 'SUBJECT "norwegian"' );
-        $this->assertEquals( array( self::$ids[0], self::$ids[2] ), $set->getMessageNumbers() );
+        $this->assertEquals( array( self::$ids[0], self::$ids[3] ), $set->getMessageNumbers() );
         $parser = new ezcMailParser();
         $mails = $parser->parseMail( $set );
         $this->assertEquals( 2, count( $mails ) );
@@ -242,7 +244,7 @@ class ezcMailTransportImapUidTest extends ezcTestCase
         $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( 'inbox' );
         $set = $imap->searchMailbox( 'SEEN SUBJECT "norwegian"' );
-        $this->assertEquals( array( self::$ids[0], self::$ids[2] ), $set->getMessageNumbers() );
+        $this->assertEquals( array( self::$ids[0], self::$ids[3] ), $set->getMessageNumbers() );
         $parser = new ezcMailParser();
         $mails = $parser->parseMail( $set );
         $this->assertEquals( 2, count( $mails ) );
@@ -472,7 +474,7 @@ class ezcMailTransportImapUidTest extends ezcTestCase
         $parser = new ezcMailParser();
         $mail = $parser->parseMail( $set );
         $this->assertEquals( 1, count( $mail ) );
-        $this->assertEquals( "pine: test 2 with 8bit norwegian chars", $mail[0]->subject );
+        $this->assertEquals( "pine: test 3 with norwegian chars", $mail[0]->subject );
     }
 
     public function testUidSortMessagesEmpty()
@@ -631,10 +633,10 @@ class ezcMailTransportImapUidTest extends ezcTestCase
         $imap->authenticate( self::$user, self::$password );
         $imap->selectMailbox( "Inbox" );
         $flags = $imap->fetchSizes( self::$ids );
-        $expected = array( self::$ids[0] => 1542,
-                           self::$ids[1] => 1539,
-                           self::$ids[2] => 1383,
-                           self::$ids[3] => 63913
+        $expected = array( self::$ids[0] => self::$sizes[0],
+                           self::$ids[1] => self::$sizes[1],
+                           self::$ids[2] => self::$sizes[2],
+                           self::$ids[3] => self::$sizes[3]
                          );
         $this->assertEquals( $expected, $flags );
     }
