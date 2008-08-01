@@ -4,6 +4,7 @@
 - Fixed issue #13329: ezcMail fetchParts() no longer generates an error when
   parsing a mail with an empty body.
 - Fixed a special case in sortFromOffset() where $range was undefined.
+- Fixed an issue with duplicate properties arrays in mail part descendants.
 
 
 1.5 - Monday 16 June 2008

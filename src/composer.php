@@ -112,13 +112,6 @@ class ezcMailComposer extends ezcMail
     protected $options;
 
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs an empty ezcMailComposer object.
      *
      * @param ezcMailComposerOptions $options

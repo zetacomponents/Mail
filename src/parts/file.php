@@ -68,13 +68,6 @@ abstract class ezcMailFilePart extends ezcMailPart
     const DISPLAY_INLINE = "inline";
 
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    protected $properties = array();
-
-    /**
      * Constructs a new attachment with $fileName.
      *
      * @param string $fileName

@@ -39,13 +39,6 @@
 class ezcMailDeliveryStatus extends ezcMailPart
 {
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs a new DeliveryStatus part.
      */
     public function __construct()

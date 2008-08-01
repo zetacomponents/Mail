@@ -64,7 +64,7 @@ abstract class ezcMailPart
      *
      * @var array(string=>mixed)
      */
-    private $properties = array();
+    protected $properties = array();
 
     /**
      * Constructs a new mail part.

@@ -95,13 +95,6 @@ class ezcMail extends ezcMailPart
     const BASE64 = "base64";
 
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs an empty ezcMail object.
      */
     public function __construct()

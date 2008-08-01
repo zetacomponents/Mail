@@ -41,13 +41,6 @@
 class ezcMailMultipartReport extends ezcMailMultipart
 {
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs a new ezcMailMultipartReport.
      *
      * @param ezcMailPart|array(ezcMailPart) $...

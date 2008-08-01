@@ -43,13 +43,6 @@
 class ezcMailText extends ezcMailPart
 {
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs a new TextPart with the given $text, $charset and $encoding.
      *
      * OriginalCharset is only used when parsing mail. Parsed mail will always

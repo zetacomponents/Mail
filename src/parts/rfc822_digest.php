@@ -37,13 +37,6 @@
 class ezcMailRfc822Digest extends ezcMailPart
 {
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * Constructs a new ezcMailDigest with the mail $mail.
      *
      * @param ezcMail $mail

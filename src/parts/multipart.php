@@ -40,13 +40,6 @@ abstract class ezcMailMultipart extends ezcMailPart
     protected $parts = array();
 
     /**
-     * Holds the properties of this class.
-     *
-     * @var array(string=>mixed)
-     */
-    private $properties = array();
-
-    /**
      * The counter is unique between all multipart types and is used to
      * generate unique boundary strings.
      *
