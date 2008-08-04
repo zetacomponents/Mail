@@ -178,6 +178,7 @@ class ezcMailParserTest extends ezcTestCase
         $parts = $mail->body->getParts();
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
         $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+        $this->assertEquals( 'Boundary-00=_M715D0nt6IAUljt', $mail->body->boundary );
 
         // check the body
         $this->assertEquals( "This is the body\n", $parts[0]->text );
@@ -280,6 +281,7 @@ class ezcMailParserTest extends ezcTestCase
         $parts = $mail->body->getParts();
         $this->assertEquals( true, $parts[0] instanceof ezcMailText );
         $this->assertEquals( true, $parts[1] instanceof ezcMailMultipartRelated );
+        $this->assertEquals( 'Apple-Mail-7-898127351', $mail->body->boundary );
 
         // check the text
         $this->assertEquals( 'utf-8', $parts[0]->charset );
@@ -291,6 +293,7 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'iso-8859-1', $mainPart->originalCharset );
         $this->assertEquals( 'utf-8', $mainPart->charset );
         $this->assertEquals( 'html', $mainPart->subType );
+        $this->assertEquals( 'Apple-Mail-8-898127352', $parts[1]->boundary );
 
         $this->assertEquals( 1, count( $parts[1]->getRelatedParts() ) );
         // chech the multipart related file

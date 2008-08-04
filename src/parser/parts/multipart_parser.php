@@ -206,6 +206,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         }
         $multipart = $this->finishMultipart();
         ezcMailPartParser::parsePartHeaders( $this->headers, $multipart );
+        $multipart->boundary = $this->boundary;
         return $multipart;
     }
 

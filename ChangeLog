@@ -1,3 +1,11 @@
+1.5.2 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed an issue that caused the part boundaries from e-mail messages not
+  being correctly set in the parsed mail structure. Instead an auto-generated
+  one was used.
+
+
 1.5.1 - Monday 04 August 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
