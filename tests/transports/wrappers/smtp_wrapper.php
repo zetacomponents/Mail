@@ -6,7 +6,7 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  * @filesource
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @subpackage Tests
  */
 
@@ -17,7 +17,7 @@
  * For testing purposes only.
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @subpackage Tests
  * @access private
  */

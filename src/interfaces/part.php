@@ -3,7 +3,7 @@
  * File containing the ezcMailPart class.
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -33,7 +33,7 @@
  *                extending this class and its derivals.
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  */
 abstract class ezcMailPart
 {

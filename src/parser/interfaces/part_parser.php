@@ -3,7 +3,7 @@
  * File containing the ezcMailPartParser class
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -30,7 +30,7 @@
  *
  * @todo case on headers
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @access private
  */
 abstract class ezcMailPartParser

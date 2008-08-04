@@ -3,7 +3,7 @@
  * File containing the ezcMailParserOption class
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -24,7 +24,7 @@
  *           parser if you plan to use another class instead of ezcMail.
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  */
 class ezcMailParserOptions extends ezcBaseOptions
 {

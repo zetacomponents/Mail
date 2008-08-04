@@ -3,7 +3,7 @@
  * File containing the ezcMailVirtualFile class
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -18,7 +18,7 @@
  *           otherwise they are set to application/octet-stream.
  *
  * @package Mail
- * @version 1.5.1
+ * @version //autogen//
  */
 class ezcMailVirtualFile extends ezcMailFilePart
 {
