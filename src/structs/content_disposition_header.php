@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version 1.5.1
  * @filesource
  * @package Mail
  */
@@ -14,7 +14,7 @@
  * Use it for reading and setting the Content-Disposition header.
  *
  * @package Mail
- * @version //autogentag//
+ * @version 1.5.1
  */
 class ezcMailContentDispositionHeader extends ezcBaseStruct
 {

@@ -3,7 +3,7 @@
  * File containing the ezcMailDeliveryStatus class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.5.1
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -34,7 +34,7 @@
  *           Holds the recipients of the delivery-status message.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.5.1
  */
 class ezcMailDeliveryStatus extends ezcMailPart
 {

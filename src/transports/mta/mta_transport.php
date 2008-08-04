@@ -3,7 +3,7 @@
  * File containing the ezcMailMtaTransport class
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.5.1
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -18,7 +18,7 @@
  * Use ezcMailTools::setLineBreak( "\n" ) before sending mail to fix this issue.
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.5.1
  * @mainclass
  */
 class ezcMailMtaTransport implements ezcMailTransport

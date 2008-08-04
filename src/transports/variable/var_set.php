@@ -6,7 +6,7 @@ declare(encoding="latin1");
  *
  * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogen//
+ * @version 1.5.1
  * @package Mail
  */
 
@@ -26,7 +26,7 @@ declare(encoding="latin1");
  * </code>
  *
  * @package Mail
- * @version //autogen//
+ * @version 1.5.1
  */
 class ezcMailVariableSet implements ezcMailParserSet
 {

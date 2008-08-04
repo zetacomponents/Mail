@@ -1,4 +1,4 @@
-1.5.1 - [RELEASEDATE]
+1.5.1 - Monday 04 August 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #13329: ezcMail fetchParts() no longer generates an error when
