@@ -151,8 +151,6 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', '', 'utf-8' ) ), $mail->to );
         $this->assertEquals( array(), $mail->cc );
         $this->assertEquals( array(), $mail->bcc );
-//        var_dump( $mail->subject );
-//        $this->assertEquals( 'Simple mail with text subject and body', $mail->subject );
         $this->assertEquals( 'utf-8', $mail->subjectCharset );
         $this->assertEquals( true, $mail->body instanceof ezcMailText );
         $this->assertEquals( "This is the body: æøå\n", $mail->body->text );
@@ -1658,6 +1656,20 @@ END;
         $mail = $mail[0];
         $parts = $mail->fetchParts();
         $this->assertEquals( array(), $mail->fetchParts() );
+    }
+
+    /**
+     * Test for issue #13553: Invalid mime subject header containing iso-8859-1 characters
+     */
+    public function testMimeSubjectBroken()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/test-mime-subject-broken' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( 'Un Fax a été émis', $mail->getHeader( 'Subject' ) );
+        $this->assertEquals( 'Un Fax a t mis', $mail->subject );
     }
 }
 ?>

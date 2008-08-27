@@ -534,6 +534,31 @@ See the other examples in ezcMailCharsetConverter, and see also the
 documentation for the `iconv`_ () function to find out how //IGNORE and
 //TRANSLIT work.
 
+Parsing: broken headers
+-----------------------
+
+If the mail contains headers with broken text (eg. 8-bit characters with no
+character set specified), then the parsed header will contain broken text or
+missing characters.
+
+For example, when parsing a mail with this header::
+
+    Subject: Un Fax a été émis
+
+Then $mail->subject will contain 'Un Fax a t mis' (because the 8-bit characters
+could not be parsed correctly by ezcMailTools::mimeDecode() due to the
+missing character set).
+
+In order to be able to get the correct value of the header, use
+$mail->getHeader( 'Subject' ), which is the raw value of the header
+(MIME-encoded). Other headers are available as raw through the getHeader()
+function.
+
+The raw headers (obtained via the function getHeader of ezcMailPart) are
+MIME-encoded for non-broken headers (eg. '=?iso-8859-1?Q?=E6=F8=E5?='), so if
+you want to decode them use ezcMailTools::mimeDecode() or implement your own
+MIME-decoding function.
+
 .. _iconv: http://php.net/manual/en/function.iconv.php
 
 

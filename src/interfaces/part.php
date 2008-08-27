@@ -159,6 +159,10 @@ abstract class ezcMailPart
      * 'Message-Id' will match both 'Message-ID' and 'MESSAGE-ID'
      * as well as 'Message-Id'.
      *
+     * The raw value is MIME-encoded, so if you want to decode it,
+     * use {@link ezcMailTools::mimeDecode()} or implement your own
+     * MIME-decoding function.
+     *
      * @param string $name
      * @return string
      */

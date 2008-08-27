@@ -4,6 +4,7 @@
 - Fixed an issue that caused the part boundaries from e-mail messages not
   being correctly set in the parsed mail structure. Instead an auto-generated
   one was used.
+- Fixed issue #13553: Documented how to access the raw value of headers.
 
 
 1.5.1 - Monday 04 August 2008
