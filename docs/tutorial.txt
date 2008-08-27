@@ -414,7 +414,8 @@ or POP3 account, an mbox file, a single mail file or a variable.
 
 Because the parser will delete the temporary attachments after the script ends,
 it is needed to save those files to another directory. On lines 19-26 a way of
-how to do this is shown.
+how to do this is shown. The *displayFileName* property of $part was used, as
+the *fileName* property of $part contains the raw file name from the mail.
 
 For a more detailed example on how to use a mail object, please see the
 `display example`_.
@@ -558,6 +559,17 @@ The raw headers (obtained via the function getHeader of ezcMailPart) are
 MIME-encoded for non-broken headers (eg. '=?iso-8859-1?Q?=E6=F8=E5?='), so if
 you want to decode them use ezcMailTools::mimeDecode() or implement your own
 MIME-decoding function.
+
+Parsing: attachment file names
+------------------------------
+
+When parsing a mail with attachments you can use a code similar to the one in
+section _`Parsing a message set`. The mail part that contains the attachment
+($part) has 2 properties which contain the file name of the attachment:
+*fileName* which contains the raw file name, and *displayFileName* which
+contain the MIME-decoded file name. Use *displayFileName* to copy the
+temporary files saved during parsing which contain the attachments, and which
+will not be available on the next request.
 
 .. _iconv: http://php.net/manual/en/function.iconv.php
 

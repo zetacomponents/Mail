@@ -21,7 +21,7 @@ for ( $i = 0; $i < count( $mail ); $i++ )
     {
         if ( $part instanceof ezcMailFile )
         {
-            rename( $part->fileName, '/path/to/save/to/' . basename( $part->fileName ) );
+            rename( $part->fileName, '/path/to/save/to/' . basename( $part->displayFileName ) );
         }
     }
 }
