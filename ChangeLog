@@ -5,6 +5,8 @@
   being correctly set in the parsed mail structure. Instead an auto-generated
   one was used.
 - Fixed issue #13553: Documented how to access the raw value of headers.
+- Implemented feature request #13538: Added possibility to set a custom
+  message in mail multiparts for e-mail clients missing MIME support.
 
 
 1.5.1 - Monday 04 August 2008

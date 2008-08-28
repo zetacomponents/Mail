@@ -1,0 +1,20 @@
+Content-Type: multipart/Test; boundary="pirate"
+
+Denne meldingen er kult, men e-postklienten din forstår ikke MIME, så du kan ikke se det.
+
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Look behind you, a three headed monkey!.
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Ask me about Loom(tm)
+--pirate
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Whew, a rubber tree
+--pirate--

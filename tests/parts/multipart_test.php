@@ -94,7 +94,25 @@ class ezcMailMultipartTest extends ezcTestCase
 
         $this->multipart->boundary = "pirate";
 
-        $this->assertEquals( file_get_contents( dirname( __FILE__) . "/data/ezcMailMultiPartTest_testGenerate.data" ),
+        $this->assertEquals( trim( file_get_contents( dirname( __FILE__) . "/data/ezcMailMultiPartTest_testGenerate.data" ) ),
+                             $this->multipart->generate() );
+    }
+
+    /**
+     * Tests generating a multipart with custom "client does not understand MIME" message.
+     *
+     * Test for issue #13538: Add Option to disable noMimeMessage.
+     */
+    public function testGenerateCustomNoMimeMessage()
+    {
+        $this->multipart->addPart( new ezcMailText( "Look behind you, a three headed monkey!." ) );
+        $this->multipart->addPart( new ezcMailText( "Ask me about Loom(tm)" ) );
+        $this->multipart->addPart( new ezcMailText( "Whew, a rubber tree" ) );
+
+        $this->multipart->boundary = "pirate";
+        $this->multipart->noMimeMessage = "Denne meldingen er kult, men e-postklienten din forstår ikke MIME, så du kan ikke se det.";
+
+        $this->assertEquals( trim( file_get_contents( dirname( __FILE__) . "/data/ezcMailMultiPartTest_customNoMimeMessage.data" ) ),
                              $this->multipart->generate() );
     }
 
@@ -109,7 +127,7 @@ class ezcMailMultipartTest extends ezcTestCase
 
         $this->multipart->boundary = "pirate";
 
-        $this->assertEquals( file_get_contents( dirname( __FILE__) . "/data/ezcMailMultiPartTest_testGenerate.data" ),
+        $this->assertEquals( trim( file_get_contents( dirname( __FILE__) . "/data/ezcMailMultiPartTest_testGenerate.data" ) ),
                              $this->multipart->generate() );
     }
 

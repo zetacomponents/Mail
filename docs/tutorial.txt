@@ -199,6 +199,21 @@ In the next example we will add an attachment to our manually built mail:
 .. include:: tutorial/tutorial_mail_attachments.php
    :literal:
 
+By default the generated message will contain a text which is displayed by
+e-mail clients lacking MIME-support::
+
+    This message is in MIME format. Since your mail reader does not understand
+    this format, some or all of this message may not be legible.
+
+This text can be changed or removed by setting the property *noMimeMessage* on
+the multipart, before generating the mail or sending it. Example::
+
+    $part = new ezcMailMultipartMixed( $textPart, $fileAttachment );
+    $part->noMimeMessage = 'Your e-mail client does not understand MIME.';
+
+    $mail = new ezcMail();
+    $mail->body = $part;
+
 Building MIME structures that work
 ----------------------------------
 
