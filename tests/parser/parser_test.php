@@ -1314,7 +1314,7 @@ END;
         }
         else
         {
-            $this->markTestSkipped( "With fileinfo extension the Content-Type of this attachment is recognized as 'text'." );
+            $this->markTestSkipped( "This test only runs if fileinfo is supported" );
         }
     }
 
@@ -1334,7 +1334,7 @@ END;
         }
         else
         {
-            $this->markTestSkipped( "Without fileinfo extension the Content-Type of attachments are assumed to be 'application'." );
+            $this->markTestSkipped( "This test only runs if fileinfo is not supported" );
         }
     }
 
@@ -1354,7 +1354,7 @@ END;
         }
         else
         {
-            $this->markTestSkipped( "With fileinfo extension the Content-Type of this attachment is recognized as 'text'." );
+            $this->markTestSkipped( "This test only runs if fileinfo is supported" );
         }
     }
 
@@ -1374,7 +1374,7 @@ END;
         }
         else
         {
-            $this->markTestSkipped( "Without fileinfo extension the Content-Type of attachments are assumed to be 'application'." );
+            $this->markTestSkipped( "This test only runs if fileinfo is not supported" );
         }
     }
 
