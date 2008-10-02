@@ -1,6 +1,6 @@
 <?php
 $dir = dirname( __FILE__ );
-$dirParts = explode( '/', $dir );
+$dirParts = explode( DIRECTORY_SEPARATOR, $dir );
 switch ( $dirParts[count( $dirParts ) - 3] )
 {
     case 'doc': require_once 'ezc/Base/base.php'; break; // pear
