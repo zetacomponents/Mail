@@ -447,6 +447,18 @@ For a list of supported mail-related RFCs, please see the `RFCs list`_.
 
 .. _RFCs list: Mail_rfcs.html
 
+Displaying HTML mail with inline images
+---------------------------------------
+
+In order to display HTML mail with inline images, you need to make sure that
+the attached images are accessible by the web server. Besides this, you also
+need to replace the internal mail references to the images with references to
+the file in the document root. In the following example we use
+ezcMailTools::replaceContentIdRefs() to do exactly this.
+
+.. include:: tutorial/tutorial_html_display.php
+   :literal:
+
 
 Troubleshooting
 ===============

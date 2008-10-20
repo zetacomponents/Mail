@@ -683,5 +683,47 @@ class ezcMailTools
         }
         return true;
     }
+
+    /**
+     * Replaces HTML embedded "cid:" references with replacements from $contentIdArray.
+     *
+     * The method matches all "cid:" references in the $htmlText and then loops
+     * over each match. For each match the found content ID is looked-up as key
+     * in the $contentIdArray and the value is then inserted as replacement for
+     * the "cid:" reference.
+     *
+     * <code>
+     * <?php
+     * $contentIdArray = array( 'consoletools-table.png@1421450' => 'http://localhost/consoletools-table.jpg' );
+     * $text = "<html> Embedded image: <img src='cid:consoletools-table.png@1421450'/> </html>";
+     * $htmlBody = ezcMailTools::replaceContentIdRefs( $text, $contentIdArray );
+     * // $htmlBody is now: 
+     * // <html> Embedded image: <img src='http://localhost/consoletools-table.jpg'/> </html>
+     * ?>
+     * </code>
+     *
+     * The $contentIdArray can be build by iterating over all parts in the
+     * mail, and for each ezcMailFilePart that you find: 1. copy the associated
+     * file (fileName property of the ezcMailFilePart object) to your webroot;
+     * 2. add an element to the array with the key created from the contentId
+     * property from the ezcMailFilePart object. See the tutorial for an
+     * example of this.
+     *
+     * @param string $htmlText
+     * @param array(string=>string) $contentIdArray
+     * @return string
+     */
+    static function replaceContentIdRefs( $htmlText, $contentIdArray )
+    {
+        preg_match_all( '@src=[\'"](cid:(.*?))[\'"]@', $htmlText, $matches );
+        for ( $i = 0; $i < count( $matches[0] ); $i++ )
+        {
+            if ( isset( $contentIdArray[$matches[2][$i]] ) )
+            {
+                $htmlText = str_replace( $matches[1][$i], $contentIdArray[$matches[2][$i]], $htmlText );
+            }
+        }
+        return $htmlText;
+    }
 }
 ?>

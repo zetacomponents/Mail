@@ -20,10 +20,8 @@ class ezcMailExtended extends ezcMail
  */
 class ezcMailToolsTest extends ezcTestCase
 {
-    /**
-     * Tests if ezcMailTools::composeEmailAddress works as it should
-     * @todo test if no 'email' is given.
-     */
+    // Tests if ezcMailTools::composeEmailAddress works as it should
+    // @todo test if no 'email' is given.
     public function testComposeEmailAddress()
     {
         $address = new ezcMailAddress( 'john@example.com', 'John Doe' );
@@ -33,10 +31,8 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( 'john@example.com', ezcMailTools::composeEmailAddress( $address ) );
     }
 
-    /**
-     * Tests if ezcMailTools::composeEmailAddresses works as it should
-     * @todo test if no 'email' is given.
-     */
+    // Tests if ezcMailTools::composeEmailAddresses works as it should
+    // @todo test if no 'email' is given.
     public function testComposeEmailAddresses()
     {
         $addresses = array( new ezcMailAddress( 'john@example.com', 'John Doe' ),
@@ -288,11 +284,9 @@ class ezcMailToolsTest extends ezcTestCase
         }
     }
 
-    /**
-     * Tests if generateContentId works as it should.
-     * Somewhat hard to test since it is supposed to return a unique string.
-     * We simply test if two calls return different strings.
-     */
+    // Tests if generateContentId works as it should.
+    // Somewhat hard to test since it is supposed to return a unique string.
+    // We simply test if two calls return different strings.
     public function testGenerateContentId()
     {
         if ( ezcMailTools::generateContentID() === ezcMailTools::generateContentID() )
@@ -301,11 +295,9 @@ class ezcMailToolsTest extends ezcTestCase
         }
     }
 
-    /**
-     * Tests if generateMessageId works as it should.
-     * Somewhat hard to test since it is supposed to return a unique string.
-     * We simply test if two calls return different strings.
-     */
+    // Tests if generateMessageId works as it should.
+    // Somewhat hard to test since it is supposed to return a unique string.
+    // We simply test if two calls return different strings.
     public function testGenerateMessageId()
     {
         if ( ezcMailTools::generateMessageID( "doe.com" ) === ezcMailTools::generateMessageID( "doe.com") )
@@ -314,9 +306,6 @@ class ezcMailToolsTest extends ezcTestCase
         }
     }
 
-    /**
-     *
-     */
     public function testEndline()
     {
         // defaul is \n\r as specified in RFC2045
@@ -432,6 +421,33 @@ class ezcMailToolsTest extends ezcTestCase
             ezcMailTools::guessContentType( $fileNames[$i], $contentType, $mimeType );
             $this->assertEquals( $types[$i], $contentType . '/' . $mimeType );
         }
+    }
+
+    public function testResolveCids()
+    {
+        $parser = new ezcMailParser();
+        $set = new ezcMailFileSet( array( dirname( __FILE__ )
+                                          . '/parser/data/various/test-html-inline-images' ) );
+        $mail = $parser->parseMail( $set );
+
+        $relatedParts = $mail[0]->body->getParts();
+        $alternativeParts = $relatedParts[0]->getParts();
+        $html = $alternativeParts[1]->getMainPart();
+
+        $convertArray = array(
+            'consoletools-table.png@1421450' => 'foo',
+            'consoletools-table.png@1421452' => 'bar'
+        );
+
+        $htmlBody = ezcMailTools::replaceContentIdRefs( $html->text, $convertArray );
+        $expected = <<<EOFE
+<html>
+Here is the HTML version of your mail
+with an image: <img src='foo'/>
+with an image: <img src='cid:consoletools-table.png@1421451'/>
+</html>
+EOFE;
+        self::assertSame( $expected, $htmlBody );
     }
 
     public static function suite()
