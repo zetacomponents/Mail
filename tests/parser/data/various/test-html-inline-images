@@ -1,0 +1,141 @@
+From SRS0=pEPq=6L=doe.com=john@example.net  Fri Apr 21 14:05:23 2006
+Return-Path: <SRS0=pEPq=6L=doe.com=john@example.net>
+Received: from localhost (localhost [127.0.0.1])
+	by kossu.home.example.nl (8.13.5/8.13.5/Debian-3) with ESMTP id k3LC5NEO000605
+	for <derick@localhost>; Fri, 21 Apr 2006 14:05:23 +0200
+Received: from 127.0.0.1 [127.0.0.1]
+	by localhost with POP3 (fetchmail-6.2.5.4)
+	for derick@localhost (single-drop); Fri, 21 Apr 2006 14:05:23 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.example.com (8.13.6/8.12.11) with ESMTP id k3LC6CBx022340
+	for <derick@[127.0.0.1]>; Fri, 21 Apr 2006 14:06:12 +0200
+Received: from osu1.example.net (osu1.example.net [140.211.166.39])
+	by jdi.example.com (8.13.6/8.12.11) with ESMTP id k3LC69Dm013771
+	for <php@example.nl>; Fri, 21 Apr 2006 14:06:10 +0200
+X-Host-Fingerprint: 194.248.150.25 dolly.ez.no Linux 2.4/2.6
+Received: from ([194.248.150.25:39348] helo=mta.ez.no)
+	by osu1.example.net (ecelerity 2.0 r(6416M)) with SMTP
+	id 40/D2-16427-A0CC8444 for <derick@example.net>; Fri, 21 Apr 2006 05:11:57 -0700
+Received: from jdi.example.com (jdi.example.com [82.94.239.5])
+	by mta.ez.no (Postfix) with ESMTP id 930E148C019
+	for <dr@example.com>; Fri, 21 Apr 2006 08:03:23 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by jdi.example.com (8.13.6/8.12.11) with SMTP id k3LC609d009006
+	for <dr@example.com>; Fri, 21 Apr 2006 14:06:00 +0200
+From: John Doe <john@example.com>
+To: Derick Rethans <dr@example.com>
+Subject: Example of an HTML email with attachments
+MIME-Version: 1.0
+User-Agent: eZ components
+Date: Fri, 21 Apr 2006 14:04:46 +0200
+Message-Id: <2006042114142146.32705.2@example.com>
+Content-Type: multipart/mixed; boundary="2006042114142145:32705:2"
+X-Virus-Scanned: by amavisd-new at example.com
+X-Bogosity: Yes, tests=bogofilter, spamicity=0.764894, version=0.96.0
+Status: R
+X-Status: 
+X-Keywords:                  
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--2006042114142145:32705:2
+Content-Type: multipart/alternative; boundary="2006042114142145:32705:1"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--2006042114142145:32705:1
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+Here is the text version of the mail.
+This is displayed if the client can not understand HTML
+--2006042114142145:32705:1
+Content-Type: multipart/related; boundary="2006042114142145:32705:0"
+
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--2006042114142145:32705:0
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+
+<html>
+Here is the HTML version of your mail
+with an image: <img src='cid:consoletools-table.png@1421450'/>
+with an image: <img src='cid:consoletools-table.png@1421451'/>
+</html>
+--2006042114142145:32705:0
+Content-Type: application/octet-stream; name="consoletools-table.png"
+Content-Disposition: attachment; filename="consoletools-table.png"
+Content-Transfer-Encoding: base64
+Content-ID: <consoletools-table.png@1421450>
+
+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
+
+--2006042114142145:32705:0--
+--2006042114142145:32705:1--
+--2006042114142145:32705:2
+Content-Type: application/octet-stream; name="mail.php"
+Content-Disposition: attachment; filename="mail.php"
+Content-Transfer-Encoding: base64
+
+PD9waHAKcmVxdWlyZSAnZXpjLXNldHVwLnBocCc7CiRkaXIgPSBkaXJuYW1lKCBfX0ZJTEVfXyAp
+OwoKJG1haWwgPSBuZXcgZXpjTWFpbENvbXBvc2VyKCk7CiRtYWlsLT5mcm9tID0gbmV3IGV6Y01h
+aWxBZGRyZXNzKCAnam9obkBkb2UuY29tJywgJ0pvaG4gRG9lJyApOwokbWFpbC0+YWRkVG8oIG5l
+dyBlemNNYWlsQWRkcmVzcyggJ2RyQGV6Lm5vJywgJ0RlcmljayBSZXRoYW5zJyApICk7CgokbWFp
+bC0+c3ViamVjdCA9ICJFeGFtcGxlIG9mIGFuIEhUTUwgZW1haWwgd2l0aCBhdHRhY2htZW50cyI7
+CiRtYWlsLT5wbGFpblRleHQgPSAiSGVyZSBpcyB0aGUgdGV4dCB2ZXJzaW9uIG9mIHRoZSBtYWls
+LgpUaGlzIGlzIGRpc3BsYXllZCBpZiB0aGUgY2xpZW50IGNhbiBub3QgdW5kZXJzdGFuZCBIVE1M
+IjsKCiRtYWlsLT5odG1sVGV4dCA9IDw8PEVOREhUTUwKPGh0bWw+CkhlcmUgaXMgdGhlIEhUTUwg
+dmVyc2lvbiBvZiB5b3VyIG1haWwKd2l0aCBhbiBpbWFnZTogPGltZyBzcmM9J2ZpbGU6Ly8kZGly
+L2NvbnNvbGV0b29scy10YWJsZS5wbmcnLz4KPC9odG1sPgpFTkRIVE1MOwoKJG1haWwtPmFkZEF0
+dGFjaG1lbnQoICIkZGlyL21haWwucGhwIiApOwokbWFpbC0+YnVpbGQoKTsKCmVjaG8gIjxwcmU+
+PGZvbnQgc2l6ZT0nNCc+IiwKCWh0bWxzcGVjaWFsY2hhcnMoCgkJJG1haWwtPmdlbmVyYXRlSGVh
+ZGVycygpIC4gJG1haWwtPmdlbmVyYXRlQm9keSgpICk7CgkKJHRyYW5zcG9ydCA9IG5ldyBlemNN
+YWlsVHJhbnNwb3J0U210cCggJ2xvY2FsaG9zdCcsIG51bGwsIG51bGwsIDI1MjUgKTsKJHRyYW5z
+cG9ydC0+c2VuZCggJG1haWwgKTsKPz4K
+
+--2006042114142145:32705:2--
+

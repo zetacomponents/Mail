@@ -1,0 +1,176 @@
+Received: from [127.0.0.1] (unknown [192.168.100.19])
+	by example.com (Postfix) with ESMTP id 58CA7FA8C3
+	for <joaocorreia@example.com>; Tue, 22 Jul 2008 11:28:00 +0100 (WEST)
+To: <joaocorreia@example.com>
+From: SysAdmin <info@example.com>
+Reply-To: SysAdmin <info@example.com>
+Subject: Work: Confirm Email Address
+Date: Tue, 22 Jul 2008 12:30:05 +0200
+X-LibVersion: 3.3.2
+Message-ID: <20080722103005.5501.2042573100.swoosh@localhost>
+Return-Path: pgraca@example.pt
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	boundary="_=_swoosh-13301339844885b6add167f2.68660690_=_"
+Content-Transfer-Encoding: 7bit
+
+This is a message in multipart MIME format.  Your mail client should not
+be displaying this. Consider upgrading your mail client to view this
+message correctly.
+--_=_swoosh-13301339844885b6add167f2.68660690_=_
+Content-Type: multipart/alternative;
+ boundary="_=_swoosh-8339233624885b6add17995.29850809_=_"
+Content-Transfer-Encoding: 7bit
+
+
+--_=_swoosh-8339233624885b6add17995.29850809_=_
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+
+
+
+
+
+
+Dear user,
+You registered a new email address. Please verify its=20
+ownership clicking the URL bellow to confirm it.
+
+URL LINK
+or copy this location into your browser:=20
+
+http://localhost/email/confirm/c/8804c17867050d4cfe7106a93147bc5a911f1d87=
+/i/36
+
+
+
+To get connected, go to the signin page and enter these codes.
+=20
+We hope to see you soon on=20
+=20
+
+
+
+--_=_swoosh-8339233624885b6add17995.29850809_=_
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
+<p><img src=3D"cid:swoosh-12167226054885b6adb4ab2.0@localhost" /></p>
+<p>Dear user,</p>
+You registered a new email address . Please verify its=20
+ownership clicking the URL bellow to confirm it.
+<br />
+<a href=3D"http://localhost/email/confirm/c/8804c17867050d4cfe7106a93147b=
+c5a911f1d87/i/36">URL LINK</a><br />
+or copy this location into your browser:<br />=20
+
+http://localhost/email/confirm/c/8804c17867050d4cfe7106a93147bc5a911f1d87=
+/i/36
+
+<br />
+<br />
+<p>To get connected, go to the signin page and enter these codes.</p>
+=20
+<p>We hope to see you soon on <br /></p>
+=20
+<p>The email robot</p>   =20
+=20
+</body>
+</html>
+--_=_swoosh-8339233624885b6add17995.29850809_=_--
+
+--_=_swoosh-13301339844885b6add167f2.68660690_=_
+Content-Type: image/gif; name=top_logo.gif
+Content-Transfer-Encoding: base64
+Content-Disposition: inline; filename=top_logo.gif
+Content-ID: <swoosh-12167226054885b6adb4ab2.0@localhost>
+
+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
+--_=_swoosh-13301339844885b6add167f2.68660690_=_--
