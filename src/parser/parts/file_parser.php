@@ -18,6 +18,23 @@
 class ezcMailFileParser extends ezcMailPartParser
 {
     /**
+     * Default class to handle file attachments when parsing mails
+     * is ezcMailFile.
+     *
+     * Change this to your own file class with:
+     * <code>
+     * $parser = new ezcMailParser();
+     * $parser->options->fileClass = 'myCustomFileClass';
+     * // call $parser->parseMail( $set );
+     * </code>
+     *
+     * where myCustomFileClass extends ezcMailFile.
+     *
+     * @var string
+     */
+    public static $fileClass = 'ezcMailFile';
+
+    /**
      * Holds the headers for this part.
      *
      * @var ezcMailHeadersHolder
@@ -249,7 +266,7 @@ class ezcMailFileParser extends ezcMailPartParser
         }
         // END DIRTY PGP HACK
 
-        $filePart = new ezcMailFile( $this->fileName );
+        $filePart = new self::$fileClass( $this->fileName );
 
         // set content type
         $filePart->setHeaders( $this->headers->getCaseSensitiveArray() );

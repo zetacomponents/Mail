@@ -16,27 +16,32 @@ require dirname( __FILE__ ) . '/classes/custom_classes.php';
  */
 class ezcMailParserOptionsTest extends ezcTestCase
 {
-    public function testParserOptionsDefault()
+    public static function suite()
+    {
+         return new PHPUnit_Framework_TestSuite( __CLASS__ );
+    }
+
+    public function testParserOptionsMailClassDefault()
     {
         $options = new ezcMailParserOptions();
         $this->assertEquals( 'ezcMail', $options->mailClass );
     }
 
-    public function testParserOptionsSetDefault()
+    public function testParserOptionsSetMailClassDefault()
     {
         $options = new ezcMailParserOptions();
         $options->mailClass = 'ezcMail';
         $this->assertEquals( 'ezcMail', $options->mailClass );
     }
 
-    public function testParserOptionsSet()
+    public function testParserOptionsSetMailClass()
     {
         $options = new ezcMailParserOptions();
         $options->mailClass = 'myCustomMail';
         $this->assertEquals( 'myCustomMail', $options->mailClass );
     }
 
-    public function testWrongCustomClassArgument()
+    public function testWrongCustomClassArgumentMailClass()
     {
         try
         {
@@ -50,7 +55,7 @@ class ezcMailParserOptionsTest extends ezcTestCase
         }
     }
 
-    public function testWrongCustomClasses()
+    public function testWrongCustomClassesMailClass()
     {
         try
         {
@@ -64,20 +69,54 @@ class ezcMailParserOptionsTest extends ezcTestCase
         }
     }
 
-/*  // wait until the mail parser has options to test
-    public function testParserOptionsSetInvalid()
+    public function testParserOptionsFileClassDefault()
     {
         $options = new ezcMailParserOptions();
+        $this->assertEquals( 'ezcMailFile', $options->fileClass );
+    }
+
+    public function testParserOptionsSetFileClassDefault()
+    {
+        $options = new ezcMailParserOptions();
+        $options->fileClass = 'ezcMailFile';
+        $this->assertEquals( 'ezcMailFile', $options->fileClass );
+    }
+
+    public function testParserOptionsSetFileClass()
+    {
+        $options = new ezcMailParserOptions();
+        $options->fileClass = 'myCustomFileClass';
+        $this->assertEquals( 'myCustomFileClass', $options->fileClass );
+    }
+
+    public function testWrongCustomClassArgumentFileClass()
+    {
         try
         {
-            // ...
-            $this->fail( "Expected exception was not thrown" );
+            $options = new ezcMailParserOptions();
+            $options->fileClass = 1;
+            self::fail( "Expected exception not thrown." );
         }
         catch ( ezcBaseValueException $e )
         {
+            self::assertEquals( "The value '1' that you were trying to assign to setting 'fileClass' is invalid. Allowed values are: string that contains a class name.", $e->getMessage() );
         }
     }
-*/
+
+    public function testWrongCustomClassesFileClass()
+    {
+        try
+        {
+            $options = new ezcMailParserOptions();
+            $options->fileClass = 'myFaultyCustomMail';
+            self::fail( "Expected exception not thrown." );
+        }
+        catch ( ezcBaseInvalidParentClassException $e )
+        {
+            self::assertEquals( "Class 'myFaultyCustomMail' does not exist, or does not inherit from the 'ezcMailFile' class.", $e->getMessage() );
+        }
+    }
+
     public function testParserOptionsSetNotExistent()
     {
         $options = new ezcMailParserOptions();
@@ -89,11 +128,6 @@ class ezcMailParserOptionsTest extends ezcTestCase
         catch ( ezcBasePropertyNotFoundException $e )
         {
         }
-    }
-    
-    public static function suite()
-    {
-         return new PHPUnit_Framework_TestSuite( "ezcMailParserOptionsTest" );
     }
 }
 ?>

@@ -459,6 +459,32 @@ ezcMailTools::replaceContentIdRefs() to do exactly this.
 .. include:: tutorial/tutorial_html_display.php
    :literal:
 
+Using a custom mail class
+-------------------------
+
+When parsing a mail, an object of class ezcMail is created by default. You can
+change this by specifying a custom mail class to the parser before parsing. The
+custom mail class must extend ezcMail.
+
+Example::
+
+    $parser = new ezcMailParser();
+    $parser->options->mailClass = 'myCustomMailClass'; // extends ezcMail
+    $parser->parseMail( $set );
+
+Using a custom file class
+-------------------------
+
+When parsing a mail, an object of class ezcMailFile is created by default for
+each file attachment. You can change this by specifying a custom file class to
+the parser before parsing. The custom file class must extend ezcMailFile.
+
+Example::
+
+    $parser = new ezcMailParser();
+    $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
+    $parser->parseMail( $set );
+
 
 Troubleshooting
 ===============

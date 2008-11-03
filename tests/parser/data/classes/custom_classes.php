@@ -93,4 +93,7 @@ class myConverter
         return mb_convert_encoding( $text, "UTF-8", $originalCharset );
     }
 }
+class myCustomFileClass extends ezcMailFile
+{
+}
 ?>

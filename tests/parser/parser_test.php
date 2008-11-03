@@ -1585,5 +1585,32 @@ END;
         $this->assertEquals( 'Un Fax a été émis', $mail->getHeader( 'Subject' ) );
         $this->assertEquals( 'Un Fax a t mis', $mail->subject );
     }
+
+    /**
+     * Test for issue #13539: Add new mail parser option fileClass.
+     */
+    public function testParserCustomFileClass()
+    {
+        $parser = new ezcMailParser();
+        $parser->options->fileClass = 'myCustomFileClass';
+
+        // to catch also the case with a custom mail class (it doesn't influence the test)
+        $parser->options->mailClass = 'ExtendedMail'; 
+
+        $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+        $parts = $mail->fetchParts( null, false );
+        $expected = array( 'ezcMailText',
+                           'ezcMailText',
+                           'myCustomFileClass',
+                           'myCustomFileClass'
+                           );
+        $this->assertEquals( 4, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
 }
 ?>

@@ -14,15 +14,27 @@
  * Example of how to use the parser options:
  * <code>
  * $options = new ezcMailParserOptions();
- * $options->mailClass = 'ezcMail';
+ * $options->mailClass = 'myCustomMailClass'; // extends ezcMail
+ * $options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
  *
  * $parser = new ezcMailParser( $options );
  * </code>
  *
- * @property int $mailClass
- *           Specifies a class descending from ezcMail which can be returned by the
- *           parser if you plan to use another class instead of ezcMail.
+ * Another way to specify the options is:
+ * <code>
+ * $parser = new ezcMailParser();
+ * $parser->options->mailClass = 'myCustomMailClass'; // extends ezcMail
+ * $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
+ * </code>
  *
+ * @property string $mailClass
+ *           Specifies a class descending from ezcMail which can be returned by the
+ *           parser if you plan to use another class instead of ezcMail. The default
+ *           value is ezcMail.
+ * @property string $fileClass
+ *           Specifies a class descending from ezcMailFile which can be instanciated
+ *           by the parser to handle file attachments. The default value is
+ *           ezcMailFile.
  * @package Mail
  * @version //autogen//
  */
@@ -40,6 +52,7 @@ class ezcMailParserOptions extends ezcBaseOptions
     public function __construct( array $options = array() )
     {
         $this->mailClass = 'ezcMail'; // default value for mail class is 'ezcMail'
+        $this->fileClass = 'ezcMailFile'; // default value for file attachment class is 'ezcMailFile'
 
         parent::__construct( $options );
     }
@@ -54,6 +67,9 @@ class ezcMailParserOptions extends ezcBaseOptions
      * @throws ezcBaseInvalidParentClassException
      *         if the class name passed as replacement mailClass does not
      *         inherit from ezcMail.
+     * @throws ezcBaseInvalidParentClassException
+     *         if the class name passed as replacement fileClass does not
+     *         inherit from ezcMailFile.
      * @param string $propertyName
      * @param mixed  $propertyValue
      * @ignore
@@ -75,6 +91,22 @@ class ezcMailParserOptions extends ezcBaseOptions
                     throw new ezcBaseInvalidParentClassException( 'ezcMail', $propertyValue );
                 }
                 $this->properties[$propertyName] = $propertyValue;
+                break;
+
+            case 'fileClass':
+                if ( !is_string( $propertyValue ) )
+                {
+                    throw new ezcBaseValueException( $propertyName, $propertyValue, 'string that contains a class name' );
+                }
+
+                // Check if the passed classname actually implements the
+                // correct parent class.
+                if ( 'ezcMailFile' !== $propertyValue && !in_array( 'ezcMailFile', class_parents( $propertyValue ) ) )
+                {
+                    throw new ezcBaseInvalidParentClassException( 'ezcMailFile', $propertyValue );
+                }
+                $this->properties[$propertyName] = $propertyValue;
+                ezcMailFileParser::$fileClass = $propertyValue;
                 break;
 
             default:

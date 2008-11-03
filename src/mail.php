@@ -468,6 +468,25 @@ class ezcMail extends ezcMailPart
                     call_user_func( $context->callbackFunction, $context, $mail );
                 }
                 break;
+
+            default:
+                // for cases where a custom mail class has been specified with $parser->options->mailClass
+                if ( in_array( 'ezcMail', class_parents( $className ) ) )
+                {
+                    if ( $mail->body !== null )
+                    {
+                        $this->walkParts( $context, $mail->body );
+                    }
+                }
+
+                // for cases where a custom file class has been specified with $parser->options->fileClass
+                if ( in_array( 'ezcMailFile', class_parents( $className ) ) )
+                {
+                    if ( empty( $context->filter ) || in_array( $className, $context->filter ) )
+                    {
+                        call_user_func( $context->callbackFunction, $context, $mail );
+                    }
+                }
         }
         $context->level--;
     }
