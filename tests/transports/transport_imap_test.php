@@ -9,6 +9,7 @@
  */
 
 include_once( 'wrappers/imap_wrapper.php' );
+include_once( 'wrappers/imap_custom_wrapper.php' );
 
 /**
  * @package Mail
@@ -57,6 +58,30 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    /**
+     * Calls $this->onConsecutiveCalls() with the lines from $fileName as
+     * parameter list.
+     *
+     * Used to create a mock object with lots of custom responses
+     * (e.g. conversation with a server).
+     *
+     * @param string $fileName
+     * @return PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls
+     */
+    protected function customMockObjectConversation( $fileName )
+    {
+        $data = file_get_contents( $fileName );
+        $dataArray = split( PHP_EOL, $data );
+
+        $returns = array();
+        foreach ( $dataArray as $line )
+        {
+            $returns[] = $this->returnValue( $line . "\r\n" );
+        }
+
+        return call_user_func_array( array( $this, 'onConsecutiveCalls' ), $returns );
+    }
+
     public function testWrapperMockConnectionAuthenticateResponseNotOk()
     {
         $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
@@ -90,6 +115,54 @@ class ezcMailTransportImapTest extends ezcTestCase
         $imap->disconnect();
         $this->assertEquals( false, $result );
         $imap->setStatus( ezcMailImapTransport::STATE_NOT_CONNECTED );
+    }
+
+    /**
+     * Test for issue #13878: Endless loop in ezcMailParser.
+     */
+    public function testWrapperMockConnectionHangFetchEnd()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+
+        // create a mock connection which responds to commands with answers from
+        // a real conversation recorded with an IMAP server
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->customMockObjectConversation( dirname( __FILE__ ) . '/data/shark' ) );
+
+        $options = new ezcMailImapTransportOptions();
+        $options->uidReferencing = true;
+        $imap = new ezcMailImapTransportCustomWrapper( self::$server, self::$port, $options );
+        $imap->setConnection( $connection );
+        $result = $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'INBOX' );
+        $set = $imap->fetchByFlag( 'NEW' );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
+    }
+
+    /**
+     * Test for issue #13878: Endless loop in ezcMailParser.
+     */
+    public function testWrapperMockConnectionHangFetchEndWrongBodyEnding()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+
+        // create a mock connection which responds to commands with answers from
+        // a real conversation recorded with an IMAP server
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->customMockObjectConversation( dirname( __FILE__ ) . '/data/shark_wrong_body_ending' ) );
+
+        $options = new ezcMailImapTransportOptions();
+        $options->uidReferencing = true;
+        $imap = new ezcMailImapTransportCustomWrapper( self::$server, self::$port, $options );
+        $imap->setConnection( $connection );
+        $result = $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'INBOX' );
+        $set = $imap->fetchByFlag( 'NEW' );
+        $parser = new ezcMailParser();
+        $mails = $parser->parseMail( $set );
     }
 
     public function testWrapperMockListMessagesFail()

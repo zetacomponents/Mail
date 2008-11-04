@@ -168,15 +168,20 @@ class ezcMailImapSet implements ezcMailParserSet
         }
         if ( $this->hasMoreMailData )
         {
-            $data = ( $this->nextData === null ) ? $this->connection->getLine() : $this->nextData;
             if ( $this->bytesToRead !== false && $this->bytesToRead >= 0 )
             {
-                $this->nextData = $this->connection->getLine();
-                $this->bytesToRead -= strlen( $this->nextData );
-                // the next code checks if the current line ends with ')'
-                // and the next line has the command tag (e.g. 'A0034').
-                if ( substr( trim( $data ), strlen( trim( $data ) ) - 1 ) === ')' && strpos( $this->nextData, $this->currentTag ) === 0 )
+                $data = $this->connection->getLine();
+                $this->bytesToRead -= strlen( $data );
+
+                // modified for issue #13878 (Endless loop in ezcMailParser):
+                // removed wrong checks (ending in ')' check and ending with tag check (e.g. 'A0002'))
+                if ( $this->bytesToRead <= 0 )
                 {
+                    if ( $this->bytesToRead < 0 )
+                    {
+                        $data = substr( $data, 0, strlen( $data ) + $this->bytesToRead ); //trim( $data, ")\r\n" );
+                    }
+
                     $this->hasMoreMailData = false;
                     // remove the mail if required by the user.
                     if ( $this->deleteFromServer === true )
@@ -186,7 +191,7 @@ class ezcMailImapSet implements ezcMailParserSet
                         // skip OK response ("{$tag} OK Store completed.")
                         $response = $this->getResponse( $tag );
                     }
-                    return null;
+                    return $data;
                 }
             }
             return $data;

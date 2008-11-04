@@ -1,0 +1,76 @@
+A0001 OK LOGIN Ok.
+* FLAGS (\Draft \Answered \Flagged \Deleted \Seen \Recent)
+* OK [PERMANENTFLAGS (\* \Draft \Answered \Flagged \Deleted \Seen)] Limited
+* 30 EXISTS
+* 1 RECENT
+* OK [UIDVALIDITY 1222873294] Ok
+* OK [MYRIGHTS "acdilrsw"] ACL
+A0002 OK [READ-WRITE] Ok
+* SEARCH 30
+A0003 OK SEARCH done.
+* 30 FETCH (UID 30 RFC822 {2264}
+Return-Path: <ablankerts@example.de>
+Delivered-To: frost@autobild-example.de
+Received: (qmail 30056 invoked by uid 89); 3 Nov 2008 20:09:07 -0000
+Received: by simscan 1.3.1 ppid: 30051, pid: 30052, t: 0.2601s
+         scanners: attach: 1.3.1 clamav: 0.93/m: spam: 3.2.4
+X-Spam-Checker-Version: SpamAssassin 3.2.4 (2008-01-01) on mx.freepoint.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=4.5 tests=BAYES_00 autolearn=no
+.version=3.2.4
+Received: from mx.office.example.de (000.000.00.000)
+  by mx.freepoint.de with (DHE-RSA-AES256-SHA encrypted) SMTP; 3 Nov 2008 20:09:07 -0000
+Received-SPF: pass (mx.freepoint.de: SPF record at example.de designates 000.000.00.000 as permitted sender)
+Received: (qmail 22155 invoked by uid 89); 3 Nov 2008 20:09:07 -0000
+Received: from warp.local.example.de (HELO ?192.168.1.92?) (192.168.1.92)
+  by mx.office.example.de with SMTP; 3 Nov 2008 20:09:07 -0000
+Subject: test 15
+From: Arne Blankerts <ablankerts@example.de>
+Reply-To: ablankerts@example.de
+To: frost@autobild-example.de
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-/VdccA4H6DdFgM23cDFX"
+Organization: Example Agenturgruppe
+Date: Mon, 03 Nov 2008 21:09:07 +0100
+Message-Id: <1225742947.1321.134.camel@warp.local.salesemotion.net>
+Mime-Version: 1.0
+X-Mailer: Evolution 2.22.3.1 (2.22.3.1-1.fc9) 
+
+
+--=-/VdccA4H6DdFgM23cDFX
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+
+Mit freundlichen Gr=FC=DFen/Regards,
+    Arne Blankerts
+
+
+--=20
+Arne Blankerts
+Head of Development
+
+Example Werbeagentur Unit2 GmbH
+Alter Wandrahm 0/0 :: 20457 Hamburg
+Tel. +00 00 00 000 0-0 :: Fax +00 00 00 000 0-000
+Mail: ablankerts@example.de :: Web: www.example.de
+
+Handelsregister HRB 00000 :: Amtsgericht Hamburg
+Gesch=E4ftsf=FChrung: S=F6ren Osing
+
+--=-/VdccA4H6DdFgM23cDFX
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iEUEABECAAYFAkkPWmEACgkQ9Ga44GqrRwrslQCXXkH5KqkJ0x0D5Ka4QHa9mVbG
+wQCfe6ob8AcMYKkaQ1c6tqa6WOFOHAs=
+=DT81
+-----END PGP SIGNATURE-----
+
+--=-/VdccA4H6DdFgM23cDFX--
+
+)
+* 30 FETCH (FLAGS (\Seen \Recent))
+A0004 OK FETCH completed.
