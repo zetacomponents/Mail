@@ -139,6 +139,8 @@ class ezcMailTransportImapTest extends ezcTestCase
         $set = $imap->fetchByFlag( 'NEW' );
         $parser = new ezcMailParser();
         $mails = $parser->parseMail( $set );
+        $mail = $mails[0];
+        $this->assertEquals( 'test 15', $mail->subject );
     }
 
     /**
@@ -163,6 +165,8 @@ class ezcMailTransportImapTest extends ezcTestCase
         $set = $imap->fetchByFlag( 'NEW' );
         $parser = new ezcMailParser();
         $mails = $parser->parseMail( $set );
+        $mail = $mails[0];
+        $this->assertEquals( 'test 15', $mail->subject );
     }
 
     public function testWrapperMockListMessagesFail()
