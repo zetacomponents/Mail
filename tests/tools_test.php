@@ -235,7 +235,7 @@ class ezcMailToolsTest extends ezcTestCase
     public function testValidateEmailAddressCorrect()
     {
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_correct.txt' );
-        $addresses = split( "\n", $data );
+        $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
             if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
@@ -248,7 +248,7 @@ class ezcMailToolsTest extends ezcTestCase
     public function testValidateEmailAddressCorrectMX()
     {
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_correct_mx.txt' );
-        $addresses = split( "\n", $data );
+        $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
             if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
@@ -261,7 +261,7 @@ class ezcMailToolsTest extends ezcTestCase
     public function testValidateEmailAddressIncorrect()
     {
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_incorrect.txt' );
-        $addresses = split( "\n", $data );
+        $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
             if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
@@ -274,7 +274,7 @@ class ezcMailToolsTest extends ezcTestCase
     public function testValidateEmailAddressIncorrectMX()
     {
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_incorrect_mx.txt' );
-        $addresses = split( "\n", $data );
+        $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
             if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
