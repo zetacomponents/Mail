@@ -310,7 +310,8 @@ class ezcMailTools
      *
      * If $checkMxRecords is true, then an MX records check will be performed
      * also, by sending a test mail (RCPT TO) to $address using the MX records
-     * found for the domain part of $address.
+     * found for the domain part of $address. MX record checking does not work
+     * on Windows due to the lack of getmxrr() PHP function.
      *
      * If checking against MX records, set these values before performing the
      * check, to ensure the MX record checks work properly:
@@ -390,6 +391,9 @@ class ezcMailTools
      * ezcMailTools::$mxValidateServer = 'your.mail.server'; // default 'smtp.ez.no'
      * ezcMailTools::$mxValidateAddress = 'email@mail.server'; // default 'postmaster@ez.no'
      * </code>
+     *
+     * MX record checking does not work on Windows due to the lack of getmxrr()
+     * PHP function.
      *
      * @param string $address
      * @return bool

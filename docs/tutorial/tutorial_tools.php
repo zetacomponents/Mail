@@ -18,7 +18,8 @@ var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 // Validate an email address
 $isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com' );
 
-// Validate an email address with MX records check
+// Validate an email address with MX records check (does not work on Windows due
+// to the lack of the getmxrr() PHP function)
 
 // set this to your mail server, it is used in a
 // 'HELO SMTP' command to validate against MX records
