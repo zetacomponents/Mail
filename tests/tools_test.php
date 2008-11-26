@@ -238,7 +238,8 @@ class ezcMailToolsTest extends ezcTestCase
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
-            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            $address = trim( $address );
+            if ( strlen( $address ) > 1 && $address{0} !== '#' )
             {
                 $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is correct." );
             }
@@ -251,7 +252,8 @@ class ezcMailToolsTest extends ezcTestCase
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
-            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            $address = trim( $address );
+            if ( strlen( $address ) > 1 && $address{0} !== '#' )
             {
                 $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is correct with MX." );
             }
@@ -264,7 +266,8 @@ class ezcMailToolsTest extends ezcTestCase
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
-            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            $address = trim( $address );
+            if ( strlen( $address ) > 1 && $address{0} !== '#' )
             {
                 $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is incorrect." );
             }
@@ -277,7 +280,8 @@ class ezcMailToolsTest extends ezcTestCase
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
         {
-            if ( strlen( trim( $address ) ) > 1 && $address{0} !== '#' )
+            $address = trim( $address );
+            if ( strlen( $address ) > 1 && $address{0} !== '#' )
             {
                 $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is incorrect with MX." );
             }
