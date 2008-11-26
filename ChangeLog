@@ -5,6 +5,8 @@
   HTML mail with the CID elements replaced.
 - Implemented feature request #13539: Add new mail parser option fileClass.
 - Fixed issue #13878: Endless loop in ezcMailParser.
+- Fixed issue #14009: ezcMailTools::validateEmailAddressMx() uses wrong HELO
+  domain name.
 
 
 1.5.2 - Monday 06 October 2008

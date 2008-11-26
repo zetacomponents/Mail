@@ -19,6 +19,15 @@ var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 $isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com' );
 
 // Validate an email address with MX records check
+
+// set this to your mail server, it is used in a
+// 'HELO SMTP' command to validate against MX records
+ezcMailTools::$mxValidateServer = 'your.mail.server';
+
+// set this to a mail address such as 'postmaster@example.com', it is used in a
+// 'MAIL FROM' SMTP command to validate against MX records
+ezcMailTools::$mxValidateAddress = 'email.address@mail.server';
+
 $isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com', true );
 
 // Create a new mail object

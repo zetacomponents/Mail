@@ -29,6 +29,26 @@ class ezcMailTools
     const REPLY_ALL = 1;
 
     /**
+     * Server to use for validateEmailAddressMx(). Change this if this server
+     * cannot be used with your Internet Service Provider.
+     *
+     * Default value: 'smtp.ez.no'.
+     *
+     * @var string
+     */
+    public static $mxValidateServer = 'smtp.ez.no';
+
+    /**
+     * Email address to use for validateEmailAddressMx(). Change this if this
+     * address cannot be used with your Internet Service Provider.
+     *
+     * Default value: 'postmaster@ez.no'.
+     *
+     * @var string
+     */
+    public static $mxValidateAddress = 'postmaster@ez.no';
+
+    /**
      * Holds the unique ID's.
      *
      * @var int
@@ -390,8 +410,8 @@ class ezcMailTools
             if ( ( $numberOfMx = count( $mx ) ) > 0 )
             {
                 $smtp = array(
-                               "HELO smtp.ez.no",
-                               "MAIL FROM: <postmaster@ez.no>",
+                               "HELO " . self::$mxValidateServer,
+                               "MAIL FROM: <" . self::$mxValidateAddress . ">",
                                "RCPT TO: <{$address}>",
                                "QUIT",
                              );
