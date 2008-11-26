@@ -312,6 +312,13 @@ class ezcMailTools
      * also, by sending a test mail (RCPT TO) to $address using the MX records
      * found for the domain part of $address.
      *
+     * If checking against MX records, set these values before performing the
+     * check, to ensure the MX record checks work properly:
+     * <code>
+     * ezcMailTools::$mxValidateServer = 'your.mail.server'; // default 'smtp.ez.no'
+     * ezcMailTools::$mxValidateAddress = 'email@mail.server'; // default 'postmaster@ez.no'
+     * </code>
+     *
      * The input email address $address should be trimmed from white spaces
      * and/or quotes around it before calling this function (if needed).
      *
@@ -376,6 +383,13 @@ class ezcMailTools
      *  - for each MX record a connection is open
      *  - a test mail (RCPT TO) is tried to be sent to $address
      *  - if one test mail succeeds, then the address is valid, else invalid
+     *
+     * Set these values before calling this function, to ensure the MX record
+     * checks work properly:
+     * <code>
+     * ezcMailTools::$mxValidateServer = 'your.mail.server'; // default 'smtp.ez.no'
+     * ezcMailTools::$mxValidateAddress = 'email@mail.server'; // default 'postmaster@ez.no'
+     * </code>
      *
      * @param string $address
      * @return bool
