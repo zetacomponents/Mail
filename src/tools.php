@@ -348,6 +348,12 @@ class ezcMailTools
      * See also the test files (in the "Mail/tests/tools/data" directory) for
      * examples of correct and incorrect email addresses.
      *
+     * The current locale plays a part in allowed characters. It is recommended
+     * to call this before validating an email address:
+     * <code>
+     * setlocale( LC_ALL, 'C' );
+     * </code>
+     *
      * @throws ezcBaseFunctionalityNotSupportedException
      *         if $checkMxRecords is true and getmxrr() or checkdnsrr() functions
      *         are missing (e.g. on Windows)

@@ -16,6 +16,8 @@ var_dump( ezcMailTools::parseEmailAddress( $addresses ) );
 var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 
 // Validate an email address (with a regular expression, without checking for MX records)
+// call this before validation if email addresses with extended ASCII characters
+// not enclosed in quotes are identified as valid: setlocale( LC_ALL, 'C' );
 $isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com' );
 
 // Validate an email address with MX records check.
