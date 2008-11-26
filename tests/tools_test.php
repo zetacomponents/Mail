@@ -248,6 +248,11 @@ class ezcMailToolsTest extends ezcTestCase
 
     public function testValidateEmailAddressCorrectMX()
     {
+        if ( !ezcBaseFeatures::hasFunction( 'getmxrr' ) || !ezcBaseFeatures::hasFunction( 'checkdnsrr' ) )
+        {
+            $this->markTestSkipped( 'This test needs getmxrr() and checkdnsrr() support' );
+        }
+
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_correct_mx.txt' );
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )
@@ -276,6 +281,11 @@ class ezcMailToolsTest extends ezcTestCase
 
     public function testValidateEmailAddressIncorrectMX()
     {
+        if ( !ezcBaseFeatures::hasFunction( 'getmxrr' ) || !ezcBaseFeatures::hasFunction( 'checkdnsrr' ) )
+        {
+            $this->markTestSkipped( 'This test needs getmxrr() and checkdnsrr() support' );
+        }
+
         $data = file_get_contents( dirname( __FILE__ ) . '/tools/data/addresses_incorrect_mx.txt' );
         $addresses = explode( "\n", $data );
         foreach ( $addresses as $address )

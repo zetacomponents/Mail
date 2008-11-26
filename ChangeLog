@@ -7,6 +7,8 @@
 - Fixed issue #13878: Endless loop in ezcMailParser.
 - Fixed issue #14009: ezcMailTools::validateEmailAddressMx() uses wrong HELO
   domain name.
+- The function ezcMailTools::validateEmailAddressMx() throws an exception if
+  there is no support for getmxrr() and checkdnsrr().
 
 
 1.5.2 - Monday 06 October 2008

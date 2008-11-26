@@ -15,11 +15,14 @@ var_dump( ezcMailTools::composeEmailAddresses( $mailAddresses ) );
 var_dump( ezcMailTools::parseEmailAddress( $addresses ) );
 var_dump( ezcMailTools::parseEmailAddresses( $addresses ) );
 
-// Validate an email address
+// Validate an email address (with a regular expression, without checking for MX records)
 $isValid = ezcMailTools::validateEmailAddress( 'john.doe@example.com' );
 
-// Validate an email address with MX records check (does not work on Windows due
-// to the lack of the getmxrr() PHP function)
+// Validate an email address with MX records check.
+
+// MX record checking does not work on Windows due to the lack of getmxrr()
+// and checkdnsrr() PHP functions. The ezcBaseFunctionalityNotSupportedException
+// is thrown in this case.
 
 // set this to your mail server, it is used in a
 // 'HELO SMTP' command to validate against MX records

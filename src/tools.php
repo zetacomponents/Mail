@@ -311,7 +311,8 @@ class ezcMailTools
      * If $checkMxRecords is true, then an MX records check will be performed
      * also, by sending a test mail (RCPT TO) to $address using the MX records
      * found for the domain part of $address. MX record checking does not work
-     * on Windows due to the lack of getmxrr() PHP function.
+     * on Windows due to the lack of getmxrr() and checkdnsrr() PHP functions.
+     * The ezcBaseFunctionalityNotSupportedException is thrown in this case.
      *
      * If checking against MX records, set these values before performing the
      * check, to ensure the MX record checks work properly:
@@ -347,6 +348,9 @@ class ezcMailTools
      * See also the test files (in the "Mail/tests/tools/data" directory) for
      * examples of correct and incorrect email addresses.
      *
+     * @throws ezcBaseFunctionalityNotSupportedException
+     *         if $checkMxRecords is true and getmxrr() or checkdnsrr() functions
+     *         are missing (e.g. on Windows)
      * @param string $address
      * @param bool $checkMxRecords
      * @return bool
@@ -393,13 +397,21 @@ class ezcMailTools
      * </code>
      *
      * MX record checking does not work on Windows due to the lack of getmxrr()
-     * PHP function.
+     * and checkdnsrr() PHP functions. The ezcBaseFunctionalityNotSupportedException
+     * is thrown in this case.
      *
+     * @throws ezcBaseFunctionalityNotSupportedException
+     *         if getmxrr() or checkdnsrr() functions are missing (e.g. on Windows)
      * @param string $address
      * @return bool
      */
     protected static function validateEmailAddressMx( $address )
     {
+        if ( !ezcBaseFeatures::hasFunction( 'getmxrr' ) || !ezcBaseFeatures::hasFunction( 'checkdnsrr' ) )
+        {
+            throw new ezcBaseFunctionalityNotSupportedException( 'Checking DNS records', 'getmxrr() or checkdnsrr() missing' );
+        }
+
         $timeoutOpen = 3; // for fsockopen()
         $timeoutConnection = 5; // for stream_set_timeout()
 
