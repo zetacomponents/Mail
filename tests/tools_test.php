@@ -298,6 +298,24 @@ class ezcMailToolsTest extends ezcTestCase
         }
     }
 
+    public function testValidateEmailAddressMXThrowException()
+    {
+        if ( ezcBaseFeatures::hasFunction( 'getmxrr' ) && ezcBaseFeatures::hasFunction( 'checkdnsrr' ) )
+        {
+            $this->markTestSkipped( 'This test works only if getmxrr() or checkdnsrr() support is missing' );
+        }
+
+        try
+        {
+            ezcMailTools::validateEmailAddress( 'john.doe@example.com', true );
+            $this->fail( 'Expected exception was not thrown.' );
+        }
+        catch ( ezcBaseFunctionalityNotSupportedException $e )
+        {
+            $this->assertEquals( 'Checking DNS records is not supported. Reason: getmxrr() or checkdnsrr() missing.', $e->getMessage() );
+        }
+    }
+
     // Tests if generateContentId works as it should.
     // Somewhat hard to test since it is supposed to return a unique string.
     // We simply test if two calls return different strings.
