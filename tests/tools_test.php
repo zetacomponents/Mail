@@ -484,9 +484,6 @@ EOFE;
 
     public static function suite()
     {
-        // to solve problems with email address validation in other locales
-        setlocale( LC_ALL, 'C' );
-
         return new PHPUnit_Framework_TestSuite( "ezcMailToolsTest" );
     }
 }

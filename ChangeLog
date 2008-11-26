@@ -1,3 +1,14 @@
+1.6beta1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed issue #14009: ezcMailTools::validateEmailAddressMx() uses wrong HELO
+  domain name.
+- The function ezcMailTools::validateEmailAddressMx() throws an exception if
+  there is no support for getmxrr() and checkdnsrr().
+- Altered the ezcMailTools::validateEmailAddress() regexp to protect against
+  locale issues.
+
+
 1.6alpha1 - Monday 10 November 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5,10 +16,6 @@
   HTML mail with the CID elements replaced.
 - Implemented feature request #13539: Add new mail parser option fileClass.
 - Fixed issue #13878: Endless loop in ezcMailParser.
-- Fixed issue #14009: ezcMailTools::validateEmailAddressMx() uses wrong HELO
-  domain name.
-- The function ezcMailTools::validateEmailAddressMx() throws an exception if
-  there is no support for getmxrr() and checkdnsrr().
 
 
 1.5.2 - Monday 06 October 2008

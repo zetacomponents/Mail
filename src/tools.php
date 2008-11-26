@@ -329,14 +329,17 @@ class ezcMailTools
      *   localpart@domainpart
      * </code>
      *
-     * The localpart has these rules:
+     * The localpart has these rules, and these rules are just an approximation of
+     * the rules in RFC2822:
      *  - allowed characters: . + ~ / ' - _ ` ^ $ % & ! ' | {
      *  - the dot (.) cannot be the first or the last character
      *  - the double-quote character (") can only surround the localpart (so
      *    if it appears it must be the first and the last character of localpart)
      *  - spaces are allowed if the localpart is surrounded in double-quotes
      *  - other ASCII characters (even from the extended-ASCII set) are allowed
-     *    if the localparts is surrounded in double-quotes
+     *    if the localparts is surrounded in double-quotes (the function
+     *    ezcMailTools::composeEmailAddress will encode it when using it
+     *    in a mail header)
      *  - the double-quotes character (") cannot be escaped to appear in a
      *    localpart surrounded by double quotes (so "john"doe"@example.com is not
      *    a valid email address)
@@ -348,12 +351,6 @@ class ezcMailTools
      * See also the test files (in the "Mail/tests/tools/data" directory) for
      * examples of correct and incorrect email addresses.
      *
-     * The current locale plays a part in allowed characters. It is recommended
-     * to call this before validating an email address:
-     * <code>
-     * setlocale( LC_ALL, 'C' );
-     * </code>
-     *
      * @throws ezcBaseFunctionalityNotSupportedException
      *         if $checkMxRecords is true and getmxrr() or checkdnsrr() functions
      *         are missing (e.g. on Windows)
@@ -363,7 +360,7 @@ class ezcMailTools
      */
     public static function validateEmailAddress( $address, $checkMxRecords = false )
     {
-        $pattern = '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,}))$/';
+        $pattern = '/^((\"[^\"\f\n\r\t\v\b]+\")|([A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,}))$/';
 
         if ( preg_match( $pattern, $address ) )
         {
