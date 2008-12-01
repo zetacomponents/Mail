@@ -220,10 +220,14 @@ class ezcMailComposer extends ezcMail
      * If $content is specified, $fileName is not checked if it exists.
      * $this->attachments will also contain in this case the $content,
      * $contentType and $mimeType.
+     *
+     * The $contentType (default = application) and $mimeType (default =
+     * octet-stream) control the complete mime-type of the attachment.
+     *
      * If $contentDisposition is specified, the attached file will have its
-     * Content-Disposition header set according to the $contentDisposition object
-     * and the filename of the attachment in the generated mail will be the one from
-     * the $contentDisposition object.
+     * Content-Disposition header set according to the $contentDisposition
+     * object and the filename of the attachment in the generated mail will be
+     * the one from the $contentDisposition object.
      * 
      * @throws ezcBaseFileNotFoundException
      *         if $fileName does not exists.
