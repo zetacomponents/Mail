@@ -1,4 +1,4 @@
-1.6beta1 - [RELEASEDATE]
+1.6beta1 - Monday 01 December 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #14009: ezcMailTools::validateEmailAddressMx() uses wrong HELO
