@@ -68,6 +68,29 @@
  * After running the above code, the sent mail will not contain the file specified
  * in the htmlText property.
  *
+ * The file name in the attachment can be different than the file name on disk, by
+ * passing an {@link ezcMailContentDispositionHeader} object to the function
+ * addAttachment(). Example:
+ * <code>
+ * $mail = new ezcMailComposer();
+ * $mail->from = new ezcMailAddress( 'john@example.com', 'John Doe' );
+ * $mail->addTo( new ezcMailAddress( 'cindy@example.com', 'Cindy Doe' ) );
+ * $mail->subject = "Example of an HTML email with attachments and custom attachment file name";
+ * $mail->plainText = "Here is the text version of the mail. This is displayed if the client can not understand HTML";
+ * $mail->htmlText = "<html>Here is the HTML version of your mail with an image: <img src='file://path_to_image.jpg' /></html>";
+ *
+ * $disposition = new ezcMailContentDispositionHeader();
+ * $disposition->fileName = 'custom name for attachment.txt';
+ * $disposition->fileNameCharSet = 'utf-8'; // if using non-ascii characters in the file name
+ * $disposition->disposition = 'attachment'; // default value is 'inline'
+ *
+ * $mail->addAttachment( 'path_to_attachment.file', null, null, null, $disposition );
+ * $mail->build();
+ *
+ * $transport = new ezcMailMtaTransport();
+ * $transport->send( $mail );
+ * </code>
+ *
  * @todo What about character set for the textPart
  *
  * @property string $plainText

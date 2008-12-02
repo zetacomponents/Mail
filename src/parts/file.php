@@ -193,20 +193,23 @@ abstract class ezcMailFilePart extends ezcMailPart
      * Does not set the fileNameCharSet and fileNameLanguage properties of the
      * Content-Disposition header. For this purpose set directly
      * $this->contentDisposition with an object of class ezcMailContentDispositionHeader.
-     *
      */
     private function setHeaderContentDisposition()
     {
-        if ( $this->contentDisposition == null )
-        {
-            $this->contentDisposition = new ezcMailContentDispositionHeader();
-        }
         if ( !isset( $this->dispositionType ) )
         {
             $this->dispositionType = self::DISPLAY_ATTACHMENT;
         }
-        $this->contentDisposition->disposition = $this->dispositionType;
-        $this->contentDisposition->fileName = basename( $this->fileName );
+        if ( $this->contentDisposition == null )
+        {
+            $this->contentDisposition = new ezcMailContentDispositionHeader();
+
+            // modified for issue #14025: set the file name and disposition
+            // only if the contentDisposition was null (to not overwrite
+            // the value set by the user)
+            $this->contentDisposition->disposition = $this->dispositionType;
+            $this->contentDisposition->fileName = basename( $this->fileName );
+        }
     }
 
     /**

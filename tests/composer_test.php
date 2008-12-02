@@ -541,7 +541,7 @@ class ezcMailComposerTest extends ezcTestCase
             null,
             array(),
             'no',
-            'iso-8859-1' );
+            'utf-8' );
         $mail->body = new ezcMailMultipartMixed(
             new ezcMailText( 'xxx' ),
             $file );
@@ -552,7 +552,7 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $mail[0]->fetchParts();
 
         // for issue #13038, displayFileName was added to contentDisposition
-        $file->contentDisposition->displayFileName = 'fly.jpg';
+        $file->contentDisposition->displayFileName = 'яверасфăîţâşåæøåöä.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -576,7 +576,7 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $mail[0]->fetchParts();
 
         // for issue #13038, displayFileName was added to contentDisposition
-        $file->contentDisposition->displayFileName = 'fly.jpg';
+        $file->contentDisposition->displayFileName = 'яверасфăîţâşåæøåöä.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -595,7 +595,7 @@ class ezcMailComposerTest extends ezcTestCase
             null,
             array(),
             'no',
-            'iso-8859-1' );
+            'utf-8' );
         $mail->plainText = 'xxx';
         $mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg", null, null, null, $contentDisposition );
         $mail->build();
@@ -606,7 +606,7 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $mail[0]->fetchParts();
 
         // for issue #13038, displayFileName was added to contentDisposition
-        $contentDisposition->displayFileName = 'fly.jpg';
+        $contentDisposition->displayFileName = 'яверасфăîţâşåæøåöä.jpg';
         $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -629,7 +629,7 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $mail[0]->fetchParts();
 
         // for issue #13038, displayFileName was added to contentDisposition
-        $contentDisposition->displayFileName = 'fly.jpg';
+        $contentDisposition->displayFileName = 'яверасфăîţâşåæøåöä.jpg';
         $this->assertEquals( $contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -653,7 +653,7 @@ class ezcMailComposerTest extends ezcTestCase
         $parts = $mail[0]->fetchParts();
 
         // for issue #13038, displayFileName was added to contentDisposition
-        $file->contentDisposition->displayFileName = 'fly.jpg';
+        $file->contentDisposition->displayFileName = 'яверасфăîţâşåæøåöäabcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz.jpg';
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
