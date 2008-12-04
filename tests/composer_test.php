@@ -525,6 +525,35 @@ class ezcMailComposerTest extends ezcTestCase
         $this->assertEquals( false, isset( $mail->no_such_property ) );
     }
 
+    /**
+     * Test for issue #14025: Problem with ezcMailComposer::addAttachment when
+     * use the fifth param to change the file name
+     */
+    public function testContentDispositionCustomAttachmentName()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( 'john.doe@example.com' );
+        $mail->subject = "Subject";
+        $mail->addTo( new ezcMailAddress( 'john.doe@example.com' ) );
+        $file = new ezcMailFile( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $file->contentDisposition = new ezcMailContentDispositionHeader(
+            'attachment',
+            'custom_attachment_name.jpg' );
+        $mail->body = new ezcMailMultipartMixed(
+            new ezcMailText( 'xxx' ),
+            $file );
+        $msg = $mail->generate();
+        $set = new ezcMailVariableSet( $msg );
+        $parser = new ezcMailParser();
+        $mail = $parser->parseMail( $set );
+        $parts = $mail[0]->fetchParts();
+
+        // for issue #13038, displayFileName was added to contentDisposition
+        $file->contentDisposition->displayFileName = 'custom_attachment_name.jpg';
+        $this->assertEquals( 'image/jpeg; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
+        $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
+    }
+
     public function testContentDisposition()
     {
         $mail = new ezcMail();

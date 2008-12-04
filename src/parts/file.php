@@ -183,8 +183,14 @@ abstract class ezcMailFilePart extends ezcMailPart
      */
     private function setHeaderContentType()
     {
+        $fileName = basename( $this->fileName );
+        if ( $this->contentDisposition !== null && $this->contentDisposition->fileName !== null )
+        {
+            $fileName = $this->contentDisposition->fileName;
+        }
+
         $this->setHeader( 'Content-Type',
-                          $this->contentType . '/' . $this->mimeType . '; ' . 'name="' . basename( $this->fileName ) . '"' );
+                          $this->contentType . '/' . $this->mimeType . '; ' . 'name="' . $fileName . '"' );
     }
 
     /**
