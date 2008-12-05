@@ -26,7 +26,7 @@
  * <code>
  * $parser = new ezcMailParser();
  * $parser->options->mailClass = 'myCustomMailClass'; // extends ezcMail
- * <code>
+ * </code>
  *
  * File attachments will be written to disk in a temporary directory.
  * This temporary directory and the file attachment will be removed
@@ -48,7 +48,7 @@
  * <code>
  * $parser = new ezcMailParser();
  * $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
- * <code>
+ * </code>
  *
  * @property ezcMailParserOptions $options
  *           Holds the options you can set to the mail parser.
