@@ -1,4 +1,4 @@
-1.6rc1 - [RELEASEDATE]
+1.6rc1 - Monday 15 December 2008
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #14025: Problem with ezcMailComposer::addAttachment when use the
