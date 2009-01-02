@@ -51,7 +51,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testAddAttachmentValid()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -64,7 +64,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testAddAttachmentValidSetMime()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -85,7 +85,7 @@ class ezcMailComposerTest extends ezcTestCase
         chmod( $fileName, 0 );
         try
         {
-            $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
             $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
             $this->mail->subject = "Message with invalid files..";
             $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -108,7 +108,7 @@ class ezcMailComposerTest extends ezcTestCase
     {
         try
         {
-            $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
             $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
             $this->mail->subject = "Message with invalid files..";
             $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -129,7 +129,7 @@ class ezcMailComposerTest extends ezcTestCase
     {
         try
         {
-            $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+            $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
             $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
             $this->mail->subject = "HTML with invalid local files..";
             $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
@@ -150,7 +150,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailTextOnly()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Text only.";
         $this->mail->plainText = "Text only. Should not have a multipart body.";
@@ -164,7 +164,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailHtmlOnly()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML only..";
         $this->mail->htmlText = "<html><i><b>HTML only. Should not have a multipart body.</b></i></html>";
@@ -178,7 +178,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailOneAttachmentNoText()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "One attachments only.";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
@@ -192,7 +192,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailManyAttachmentsNoText()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Many attachments only.";
         $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
@@ -207,7 +207,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailTextAndHtmlNoAttachments()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
@@ -222,7 +222,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailTextAndHtmlSetCharset()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
@@ -236,7 +236,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testMailTextHtmlAndAttachments()
     {
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message and attachments.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
@@ -340,7 +340,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testAddVirtualAttachmentValid()
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -354,7 +354,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testAddVirtualAttachmentValidSetMime()
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -368,7 +368,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testMailOneVirtualAttachmentNoText()
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "One attachments only.";
         $this->mail->addAttachment( "fly.jpg", $contents );
@@ -381,7 +381,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testMailManyVirtualAttachmentsNoText()
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Many attachments only.";
         $this->mail->addAttachment( "fly.jpg", $contents );
@@ -395,7 +395,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testMailTextHtmlAndVirtualAttachments()
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message and attachments.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
@@ -430,7 +430,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testAddStreamAttachmentValid()
     {
         $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -444,7 +444,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testAddStreamAttachmentValidSetMime()
     {
         $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
@@ -458,7 +458,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testMailOneStreamAttachmentNoText()
     {
         $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "One attachments only.";
         $this->mail->addAttachment( "fly.jpg", $file );
@@ -471,7 +471,7 @@ class ezcMailComposerTest extends ezcTestCase
     public function testMailManyStreamAttachmentsNoText()
     {
         $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Many attachments only.";
         $this->mail->addAttachment( "fly.jpg", $file );
@@ -486,7 +486,7 @@ class ezcMailComposerTest extends ezcTestCase
     {
         $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
         $file = fopen( dirname( __FILE__) . "/parts/data/fly.jpg", "r" );
-        $this->mail->from = array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "Alternative HTML/Text message and attachments.";
         $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
