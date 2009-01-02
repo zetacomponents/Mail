@@ -550,7 +550,13 @@ class ezcMailComposerTest extends ezcTestCase
 
         // for issue #13038, displayFileName was added to contentDisposition
         $file->contentDisposition->displayFileName = 'custom_attachment_name.jpg';
-        $this->assertEquals( 'image/jpeg; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
+
+        $contentType = 'image/jpeg';
+        if ( !ezcBaseFeatures::hasExtensionSupport( 'fileinfo' ) )
+        {
+            $contentType = 'application/octet-stream';
+        }
+        $this->assertEquals( $contentType . '; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
