@@ -324,23 +324,25 @@ class ezcMailComposer extends ezcMail
         }
 
         // build all attachments
-        // special case, mail with no text and one attachment
+        // special case, mail with no text and one attachment.
+        // A fix for issue #14220 was added by wrapping the attachment in
+        // an ezcMailMultipartMixed part
         if ( $mainPart == false && count( $this->attachments ) == 1 )
         {
             if ( isset( $this->attachments[0][1] ) )
             {
                 if ( is_resource( $this->attachments[0][1] ) )
                 {
-                    $mainPart = new ezcMailStreamFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] );
+                    $mainPart = new ezcMailMultipartMixed( new ezcMailStreamFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] ) );
                 }
                 else
                 {
-                    $mainPart = new ezcMailVirtualFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] );
+                    $mainPart = new ezcMailMultipartMixed( new ezcMailVirtualFile( $this->attachments[0][0], $this->attachments[0][1], $this->attachments[0][2], $this->attachments[0][3] ) );
                 }
             }
             else
             {
-                $mainPart = new ezcMailFile( $this->attachments[0][0], $this->attachments[0][2], $this->attachments[0][3] );
+                $mainPart = new ezcMailMultipartMixed( new ezcMailFile( $this->attachments[0][0], $this->attachments[0][2], $this->attachments[0][3] ) );
             }
             $mainPart->contentDisposition = $this->attachments[0][4];
         }
