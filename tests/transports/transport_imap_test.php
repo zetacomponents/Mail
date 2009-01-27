@@ -71,7 +71,7 @@ class ezcMailTransportImapTest extends ezcTestCase
     protected function customMockObjectConversation( $fileName )
     {
         $data = file_get_contents( $fileName );
-        $dataArray = explode( PHP_EOL, $data );
+        $dataArray = explode( "\r\n", $data );
 
         $returns = array();
         foreach ( $dataArray as $line )
