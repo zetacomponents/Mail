@@ -169,6 +169,52 @@ class ezcMailTransportImapTest extends ezcTestCase
         $this->assertEquals( 'test 15', $mail->subject );
     }
 
+    /**
+     * Test for issue #14242: Cannot append email through IMAP.
+     *
+     * The issue was not about the APPEND command, but it was about
+     * the handling of broken returned FETCH data from Microsoft Exchange.
+     *
+     * This test feeds a wireshark output to an IMAP conversation and it will
+     * fail because the wireshark output is wrong - Microsoft Exchange
+     * outputs an unexpected line ' FLAGS (\Seen))' when the expected
+     * IMAP response would be ')'.
+     *
+     * When a fix will be available for the IMAP problem, this test will not
+     * fail anymore.
+     */
+    public function testWrapperMockConnectionAppend()
+    {
+        $connection = $this->getMock( 'ezcMailTransportConnection', array(), array( self::$server, self::$port ) );
+
+        // create a mock connection which responds to commands with answers from
+        // a real conversation recorded with an IMAP server
+        $connection->expects( $this->any() )
+                   ->method( 'getLine' )
+                   ->will( $this->customMockObjectConversation( dirname( __FILE__ ) . '/data/shark_append' ) );
+
+        $options = new ezcMailImapTransportOptions();
+        $imap = new ezcMailImapTransportCustomWrapper( self::$server, self::$port, $options );
+        $imap->setConnection( $connection );
+        $result = $imap->authenticate( self::$user, self::$password );
+        $imap->selectMailbox( 'INBOX' );
+
+        try
+        {
+            $mail = new ezcMail();
+            $set = $imap->fetchByMessageNr( '1' );
+            $parser = new ezcMailParser();
+            $mails = $parser->parseMail( $set );
+            $mail = $mails[0];
+            $imap->append( 'INBOX', $mail->generate() );
+            $this->assertEquals( 'Test', $mail->subject );
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            $this->fail( 'Issue #14242 (Cannot append email through IMAP) is not fixed yet.' );
+        }
+    }
+
     public function testWrapperMockListMessagesFail()
     {
         $imap = $this->getMock( 'ezcMailImapTransportWrapper', array( 'responseType' ), array( self::$server, self::$port ) );
