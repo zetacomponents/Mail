@@ -2332,6 +2332,38 @@ class ezcMailTransportImapTest extends ezcTestCase
         }
     }
 
+    /**
+     * Test for issue #14360: problems with $imap->top() command in gmail.
+     */
+    public function testTopGmail()
+    {
+        $options = new ezcMailImapTransportOptions();
+        $options->ssl = true;
+        $imap = new ezcMailImapTransport( 'imap.gmail.com', '993', $options );
+
+        // please don't use this account :)
+        $imap->authenticate( 'ezcomponents' . '@' . 'gmail.com', 'wee12345' );
+        $imap->selectMailbox( 'inbox' );
+        $text = $imap->top( 1 );
+        $this->assertEquals( 3433, strlen( $text ) );
+    }
+
+    /**
+     * Test for issue #14360: problems with $imap->top() command in gmail.
+     */
+    public function testTopGmailHeadersOnly()
+    {
+        $options = new ezcMailImapTransportOptions();
+        $options->ssl = true;
+        $imap = new ezcMailImapTransport( 'imap.gmail.com', '993', $options );
+
+        // please don't use this account :)
+        $imap->authenticate( 'ezcomponents' . '@' . 'gmail.com', 'wee12345' );
+        $imap->selectMailbox( 'inbox' );
+        $text = $imap->top( 1, 1 );
+        $this->assertEquals( 382, strlen( $text ) );
+    }
+
     public function testSetOptions()
     {
         $options = new ezcMailImapSetOptions();

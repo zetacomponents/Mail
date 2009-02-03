@@ -222,6 +222,13 @@ class ezcMailImapTransport
     const NO_UID = '';
 
     /**
+     * The string returned by Google IMAP servers when at connection time.
+     *
+     * @access private
+     */
+    const SERVER_GIMAP = 'Gimap';
+
+    /**
      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
      *
      * Basic flags:
@@ -296,6 +303,18 @@ class ezcMailImapTransport
     protected $connection = null;
 
     /**
+     * Holds the string which identifies the IMAP server type.
+     *
+     * Used for fixing problems with Google IMAP (see issue #14360). Possible
+     * values are {@link self::SERVER_GIMAP} or null for all other servers.
+     *
+     * @todo Add identification strings for each existing IMAP server?
+     *
+     * @var string
+     */
+    protected $serverType = null;
+
+    /**
      * Holds the options for an IMAP transport connection.
      *
      * @var ezcMailImapTransportOptions
@@ -361,6 +380,10 @@ class ezcMailImapTransport
         if ( strpos( $response, "* OK" ) === false )
         {
             throw new ezcMailTransportException( "The connection to the IMAP server is ok, but a negative response from server was received. Try again later." );
+        }
+        if ( strpos( $response, self::SERVER_GIMAP ) !== false )
+        {
+            $this->serverType = self::SERVER_GIMAP; // otherwise it is null
         }
         $this->state = self::STATE_NOT_AUTHENTICATED;
     }
@@ -1251,18 +1274,63 @@ class ezcMailImapTransport
         $message = "";
         if ( strpos( $response, 'FETCH (' ) !== false )
         {
-            $response = "";
-            while ( strpos( $response, 'BODY[TEXT]' ) === false )
+            // Added hack for issue #14360: problems with $imap->top() command in gmail.
+            if ( $this->serverType === self::SERVER_GIMAP )
             {
-                $message .= $response;
-                $response = $this->connection->getLine();
-            }
+                // Google IMAP servers return the body first, then the headers (!)
+                $bytesToRead = $this->getMessageSectionSize( $response );
+                $response = "";
+                while ( $bytesToRead >= 0 )
+                {
+                    $data = $this->connection->getLine();
+                    $lastResponse = $data;
+                    $bytesToRead -= strlen( $data );
 
-            $response = $this->connection->getLine();
-            while ( strpos( $response, $tag ) === false )
-            {
-                $message .= $response;
+                    // in case reading too much and the string "BODY[HEADER] {size}"
+                    // is at the end of the last line
+                    if ( $bytesToRead <= 0 )
+                    {
+                        if ( $bytesToRead < 0 )
+                        {
+                            $lastResponse = substr( $data, $bytesToRead );
+                            $data = substr( $data, 0, strlen( $data ) + $bytesToRead );
+                        }
+                    }
+                    $message .= $data;
+                }
+
+                // Read the headers
+                $headers = '';
                 $response = $this->connection->getLine();
+                $bytesToRead = $this->getMessageSectionSize( $lastResponse );
+
+                $response = $this->connection->getLine();
+                while ( strpos( $response, $tag ) === false )
+                {
+                    $headers .= $response;
+                    $response = $this->connection->getLine();
+                }
+                $headers = trim( $headers, ")\r\n" );
+
+                // Append the body AFTER the headers as it should be
+                $message = $headers . "\r\n\r\n" . $message;
+            }
+            else
+            {
+                // Other IMAP servers return the headers first, then the body
+                $response = "";
+                while ( strpos( $response, 'BODY[TEXT]' ) === false )
+                {
+                    $message .= $response;
+                    $response = $this->connection->getLine();
+                }
+
+                $response = $this->connection->getLine();
+                while ( strpos( $response, $tag ) === false )
+                {
+                    $message .= $response;
+                    $response = $this->connection->getLine();
+                }
             }
         }
         // skip the OK response ("{$tag} OK Fetch completed.")
@@ -2622,6 +2690,27 @@ class ezcMailImapTransport
         }
         $this->currentTag = $tagLetter . sprintf( "%04s", $tagNumber );
         return $this->currentTag;
+    }
+
+    /**
+     * Returns the size of a FETCH section in bytes.
+     *
+     * The section header looks like: * id FETCH (BODY[TEXT] {size}
+     * where size is the size in bytes and id is the message number or ID.
+     *
+     * Example: for " * 2 FETCH (BODY[TEXT] {377}" this function returns 377.
+     *
+     * @return int
+     */
+    protected function getMessageSectionSize( $response )
+    {
+        $size = 0;
+        preg_match( '/\{(.*)\}/', $response, $matches );
+        if ( count( $matches ) > 0 )
+        {
+            $size = (int) $matches[1];
+        }
+        return $size;
     }
 }
 ?>
