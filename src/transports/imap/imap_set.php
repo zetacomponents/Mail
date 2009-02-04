@@ -182,6 +182,18 @@ class ezcMailImapSet implements ezcMailParserSet
                         $data = substr( $data, 0, strlen( $data ) + $this->bytesToRead ); //trim( $data, ")\r\n" );
                     }
 
+                    if ( $this->bytesToRead === 0 )
+                    {
+                        // hack for Microsoft Exchange, which sometimes puts
+                        // FLAGS (\Seen)) at the end of a message instead of before (!)
+                        if ( strlen( trim( $data, ")\r\n" ) !== strlen( $data ) - 3 ) )
+                        {
+                            // if the last line in a mail does not end with ")\r\n"
+                            // then read an extra line and discard it
+                            $extraData = $this->connection->getLine();
+                        }
+                    }
+
                     $this->hasMoreMailData = false;
                     // remove the mail if required by the user.
                     if ( $this->deleteFromServer === true )

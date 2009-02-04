@@ -2,6 +2,7 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #14360: problems with $imap->top() command in gmail.
+- Fixed issue #14242: Cannot append email through IMAP.
 
 
 1.6 - Monday 05 January 2009
