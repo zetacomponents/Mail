@@ -365,7 +365,7 @@ class ezcMailComposerTest extends ezcTestCase
                                        . "/parts/data/fly.jpg\">file.</a></html>";
             $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
             $this->mail->build();
-            $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile', 'ezcMailText' ) );
+            $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile', 'ezcMailFile' ) );
 
             $this->removeTempDir();
         }
