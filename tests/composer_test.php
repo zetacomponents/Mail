@@ -337,6 +337,10 @@ class ezcMailComposerTest extends ezcTestCase
 
             $this->removeTempDir();
         }
+        else
+        {
+            $this->markTestSkipped( "This test is supposed to run only when the fileinfo extension is available." );
+        }
     }
 
     /**
@@ -361,9 +365,13 @@ class ezcMailComposerTest extends ezcTestCase
                                        . "/parts/data/fly.jpg\">file.</a></html>";
             $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
             $this->mail->build();
-            $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+            $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile', 'ezcMailText' ) );
 
             $this->removeTempDir();
+        }
+        else
+        {
+            $this->markTestSkipped( "This test is supposed to run only when the fileinfo extension is not available." );
         }
     }
 
