@@ -197,6 +197,11 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $this->assertEquals( array(), $mail );
     }
 
+    /**
+     * Test modified for issue #14776: ezcMailStorageSet generates bad file names.
+     *
+     * Now the generated file names are md5() of the Message-IDs.
+     */
     public function testGetSourceFileNames()
     {
         $transport = new ezcMailImapTransport( "mta1.ez.no" );
@@ -207,10 +212,10 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $set = new ezcMailStorageSet( $transport->fetchAll(), $this->tempDir );
         $mail = $parser->parseMail( $set );
         $files = $set->getSourceFiles();
-        $expected = array( "Pine.LNX.4.62.0603161543230.13229@localhost",
-                           "Pine.LNX.4.62.0603160934040.13229@localhost",
-                           "Pine.LNX.4.62.0603160934280.13229@localhost",
-                           "Pine.LNX.4.62.0603161539140.13229@localhost", );
+        $expected = array( md5( "Pine.LNX.4.62.0603161543230.13229@localhost" ),
+                           md5( "Pine.LNX.4.62.0603160934040.13229@localhost" ),
+                           md5( "Pine.LNX.4.62.0603160934280.13229@localhost" ),
+                           md5( "Pine.LNX.4.62.0603161539140.13229@localhost" ), );
 
         for ( $i = 0; $i < count( $files ); $i++ )
         {

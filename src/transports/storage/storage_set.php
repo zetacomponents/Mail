@@ -27,12 +27,13 @@
  * // parse the storage set
  * $mail = $parser->parseMail( $set );
  *
- * // get the filenames of the saved mails in the set
- * // this must be saved somewhere so it can be used on a subsequent request
+ * // get the filenames of the saved mails in the set.
+ * // The file names are md5() of the Message-ID values contained in the mail.
+ * // This array must be saved somewhere so it can be used on a subsequent request.
  * $files = $set->getSourceFiles();
  *
- * // get the source of a the 4th saved mail
- * // this can be on a subsequent request if the $files array was saved from
+ * // get the source of the 4th saved mail.
+ * // This can be on a subsequent request if the $files array was saved from
  * // a previous request
  * $source = file_get_contents( $files[3] );
  * </code>
@@ -150,7 +151,7 @@ class ezcMailStorageSet implements ezcMailParserSet
             preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
             if ( count( $matches ) > 0 )
             {
-                $this->id = trim( trim( $matches[0][2] ), '<>' );
+                $this->id = md5( trim( trim( $matches[0][2] ), '<>' ) );
             }
         }
         fputs( $this->writer, $line );
@@ -186,7 +187,7 @@ class ezcMailStorageSet implements ezcMailParserSet
         {
             // Temporary file name until message is parsed and Message-ID is extracted.
             // It could remain the same if the mail doesn't contain a Message-ID header
-            $this->file = getmypid() . '.' . time();
+            $this->file = md5( getmypid() . '.' . time() );
             $writer = fopen( $this->path . $this->file, 'w' );
             if ( $writer !== false )
             {
