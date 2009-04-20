@@ -28,8 +28,8 @@
  * $mail = $parser->parseMail( $set );
  *
  * // get the filenames of the saved mails in the set.
- * // The file names are md5() of the Message-ID values contained in the mail.
- * // This array must be saved somewhere so it can be used on a subsequent request.
+ * // The file names are composed of process ID + current time + a counter
+ * // This array must be saved to be used on a subsequent request
  * $files = $set->getSourceFiles();
  *
  * // get the source of the 4th saved mail.
@@ -66,13 +66,6 @@ class ezcMailStorageSet implements ezcMailParserSet
     private $path = null;
 
     /**
-     * Holds the Message-ID of the current message, used to rename the mail source file.
-     *
-     * @var string
-     */
-    private $id = null;
-
-    /**
      * This variable is true if there is more data in the mail that is being fetched.
      *
      * @var bool
@@ -94,6 +87,13 @@ class ezcMailStorageSet implements ezcMailParserSet
     private $files = null;
 
     /**
+     * Holds the current email number being parsed.
+     *
+     * @var int
+     */
+    private $counter;
+
+    /**
      * Constructs a new storage set around the provided set.
      *
      * $location specifies where to save the message sources. This directory MUST
@@ -108,6 +108,7 @@ class ezcMailStorageSet implements ezcMailParserSet
         $this->location = $location;
         $this->path = rtrim( $this->location, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
         $this->hasMoreMailData = false;
+        $this->counter = 0;
     }
 
     /**
@@ -143,17 +144,8 @@ class ezcMailStorageSet implements ezcMailParserSet
             $this->nextMail();
             $this->hasMoreMailData = true;
         }
+
         $line = $this->set->getNextLine();
-        if ( $this->id === null && stripos( $line, 'message-id' ) !== false )
-        {
-            // Temporary value in case the Message-ID cannot be extracted from $line
-            $this->id = $this->file;
-            preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
-            if ( count( $matches ) > 0 )
-            {
-                $this->id = md5( trim( trim( $matches[0][2] ), '<>' ) );
-            }
-        }
         fputs( $this->writer, $line );
         return $line;
     }
@@ -170,24 +162,16 @@ class ezcMailStorageSet implements ezcMailParserSet
         if ( $this->writer !== null )
         {
             fclose( $this->writer );
-            if ( $this->id !== null )
-            {
-                rename( $this->path . $this->file, $this->path . $this->id );
-                $this->files[] = $this->path . $this->id;
-            }
-            else
-            {
-                $this->files[] = $this->path . $this->file;
-            }
+            $this->files[] = $this->path . $this->file;
             $this->writer = null;
         }
-        $this->id = null;
         $mail = $this->set->nextMail();
         if ( $mail === true || $this->hasMoreMailData === false )
         {
-            // Temporary file name until message is parsed and Message-ID is extracted.
-            // It could remain the same if the mail doesn't contain a Message-ID header
-            $this->file = md5( getmypid() . '.' . time() );
+            $this->counter++;
+
+            // Temporary file name for the mail source
+            $this->file = getmypid() . '-' . time() . '-' . $this->counter;
             $writer = fopen( $this->path . $this->file, 'w' );
             if ( $writer !== false )
             {

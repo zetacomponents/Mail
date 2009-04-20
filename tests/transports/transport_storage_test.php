@@ -212,10 +212,10 @@ class ezcMailTransportStorageTest extends ezcTestCase
         $set = new ezcMailStorageSet( $transport->fetchAll(), $this->tempDir );
         $mail = $parser->parseMail( $set );
         $files = $set->getSourceFiles();
-        $expected = array( md5( "Pine.LNX.4.62.0603161543230.13229@localhost" ),
-                           md5( "Pine.LNX.4.62.0603160934040.13229@localhost" ),
-                           md5( "Pine.LNX.4.62.0603160934280.13229@localhost" ),
-                           md5( "Pine.LNX.4.62.0603161539140.13229@localhost" ), );
+        $expected = array( getmypid() . '-' . time() . '-' . 1,
+                           getmypid() . '-' . time() . '-' . 2,
+                           getmypid() . '-' . time() . '-' . 3,
+                           getmypid() . '-' . time() . '-' . 4, );
 
         for ( $i = 0; $i < count( $files ); $i++ )
         {
