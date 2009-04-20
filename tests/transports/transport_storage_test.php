@@ -199,8 +199,6 @@ class ezcMailTransportStorageTest extends ezcTestCase
 
     /**
      * Test modified for issue #14776: ezcMailStorageSet generates bad file names.
-     *
-     * Now the generated file names are md5() of the Message-IDs.
      */
     public function testGetSourceFileNames()
     {
