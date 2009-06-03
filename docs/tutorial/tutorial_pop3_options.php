@@ -5,7 +5,7 @@ require_once 'tutorial_autoload.php';
 // you can specify a different one using the second parameter of the constructor).
 // A timeout option is specified to be 10 seconds (default is 5).
 // Another option to be specified is the authenticationMethod as APOP (default is plain text)
-$options = new ezcMailPop3TransportOptions()
+$options = new ezcMailPop3TransportOptions();
 $options->timeout = 10;
 $options->authenticationMethod = ezcMailPop3Transport::AUTH_APOP;
 
