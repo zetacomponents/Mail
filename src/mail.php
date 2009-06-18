@@ -145,7 +145,7 @@ class ezcMail extends ezcMailPart
                 }
                 foreach ( $value as $key => $obj )
                 {
-                    if ( $obj !== null && !$obj instanceof ezcMailAddress )
+                    if ( !$obj instanceof ezcMailAddress )
                     {
                         throw new ezcBaseValueException( "{$name}[{$key}]", $obj, 'ezcMailAddress' );
                     }
