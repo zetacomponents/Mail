@@ -66,7 +66,7 @@ class ezcMailComposerTest extends ezcTestCase
      */
     public function testInheritedProperties()
     {
-        $this->assertSetProperty( $this->mail, "to", array( array( 'email' => 'fh@ez.no' ) ) );
+        $this->assertSetProperty( $this->mail, "to", array( array( new ezcMailAddress( 'fh@ez.no' ) ) ) );
     }
 
     /**

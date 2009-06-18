@@ -25,7 +25,7 @@ class ezcMailTest extends ezcTestCase
     public function testProperties()
     {
         $this->assertSetPropertyFails( $this->mail, "does_not_exist", array( 42 ) );
-        $this->assertSetProperty( $this->mail, "to", array( array( 'email' => 'fh@ez.no' ) ) );
+        $this->assertSetProperty( $this->mail, "to", array( array( new ezcMailAddress( 'fh@ez.no' ) ) ) );
 
         try
         {

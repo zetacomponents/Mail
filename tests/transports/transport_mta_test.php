@@ -78,13 +78,13 @@ class ezcMailTransportMtaTest extends ezcTestCase
     // Tests sending a mail with null to field.
     public function testInvalidMail2()
     {
-        $this->mail->to = null;
-        $this->mail->subject = "No recepients";
         try
         {
+            $this->mail->to = null;
+            $this->mail->subject = "No recepients";
             $this->transport->send( $this->mail );
         }
-        catch ( ezcMailTransportException $e )
+        catch ( ezcBaseValueException $e )
         {
             return;
         }

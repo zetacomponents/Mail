@@ -429,13 +429,13 @@ class ezcMailTransportSmtpTest extends ezcTestCase
     public function testInvalidMailToNull()
     {
         $transport = new ezcMailSmtpTransport( self::HOST_PLAIN, self::USER_PLAIN, self::PASS_PLAIN, self::PORT_PLAIN );
-        $this->mail->to = null;
         try
         {
+            $this->mail->to = null;
             $this->mail->subject = __CLASS__ . ':' . __FUNCTION__;
             $transport->send( $this->mail );
         }
-        catch ( ezcMailTransportException $e )
+        catch ( ezcBaseValueException $e )
         {
             return;
         }
