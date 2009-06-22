@@ -1,4 +1,4 @@
-1.6.3 - [RELEASEDATE]
+1.6.3 - Monday 22 June 2009
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed issue #15068: false ezcMail tests. Based on a patch from Thomas Koch.
