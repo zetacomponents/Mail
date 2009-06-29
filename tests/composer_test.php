@@ -650,6 +650,10 @@ class ezcMailComposerTest extends ezcTestCase
         {
             $contentType = 'application/octet-stream';
         }
+        if ( version_compare( phpversion(), '5.3.0', '>=' ) )
+        {
+            $contentType .= '; charset=binary';
+        }
         $this->assertEquals( $contentType . '; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
