@@ -163,14 +163,33 @@ abstract class ezcMailPart
      * use {@link ezcMailTools::mimeDecode()} or implement your own
      * MIME-decoding function.
      *
+     * If $returnAllValues is true, the function will return all
+     * the values of the header $name from the mail in an array. If
+     * it is false it will return only the first value as a string
+     * if there are multiple values present in the mail.
+     *
      * @param string $name
-     * @return string
+     * @param bool $returnAllValues
+     * @return mixed
      */
-    public function getHeader( $name )
+    public function getHeader( $name, $returnAllValues = false )
     {
         if ( isset( $this->headers[$name] ) )
         {
-            return $this->headers[$name];
+            if ( $returnAllValues === true )
+            {
+                return $this->headers[$name];
+            }
+            else if ( is_array( $this->headers[$name] ) )
+            {
+                // return only the first value in order to not break compatibility
+                // see issue #14257
+                return $this->headers[$name][0];
+            }
+            else
+            {
+                return $this->headers[$name];
+            }
         }
         return '';
     }
@@ -323,6 +342,11 @@ abstract class ezcMailPart
         $text = "";
         foreach ( $this->headers->getCaseSensitiveArray() as $header => $value )
         {
+            if ( is_array( $value ) )
+            {
+                $value = $value[0];
+            }
+
             // here we encode every header, even the ones that we don't add to
             // the header set directly. We do that so that transports sill see
             // all the encoded headers which they then can use accordingly.
@@ -365,7 +389,7 @@ abstract class ezcMailPart
 
             if ( in_array( strtolower( $header ), $this->excludeHeaders ) === false )
             {
-                $text .= "$header: $value" . ezcMailTools::lineBreak();
+                 $text .= "$header: $value" . ezcMailTools::lineBreak();
             }
         }
 

@@ -36,6 +36,19 @@
 abstract class ezcMailPartParser
 {
     /**
+     * Mail headers which can appear maximum one time in a mail message,
+     * as defined by RFC 2822.
+     *
+     * @var array(string)
+     */
+    protected static $uniqueHeaders = array( 'bcc', 'cc', 'content-type',
+                                             'content-disposition', 'from',
+                                             'content-transfer-encoding',
+                                             'return-path',
+                                             'in-reply-to', 'references',
+                                             'message-id', 'date', 'reply-to',
+                                             'sender', 'subject', 'sender', 'to' );
+    /**
      * The name of the last header parsed.
      *
      * This variable is used when glueing together multi-line headers.
@@ -175,12 +188,30 @@ abstract class ezcMailPartParser
         preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
-            $headers[$matches[0][1]] = str_replace( "\t", " ", trim( $matches[0][2] ) );
+            if ( !in_array( strtolower( $matches[0][1] ), self::$uniqueHeaders ) )
+            {
+                $arr = $headers[$matches[0][1]];
+                $arr[0][] = str_replace( "\t", " ", trim( $matches[0][2] ) );
+                $headers[$matches[0][1]] = $arr;
+            }
+            else
+            {
+                $headers[$matches[0][1]] = str_replace( "\t", " ", trim( $matches[0][2] ) );
+            }
             $this->lastParsedHeader = $matches[0][1];
         }
         else if ( $this->lastParsedHeader !== null ) // take care of folding
         {
-            $headers[$this->lastParsedHeader] .= str_replace( "\t", " ", $line );
+            if ( !in_array( strtolower( $this->lastParsedHeader ), self::$uniqueHeaders ) )
+            {
+                $arr = $headers[$this->lastParsedHeader];
+                $arr[0][count( $arr[0] ) - 1] .= str_replace( "\t", " ", $line );
+                $headers[$this->lastParsedHeader] = $arr;
+            }
+            else
+            {
+                $headers[$this->lastParsedHeader] .= str_replace( "\t", " ", $line );
+            }
         }
         // else -invalid syntax, this should never happen.
     }

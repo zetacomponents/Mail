@@ -1,7 +1,9 @@
-1.6.4 - [RELEASEDATE]
+1.7alpha1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed test cases for PHP 5.3 and later.
+- Implemented feature request #14257: Problem accessing multiple headers with
+  same headername.
 
 
 1.6.3 - Monday 22 June 2009

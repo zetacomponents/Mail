@@ -1612,5 +1612,34 @@ END;
             $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
         }
     }
+
+    /**
+     * Test for issue #14257: Problem accessing multiple headers with same headername.
+     */
+    public function testParserMultipleReceivedHeaders()
+    {
+        $parser = new ezcMailParser();
+
+        $set = new SingleFileSet( 'various/multiple-received-headers' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        // get the value of the header Received (the first value as it appears)
+        // (this is the default behaviour)
+        $received = $mail->getHeader( 'Received' );
+        $expected = "from punisher.dreamhost.com (punisher.dreamhost.com [66.33.206.109]) by fractured.dreamservers.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)";
+        $this->assertEquals( $expected, $received );
+
+        // get all values of the header Received as an array
+        $received = $mail->getHeader( 'Received', true );
+        $expected = array(
+            "from punisher.dreamhost.com (punisher.dreamhost.com [66.33.206.109]) by fractured.dreamservers.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from localhost (localhost [127.0.0.1]) by punisher.dreamhost.com (Postfix) with ESMTP id 67FEC67392 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from punisher.dreamhost.com ([127.0.0.1]) by localhost (punisher [127.0.0.1]) (amavisd-new, port 10024) with ESMTP id 18012-11 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from www.brssolutions.com (unknown [216.198.224.130]) by punisher.dreamhost.com (Postfix) with ESMTP id 0449E67401 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:06 -0700 (PDT)",
+            "from localhost (localhost) by www.brssolutions.com (8.13.4/8.13.4) id k6HJpREA009057; Mon, 17 Jul 2006 14:51:27 -0500"
+            );
+        $this->assertEquals( $expected, $received );
+    }
 }
 ?>

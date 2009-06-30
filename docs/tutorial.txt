@@ -614,6 +614,33 @@ MIME-encoded for non-broken headers (eg. '=?iso-8859-1?Q?=E6=F8=E5?='), so if
 you want to decode them use ezcMailTools::mimeDecode() or implement your own
 MIME-decoding function.
 
+Parsing: multiple-value headers
+-------------------------------
+
+Mail headers such as **Received** can appear multiple times in a mail message.
+By default the mail parser will only recognize the first value of the header
+it encounters, and will disregard the others.
+
+To retrieve all the values of a header from a mail in an array, use the second
+argument for the function $mail->getHeader() with the value *true*.
+
+Example::
+
+    $mail->getHeader( 'Received', true );
+
+This will return an array which looks like this::
+
+    array(
+        "from punisher.dreamhost.com (punisher.dreamhost.com...",
+        "from localhost (localhost [127.0.0.1])...",
+        "from punisher.dreamhost.com ([127.0.0.1])...",
+        "from www.brssolutions.com (unknown [216.198.224.130]) by...",
+        "from localhost (localhost) by www.brssolutions.com..."
+         );
+
+instead of only the first value as a string if the second parameter to
+getHeader() was not specified.
+
 Parsing: attachment file names
 ------------------------------
 
