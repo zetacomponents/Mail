@@ -1627,17 +1627,17 @@ END;
         // get the value of the header Received (the first value as it appears)
         // (this is the default behaviour)
         $received = $mail->getHeader( 'Received' );
-        $expected = "from punisher.dreamhost.com (punisher.dreamhost.com [66.33.206.109]) by fractured.dreamservers.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)";
+        $expected = "from punisher.example.com (punisher.example.com [66.33.206.109]) by fractured.example.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@example.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)";
         $this->assertEquals( $expected, $received );
 
         // get all values of the header Received as an array
         $received = $mail->getHeader( 'Received', true );
         $expected = array(
-            "from punisher.dreamhost.com (punisher.dreamhost.com [66.33.206.109]) by fractured.dreamservers.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
-            "from localhost (localhost [127.0.0.1]) by punisher.dreamhost.com (Postfix) with ESMTP id 67FEC67392 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
-            "from punisher.dreamhost.com ([127.0.0.1]) by localhost (punisher [127.0.0.1]) (amavisd-new, port 10024) with ESMTP id 18012-11 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
-            "from www.brssolutions.com (unknown [216.198.224.130]) by punisher.dreamhost.com (Postfix) with ESMTP id 0449E67401 for <helpdesk@fracturedatlas.org>; Mon, 17 Jul 2006 12:35:06 -0700 (PDT)",
-            "from localhost (localhost) by www.brssolutions.com (8.13.4/8.13.4) id k6HJpREA009057; Mon, 17 Jul 2006 14:51:27 -0500"
+            "from punisher.example.com (punisher.example.com [66.33.206.109]) by fractured.example.com (Postfix) with ESMTP id B84ED80EBE for <helpdesk@example.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from localhost (localhost [127.0.0.1]) by punisher.example.com (Postfix) with ESMTP id 67FEC67392 for <helpdesk@example.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from punisher.example.com ([127.0.0.1]) by localhost (punisher [127.0.0.1]) (amavisd-new, port 10024) with ESMTP id 18012-11 for <helpdesk@example.org>; Mon, 17 Jul 2006 12:35:07 -0700 (PDT)",
+            "from www.example.com (unknown [216.198.224.130]) by punisher.example.com (Postfix) with ESMTP id 0449E67401 for <helpdesk@example.org>; Mon, 17 Jul 2006 12:35:06 -0700 (PDT)",
+            "from localhost (localhost) by www.example.com (8.13.4/8.13.4) id k6HJpREA009057; Mon, 17 Jul 2006 14:51:27 -0500"
             );
         $this->assertEquals( $expected, $received );
     }
@@ -1648,7 +1648,7 @@ END;
     public function testParseBodyAsFile()
     {
         $parser = new ezcMailParser();
-        $parser->options->parseTextAttachmentAsFiles = true;
+        $parser->options->parseTextAttachmentsAsFiles = true;
         $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];

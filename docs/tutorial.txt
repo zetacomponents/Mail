@@ -631,11 +631,11 @@ Example::
 This will return an array which looks like this::
 
     array(
-        "from punisher.dreamhost.com (punisher.dreamhost.com...",
+        "from punisher.example.com (punisher.example.com...",
         "from localhost (localhost [127.0.0.1])...",
-        "from punisher.dreamhost.com ([127.0.0.1])...",
-        "from www.brssolutions.com (unknown [216.198.224.130]) by...",
-        "from localhost (localhost) by www.brssolutions.com..."
+        "from punisher.example.com ([127.0.0.1])...",
+        "from www.example.com (unknown [216.198.224.130]) by...",
+        "from localhost (localhost) by www.example.com..."
          );
 
 instead of only the first value as a string if the second parameter to
