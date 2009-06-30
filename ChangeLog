@@ -4,6 +4,8 @@
 - Fixed test cases for PHP 5.3 and later.
 - Implemented feature request #14257: Problem accessing multiple headers with
   same headername.
+- Implemented feature request #14794: Add an option to parse text attachments
+  as file part instead of text part.
 
 
 1.6.3 - Monday 22 June 2009

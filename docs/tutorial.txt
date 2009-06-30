@@ -641,6 +641,20 @@ This will return an array which looks like this::
 instead of only the first value as a string if the second parameter to
 getHeader() was not specified.
 
+Parsing: text attachments as file parts
+---------------------------------------
+
+By default, the mail parser creates ezcMailTextPart objects for text
+attachments found in the mail.
+
+To create ezcMailFile objects instead (for example on servers where
+internal memory is limited), set this option to the mail parser before
+parsing::
+
+    $parser = new ezcMailParser();
+    $parser->options->parseTextAttachmentsAsFiles = true;
+    // call $parser->parseMail( $set );
+
 Parsing: attachment file names
 ------------------------------
 

@@ -13,7 +13,7 @@
  *
  * By default an object of class {@link ezcMail} is returned by the parser. If
  * you want to use your own mail class (which extends {@link ezcMail}),
- * use {@link ezcMailParserOption}. Example:
+ * use {@link ezcMailParserOptions}. Example:
  *
  * <code>
  * $options = new ezcMailParserOptions();
@@ -35,7 +35,7 @@
  *
  * By default objects of class {@link ezcMailFile} are created to handle file
  * attachments. If you want to use your own file class (which extends
- * {@link ezcMailFile}), use {@link ezcMailParserOption}. Example:
+ * {@link ezcMailFile}), use {@link ezcMailParserOptions}. Example:
  *
  * <code>
  * $options = new ezcMailParserOptions();
@@ -48,6 +48,23 @@
  * <code>
  * $parser = new ezcMailParser();
  * $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
+ * </code>
+ *
+ * By default objects of class {@link ezcMailTextPart} are created for text
+ * attachments. If you want to use ezcMailFile objects instead, use
+ * {@link ezcMailParserOptions}. Example:
+ *
+ * <code>
+ * $options = new ezcMailParserOptions();
+ * $options->parseTextAttachmentsAsFiles = true;
+ *
+ * $parser = new ezcMailParser( $options );
+ * </code>
+ *
+ * Another way to do this is:
+ * <code>
+ * $parser = new ezcMailParser();
+ * $parser->options->parseTextAttachmentsAsFiles = true;
  * </code>
  *
  * @property ezcMailParserOptions $options

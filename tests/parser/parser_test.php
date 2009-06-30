@@ -1641,5 +1641,48 @@ END;
             );
         $this->assertEquals( $expected, $received );
     }
+
+    /**
+     * Test for issue #14794: Add an option to parse text attachments as file part instead of text part
+     */
+    public function testParseBodyAsFile()
+    {
+        $parser = new ezcMailParser();
+        $parser->options->parseBodyAsFile = true;
+        $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        $parts = $mail->fetchParts();
+        $expected = array( 'ezcMailFile',
+                           );
+
+        $this->assertEquals( 1, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
+
+    /**
+     * Test for issue #14794: Add an option to parse text attachments as file part instead of text part
+     */
+    public function testParseBodyAsFileDefaultAfterSetting()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        $parts = $mail->fetchParts();
+        $expected = array( 'ezcMailText',
+                           );
+
+        $this->assertEquals( 1, count( $parts ) );
+        for ( $i = 0; $i < count( $parts ); $i++ )
+        {
+            $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
+        }
+    }
 }
 ?>

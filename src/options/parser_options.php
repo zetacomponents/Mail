@@ -16,6 +16,7 @@
  * $options = new ezcMailParserOptions();
  * $options->mailClass = 'myCustomMailClass'; // extends ezcMail
  * $options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
+ * $options->parseTextAttachmentsAsFiles = true; // to get the text attachments in ezcMailFile objects
  *
  * $parser = new ezcMailParser( $options );
  * </code>
@@ -25,6 +26,7 @@
  * $parser = new ezcMailParser();
  * $parser->options->mailClass = 'myCustomMailClass'; // extends ezcMail
  * $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
+ * $parser->options->parseTextAttachmentsAsFiles = true;
  * </code>
  *
  * @property string $mailClass
@@ -35,6 +37,9 @@
  *           Specifies a class descending from ezcMailFile which can be instanciated
  *           by the parser to handle file attachments. The default value is
  *           ezcMailFile.
+ * @property string $parseTextAttachmentsAsFiles
+ *           Specifies whether to parse the text attachments in an ezcMailTextPart
+ *           (default) or in an ezcMailFile (by setting the option to true).
  * @package Mail
  * @version //autogen//
  */
@@ -53,6 +58,7 @@ class ezcMailParserOptions extends ezcBaseOptions
     {
         $this->mailClass = 'ezcMail'; // default value for mail class is 'ezcMail'
         $this->fileClass = 'ezcMailFile'; // default value for file attachment class is 'ezcMailFile'
+        $this->parseTextAttachmentsAsFiles = false; // default is to parse text attachments in ezcMailTextPart objects
 
         parent::__construct( $options );
     }
@@ -107,6 +113,15 @@ class ezcMailParserOptions extends ezcBaseOptions
                 }
                 $this->properties[$propertyName] = $propertyValue;
                 ezcMailFileParser::$fileClass = $propertyValue;
+                break;
+
+            case 'parseTextAttachmentsAsFiles':
+                if ( !is_bool( $propertyValue ) )
+                {
+                    throw new ezcBaseValueException( $propertyName, $propertyValue, 'bool' );
+                }
+                $this->properties[$propertyName] = $propertyValue;
+                ezcMailPartParser::$parseTextAttachmentsAsFiles = $propertyValue;
                 break;
 
             default:

@@ -48,6 +48,23 @@ abstract class ezcMailPartParser
                                              'in-reply-to', 'references',
                                              'message-id', 'date', 'reply-to',
                                              'sender', 'subject', 'sender', 'to' );
+
+    /**
+     * The default is to parse text attachments into ezcMailTextPart objects.
+     *
+     * Setting this to true before calling the parser will parse text attachments
+     * into ezcMailFile objects. Use the parser options for this:
+     *
+     * <code>
+     * $parser = new ezcMailParser();
+     * $parser->options->parseTextAttachmentsAsFiles = true;
+     * // call $parser->parseMail( $set );
+     * </code>
+     *
+     * @var bool
+     */
+    public static $parseTextAttachmentsAsFiles = false;
+
     /**
      * The name of the last header parsed.
      *
@@ -135,7 +152,14 @@ abstract class ezcMailPartParser
                 break;
 
             case 'text':
-                $bodyParser = new ezcMailTextParser( $subType, $headers );
+                if ( ezcMailPartParser::$parseTextAttachmentsAsFiles === true )
+                {
+                    $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
+                }
+                else
+                {
+                    $bodyParser = new ezcMailTextParser( $subType, $headers );
+                }
                 break;
 
             case 'multipart':
