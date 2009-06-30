@@ -1648,7 +1648,7 @@ END;
     public function testParseBodyAsFile()
     {
         $parser = new ezcMailParser();
-        $parser->options->parseBodyAsFile = true;
+        $parser->options->parseTextAttachmentAsFiles = true;
         $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
