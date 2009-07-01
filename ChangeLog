@@ -6,6 +6,9 @@
   same headername.
 - Implemented feature request #14794: Add an option to parse text attachments
   as file part instead of text part.
+- Implemented feature request #14023: Split ezcMailComposer's addAttachment
+  into a function for adding file attachments and for adding attachments from
+  strings.
 
 
 1.6.3 - Monday 22 June 2009

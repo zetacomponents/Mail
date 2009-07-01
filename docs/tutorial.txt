@@ -152,6 +152,10 @@ using the ezcMailComposer class.
 .. include:: tutorial/tutorial_composer_attachments.php
    :literal:
 
+The mime-type of the attachment can be specified if needed. See the
+documentation for the functions addFileAttachment() and addStringAttachment()
+for more details.
+
 Securing HTML mails which include file:// in image tags
 -------------------------------------------------------
 

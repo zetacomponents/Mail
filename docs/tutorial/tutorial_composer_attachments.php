@@ -19,8 +19,12 @@ $mail->plainText = "Here is the text version of the mail. This is displayed if t
 // Specify the html text of the mail
 $mail->htmlText = "<html>Here is the HTML version of your mail with an image: <img src='file://path_to_image.jpg' /></html>";
 
-// Add an attachment to the mail
-$mail->addAttachment( 'path_to_attachment.file' );
+// Add a file as an attachment to the mail
+$mail->addFileAttachment( 'path_to_attachment.file' );
+
+// Add a string as an attachment to the mail, with 'filename' as the name of the attachment in the mail
+$contents = 'contents of the attachment'; // can be a binary string, eg. contents of an image file
+$mail->addStringAttachment( 'filename', $contents );
 
 // Build the mail object
 $mail->build();

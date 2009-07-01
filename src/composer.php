@@ -21,7 +21,7 @@
  * 3. Set the plainText and htmlText message parts. You can set only one
  *    or both. If you set both, the client will display the htmlText if it
  *    supports HTML. Otherwise the client will display plainText.
- * 4. Add any attachments.
+ * 4. Add any attachments (addFileAttachment() or addStringAttachment()).
  * 5. Call the build method.
  *
  * This example shows how to send an HTML mail with a text fallback and
@@ -33,7 +33,7 @@
  * $mail->subject = "Example of an HTML email with attachments";
  * $mail->plainText = "Here is the text version of the mail. This is displayed if the client can not understand HTML";
  * $mail->htmlText = "<html>Here is the HTML version of your mail with an image: <img src='file://path_to_image.jpg' /></html>";
- * $mail->addAttachment( 'path_to_attachment.file' );
+ * $mail->addFileAttachment( 'path_to_attachment.file' );
  * $mail->build();
  * $transport = new ezcMailMtaTransport();
  * $transport->send( $mail );
@@ -70,7 +70,7 @@
  *
  * The file name in the attachment can be different than the file name on disk, by
  * passing an {@link ezcMailContentDispositionHeader} object to the function
- * addAttachment(). Example:
+ * addFileAttachment(). Example:
  * <code>
  * $mail = new ezcMailComposer();
  * $mail->from = new ezcMailAddress( 'john@example.com', 'John Doe' );
@@ -84,11 +84,20 @@
  * $disposition->fileNameCharSet = 'utf-8'; // if using non-ascii characters in the file name
  * $disposition->disposition = 'attachment'; // default value is 'inline'
  *
- * $mail->addAttachment( 'path_to_attachment.file', null, null, null, $disposition );
+ * $mail->addFileAttachment( 'path_to_attachment.file', null, null, $disposition );
  * $mail->build();
  *
  * $transport = new ezcMailMtaTransport();
  * $transport->send( $mail );
+ * </code>
+ *
+ * Use the function addStringAttachment() if you want to add an attachment which
+ * is stored in a string variable. A file name for a string attachment needs to
+ * be specified as well. Example:
+ *
+ * <code>
+ * $contents = 'contents for mail attachment'; // can be a binary string, eg. image file contents
+ * $mail->addStringAttachment( 'filename', $contents );
  * </code>
  *
  * @todo What about character set for the textPart
@@ -261,31 +270,84 @@ class ezcMailComposer extends ezcMail
      * @param string $contentType
      * @param string $mimeType
      * @param ezcMailContentDispositionHeader $contentDisposition
+     * @apichange This function might be removed in a future iteration of
+     *            the Mail component. Use addFileAttachment() and
+     *            addStringAttachment() instead.
      */
     public function addAttachment( $fileName, $content = null, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
     {
         if ( is_null( $content ) )
         {
-            if ( is_readable( $fileName ) )
-            {
-                $this->attachments[] = array( $fileName, null, $contentType, $mimeType, $contentDisposition );
-            }
-            else
-            {
-                if ( file_exists( $fileName ) )
-                {
-                    throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
-                }
-                else
-                {
-                    throw new ezcBaseFileNotFoundException( $fileName );
-                }
-            }
+            $this->addFileAttachment( $fileName, $contentType, $mimeType, $contentDisposition );
         }
         else
         {
-            $this->attachments[] = array( $fileName, $content, $contentType, $mimeType, $contentDisposition );
+            $this->addStringAttachment( $fileName, $content, $contentType, $mimeType, $contentDisposition );
         }
+    }
+
+    /**
+     * Adds the file $fileName to the list of attachments.
+     *
+     * The $contentType (default = application) and $mimeType (default =
+     * octet-stream) control the complete mime-type of the attachment.
+     *
+     * If $contentDisposition is specified, the attached file will have its
+     * Content-Disposition header set according to the $contentDisposition
+     * object and the filename of the attachment in the generated mail will be
+     * the one from the $contentDisposition object.
+     * 
+     * @throws ezcBaseFileNotFoundException
+     *         if $fileName does not exists.
+     * @throws ezcBaseFilePermissionProblem
+     *         if $fileName could not be read.
+     * @param string $fileName
+     * @param string $contentType
+     * @param string $mimeType
+     * @param ezcMailContentDispositionHeader $contentDisposition
+     */
+    public function addFileAttachment( $fileName, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
+    {
+        if ( is_readable( $fileName ) )
+        {
+            $this->attachments[] = array( $fileName, null, $contentType, $mimeType, $contentDisposition );
+        }
+        else
+        {
+            if ( file_exists( $fileName ) )
+            {
+                throw new ezcBaseFilePermissionException( $fileName, ezcBaseFileException::READ );
+            }
+            else
+            {
+                throw new ezcBaseFileNotFoundException( $fileName );
+            }
+        }
+    }
+
+    /**
+     * Adds the file $fileName to the list of attachments, with contents $content.
+     *
+     * The file $fileName is not checked if it exists. An attachment is added
+     * to the mail, with the name $fileName, and the contents $content.
+     *
+     * The $contentType (default = application) and $mimeType (default =
+     * octet-stream) control the complete mime-type of the attachment.
+     *
+     * If $contentDisposition is specified, the attached file will have its
+     * Content-Disposition header set according to the $contentDisposition
+     * object and the filename of the attachment in the generated mail will be
+     * the one from the $contentDisposition object.
+     * 
+     * @param string $fileName
+     * @param string $content
+     * @param string $contentType
+     * @param string $mimeType
+     * @param ezcMailContentDispositionHeader $contentDisposition
+     */
+    public function addStringAttachment( $fileName, $content, $contentType = null, $mimeType = null, ezcMailContentDispositionHeader $contentDisposition = null )
+    {
+        $this->attachments[] = array( $fileName, $content, $contentType, $mimeType, $contentDisposition );
     }
 
     /**

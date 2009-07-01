@@ -885,6 +885,37 @@ class ezcMailComposerTest extends ezcTestCase
         }
     }
 
+    /**
+     * Test for issue #14023: Split ezcMailComposer's addAttachment into a function for adding file attachments and for adding attachments from strings
+     */
+    public function testAddFileAttachment()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addFileAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->build();
+
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
+    /**
+     * Test for issue #14023: Split ezcMailComposer's addAttachment into a function for adding file attachments and for adding attachments from strings
+     */
+    public function testAddStringAttachment()
+    {
+        $contents = file_get_contents( dirname( __FILE__) . "/parts/data/fly.jpg" );
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->plainText = "Naked people with extra parts! The things folk do for fashion!!";
+        $this->mail->addStringAttachment( "fly.jpg", $contents );
+        $this->mail->build();
+
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );
