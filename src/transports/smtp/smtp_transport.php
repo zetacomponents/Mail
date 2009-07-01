@@ -1242,7 +1242,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             $response .= mcrypt_generic( $td, $challenge );
             mcrypt_generic_deinit( $td );
         }
-        mcrypt_module_close($td);
+        mcrypt_module_close( $td );
 
         return $response;
     }

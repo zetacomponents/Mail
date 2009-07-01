@@ -449,7 +449,7 @@ class ezcMailTools
                                "QUIT",
                              );
 
-                for( $i = 0; $i < $numberOfMx; $i++ )
+                for ( $i = 0; $i < $numberOfMx; $i++ )
                 {
                     if ( $socket = @fsockopen( $mx[$i], 25, $errno = 0, $errstr = 0, $timeoutOpen ) )
                     {

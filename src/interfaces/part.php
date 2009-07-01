@@ -431,7 +431,7 @@ abstract class ezcMailPart
      */
     public function generate()
     {
-        return $this->generateHeaders() .ezcMailTools::lineBreak() . $this->generateBody();
+        return $this->generateHeaders() . ezcMailTools::lineBreak() . $this->generateBody();
     }
 
     /**

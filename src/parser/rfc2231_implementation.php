@@ -103,7 +103,7 @@ class ezcMailRfc2231Implementation
 
                 if ( count( $parts > 1 ) )
                 {
-                    for( $i = 1; $i < count( $parts ); $i++ )
+                    for ( $i = 1; $i < count( $parts ); $i++ )
                     {
                         $result[1][$paramName]['value'] .= $parts[$i]['encoding'] ?
                             urldecode( $parts[$i]['value'] ) : $parts[$i]['value'];

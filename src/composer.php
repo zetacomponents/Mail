@@ -525,7 +525,7 @@ class ezcMailComposer extends ezcMail
                         // throw
                     }
                 }
-                // update mail, with replaced url's
+                // update mail, with replaced URLs
                 $htmlPart->text = $this->htmlText;
             }
         }

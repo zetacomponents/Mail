@@ -73,7 +73,7 @@ abstract class ezcMailMultipart extends ezcMailPart
             {
                 $this->parts[] = $part;
             }
-            elseif( is_array( $part ) ) // add each and everyone of the parts in the array
+            elseif ( is_array( $part ) ) // add each and everyone of the parts in the array
             {
                 foreach ( $part as $array_part )
                 {
