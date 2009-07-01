@@ -9,6 +9,8 @@
 - Implemented feature request #14023: Split ezcMailComposer's addAttachment
   into a function for adding file attachments and for adding attachments from
   strings.
+- Implemented feature request #14487: Enable ezcMailComposer to specify
+  encoding for text and html parts.
 
 
 1.6.3 - Monday 22 June 2009

@@ -916,6 +916,29 @@ class ezcMailComposerTest extends ezcTestCase
         $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
     }
 
+    /**
+     * Test for issue #14487: Enable ezcMailComposer to specify encoding for text and html parts
+     */
+    public function testMailTextAndHtmlSetBase64Encoding()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "Alternative HTML/Text message.";
+        $this->mail->plainText = "Plain text message. Your client should show the HTML message if it supports HTML mail.";
+        $this->mail->htmlText = "<html><i><b>HTML message. Your client should show this if it supports HTML.</b></i></html>";
+        $this->mail->encoding = ezcMail::BASE64;
+        $this->mail->build();
+
+        $message = $this->mail->generate();
+        $this->parseAndCheckParts( $message, array( 'ezcMailText', 'ezcMailText' ) );
+
+        $expected = "PGh0bWw+PGk+PGI+SFRNTCBtZXNzYWdlLiBZb3VyIGNsaWVudCBzaG91bGQgc2hvdyB0aGlzIGlm" . ezcMailTools::lineBreak() .
+                    "IGl0IHN1cHBvcnRzIEhUTUwuPC9iPjwvaT48L2h0bWw+";
+
+        // test if the $expected BASE64 encoded string is found somewhere in the generated mail (at position 759 usually)
+        $this->assertGreaterThan( 500, strpos( $message, $expected ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );

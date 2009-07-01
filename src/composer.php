@@ -100,8 +100,6 @@
  * $mail->addStringAttachment( 'filename', $contents );
  * </code>
  *
- * @todo What about character set for the textPart
- *
  * @property string $plainText
  *           Contains the message of the mail in plain text.
  * @property string $htmlText
@@ -118,6 +116,10 @@
  * @property string $charset
  *           Contains the character set for both $plainText and $htmlText.
  *           Default value is 'us-ascii'.
+ * @property string $encoding
+ *           Contains the encoding for both $plainText and $htmlText.
+ *           Default value is ezcMail::EIGHT_BIT. Other values are found
+ *           as constants in the class {@link ezcMail}.
  * @property ezcMailComposerOptions $options
  *           Options for composing mail. See {@link ezcMailComposerOptions}.
  *
@@ -153,6 +155,7 @@ class ezcMailComposer extends ezcMail
         $this->properties['plainText'] = null;
         $this->properties['htmlText'] = null;
         $this->properties['charset'] = 'us-ascii';
+        $this->properties['encoding'] = ezcMail::EIGHT_BIT;
         if ( $options === null )
         {
             $options = new ezcMailComposerOptions();
@@ -179,6 +182,7 @@ class ezcMailComposer extends ezcMail
             case 'plainText':
             case 'htmlText':
             case 'charset':
+            case 'encoding':
                 $this->properties[$name] = $value;
                 break;
 
@@ -212,6 +216,7 @@ class ezcMailComposer extends ezcMail
             case 'plainText':
             case 'htmlText':
             case 'charset':
+            case 'encoding':
                 return $this->properties[$name];
 
             case 'options':
@@ -236,6 +241,7 @@ class ezcMailComposer extends ezcMail
             case 'plainText':
             case 'htmlText':
             case 'charset':
+            case 'encoding':
                 return isset( $this->properties[$name] );
 
             case 'options':
@@ -466,7 +472,7 @@ class ezcMailComposer extends ezcMail
                 $matches = array_unique( $matches[1] );
             }
 
-            $result = new ezcMailText( $this->htmlText, $this->charset );
+            $result = new ezcMailText( $this->htmlText, $this->charset, $this->encoding );
             $result->subType = "html";
             if ( count( $matches ) > 0 )
             {
