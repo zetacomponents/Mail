@@ -1,0 +1,15 @@
+ezcMailPartParser
+=================
+
+[ ] The function parseHeader() should be refactored. The new code has in 
+    the if() and elseif() case duplicated code that can easily be extracted
+    into a new private method.
+
+[ ] The test in trunk/Mail/tests/composer_test.php should removed the
+    added check for "charset=binary" as that is a bug in PHP (line 647ish)
+
+[ ] From reading the code, I don't think that it is possible to use
+    headers with the same name while creating mail as well. This needs to
+    be supported so that mails can be forwarded with all current headers
+    in tact. We'd need to add tests for both generation and forwarding/replying
+    here.
