@@ -1684,5 +1684,26 @@ END;
             $this->assertEquals( $expected[$i], get_class( $parts[$i] ) );
         }
     }
+
+    /**
+     * Test for issue #15341: ezcMailFileParser class function appendStreamFilters not working properly for quoted-printable
+     */
+    public function testParseQuotedPrintableMac()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/quoted-printable-mac' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        $parts = $mail->fetchParts();
+        
+        // $parts[2] is an ezcMailFile object
+        $cd = $parts[2]->contentDisposition;
+        $body = trim( file_get_contents( $parts[2]->fileName ) );
+
+        // Mac systems have a different way of handling line endings
+        $body = str_replace( "\r", "\n", $body );
+        $this->assertEquals( "PART#,DESCRIPTION,LIST PRICE,NET PRICE\n1234,LIGHTSABER,89.99,109.99", $body );
+    }
 }
 ?>

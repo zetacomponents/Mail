@@ -11,6 +11,8 @@
   encoding for text and html parts.
 - Implemented feature request #14794: Add an option to parse text attachments
   as file part instead of text part.
+- Fixed issue #15341: ezcMailFileParser class function appendStreamFilters not
+  working properly for quoted-printable.
 
 
 1.6.3 - Monday 22 June 2009

@@ -197,7 +197,7 @@ class ezcMailFileParser extends ezcMailPartParser
                 break;
             case 'quoted-printable':
                 // fetch the type of linebreak
-                preg_match( "/[\r\n|\r|\n]$/", $line, $matches );
+                preg_match( "/(\r\n|\r|\n)$/", $line, $matches );
                 $lb = count( $matches ) > 0 ? $matches[0] : ezcMailTools::lineBreak();
 
                 $param = array( 'line-break-chars' => $lb );

@@ -1,0 +1,64 @@
+Received: (qmail 3404 invoked from network); 21 Aug 2009 13:54:08 -0400
+Received: from 132202-www1.jmsonline.net (72.32.187.117)
+  by 65.17.213.77 with SMTP; 21 Aug 2009 13:53:58 -0400
+Received: from [192.168.15.100] (unknown [98.201.100.93])
+	by 132202-www1.jmsonline.net (Postfix) with ESMTP id DEED0F08CC8
+	for <supplier.feeds@roguewavelimited.com>; Fri, 21 Aug 2009 12:53:17 -0500 (CDT)
+Message-Id: <565FD84D-6FBD-4155-B4CD-CB5ADD913A42@jmsonline.net>
+From: Dario Foti <dario.foti@jmsonline.net>
+To: supplier.feeds@roguewavelimited.com
+Content-Type: multipart/alternative; boundary=Apple-Mail-155--160425984
+Mime-Version: 1.0 (Apple Message framework v936)
+Subject: KMLEVELP.CSV
+Date: Fri, 21 Aug 2009 12:53:16 -0500
+X-Mailer: Apple Mail (2.936)
+
+
+--Apple-Mail-155--160425984
+Content-Type: text/plain;
+	charset=US-ASCII;
+	format=flowed
+Content-Transfer-Encoding: 7bit
+
+
+Regards,
+
+
+Dario Foti
+JMSOnline.net
+315 Detering
+Houston, TX 77007
+ph: 832-308-3163 x 1003
+fax: 281-738-3469
+
+.
+
+
+
+--Apple-Mail-155--160425984
+Content-Type: multipart/mixed;
+	boundary=Apple-Mail-156--160425984
+
+
+--Apple-Mail-156--160425984
+Content-Type: text/html;
+	charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+<html><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; "></body></html>
+--Apple-Mail-156--160425984
+Content-Disposition: attachment;
+	filename=KMLEVELP.csv
+Content-Type: application/octet-stream;
+	x-mac-creator=5843454C;
+	x-unix-mode=0644;
+	x-mac-type=54455854;
+	name="KMLEVELP.csv"
+Content-Transfer-Encoding: quoted-printable
+
+PART#,DESCRIPTION,LIST=20PRICE,NET=20PRICE=0D1234,LIGHTSABER=
+,89.99,109.99=0D
+
+--Apple-Mail-156--160425984--
+
+--Apple-Mail-155--160425984-- 
