@@ -1701,9 +1701,7 @@ END;
         $cd = $parts[2]->contentDisposition;
         $body = trim( file_get_contents( $parts[2]->fileName ) );
 
-        // Mac systems have a different way of handling line endings
-        $body = str_replace( "\r", "\n", $body );
-        $this->assertEquals( "PART#,DESCRIPTION,LIST PRICE,NET PRICE\n1234,LIGHTSABER,89.99,109.99", $body );
+        $this->assertEquals( "PART#,DESCRIPTION,LIST PRICE,NET PRICE\r1234,LIGHTSABER,89.99,109.99", $body );
     }
 }
 ?>
