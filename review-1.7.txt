@@ -5,7 +5,7 @@ ezcMailPartParser
     the if() and elseif() case duplicated code that can easily be extracted
     into a new private method.
 
-[ ] The test in trunk/Mail/tests/composer_test.php should removed the
+[x] The test in trunk/Mail/tests/composer_test.php should removed the
     added check for "charset=binary" as that is a bug in PHP (line 647ish)
 
 [ ] From reading the code, I don't think that it is possible to use
