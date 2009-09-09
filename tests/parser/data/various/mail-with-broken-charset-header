@@ -1,0 +1,30 @@
+From - Sat Aug 29 23:48:46 2009
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <alert@example.de>
+Delivered-To: server@example2.de
+Received: from mail2.example.de (static.83-125-10-51.server.example.de [83.125.10.51])
+	by hr1.example2.de (Postfix) with ESMTP id 8DC392A4000C
+	for <server@example2.de>; Sat, 29 Aug 2009 17:07:16 +0200 (CEST)
+Received: from hostname.example.de (hostname [83.125.10.49])
+	by mail2.example.de (Postfix) with ESMTP id 21B571CE1C
+	for <server@example2.de>; Sat, 29 Aug 2009 16:09:42 +0200 (CEST)
+Date: Sat, 29 Aug 2009 16:09:41 +0200
+To: server@example2.de
+From: "example.de" <alert@example.de>
+Subject: [29.08.2009 16:09:41][hr1] Server wieder erreichbar
+Message-ID: <f12f48b092f702bb16c4b012fb29d489@hostname.example.de>
+X-Priority: 1
+X-Mailer: PHPMailer [version 1.73]
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="b1_f12f48b092f702bb16c4b012fb29d489"
+
+
+--b1_f12f48b092f702bb16c4b012fb29d489
+Content-Type: text/html; charset = "iso-8859-1"
+Content-Transfer-Encoding: 8bit
+
+wir können Ihnen mitteilen, dass einer Ihrer
+
+--b1_f12f48b092f702bb16c4b012fb29d489--

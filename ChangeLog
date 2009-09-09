@@ -13,6 +13,8 @@
   as file part instead of text part.
 - Fixed issue #15341: ezcMailFileParser class function appendStreamFilters not
   working properly for quoted-printable.
+- Fixed issue #15456: Problems with parsing emails that have "charset = "
+  instead of "charset=".
 
 
 1.6.3 - Monday 22 June 2009

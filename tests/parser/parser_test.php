@@ -1703,5 +1703,19 @@ END;
 
         $this->assertEquals( "PART#,DESCRIPTION,LIST PRICE,NET PRICE\r1234,LIGHTSABER,89.99,109.99", $body );
     }
+
+    /**
+     * Test for issue 15456: Problems with parsing emails that have "charset = " instead of "charset="
+     */
+    public function testCharsetHeader()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/mail-with-broken-charset-header' );
+        $mail = $parser->parseMail( $set );
+        $mail = $mail[0];
+
+        $parts = $mail->fetchParts();
+        $this->assertEquals( "wir können Ihnen mitteilen, dass einer Ihrer\n", $parts[0]->text );
+    }
 }
 ?>
