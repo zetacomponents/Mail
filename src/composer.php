@@ -115,7 +115,9 @@
  *           automatic inclusion of files in the generated mail.
  * @property string $charset
  *           Contains the character set for both $plainText and $htmlText.
- *           Default value is 'us-ascii'.
+ *           Default value is 'us-ascii'. This does not set any specific
+ *           charset for the subject, you need the subjectCharset property for
+ *           that.
  * @property string $encoding
  *           Contains the encoding for both $plainText and $htmlText.
  *           Default value is ezcMail::EIGHT_BIT. Other values are found
