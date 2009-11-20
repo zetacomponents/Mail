@@ -522,6 +522,11 @@ class ezcMailImapTransport
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} LOGIN {$user} {$password}" );
         $response = trim( $this->connection->getLine() );
+        // hack for gmail, to fix issue #15837: imap.google.com (google gmail) changed IMAP response
+        if ( $this->serverType === self::SERVER_GIMAP && strpos( $response, "* CAPABILITY" ) === 0 )
+        {
+            $response = trim( $this->connection->getLine() );
+        }
         if ( strpos( $response, '* OK' ) !== false )
         {
             // the server is busy waiting for authentication process to
