@@ -16,6 +16,7 @@ require_once( "composer_test.php" );
 require_once( "interfaces/part_test.php" );
 require_once( "options/transport_options_test.php" );
 require_once( "options/parser_options_test.php" );
+require_once( "options/mail_options_test.php" );
 require_once( "parts/text_part_test.php" );
 require_once( "parts/multipart_test.php" );
 require_once( "parts/multipart_digest_test.php" );
@@ -58,6 +59,7 @@ class ezcMailSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcMailPartTest::suite() );
         $this->addTest( ezcMailTransportOptionsTest::suite() );
         $this->addTest( ezcMailParserOptionsTest::suite() );
+        $this->addTest( ezcMailOptionsTest::suite() );
         $this->addTest( ezcMailTextTest::suite() );
         $this->addTest( ezcMailMultiPartTest::suite() );
         $this->addTest( ezcMailFileTest::suite() );

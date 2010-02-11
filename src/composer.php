@@ -165,7 +165,7 @@ class ezcMailComposer extends ezcMail
 
         $this->options = $options;
 
-        parent::__construct();
+        parent::__construct( $options );
     }
 
     /**

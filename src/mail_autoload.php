@@ -55,6 +55,7 @@ return array(
     'ezcMailMultipartRelatedParser'     => 'Mail/parser/parts/multipart_related_parser.php',
     'ezcMailMultipartReport'            => 'Mail/parts/multiparts/multipart_report.php',
     'ezcMailMultipartReportParser'      => 'Mail/parser/parts/multipart_report_parser.php',
+    'ezcMailOptions'                    => 'Mail/options/mail_options.php',
     'ezcMailParser'                     => 'Mail/parser/parser.php',
     'ezcMailParserOptions'              => 'Mail/options/parser_options.php',
     'ezcMailParserShutdownHandler'      => 'Mail/parser/shutdown_handler.php',

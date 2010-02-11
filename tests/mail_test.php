@@ -440,6 +440,42 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( 'No Spam', $address->name );
     }
 
+    /**
+     * Test for issue #16154: Bcc headers are not stripped when using SMTP
+     */
+    public function testKeepBccHeader()
+    {
+        $mail = new ezcMail();
+        $mail->from = new ezcMailAddress( "nospam@ez.no", "No Spam 1" );
+        $mail->addTo( new ezcMailAddress( "alex.stanoi@gmail.com", "No Spam 2" ) );
+        $mail->addBcc( new ezcMailAddress( "as@ez.no", "No Spam 3" ) );
+        $mail->subject = __FUNCTION__; 
+ 
+        $source = $mail->generate();
+
+        // Assert that the mail source contains the Bcc header
+        $this->assertNotEquals( false, strpos( $source, "Bcc: " ) );
+    }
+
+    /**
+     * Test for issue #16154: Bcc headers are not stripped when using SMTP
+     */
+    public function testStripBccHeader()
+    {
+        $options = new ezcMailOptions();
+        $options->stripBccHeader = true;
+        $mail = new ezcMail( $options );
+        $mail->from = new ezcMailAddress( "nospam@ez.no", "No Spam 1" );
+        $mail->addTo( new ezcMailAddress( "alex.stanoi@gmail.com", "No Spam 2" ) );
+        $mail->addBcc( new ezcMailAddress( "as@ez.no", "No Spam 3" ) );
+        $mail->subject = __FUNCTION__; 
+
+        $source = $mail->generate();
+
+        // Assert that the mail source doesn't contain the Bcc header
+        $this->assertEquals( false, strpos( $source, "Bcc: " ) );
+    }
+
     public function testIsSet()
     {
         $mail = new ezcMail();

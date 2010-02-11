@@ -26,6 +26,20 @@
  * $transport->send( $mail );
  * </code>
  *
+ * By default, the ezcMail class will generate a mail with the Bcc header inside,
+ * and leave it to the SMTP server to strip the Bcc header. This can pose a
+ * problem with some SMTP servers which do not strip the Bcc header
+ * (issue #16154: Bcc headers are not stripped when using SMTP). Use the option
+ * stripBccHeader from {@link ezcMailOptions} to delete the Bcc header from
+ * the mail before it is sent.
+ *
+ * Example:
+ * <code>
+ * $options = new ezcMailOptions();
+ * $options->stripBccHeader = true; // default value is false
+ *
+ * $mail = new ezcMail( $options );
+ *
  * You can also derive your own mail classes from this class if you have
  * special requirements. An example of this is the ezcMailComposer class which
  * is a convenience class to send simple mail structures and HTML mail.
@@ -60,6 +74,8 @@
  *                                       sent as Unix Timestamp.
  * @property ezcMailAddress        $returnPath Contains the Return-Path address as an
  *                                             ezcMailAddress object.
+ * @property ezcMailOptions $options
+ *           Options for generating mail. See {@link ezcMailOptions}.
  *
  * @apichange Remove the support for the deprecated property messageID.
  *
@@ -95,9 +111,16 @@ class ezcMail extends ezcMailPart
     const BASE64 = "base64";
 
     /**
+     * Holds the options for this class.
+     *
+     * @var ezcMailOptions
+     */
+    protected $options;
+
+    /**
      * Constructs an empty ezcMail object.
      */
-    public function __construct()
+    public function __construct( ezcMailOptions $options = null )
     {
         parent::__construct();
 
@@ -110,6 +133,13 @@ class ezcMail extends ezcMailPart
         $this->properties['body'] = null;
         $this->properties['messageId'] = null;
         $this->properties['returnPath'] = null;
+
+        if ( $options === null )
+        {
+            $options = new ezcMailOptions();
+        }
+
+        $this->options = $options;
     }
 
     /**
@@ -325,7 +355,7 @@ class ezcMail extends ezcMailPart
         {
             $this->setHeader( "Cc", ezcMailTools::composeEmailAddresses( $this->cc ) );
         }
-        if ( count( $this->bcc ) )
+        if ( count( $this->bcc ) && $this->options->stripBccHeader === false )
         {
             $this->setHeader( "Bcc", ezcMailTools::composeEmailAddresses( $this->bcc ) );
         }

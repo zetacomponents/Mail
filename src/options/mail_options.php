@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcMailComposerOptions class
+ * File containing the ezcMailOptions class
  *
  * @package Mail
  * @version //autogen//
@@ -9,31 +9,32 @@
  */
 
 /**
- * Class containing the options for the mail composer.
+ * Class containing the options for the mail generator.
  *
- * Example of how to use the composer options:
+ * Example of how to use the mail options:
  * <code>
- * $options = new ezcMailComposerOptions();
- * $options->automaticImageInclude = false; // default value is true
+ * $options = new ezcMailOptions();
+ * $options->stripBccHeader = true; // default value is false
  *
- * $mail = new ezcMailComposer( $options );
+ * $mail = new ezcMail( $options );
  * </code>
  *
  * Alternatively, you can set the options direcly:
  * <code>
- * $mail = new ezcMailComposer();
- * $mail->options->automaticImageInclude = false;
+ * $mail = new ezcMail();
+ * $mail->options->stripBccHeader = true;
  * </code>
  *
- * @property bool $automaticImageInclude
- *           Specifies whether to include in the generated mail the content of
- *           the files specified with "file://" in image tags. Default value
- *           is true (the contents are included).
+ * @property bool $stripBccHeader
+ *           Specifies whether to strip the Bcc header from a mail before
+ *           sending it. This can prevent problems with certain SMTP servers
+ *           where the Bcc header appears visible to the To and Cc recipients
+ *           (issue #16154: Bcc headers are not stripped when using SMTP).
  *
  * @package Mail
  * @version //autogen//
  */
-class ezcMailComposerOptions extends ezcMailOptions
+class ezcMailOptions extends ezcBaseOptions
 {
     /**
      * Constructs an object with the specified values.
@@ -46,7 +47,7 @@ class ezcMailComposerOptions extends ezcMailOptions
      */
     public function __construct( array $options = array() )
     {
-        $this->automaticImageInclude = true; // default is to include the contents of "file://" from image tags
+        $this->stripBccHeader = false; // default is to not strip the Bcc header
 
         parent::__construct( $options );
     }
@@ -66,7 +67,7 @@ class ezcMailComposerOptions extends ezcMailOptions
     {
         switch ( $propertyName )
         {
-            case 'automaticImageInclude':
+            case 'stripBccHeader':
                 if ( !is_bool( $propertyValue ) )
                 {
                     throw new ezcBaseValueException( $propertyName, $propertyValue, 'bool' );
@@ -76,7 +77,7 @@ class ezcMailComposerOptions extends ezcMailOptions
                 break;
 
             default:
-                parent::__set( $propertyName, $propertyValue );
+                throw new ezcBasePropertyNotFoundException( $propertyName );
         }
     }
 }

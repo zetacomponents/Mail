@@ -268,6 +268,19 @@ thrown.
 .. include:: tutorial/tutorial_smtp_auth.php
    :literal:
 
+Avoid Bcc headers appearing in the sent mails
+---------------------------------------------
+
+By default the Mail component leaves it to the SMTP server to strip the Bcc
+header from the sent mails. Some SMTP servers will not strip the Bcc header. If
+you want to be sure that the Bcc header will not appear in sent mails, use
+the stripBccHeader option from ezcMailOptions::
+
+    $options = new ezcMailOptions();
+    $options->stripBccHeader = true; // default is false
+
+    $mail = new ezcMail( $options );
+
 Character encoding
 ------------------
 
