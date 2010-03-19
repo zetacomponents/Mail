@@ -311,6 +311,54 @@ class ezcMailComposerTest extends ezcTestCase
         $this->assertEquals( "<html>Some text before the image: file://" . dirname( __FILE__ ) . "/parts/data/fly.jpg </html>", $mail->body->text );
     }
 
+    public function testMailHtmlWithImagesBug16347()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: <img class=\"foo\" src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\" />Here is some text after the image.";
+        $this->mail->build();
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
+    public function testMailHtmlWithImagesBug16348_1()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: <img class=\"foo\" src='file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly with whitespace.jpg' />Here is some text after the image.";
+        $this->mail->build();
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
+    public function testMailHtmlWithImagesBug16348_2()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: <img class=\"foo\" src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly with whitespace.jpg\" />Here is some text after the image.";
+        $this->mail->build();
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
+    public function testMailHtmlWithImagesBug16348_3()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: <img class=\"foo\" src=file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg />Here is some text after the image.";
+        $this->mail->build();
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
+
     /**
      * Tests a complete mail with html images and files
      * http://www.apps.ietf.org/msglint.html - validator
@@ -360,7 +408,7 @@ class ezcMailComposerTest extends ezcTestCase
             $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
             $this->mail->subject = "HTML message with embeded files and images.";
             $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
-                                       . realpath( $fileName ) . " />Here is some text after the image. Here is the <a href=\"file://"
+                                       . realpath( $fileName ) . "\" />Here is some text after the image. Here is the <a href=\"file://"
                                        . dirname( __FILE__  )
                                        . "/parts/data/fly.jpg\">file.</a></html>";
             $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );

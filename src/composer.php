@@ -469,9 +469,19 @@ class ezcMailComposer extends ezcMail
             if ( $this->options->automaticImageInclude === true )
             {
                 // recognize file:// and file:///, pick out the image, add it as a part and then..:)
-                preg_match_all( "/<img[\s\*\s]src=[\'\"]file:\/\/([^ >\'\"]+)/i", $this->htmlText, $matches );
+                preg_match_all( '(
+                    <img \\s+[^>]*
+                        src\\s*=\\s*
+                            (?:
+                                (?# Match quoted attribute)
+                                ([\'"])file://(?P<quoted>[^>]+)\\1
+
+                                (?# Match unquoted attribute, which may not contain spaces)
+                            |   file://(?P<unquoted>[^>\\s]+)
+                        )
+                    [^>]* >)ix', $this->htmlText, $matches );
                 // pictures/files can be added multiple times. We only need them once.
-                $matches = array_unique( $matches[1] );
+                $matches = array_filter( array_unique( array_merge( $matches['quoted'], $matches['unquoted'] ) ) );
             }
 
             $result = new ezcMailText( $this->htmlText, $this->charset, $this->encoding );
