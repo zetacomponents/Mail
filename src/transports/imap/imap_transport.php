@@ -395,7 +395,14 @@ class ezcMailImapTransport
      */
     public function __destruct()
     {
-        $this->disconnect();
+        try 
+        {
+            $this->disconnect();
+        }
+        catch ( ezcMailTransportException $e )
+        {
+            // Ignore occuring transport exceptions.
+        }
     }
 
     /**

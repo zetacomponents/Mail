@@ -1,7 +1,8 @@
 1.7.1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- No changes.
+- Fixed #16470: Mail test suite causes fatal errors because of transport
+  errors in destructor.
 
 
 1.7 - Monday 21 December 2009

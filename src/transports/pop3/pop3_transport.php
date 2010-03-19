@@ -221,9 +221,16 @@ class ezcMailPop3Transport
     {
         if ( $this->state != self::STATE_NOT_CONNECTED )
         {
-            $this->connection->sendData( 'QUIT' );
-            $this->connection->getLine(); // discard
-            $this->connection->close();
+            try 
+            {
+                $this->connection->sendData( 'QUIT' );
+                $this->connection->getLine(); // discard
+                $this->connection->close();
+            }
+            catch ( ezcMailTransportException $e )
+            {
+                // Ignore occuring transport exceptions.
+            }
         }
     }
 
