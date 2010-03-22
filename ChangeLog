@@ -2,12 +2,12 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed #16154: Bcc headers are not stripped when using SMTP.
-- Fixed #16470: Mail test suite causes fatal errors because of transport
-  errors in destructor.
-- Fixed #16348: Adding inline images in the mail composer with whitespace in
-  the path fails.
 - Fixed #16347: Inline images in the mail composer are not added other
   attributes precede the src attribute.
+- Fixed #16348: Adding inline images in the mail composer with whitespace in
+  the path fails.
+- Fixed #16470: Mail test suite causes fatal errors because of transport
+  errors in destructor.
 
 
 1.7 - Monday 21 December 2009
