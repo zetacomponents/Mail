@@ -380,7 +380,7 @@ class ezcMailToolsTest extends ezcTestCase
             "ezcMailExtended"
         );
 
-        $this->assertType(
+        $this->assertInstanceOf(
             "ezcMailExtended",
             $reply,
             "replyToMail created incorrect class instance."

@@ -861,7 +861,7 @@ END;
         $mail = $parser->parseMail( $set, "ExtendedMail" );
         foreach ( $set as $mail )
         {
-            $this->assertType(
+            $this->assertInstanceOf(
                 "ExtendedMail",
                 $mail,
                 "Parser did not create instance of extended mail class."
@@ -875,7 +875,7 @@ END;
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'kmail/simple_mail_with_text_subject_and_body.mail' );
         $mail = $parser->parseMail( $set );
-        $this->assertType(
+        $this->assertInstanceOf(
             "ezcMailHeadersHolder",
             $mail[0]->headers
         );
