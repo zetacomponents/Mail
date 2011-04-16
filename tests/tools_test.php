@@ -387,6 +387,27 @@ class ezcMailToolsTest extends ezcTestCase
         );
     }
 
+	// test for ZETACOMP-76
+    public function testReplyToSelf()
+    {
+        $parser = new ezcMailParser();
+        $set = new ezcMailFileSet( array( dirname( __FILE__ )
+                                          . '/parser/data/various/multiple_recipients' ) );
+        $mail = $parser->parseMail( $set );
+
+        $reply = ezcMailTools::replyToMail( $mail[0],
+                                            new ezcMailAddress( 'test@example.com', 'Reply Guy' ),
+                                            ezcMailTools::REPLY_SENDER, 'Antwoord: ' );
+
+        $this->assertEquals( array( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen', 'utf-8' ) ),
+                             $reply->to );
+        $this->assertEquals( new ezcMailAddress( 'test@example.com', 'Reply Guy' ), $reply->from );
+        $this->assertEquals( array(), $reply->cc );
+        $this->assertEquals( 'Antwoord: Simple mail with text subject and body', $reply->subject );
+        $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'In-Reply-To' ) );
+        $this->assertEquals( '<1234.567@example.com> <200602061533.27600.fh@ez.no>', $reply->getHeader( 'References' ) );
+    }
+
     public function testReplyToAll()
     {
         $parser = new ezcMailParser();

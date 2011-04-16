@@ -42,7 +42,7 @@ class ezcMailTools
     /**
      * Reply to all.
      */
-    const REPLY_ALL = 1;
+    const REPLY_ALL = 2;
 
     /**
      * Server to use for validateEmailAddressMx(). Change this if this server

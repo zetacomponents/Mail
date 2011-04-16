@@ -10,6 +10,8 @@
   errors in destructor.
 - Fixed #ZETACOMP-75: Mail parser doesn't understand uppercase "CHARSET" that
   alpine uses.
+- Fixed #ZETACOMP-76: MailTools::replyTo will always use REPLY_ALL instead of
+  distinguishing between REPLY_ALL and REPLY_SENDER.
 
 
 1.7 - Monday 21 December 2009
