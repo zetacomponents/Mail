@@ -12,6 +12,8 @@
   alpine uses.
 - Fixed #ZETACOMP-76: MailTools::replyTo will always use REPLY_ALL instead of
   distinguishing between REPLY_ALL and REPLY_SENDER.
+- Fixed #ZETACOMP-77: Mail still uses "eZ Components" as User-Agent, which
+  should be "Apache Zeta Components".
 
 
 1.7 - Monday 21 December 2009

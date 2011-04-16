@@ -379,7 +379,7 @@ class ezcMail extends ezcMailPart
         $this->setHeader( 'Subject', $this->subject, $this->subjectCharset );
 
         $this->setHeader( 'MIME-Version', '1.0' );
-        $this->setHeader( 'User-Agent', 'eZ Components' );
+        $this->setHeader( 'User-Agent', 'Apache Zeta Components' );
         $this->setHeader( 'Date', date( 'r' ) );
         $idhost = $this->from != null && $this->from->email != '' ? $this->from->email : 'localhost';
         if ( is_null( $this->messageId ) )

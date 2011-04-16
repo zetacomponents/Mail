@@ -81,7 +81,7 @@ class ezcMailTest extends ezcTestCase
             "Bcc: amos@ez.no" . ezcMailTools::lineBreak() .
             "Subject: " . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -99,7 +99,7 @@ class ezcMailTest extends ezcTestCase
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: Dette er en test" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -118,7 +118,7 @@ class ezcMailTest extends ezcTestCase
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: =?ISO-8859-1?Q?D=F8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -141,7 +141,7 @@ class ezcMailTest extends ezcTestCase
             "Bcc: =?ISO-8859-1?Q?Fr=E6derik=20H=F8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: =?ISO-8859-1?Q?D=F8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -160,7 +160,7 @@ class ezcMailTest extends ezcTestCase
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: Dette er en test" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -179,7 +179,7 @@ class ezcMailTest extends ezcTestCase
             "To: Frederik Holljen <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: =?UTF-8?Q?D=C3=B8tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -202,7 +202,7 @@ class ezcMailTest extends ezcTestCase
             "Bcc: =?UTF-8?Q?Fr=C3=A6derik=20H=C3=B8lljen?= <fh@ez.no>" . ezcMailTools::lineBreak() .
             "Subject: =?UTF-8?Q?D=C3=A4tte=20er=20en=20test?=" . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
@@ -379,7 +379,7 @@ class ezcMailTest extends ezcTestCase
             " nospam6@ez.no, nospam7@ez.no" . ezcMailTools::lineBreak() .
             "Subject: " . ezcMailTools::lineBreak() .
             "MIME-Version: 1.0" . ezcMailTools::lineBreak() .
-            "User-Agent: eZ Components";
+            "User-Agent: Apache Zeta Components";
 
         $return = $this->mail->generate();
         // cut away the Date and Message-ID headers as there is no way to predict what they will be
