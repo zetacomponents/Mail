@@ -8,6 +8,8 @@
   the path fails.
 - Fixed #16470: Mail test suite causes fatal errors because of transport
   errors in destructor.
+- Fixed #ZETACOMP-75: Mail parser doesn't understand uppercase "CHARSET" that
+  alpine uses.
 
 
 1.7 - Monday 21 December 2009

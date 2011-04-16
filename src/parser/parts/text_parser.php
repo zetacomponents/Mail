@@ -95,7 +95,7 @@ class ezcMailTextParser extends ezcMailPartParser
         $charset = "us-ascii"; // RFC 2822 default
         if ( isset( $this->headers['Content-Type'] ) )
         {
-            preg_match( '/\s*charset\s?=\s?"?([^;"\s]*);?/',
+            preg_match( '/\s*charset\s?=\s?"?([^;"\s]*);?/i',
                             $this->headers['Content-Type'],
                             $parameters );
             if ( count( $parameters ) > 0 )
