@@ -524,6 +524,28 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( "This is the body with æøå", $parts[0]->text );
     }
 
+    public function testAlpineCharset()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'pine/uppercase-charset.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $this->assertEquals( new ezcMailAddress( 'derick@example.org', 'Derick Rethans', 'utf-8' ), $mail->from );
+        $this->assertEquals( array( new ezcMailAddress( 'louis.hache@example.com', 'HACHE, Louis', 'utf-8' ) ), $mail->to );
+        $this->assertEquals( array( new ezcMailAddress( 'derick@example.org', 'Derick Rethans', 'utf-8' ) ), $mail->bcc );
+        $this->assertEquals( array(), $mail->cc );
+        $this->assertEquals( 'RE: [xdebug-general] Xdebug & crappy firewall', $mail->subject );
+        $this->assertEquals( 'utf-8', $mail->subjectCharset );
+        $this->assertEquals( true, $mail->body instanceof ezcMailText );
+        $this->assertEquals( "utf-8", $mail->body->originalCharset );
+        $this->assertEquals( "utf-8", $mail->body->charset );
+        $this->assertEquals( 'madeup', $mail->body->subType );
+
+        $this->assertEquals( 1301496986, $mail->timestamp );
+        $this->assertEquals( 1301496986, strtotime( $mail->getHeader( 'Date' ) ) );
+    }
+
     // 
     // Hotmail
     // 

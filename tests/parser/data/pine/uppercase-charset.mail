@@ -1,0 +1,47 @@
+From derick@example.com Wed Mar 30 15:56:27 2011 +0100
+Date: Wed, 30 Mar 2011 15:56:26 +0100 (BST)
+From: Derick Rethans <derick@example.org>
+X-X-Sender: derick@whisky
+To: "HACHE, Louis" <louis.hache@example.com>
+bcc: Derick Rethans <derick@example.org>
+Subject: RE: [xdebug-general] Xdebug & crappy firewall
+In-Reply-To: <13984_1301484192_4D9312A0_13984_430_1_182BB42C807C6E4D8F73FE42714573183990B033F1@DE0-MAILMBX-P13.res.example.corp>
+Message-ID: <alpine.DEB.2.02.1103301259170.27738@whisky>
+References: <32555_1301480572_4D93047C_32555_788_1_182BB42C807C6E4D8F73FE42714573183990B032B9@DE0-MAILMBX-P13.res.example.corp> <26986_1301481877_4D930995_26986_2307_3_alpine.DEB.2.02.1103301143540.27738@whisky>
+ <13984_1301484192_4D9312A0_13984_430_1_182BB42C807C6E4D8F73FE42714573183990B033F1@DE0-MAILMBX-P13.res.example.corp>
+User-Agent: Alpine 2.02 (DEB 1266 2009-07-14)
+MIME-Version: 1.0
+Content-Type: TEXT/MADEUP; CHARSET=UTF-8
+Status: RO
+X-Status: 
+X-Keywords:                 
+X-UID: 18085
+
+On Wed, 30 Mar 2011, HACHE, Louis wrote:
+
+> On Wed, 20 Mar 2011, Derick Rethans wrote:
+> 
+> > On Wed, 30 Mar 2011, HACHE, Louis wrote:
+> > 
+> > > I'm working on a PHP project with netbeans and xdebug. All is 
+> > > working fine except that there's a crappy firewall which analyses 
+> > > every data transfer on the localhost. Moreover, my computer is 
+> > > really slow. Due to these to things, i can't work, my computer 
+> > > freezes and i have to reboot netbeans and apache.
+> > > 
+> > > Is there a way to configure xdebug in order that he works with a 
+> > > socket and not TCP or UDP or whatever. I want to bypass the 
+> > > firewall.
+> > 
+> > What sort of socket do you mean? You mean unix domain, or Windows 
+> > pipes?
+> 
+That's all right. Everybody makes mistakes :-) I probably could add this 
+to Xdebug quite easily, but the thing is, the protocol specs don't 
+support it (yet) and neither of course will IDEs. If you can get 
+netbeans people willing to commit to adding Windows pipe support as 
+well, then I'll have a look at getting Xdebug to support it.
+
+cheers,
+Derick
+twitter: @derickr and @xdebug
