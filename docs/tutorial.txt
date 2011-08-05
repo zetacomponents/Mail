@@ -686,6 +686,22 @@ available on the next request.
 .. _iconv: http://php.net/manual/en/function.iconv.php
 
 
+Security
+========
+
+Excluding the User-Agent header
+-------------------------------
+
+By defaul the Mail component will add the "User-Agent" header containing the
+string "Apache Zeta Components". This can be considered a security issue. If
+you do not want to get this header sent along with the email you can use the
+following code: ::
+
+    $mail = new ezcMailComposer();
+    // [...]
+    $mail->appendExcludeHeaders(array('User-Agent'));
+
+
 
 ..
    Local Variables:
