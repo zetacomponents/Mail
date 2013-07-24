@@ -50,10 +50,11 @@
     "license": "Apache-2.0",
     "name": "zetacomponents/mail",
     "type": "library",
-        "require": {
-            "zetacomponents/base": "*"
-        },
-        "require-dev": {
-            "zetacomponents/unit-test": "*"
-        }
+    "require": {
+        "zetacomponents/base": "*"
+    },
+    "require-dev": {
+        "zetacomponents/unit-test": "*"
+    },
+    "minimum-stability": "dev"
 }

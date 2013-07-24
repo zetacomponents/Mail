@@ -1,17 +1,134 @@
 {
-    "hash": "d7d156a2ed47dc191fee9a3741384cd2",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "05387ad91d765d4b2cf4664089d92afe",
     "packages": [
         {
-            "package": "zetacomponents/base",
+            "name": "zetacomponents/base",
             "version": "dev-master",
-            "source-reference": "d6f1d9179ebe56637b559570b0258b83b6a57554"
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zetacomponents/Base.git",
+                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zetacomponents/Base/zipball/642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+                "shasum": ""
+            },
+            "require-dev": {
+                "zetacomponents/unit-test": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Alexeev"
+                },
+                {
+                    "name": "Sebastian Bergmann"
+                },
+                {
+                    "name": "Jan Borsodi"
+                },
+                {
+                    "name": "Raymond Bosman"
+                },
+                {
+                    "name": "Frederik Holljen"
+                },
+                {
+                    "name": "Kore Nordmann"
+                },
+                {
+                    "name": "Derick Rethans"
+                },
+                {
+                    "name": "Vadym Savchuk"
+                },
+                {
+                    "name": "Tobias Schlitt"
+                },
+                {
+                    "name": "Alexandru Stanoi"
+                }
+            ],
+            "description": "The Base package provides the basic infrastructure that all packages rely on. Therefore every component relies on this package.",
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 11:21:36"
         }
     ],
     "packages-dev": [
         {
-            "package": "zetacomponents/unit-test",
+            "name": "zetacomponents/unit-test",
             "version": "dev-master",
-            "source-reference": "6d117e709ad5ade03a5cd395bcc80adb7fee68fc"
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zetacomponents/UnitTest.git",
+                "reference": "772d6e651cb90c6de10f975b2e323df98d1e4a2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zetacomponents/UnitTest/zipball/772d6e651cb90c6de10f975b2e323df98d1e4a2c",
+                "reference": "772d6e651cb90c6de10f975b2e323df98d1e4a2c",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "apache2"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Alexeev"
+                },
+                {
+                    "name": "Sebastian Bergmann"
+                },
+                {
+                    "name": "Jan Borsodi"
+                },
+                {
+                    "name": "Raymond Bosman"
+                },
+                {
+                    "name": "Frederik Holljen"
+                },
+                {
+                    "name": "Kore Nordmann"
+                },
+                {
+                    "name": "Derick Rethans"
+                },
+                {
+                    "name": "Vadym Savchuk"
+                },
+                {
+                    "name": "Tobias Schlitt"
+                },
+                {
+                    "name": "Alexandru Stanoi"
+                }
+            ],
+            "description": "zetacomponents/unit-test Component",
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:51:20"
         }
     ],
     "aliases": [
@@ -19,6 +136,12 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
 
     ]
 }
