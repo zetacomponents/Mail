@@ -207,6 +207,25 @@ class ezcMailPartTest extends ezcTestCase
         $this->assertEquals( $expected, $this->part->generateHeaders() );
     }
 
+    public function testSetHeaderWithEncodingMultiByte()
+    {
+        if ( !extension_loaded( 'mbstring' ) )
+        {
+            $this->markTestSkipped( 'mbstring extension not loaded.' );
+        }
+
+        $str = 'Folder "ログイン前トップ" は更新されま';
+        $this->part->setHeader( 'X-Subject', $str, 'utf-8' );
+        $this->assertSame( $str, $this->part->getHeader( 'X-Subject' ) );
+
+        $expected = "X-Subject: Folder =?UTF-8?Q?=22=C3=A3=C2=83=C2=AD=C3=A3=C2=82=C2=B0=C3=A3=C2=82?=" . ezcMailTools::lineBreak() .
+                    " =?UTF-8?Q?=C2=A4=C3=A3=C2=83=C2=B3=C3=A5=C2=89=C2=8D=C3=A3=C2=83=C2=88?=" . ezcMailTools::lineBreak() .
+                    " =?UTF-8?Q?=C3=A3=C2=83=C2=83=C3=A3=C2=83=C2=97=22=20=C3=A3=C2=81=C2=AF?=" . ezcMailTools::lineBreak() .
+                    " =?UTF-8?Q?=C3=A6=C2=9B=C2=B4=C3=A6=C2=96=C2=B0=C3=A3=C2=81=C2=95=C3=A3?=" . ezcMailTools::lineBreak() .
+                    " =?UTF-8?Q?=C2=82=C2=8C=C3=A3=C2=81=C2=BE?=" . ezcMailTools::lineBreak();
+        $this->assertSame( $expected, $this->part->generateHeaders() );
+    }
+
     public function testSetHeadersWithEncoding()
     {
         $this->part->setHeaders( array( "X-Related-City" => array( "Moscow" ), "X-Related-Movie" => array( 'James Bond - Из России с любовью', 'iso-8859-5' ) ) );
