@@ -97,7 +97,7 @@ class ezcMailMultipartRelated extends ezcMailMultipart
             }
             else
             {
-                $part->setHeader( 'Content-ID', ezcMailTools::generateContentId( 'part' ) );
+                $part->setHeader( 'Content-ID', '<' . ezcMailTools::generateContentId( 'part' ) . '>' );
             }
         }
         $contentId = trim( $part->getHeader( 'Content-ID' ), '<>' );
