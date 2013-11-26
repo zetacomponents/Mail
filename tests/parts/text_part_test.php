@@ -1,5 +1,4 @@
 <?php
-declare(encoding="latin1");
 /**
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @version //autogentag//
