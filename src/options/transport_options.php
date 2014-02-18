@@ -51,6 +51,8 @@ class ezcMailTransportOptions extends ezcBaseOptions
     {
         $this->timeout = 5; // default value for timeout is 5 seconds
         $this->ssl = false; // default value for ssl is false
+        $this->flags = STREAM_CLIENT_CONNECT; // default value for flags is STREAM_CLIENT_CONNECT
+        $this->context = null; // default value for context is null
 
         parent::__construct( $options );
     }
@@ -82,6 +84,22 @@ class ezcMailTransportOptions extends ezcBaseOptions
                 if ( !is_bool( $value ) )
                 {
                     throw new ezcBaseValueException( $name, $value, 'bool' );
+                }
+                $this->properties[$name] = $value;
+                break;
+
+            case 'flags':
+                if ( !in_array( $value, array(STREAM_CLIENT_CONNECT, STREAM_CLIENT_ASYNC_CONNECT, STREAM_CLIENT_PERSISTENT) ) )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'one of STREAM_CLIENT_CONNECT, STREAM_CLIENT_ASYNC_CONNECT, STREAM_CLIENT_PERSISTENT' );
+                }
+                $this->properties[$name] = $value;
+                break;
+
+            case 'context':
+                if ( !is_resource($value) )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'stream context resource' );
                 }
                 $this->properties[$name] = $value;
                 break;
