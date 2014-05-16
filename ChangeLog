@@ -1,4 +1,4 @@
-1.7.1 - [RELEASEDATE]
+1.8beta1 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed #16154: Bcc headers are not stripped when using SMTP.
@@ -14,6 +14,10 @@
   distinguishing between REPLY_ALL and REPLY_SENDER.
 - Fixed #ZETACOMP-77: Mail still uses "eZ Components" as User-Agent, which
   should be "Apache Zeta Components".
+- Fixed #7: PREG_REPLACE_EVAL is deprecated, use preg_replace_callback
+- Fixed #8: Fixed header Mime encoding failing using multi-byte characters
+- Fixed #9: Fixed composer.json to use dev-master for unit-test component,
+  since there is no stable release of it.
 
 
 1.7 - Monday 21 December 2009

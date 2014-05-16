@@ -73,12 +73,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zetacomponents/UnitTest.git",
-                "reference": "772d6e651cb90c6de10f975b2e323df98d1e4a2c"
+                "reference": "f60b1c72a2843d462720ba82934e6b3ceb013fd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zetacomponents/UnitTest/zipball/772d6e651cb90c6de10f975b2e323df98d1e4a2c",
-                "reference": "772d6e651cb90c6de10f975b2e323df98d1e4a2c",
+                "url": "https://api.github.com/repos/zetacomponents/UnitTest/zipball/f60b1c72a2843d462720ba82934e6b3ceb013fd7",
+                "reference": "f60b1c72a2843d462720ba82934e6b3ceb013fd7",
                 "shasum": ""
             },
             "type": "library",
@@ -87,7 +87,7 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "notification-url": "http://packagist.org/downloads/",
             "license": [
                 "apache2"
             ],
@@ -125,7 +125,7 @@
             ],
             "description": "zetacomponents/unit-test Component",
             "homepage": "https://github.com/zetacomponents",
-            "time": "2012-05-21 09:51:20"
+            "time": "2013-12-21 11:12:59"
         }
     ],
     "aliases": [
