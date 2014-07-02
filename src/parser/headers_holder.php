@@ -108,13 +108,24 @@ class ezcMailHeadersHolder implements ArrayAccess
         $lowerKey = strtolower( $key );
         if ( !array_key_exists( $lowerKey, $this->lookup ) )
         {
-            $this->map[$key] = $value;
+            $this->map[$key] = $this->trimRecursive($value);
             $this->lookup[$lowerKey] = $key;
         }
         else // use old case
         {
-            $this->map[$this->lookup[$lowerKey]] = $value;
+            $this->map[$this->lookup[$lowerKey]] = $this->trimRecursive($value);
         }
+    }
+
+    /**
+     * @param string|array $value
+     * @return array|string
+     */
+    private function trimRecursive($value) {
+        if (is_array($value)) {
+            return array_map(array($this, 'trimRecursive'), $value);
+        }
+        return trim($value);
     }
 
     /**

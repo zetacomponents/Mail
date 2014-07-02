@@ -755,6 +755,34 @@ END;
         $this->assertEquals( 'mail.php', basename( $parts[1]->fileName ) );
     }
 
+    public function testVarious8() {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet('various/test-html-text-and-attachment-weird-content-type-header');
+        $mail = $parser->parseMail($set);
+        $this->assertEquals(1, count($mail));
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        $this->assertEquals(2, count($parts));
+        $this->assertEquals('ezcMailMultipartAlternative', get_class($parts[0]));
+
+        $subParts = $parts[0]->getParts();
+        $this->assertEquals(2, count($subParts));
+        $this->assertEquals('ezcMailText', get_class($subParts[0]));
+        $this->assertEquals('ezcMailMultipartRelated', get_class($subParts[1]));
+
+        $subMainPart = $subParts[1]->getMainPart();
+        $this->assertEquals('ezcMailText', get_class($subMainPart));
+
+        $subRelatedParts = $subParts[1]->getRelatedParts();
+        $this->assertEquals(1, count($subRelatedParts));
+        $this->assertEquals('ezcMailFile', get_class($subRelatedParts[0]));
+        $this->assertEquals('consoletools-table.png', basename($subRelatedParts[0]->fileName));
+
+        $this->assertEquals('ezcMailFile', get_class($parts[1]));
+        $this->assertEquals('mail.php', basename($parts[1]->fileName));
+    }
+
     // we currently don't have PGP support
     // check that the signature does not show up in the multipart body
     public function testPGPSignature()

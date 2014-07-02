@@ -38,11 +38,13 @@ class ezcMailHeadersHolderTest extends ezcTestCase
 
     public function testSet()
     {
-        $reference = array( 'Subject' => 2, 'tO' => 3 );
+        $reference = array( 'Subject' => 2, 'tO' => 3 , 'trimTest' => 'foo', 'trimTestArray' => array('foo'));
         $map = new ezcMailHeadersHolder();
         $map['Subject'] = 1;
         $map['suBject'] = 2;
         $map['tO'] = 3;
+        $map['trimTest'] = ' foo ';
+        $map['trimTestArray'] = array(' foo ');
         $this->assertEquals( $reference, $map->getCaseSensitiveArray() );
     }
 
