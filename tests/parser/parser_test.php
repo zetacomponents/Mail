@@ -21,9 +21,9 @@ class ezcMailParserTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( "ezcMailParserTest" );
     }
 
-    // 
+    //
     // Kmail
-    // 
+    //
     public function testKmail1()
     {
         $parser = new ezcMailParser();
@@ -167,9 +167,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<200602061538.16305.fh@ez.no>', $mail->messageID );
     }
 
-    // 
+    //
     // Mail.app
-    // 
+    //
 
     public function testMailApp1()
     {
@@ -217,9 +217,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
-    // 
+    //
     // Gmail
-    // 
+    //
     public function testGmail1()
     {
         $parser = new ezcMailParser();
@@ -319,9 +319,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<span', substr( $parts[1]->text, 0, 5 ) );
     }
 
-    // 
+    //
     // Opera
-    // 
+    //
 
     public function testOpera()
     {
@@ -394,9 +394,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
-    // 
+    //
     // Pine
-    // 
+    //
     public function testPine1()
     {
         $parser = new ezcMailParser();
@@ -545,9 +545,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1301496986, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
-    // 
+    //
     // Hotmail
-    // 
+    //
     public function testHotmail1()
     {
         $parser = new ezcMailParser();
@@ -918,7 +918,7 @@ END;
         }
 
     }
-    
+
     public function testHeadersHolder()
     {
         $parser = new ezcMailParser();
@@ -1396,7 +1396,7 @@ END;
         $this->assertEquals( 97, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
-    
+
 
     public function testIconvCharsetConverterIconvTranslit1()
     {
@@ -1643,7 +1643,7 @@ END;
         $parser->options->fileClass = 'myCustomFileClass';
 
         // to catch also the case with a custom mail class (it doesn't influence the test)
-        $parser->options->mailClass = 'ExtendedMail'; 
+        $parser->options->mailClass = 'ExtendedMail';
 
         $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
         $mail = $parser->parseMail( $set );
@@ -1744,7 +1744,7 @@ END;
         $mail = $mail[0];
 
         $parts = $mail->fetchParts();
-        
+
         // $parts[2] is an ezcMailFile object
         $cd = $parts[2]->contentDisposition;
         $body = trim( file_get_contents( $parts[2]->fileName ) );
