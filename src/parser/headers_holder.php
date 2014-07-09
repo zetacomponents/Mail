@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -108,13 +108,24 @@ class ezcMailHeadersHolder implements ArrayAccess
         $lowerKey = strtolower( $key );
         if ( !array_key_exists( $lowerKey, $this->lookup ) )
         {
-            $this->map[$key] = $value;
+            $this->map[$key] = $this->trimRecursive($value);
             $this->lookup[$lowerKey] = $key;
         }
         else // use old case
         {
-            $this->map[$this->lookup[$lowerKey]] = $value;
+            $this->map[$this->lookup[$lowerKey]] = $this->trimRecursive($value);
         }
+    }
+
+    /**
+     * @param string|array $value
+     * @return array|string
+     */
+    private function trimRecursive($value) {
+        if (is_array($value)) {
+            return array_map(array($this, 'trimRecursive'), $value);
+        }
+        return trim($value);
     }
 
     /**

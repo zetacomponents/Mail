@@ -21,9 +21,9 @@ class ezcMailParserTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( "ezcMailParserTest" );
     }
 
-    // 
+    //
     // Kmail
-    // 
+    //
     public function testKmail1()
     {
         $parser = new ezcMailParser();
@@ -167,9 +167,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<200602061538.16305.fh@ez.no>', $mail->messageID );
     }
 
-    // 
+    //
     // Mail.app
-    // 
+    //
 
     public function testMailApp1()
     {
@@ -217,9 +217,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1142414084, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
-    // 
+    //
     // Gmail
-    // 
+    //
     public function testGmail1()
     {
         $parser = new ezcMailParser();
@@ -319,9 +319,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( '<span', substr( $parts[1]->text, 0, 5 ) );
     }
 
-    // 
+    //
     // Opera
-    // 
+    //
 
     public function testOpera()
     {
@@ -394,9 +394,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 'jpeg', $parts[1]->mimeType );
     }
 
-    // 
+    //
     // Pine
-    // 
+    //
     public function testPine1()
     {
         $parser = new ezcMailParser();
@@ -545,9 +545,9 @@ class ezcMailParserTest extends ezcTestCase
         $this->assertEquals( 1301496986, strtotime( $mail->getHeader( 'Date' ) ) );
     }
 
-    // 
+    //
     // Hotmail
-    // 
+    //
     public function testHotmail1()
     {
         $parser = new ezcMailParser();
@@ -755,6 +755,34 @@ END;
         $this->assertEquals( 'mail.php', basename( $parts[1]->fileName ) );
     }
 
+    public function testVarious8() {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet('various/test-html-text-and-attachment-weird-content-type-header');
+        $mail = $parser->parseMail($set);
+        $this->assertEquals(1, count($mail));
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        $this->assertEquals(2, count($parts));
+        $this->assertEquals('ezcMailMultipartAlternative', get_class($parts[0]));
+
+        $subParts = $parts[0]->getParts();
+        $this->assertEquals(2, count($subParts));
+        $this->assertEquals('ezcMailText', get_class($subParts[0]));
+        $this->assertEquals('ezcMailMultipartRelated', get_class($subParts[1]));
+
+        $subMainPart = $subParts[1]->getMainPart();
+        $this->assertEquals('ezcMailText', get_class($subMainPart));
+
+        $subRelatedParts = $subParts[1]->getRelatedParts();
+        $this->assertEquals(1, count($subRelatedParts));
+        $this->assertEquals('ezcMailFile', get_class($subRelatedParts[0]));
+        $this->assertEquals('consoletools-table.png', basename($subRelatedParts[0]->fileName));
+
+        $this->assertEquals('ezcMailFile', get_class($parts[1]));
+        $this->assertEquals('mail.php', basename($parts[1]->fileName));
+    }
+
     // we currently don't have PGP support
     // check that the signature does not show up in the multipart body
     public function testPGPSignature()
@@ -890,7 +918,7 @@ END;
         }
 
     }
-    
+
     public function testHeadersHolder()
     {
         $parser = new ezcMailParser();
@@ -1368,7 +1396,7 @@ END;
         $this->assertEquals( 97, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
-    
+
 
     public function testIconvCharsetConverterIconvTranslit1()
     {
@@ -1615,7 +1643,7 @@ END;
         $parser->options->fileClass = 'myCustomFileClass';
 
         // to catch also the case with a custom mail class (it doesn't influence the test)
-        $parser->options->mailClass = 'ExtendedMail'; 
+        $parser->options->mailClass = 'ExtendedMail';
 
         $set = new SingleFileSet( 'various/test-html-text-and-attachment' );
         $mail = $parser->parseMail( $set );
@@ -1716,7 +1744,7 @@ END;
         $mail = $mail[0];
 
         $parts = $mail->fetchParts();
-        
+
         // $parts[2] is an ezcMailFile object
         $cd = $parts[2]->contentDisposition;
         $body = trim( file_get_contents( $parts[2]->fileName ) );

@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -38,11 +38,13 @@ class ezcMailHeadersHolderTest extends ezcTestCase
 
     public function testSet()
     {
-        $reference = array( 'Subject' => 2, 'tO' => 3 );
+        $reference = array( 'Subject' => 2, 'tO' => 3 , 'trimTest' => 'foo', 'trimTestArray' => array('foo'));
         $map = new ezcMailHeadersHolder();
         $map['Subject'] = 1;
         $map['suBject'] = 2;
         $map['tO'] = 3;
+        $map['trimTest'] = ' foo ';
+        $map['trimTestArray'] = array(' foo ');
         $this->assertEquals( $reference, $map->getCaseSensitiveArray() );
     }
 
