@@ -561,17 +561,17 @@ class ezcMailSmtpTransport implements ezcMailTransport
         }
 
         // start TLS connections unencrypted
-        $_connectionType = $this->options->connectionType == 'tls' ? 'tcp' : $this->options->connectionType;
+        $connectionType = $this->options->connectionType == 'tls' ? 'tcp' : $this->options->connectionType;
 
         if ( count( $this->options->connectionOptions ) > 0 )
         {
             $context = stream_context_create( $this->options->connectionOptions );
-            $this->connection = @stream_socket_client( "{$_connectionType}://{$this->serverHost}:{$this->serverPort}",
+            $this->connection = @stream_socket_client( "{$connectionType}://{$this->serverHost}:{$this->serverPort}",
                                                        $errno, $errstr, $this->options->timeout, STREAM_CLIENT_CONNECT, $context );
         }
         else
         {
-            $this->connection = @stream_socket_client( "{$_connectionType}://{$this->serverHost}:{$this->serverPort}",
+            $this->connection = @stream_socket_client( "{$connectionType}://{$this->serverHost}:{$this->serverPort}",
                                                        $errno, $errstr, $this->options->timeout );
         }
 
@@ -613,9 +613,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
         }
 
         // setup TLS connection before continuing with AUTH
-        if ($this->options->connectionType == 'tls')
+        if ( $this->options->connectionType == 'tls' )
         {
-            if (!preg_match( "/250-STARTTLS/", $response))
+            if ( !preg_match( "/250-STARTTLS/", $response) )
             {
                 throw new ezcMailTransportSmtpException( 'SMTP server does not accept the STARTTLS command.' );
             }
@@ -706,7 +706,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         }
 
         // setup the current connection for TLS
-        if (!stream_socket_enable_crypto($this->connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT))
+        if ( !stream_socket_enable_crypto($this->connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT) )
         {
             throw new ezcMailTransportSmtpException( "Error enabling TLS on existing SMTP connection." );
         }
