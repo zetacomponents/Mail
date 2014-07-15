@@ -49,6 +49,7 @@
  *  - DIGEST-MD5
  *  - CRAM-MD5
  *  - NTLM (requires the PHP mcrypt extension)
+ *  - XOAUTH2
  *  - LOGIN
  *  - PLAIN
  *
@@ -170,6 +171,11 @@ class ezcMailSmtpTransport implements ezcMailTransport
      * Authenticate with 'AUTH NTLM'.
      */
     const AUTH_NTLM = 'NTLM';
+
+    /**
+     * Authenticate with 'AUTH XOAUTH2'.
+     */
+    const AUTH_XOAUTH2 = 'XOAUTH2';
 
     /**
      * No authentication method. Specifies that the transport should try to
@@ -686,6 +692,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             ezcMailSmtpTransport::AUTH_NTLM,
             ezcMailSmtpTransport::AUTH_LOGIN,
             ezcMailSmtpTransport::AUTH_PLAIN,
+            ezcMailSmtpTransport::AUTH_XOAUTH2,
             );
     }
 
@@ -773,6 +780,10 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
             case self::AUTH_PLAIN:
                 $authenticated = $this->authPlain();
+                break;
+
+            case self::AUTH_XOAUTH2:
+                $authenticated = $this->authXOAuth2();
                 break;
 
             default:
@@ -1000,6 +1011,26 @@ class ezcMailSmtpTransport implements ezcMailTransport
         if ( $this->getReplyCode( $error ) !== '235' )
         {
             throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided username and password.' );
+        }
+
+        return true;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH XOAUTH2' and returns true if
+     * successful.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if the SMTP server returned an error
+     * @return bool
+     */
+    protected function authXOAuth2()
+    {
+        $digest = base64_encode("user={$this->user}\1auth=Bearer {$this->password}\1\1");
+        $this->sendData( "AUTH XOAUTH2 {$digest}" );
+        if ( $this->getReplyCode( $error ) !== '235' )
+        {
+            throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided OAuth token.' );
         }
 
         return true;
