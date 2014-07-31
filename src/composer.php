@@ -490,7 +490,7 @@ class ezcMailComposer extends ezcMail
                         src\\s*=\\s*
                             (?:
                                 (?# Match quoted attribute)
-                                ([\'"])file://(?P<quoted>[^>]+)\\1
+                                ([\'"])file://(?P<quoted>[^"]+)\\1
 
                                 (?# Match unquoted attribute, which may not contain spaces)
                             |   file://(?P<unquoted>[^>\\s]+)
