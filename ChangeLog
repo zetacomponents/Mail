@@ -1,13 +1,9 @@
-1.8 - Sunday 14 September 2014
+1.8 - Saturday 27 September 2014
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - fixed mailbox names with spaces not being properly quoted
 - Fixed bug parsing img tags in the html
 - Trim header values before they are being set in the headers_holder
-
-1.8beta1 - [RELEASEDATE]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 - Fixed #16154: Bcc headers are not stripped when using SMTP.
 - Fixed #16347: Inline images in the mail composer are not added other
   attributes precede the src attribute.
