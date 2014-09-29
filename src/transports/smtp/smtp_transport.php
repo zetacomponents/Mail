@@ -1151,7 +1151,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             while ( ( strpos( $data, self::CRLF ) === false || (string) substr( $line, 3, 1 ) !== ' ' ) && $loops < 100 )
             {
-                $line = fgets( $this->connection, 512 );
+                $line = @fgets( $this->connection, 512 );
                 $data .= $line;
                 $loops++;
             }
