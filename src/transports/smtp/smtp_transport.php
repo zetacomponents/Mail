@@ -952,6 +952,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             throw new ezcMailTransportSmtpException( 'SMTP server did not allow NTLM authentication.' );
         }
+        
+        return true;
     }
 
     /**
