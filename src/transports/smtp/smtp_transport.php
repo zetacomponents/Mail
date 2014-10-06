@@ -559,15 +559,19 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             throw new ezcBaseExtensionNotFoundException( 'openssl', null, "PHP not configured --with-openssl." );
         }
+
+        // start TLS connections unencrypted
+        $connectionType = $this->options->connectionType == 'tls' ? 'tcp' : $this->options->connectionType;
+
         if ( count( $this->options->connectionOptions ) > 0 )
         {
             $context = stream_context_create( $this->options->connectionOptions );
-            $this->connection = @stream_socket_client( "{$this->options->connectionType}://{$this->serverHost}:{$this->serverPort}",
+            $this->connection = @stream_socket_client( "{$connectionType}://{$this->serverHost}:{$this->serverPort}",
                                                        $errno, $errstr, $this->options->timeout, STREAM_CLIENT_CONNECT, $context );
         }
         else
         {
-            $this->connection = @stream_socket_client( "{$this->options->connectionType}://{$this->serverHost}:{$this->serverPort}",
+            $this->connection = @stream_socket_client( "{$connectionType}://{$this->serverHost}:{$this->serverPort}",
                                                        $errno, $errstr, $this->options->timeout );
         }
 
@@ -606,6 +610,24 @@ class ezcMailSmtpTransport implements ezcMailTransport
         if ( $this->getReplyCode( $response ) !== '250' )
         {
             throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: {$response}." );
+        }
+
+        // setup TLS connection before continuing with AUTH
+        if ( $this->options->connectionType == 'tls' )
+        {
+            if ( !preg_match( "/250-STARTTLS/", $response) )
+            {
+                throw new ezcMailTransportSmtpException( 'SMTP server does not accept the STARTTLS command.' );
+            }
+
+            $this->startTls();
+
+            // need to redo HELO after TLS negotiation
+            $this->sendData( 'EHLO ' . $this->senderHost );
+            if ( $this->getReplyCode( $response ) !== '250' )
+            {
+                throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: {$response}." );
+            }
         }
 
         // do authentication
@@ -665,6 +687,29 @@ class ezcMailSmtpTransport implements ezcMailTransport
             ezcMailSmtpTransport::AUTH_LOGIN,
             ezcMailSmtpTransport::AUTH_PLAIN,
             );
+    }
+
+     /**
+      * Enables TLS on an unencrypted SMTP connection
+      *
+      * @throws ezcMailTransportSmtpException
+      *         if the STARTTLS command or crypto exchange fails
+      * @return void
+      */
+    protected function startTls()
+    {
+        // start TLS authentication process
+        $this->sendData('STARTTLS');
+        if ( $this->getReplyCode( $response ) !== '220' )
+        {
+            throw new ezcMailTransportSmtpException( "STARTTLS failed with error: {$response}." );
+        }
+
+        // setup the current connection for TLS
+        if ( !stream_socket_enable_crypto($this->connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT) )
+        {
+            throw new ezcMailTransportSmtpException( "Error enabling TLS on existing SMTP connection." );
+        }
     }
 
     /**
@@ -1106,7 +1151,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             while ( ( strpos( $data, self::CRLF ) === false || (string) substr( $line, 3, 1 ) !== ' ' ) && $loops < 100 )
             {
-                $line = fgets( $this->connection, 512 );
+                $line = @fgets( $this->connection, 512 );
                 $data .= $line;
                 $loops++;
             }
