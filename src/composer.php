@@ -476,7 +476,7 @@ class ezcMailComposer extends ezcMail
      *         if $fileName could not be read.
      * @return ezcMailPart
      */
-    private function generateHtmlPart()
+    protected function generateHtmlPart()
     {
         $result = false;
         if ( $this->htmlText != '' )
