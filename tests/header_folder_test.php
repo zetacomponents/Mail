@@ -82,6 +82,18 @@ class ezcMailHeaderFolderTest extends ezcTestCase
         $this->assertEquals( 26, strlen( $exploded[1] ) );
     }
 
+    public function testNoDoubleFold()
+    {
+        $composedAddress = ezcMailTools::composeEmailAddress(
+            new ezcMailAddress(
+                'foo@bar.com',
+                'From name ØÆÅ test test test test with a very long name which contains norwegian characters ÆØÅæøÅ',
+                'utf-8'
+            )
+        );
+        $this->assertSame( $composedAddress, ezcMailHeaderFolder::foldAny( $composedAddress ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailHeaderFolderTest" );
