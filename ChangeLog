@@ -1,3 +1,12 @@
+1.8.1 - Tuesday 04 November 2014
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed double folding on e-mail headers.
+- Make ezcMailComposer::generateHtmlPart protected instead of private.
+- Fixed issues with NTML authentication.
+- Fixed issues with TLS sessions and unencrypted SMTP connections.
+
+
 1.8 - Saturday 27 September 2014
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
