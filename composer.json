@@ -51,9 +51,9 @@
     "name": "zetacomponents/mail",
     "type": "library",
         "require": {
-            "zetacomponents/base": "*"
+            "zetacomponents/base": "~1.8"
         },
         "require-dev": {
-            "zetacomponents/unit-test": "dev-master"
+            "zetacomponents/unit-test": "*"
         }
 }

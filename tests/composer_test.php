@@ -313,6 +313,23 @@ class ezcMailComposerTest extends ezcTestCase
 
         $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile', 'ezcMailFile' ) );
     }
+    
+    
+    /**
+     * Tests a mail with image tags with attributes after the src 
+     * https://github.com/zetacomponents/Mail/pull/21#issuecomment-44401526
+     */
+    public function testMailHtmlWithImagesWithAttributes()
+    {
+        $this->mail->from = new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' );
+        $this->mail->addTo( new ezcMailAddress( 'as@ez.no', 'Frederik Holljen' ) );
+        $this->mail->subject = "HTML message with embeded files and images.";
+        $this->mail->htmlText = "<html>Some text before the image: <img src=\"file://"
+                                   . dirname( __FILE__  )
+                                   . "/parts/data/fly.jpg\" width=\"200\" class=\"foo\"/>Here is some text after the image.";
+        $this->mail->build();
+        $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile' ) );
+    }
 
     public function testMailHtmlWithImagesAndFilesOutsideImg()
     {

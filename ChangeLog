@@ -1,6 +1,18 @@
-1.8beta1 - [RELEASEDATE]
+1.8.1 - Tuesday 04 November 2014
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Fixed double folding on e-mail headers.
+- Make ezcMailComposer::generateHtmlPart protected instead of private.
+- Fixed issues with NTML authentication.
+- Fixed issues with TLS sessions and unencrypted SMTP connections.
+
+
+1.8 - Saturday 27 September 2014
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- fixed mailbox names with spaces not being properly quoted
+- Fixed bug parsing img tags in the html
+- Trim header values before they are being set in the headers_holder
 - Fixed #16154: Bcc headers are not stripped when using SMTP.
 - Fixed #16347: Inline images in the mail composer are not added other
   attributes precede the src attribute.

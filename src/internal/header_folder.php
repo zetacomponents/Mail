@@ -102,8 +102,8 @@ class ezcMailHeaderFolder
      */
     static public function foldAny( $text )
     {
-        // Don't fold unless we have to.
-        if ( strlen( $text ) <= self::$limit )
+        // Don't fold unless we have to (e.g. when text is already folded or it doesn't reach the limit).
+        if ( strpos( $text, ezcMailTools::lineBreak() ) !== false || strlen( $text ) <= self::$limit )
         {
             return $text;
         }

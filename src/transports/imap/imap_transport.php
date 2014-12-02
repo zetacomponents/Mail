@@ -2448,11 +2448,11 @@ class ezcMailImapTransport
                 $flags[$i] = '\\' . $this->normalizeFlag( $flags[$i] );
             }
             $flagList = implode( ' ', $flags );
-            $command = "{$tag} APPEND {$mailbox} ({$flagList}) {{$mailSize}}";
+            $command = "{$tag} APPEND \"{$mailbox}\" ({$flagList}) {{$mailSize}}";
         }
         else
         {
-            $command = "{$tag} APPEND {$mailbox} {{$mailSize}}";
+            $command = "{$tag} APPEND \"{$mailbox}\" {{$mailSize}}";
         }
 
         $this->connection->sendData( $command );
