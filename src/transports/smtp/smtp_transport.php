@@ -645,7 +645,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
             }
             else
             {
-                preg_match( "/250-AUTH[= ](.*)/", $response, $matches );
+                preg_match( "/250[- ]AUTH[= ](.*)/", $response, $matches );
                 if ( count( $matches ) > 0 )
                 {
                     $methods = explode( ' ', trim( $matches[1] ) );
