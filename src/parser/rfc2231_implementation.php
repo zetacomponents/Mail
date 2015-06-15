@@ -62,7 +62,7 @@ class ezcMailRfc2231Implementation
         $parameterBuffer = array();
 
         // parameters
-        if ( preg_match_all( '/\s*(\S*?)="?([^;"]*);?/i', $header, $matches, PREG_SET_ORDER ) )
+        if ( preg_match_all( '/\s*(\S*?)=\s?"?([^;"]*);?/i', $header, $matches, PREG_SET_ORDER ) )
         {
             foreach ( $matches as $parameter )
             {
