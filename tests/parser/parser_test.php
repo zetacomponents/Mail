@@ -1765,5 +1765,30 @@ END;
         $parts = $mail->fetchParts();
         $this->assertEquals( "wir können Ihnen mitteilen, dass einer Ihrer\n", $parts[0]->text );
     }
+
+
+    /**
+     * Test for issue with extra space after "=" in header (some clients begin filename from new line and with \t prepended)
+     */
+    public function testSpaceBeforeFileName()
+    {
+        $parser = new ezcMailParser();
+        $messages = array(
+            array( "Content-Disposition: attachment; filename=\r\n\t\"=?iso-8859-1?q?Lettre=20de=20motivation=20directeur=20de=20client=E8le.doc?=\"\r\n",
+                "Lettre de motivation directeur de clientèle.doc" ),
+
+        );
+
+        foreach ( $messages as $msg )
+        {
+            $set = new ezcMailVariableSet( $msg[0] );
+            $mail = $parser->parseMail( $set );
+            $mail = $mail[0];
+
+            // check the body
+            $this->assertEquals( $msg[1], $mail->contentDisposition->displayFileName );
+        }
+    }
+
 }
 ?>
