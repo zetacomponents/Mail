@@ -220,7 +220,7 @@ class ezcMailTransportConnection
         if ( is_resource( $this->connection ) )
         {
             // in case there is a problem with the connection fgets() returns false
-            while ( strpos( $data, self::CRLF ) === false )
+            while ( strpos( $data, ezcMailTools::lineBreak() ) === false )
             {
                 $line = fgets( $this->connection, 512 );
 
