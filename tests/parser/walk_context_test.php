@@ -88,6 +88,45 @@ class ezcMailPartWalkContextTest extends ezcTestCase
         $this->assertEquals( false, isset( $context->no_such_property ) );
     }
 
+    public function testWalkPartsForVirtualFile()
+    {
+        // create mail instance
+        $mail = new ezcMailComposer();
+        $mail->addAttachment("file.txt", "content");
+        $mail->build();
+        // create the testing context
+        $context = new ezcMailPartWalkContext(
+            function ($ctx, $part) {
+                $this->assertInstanceOf('ezcMailVirtualFile', $part);
+            }
+        );
+        $context->filter = ['ezcMailVirtualFile'];
+        // test it
+        $mail->walkParts($context, $mail);
+    }
+
+    public function testWalkPartsForStreamFile()
+    {
+        // create a temporary file
+        $tmpFile = tempnam(sys_get_temp_dir(), "stream");
+        file_put_contents($tmpFile, "content");
+        // create mail instance
+        $mail = new ezcMailComposer();
+        $mail->addAttachment($tmpFile);
+        $mail->build();
+        // create the testing context
+        $context = new ezcMailPartWalkContext(
+            function ($ctx, $part) {
+                $this->assertInstanceOf('ezcMailStreamFile', $part);
+            }
+        );
+        $context->filter = ['ezcMailStreamFile'];
+        // test it
+        $mail->walkParts($context, $mail);
+        // remove the temporary file
+        @unlink($tmpFile);
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailPartWalkContextTest" );
