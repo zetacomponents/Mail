@@ -518,6 +518,8 @@ class ezcMail extends ezcMailPart
 
             case 'ezcMailText':
             case 'ezcMailFile':
+            case 'ezcMailVirtualFile':
+            case 'ezcMailStreamFile':
             case 'ezcMailDeliveryStatus':
                 if ( empty( $context->filter ) || in_array( $className, $context->filter ) )
                 {
