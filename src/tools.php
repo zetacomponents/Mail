@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -605,7 +605,11 @@ class ezcMailTools
 
         // Try it as latin 1 string
         $text = preg_replace( '/=\?([^?]+)\?/', '=?iso-8859-1?', $origtext );
-        $text = iconv_mime_decode( $text, 0, $charset );
+        $result = @iconv_mime_decode( $text, 0, $charset );
+        if ($result)
+        {
+            return $result;
+        }
 
         return $text;
     }
@@ -758,7 +762,7 @@ class ezcMailTools
      * $contentIdArray = array( 'consoletools-table.png@1421450' => 'http://localhost/consoletools-table.jpg' );
      * $text = "<html> Embedded image: <img src='cid:consoletools-table.png@1421450'/> </html>";
      * $htmlBody = ezcMailTools::replaceContentIdRefs( $text, $contentIdArray );
-     * // $htmlBody is now: 
+     * // $htmlBody is now:
      * // <html> Embedded image: <img src='http://localhost/consoletools-table.jpg'/> </html>
      * ?>
      * </code>
