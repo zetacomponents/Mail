@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -519,9 +519,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
             $this->sendData( $data );
             $this->sendData( '.' );
 
-            if ( $this->getReplyCode( $error ) !== '250' )
+            if ( $this->getReplyCode( $line ) !== '250' )
             {
-                throw new ezcMailTransportSmtpException( "Error: {$error}" );
+                throw new ezcMailTransportSmtpException(trim($line));
             }
         }
         catch ( ezcMailTransportSmtpException $e )
@@ -542,6 +542,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
                 // Eat! We don't care anyway since we are aborting the connection
             }
         }
+
+         return trim($line);
     }
 
     /**
@@ -590,7 +592,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         }
         else
         {
-            throw new ezcMailTransportSmtpException( "Failed to connect to the smtp server: {$this->serverHost}:{$this->serverPort}." );
+            throw new ezcMailTransportSmtpException( "Failed to connect to the smtp server: {$this->serverHost}:{$this->serverPort}" );
         }
     }
 
@@ -963,7 +965,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         {
             throw new ezcMailTransportSmtpException( 'SMTP server did not allow NTLM authentication.' );
         }
-        
+
         return true;
     }
 
@@ -1315,7 +1317,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         $td = mcrypt_module_open( 'des', '', 'ecb', '' );
         $iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_RAND );
 
-        $response = '';        
+        $response = '';
         for ( $i = 0; $i < 21; $i += 7 )
         {
             $packed = '';
