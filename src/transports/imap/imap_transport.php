@@ -1622,7 +1622,8 @@ class ezcMailImapTransport
             }
 
             $range = array();
-            for ( $i = $ids[$offset]; $i < min( $count, count( $messages ) ); $i++ )
+            $base = $ids[$offset];
+            for ( $i = $base; $i < min( $count, count( $messages ) ) + $base; $i++ )
             {
                 $range[] = $messages[$i];
             }
