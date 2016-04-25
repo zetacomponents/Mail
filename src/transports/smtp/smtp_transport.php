@@ -621,7 +621,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
         // setup TLS connection before continuing with AUTH
         if ( $this->options->connectionType == 'tls' )
         {
-            if ( !preg_match( "/250-STARTTLS/", $response) )
+            if ( !preg_match( "/250[- ]STARTTLS/", $response) )
             {
                 throw new ezcMailTransportSmtpException( 'SMTP server does not accept the STARTTLS command.' );
             }
