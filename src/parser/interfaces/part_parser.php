@@ -245,6 +245,8 @@ abstract class ezcMailPartParser
             if ( !in_array( strtolower( $this->lastParsedHeader ), self::$uniqueHeaders ) )
             {
                 $arr = $headers[$this->lastParsedHeader];
+                if (!isset($arr[0]))
+                    throw new \ezcMailIncompleteHeaderException('Line ' . $line . ' is an incomplete header and cannot be parsed');
                 $arr[0][count( $arr[0] ) - 1] .= ' ' . ltrim(str_replace( "\t", " ", $line ), ' ');
                 $headers[$this->lastParsedHeader] = $arr;
             }
