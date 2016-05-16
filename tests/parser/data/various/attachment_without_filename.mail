@@ -1,0 +1,55 @@
+Return-Path: <as@ez.no>
+X-Original-To: as@ez.no
+Delivered-To: as@mail.ez.no
+Received: from smtp.ez.no (blackboy.ez.no [194.248.150.22])
+	by mta1.ez.no (Postfix) with ESMTP id 99508362508
+	for <as@ez.no>; Fri, 23 Nov 2007 13:29:23 +0100 (CET)
+Received: from [10.0.2.184] (popeye.ez.no [85.19.74.66])
+	by smtp.ez.no (Postfix) with ESMTP id D611AAB54C
+	for <as@ez.no>; Fri, 23 Nov 2007 13:26:40 +0100 (CET)
+Message-ID: <4746C7D6.5010203@ez.no>
+Date: Fri, 23 Nov 2007 13:30:14 +0100
+From: Alexandru Stanoi <as@ez.no>
+User-Agent: Thunderbird 1.5.0.12 (X11/20070604)
+MIME-Version: 1.0
+To: Alexandru Stanoi <as@ez.no>
+Subject: TEST: HTML attachment
+Content-Type: multipart/mixed;
+ boundary="1234567890"
+
+
+--1234567890
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+<body marginwidth="0" marginheight="0" leftmargin="0" topmargin="0"  
+bgcolor="#FFFFFF">
+<table border="0" width="640" cellspacing="0" cellpadding="0"><tr><td>
+<img src="cid:cam_data/photo067" alt="cam_data/photo067.jpg"><br><br>
+</td></tr></table>
+</body></html>
+
+--1234567890
+Content-Type: image/jpeg; name=""
+Content-Transfer-Encoding: base64
+Content-ID: <cam_data/photo067>
+Content-Disposition: attachment; filename=""
+
+/9j/4AAQSkZJRgABAgEAkACQAAD/ 
+2wCEAAwICQoJBwwKCQoNDAwOER0TERAQESQZGxUdKiUsLCkl
+KSgvNEM5LzE/ 
+MigpOk87P0VHS0xLLThSWFFJV0NJS0gBDA0NEQ8RIhMTIkgwKTBISEhISEhISEhI
+SEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISP/ 
+AABEIAPABQAMBIQACEQED
+EQH/3QAEABT/ 
+xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAAB
+fQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5
+OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeo
+qaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/ 
+j5+gEAAwEBAQEB
+AQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIy
+gQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNk
+ZWZnaG 
+
+--1234567890--

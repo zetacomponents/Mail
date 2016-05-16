@@ -136,7 +136,8 @@ class ezcMailFileParser extends ezcMailPartParser
             $fileName = "filename";
         }
 
-        if (empty($fileName)) {  // $fileName can be empty in reality, then the openFile() call fails because it's trying to open a directory with fopen
+        if ( empty( $fileName ) )  // $fileName can be empty in reality, then the openFile() call fails because it's trying to open a directory with fopen
+        {
             $fileName = "filename";
         }
 
