@@ -131,7 +131,9 @@ class ezcMailFileParser extends ezcMailPartParser
         {
             $fileName = trim( $matches[1], '"' );
         }
-        else // default
+
+        // default
+        if (empty($fileName))
         {
             $fileName = "filename";
         }
