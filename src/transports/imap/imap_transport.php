@@ -2047,9 +2047,19 @@ class ezcMailImapTransport
             {
                 if ( $this->options->uidReferencing )
                 {
-                    preg_match( '/\*\s.*\sFETCH\s\(FLAGS \((.*)\)\sUID\s(.*)\)/U', $response, $matches );
-                    $parts = explode( ' ', $matches[1] );
-                    $flags[intval( $matches[2] )] = $parts;
+                    if ( preg_match( '/\*\s.*\sFETCH\s\(FLAGS \((.*)\)\sUID\s(.*)\)/U', $response, $matches ) )
+                    {
+                        $parts = explode( ' ', $matches[1] );
+                        $flags[intval( $matches[2] )] = $parts;
+                    }
+
+                    // The second regex here is to handle edge cases where a mail server like gmail returns the FETCH response in a different order than normal
+                    else
+                    {
+                        preg_match( '/\*\s.*\sFETCH\s\(UID\s(.*)\sFLAGS \((.*)\)\)/U', $response, $matches );
+                        $parts = explode( ' ', $matches[2] );
+                        $flags[intval( $matches[1] )] = $parts;
+                    }
                 }
                 else
                 {
