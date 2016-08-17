@@ -1504,6 +1504,17 @@ END;
         $this->assertEquals( 'cam_data_photo067.jpg', basename( $parts[1]->fileName ) );
     }
 
+    public function testAttachmentWithoutFilename()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/attachment_without_filename.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+        $this->assertEquals( 'filename', basename( $parts[1]->fileName ) );
+    }
+
     /**
      * Test for bug #12844.
      */
