@@ -123,7 +123,10 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     public function finish()
     {
-        unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
+        if ( isset( $this->part->recipients[$this->section - 1] ) )
+        {
+            unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
+        }
         $this->part->size = $this->size;
         return $this->part;
     }
