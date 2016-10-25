@@ -498,7 +498,7 @@ class ezcMail extends ezcMailPart
                 break;
 
             case 'ezcMailMultipartRelated':
-                if ($mail->getMainPart())
+                if (!$mail->getMainPart())
                     throw new ezcMailInvalidMimeException('Unable to parse invalid mime message multipart/related');
 
                 $this->walkParts( $context, $mail->getMainPart() );
