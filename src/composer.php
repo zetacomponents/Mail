@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -284,7 +284,7 @@ class ezcMailComposer extends ezcMail
      * Content-Disposition header set according to the $contentDisposition
      * object and the filename of the attachment in the generated mail will be
      * the one from the $contentDisposition object.
-     * 
+     *
      * @throws ezcBaseFileNotFoundException
      *         if $fileName does not exists.
      * @throws ezcBaseFilePermissionProblem
@@ -320,7 +320,7 @@ class ezcMailComposer extends ezcMail
      * Content-Disposition header set according to the $contentDisposition
      * object and the filename of the attachment in the generated mail will be
      * the one from the $contentDisposition object.
-     * 
+     *
      * @throws ezcBaseFileNotFoundException
      *         if $fileName does not exists.
      * @throws ezcBaseFilePermissionProblem
@@ -362,7 +362,7 @@ class ezcMailComposer extends ezcMail
      * Content-Disposition header set according to the $contentDisposition
      * object and the filename of the attachment in the generated mail will be
      * the one from the $contentDisposition object.
-     * 
+     *
      * @param string $fileName
      * @param string $content
      * @param string $contentType
@@ -490,10 +490,10 @@ class ezcMailComposer extends ezcMail
                         src\\s*=\\s*
                             (?:
                                 (?# Match quoted attribute)
-                                ([\'"])file://(?P<quoted>[^"]+)\\1
+                                ([\'"])notion://(?P<quoted>[^"]+)\\1
 
                                 (?# Match unquoted attribute, which may not contain spaces)
-                            |   file://(?P<unquoted>[^>\\s]+)
+                            |   notion://(?P<unquoted>[^>\\s]+)
                         )
                     [^>]* >)ix', $this->htmlText, $matches );
                 // pictures/files can be added multiple times. We only need them once.
@@ -538,7 +538,7 @@ class ezcMailComposer extends ezcMail
                         }
                         $cid = $result->addRelatedPart( $filePart );
                         // replace the original file reference with a reference to the cid
-                        $this->htmlText = str_replace( 'file://' . $fileName, 'cid:' . $cid, $this->htmlText );
+                        $this->htmlText = str_replace( 'notion://' . $fileName, 'cid:' . $cid, $this->htmlText );
                     }
                     else
                     {
