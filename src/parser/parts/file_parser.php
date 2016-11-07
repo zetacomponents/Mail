@@ -139,7 +139,6 @@ class ezcMailFileParser extends ezcMailPartParser
         // hash the file name to ensure uniqueness and safety saving on file system
         $fileName = md5( $fileName );
 
-
         $this->fp = $this->openFile( $fileName ); // propagate exception
     }
 
