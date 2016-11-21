@@ -24,6 +24,7 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @access private
  */
+use Notion\Common\Arr;
 
 /**
  * This class parses header fields that conform to RFC2231.
@@ -94,29 +95,30 @@ class ezcMailRfc2231Implementation
             // Now we must go through them all and convert them into the end result
             foreach ( $parameterBuffer as $paramName => $parts )
             {
+                $first_part = Arr::first($parts);
                 // fetch language and encoding if we have it
                 // syntax: '[charset]'[language]'encoded_string
                 $language = null;
                 $charset = null;
-                if ( $parts[0]['encoding'] == true )
+                if ( $first_part['encoding'] == true )
                 {
-                    if (!preg_match( "/(\S*)'(\S*)'(.*)/", $parts[0]['value'], $matches))
+                    if (!preg_match( "/(\S*)'(\S*)'(.*)/", $first_part['value'], $matches))
                     {
                         $matches = [
                             null,
                             'us-ascii',
                             'en-us',
-                            $parts[0]['value']
+                            $first_part['value']
                         ];
                     }
 
                     $charset = $matches[1];
                     $language = $matches[2];
-                    $parts[0]['value'] = urldecode( $matches[3] ); // rewrite value: todo: decoding
-                    $result[1][$paramName] = array( 'value' => $parts[0]['value'] );
+                    $first_part['value'] = urldecode( $matches[3] ); // rewrite value: todo: decoding
+                    $result[1][$paramName] = array( 'value' => $first_part['value'] );
                 }
 
-                $result[1][$paramName] = array( 'value' => $parts[0]['value'] );
+                $result[1][$paramName] = array( 'value' => $first_part['value'] );
                 if ( strlen( $charset ) > 0 )
                 {
                     $result[1][$paramName]['charset'] = $charset;
