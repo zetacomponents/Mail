@@ -65,6 +65,13 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
     private $headers;
 
     /**
+     * Stores the value of the header
+     *
+     * @var string
+     */
+    private $headerValue = '';
+
+    /**
      * Constructs a new ezcMailDeliveryStatusParser with additional headers $headers.
      *
      * @param ezcMailHeadersHolder $headers
@@ -96,17 +103,16 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
     {
-        $headerValue = '';
         $matches = array();
         preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
             $this->lastParsedHeader = $matches[0][1];
-            $headerValue = trim( $matches[0][2] );
+            $this->headerValue = trim( $matches[0][2] );
         }
         else if ( isset( $this->lastParsedHeader ) && $this->lastParsedHeader !== null ) // take care of folding
         {
-            $headerValue .= $line;
+            $this->headerValue .= $line;
         }
         if ( strlen( trim( $line ) ) == 0 )
         {
@@ -114,14 +120,13 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
             $this->part->createRecipient();
             return;
         }
-        if (isset( $this->lastParsedHeader ) && $this->section == 0 )
+        if ( $this->section == 0 )
         {
-            $this->part->message[$this->lastParsedHeader] = $headerValue;
+            $this->part->message[$this->lastParsedHeader] = $this->headerValue;
         }
         else
         {
-            if (isset( $this->lastParsedHeader ))
-                $this->part->recipients[$this->section - 1][$this->lastParsedHeader] = $headerValue;
+            $this->part->recipients[$this->section - 1][$this->lastParsedHeader] = $this->headerValue;
         }
     }
 
