@@ -58,6 +58,13 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
     private $size;
 
     /**
+     * Holds the headers
+     *
+     * @var ezcMailHeadersHolder
+     */
+    private $headers;
+
+    /**
      * Constructs a new ezcMailDeliveryStatusParser with additional headers $headers.
      *
      * @param ezcMailHeadersHolder $headers
@@ -89,16 +96,17 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
     {
+        $headerValue = '';
         $matches = array();
         preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
             $this->lastParsedHeader = $matches[0][1];
-            $this->headerValue = trim( $matches[0][2] );
+            $headerValue = trim( $matches[0][2] );
         }
         else if ( isset( $this->lastParsedHeader ) && $this->lastParsedHeader !== null ) // take care of folding
         {
-            $this->headerValue .= $line;
+            $headerValue .= $line;
         }
         if ( strlen( trim( $line ) ) == 0 )
         {
@@ -108,12 +116,12 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
         }
         if (isset( $this->lastParsedHeader ) && $this->section == 0 )
         {
-            $this->part->message[$this->lastParsedHeader] = $this->headerValue;
+            $this->part->message[$this->lastParsedHeader] = $headerValue;
         }
         else
         {
             if (isset( $this->lastParsedHeader ))
-                $this->part->recipients[$this->section - 1][$this->lastParsedHeader] = $this->headerValue;
+                $this->part->recipients[$this->section - 1][$this->lastParsedHeader] = $headerValue;
         }
     }
 
@@ -124,7 +132,8 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     public function finish()
     {
-        unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
+        if (isset($this->part->recipients[$this->section - 1]))
+            unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
         $this->part->size = $this->size;
         return $this->part;
     }
