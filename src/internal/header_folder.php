@@ -65,7 +65,7 @@ class ezcMailHeaderFolder
      *
      * @var int
      */
-    static private $limit = 76;
+    static private $limit = 276;
 
     /**
      * Sets the number of allowed characters before folding to $numCharacters.
