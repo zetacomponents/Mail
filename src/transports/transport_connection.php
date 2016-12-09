@@ -96,12 +96,12 @@ class ezcMailTransportConnection
                 throw new ezcBaseExtensionNotFoundException( 'openssl', null, "PHP not configured --with-openssl." );
             }
             $this->connection = @stream_socket_client( "ssl://{$server}:{$port}",
-                                                       $errno, $errstr, $this->options->timeout );
+                                                       $errno, $errstr, $this->options->timeout, $this->options->flags, $this->options->context );
         }
         else
         {
             $this->connection = @stream_socket_client( "tcp://{$server}:{$port}",
-                                                       $errno, $errstr, $this->options->timeout );
+                                                       $errno, $errstr, $this->options->timeout, $this->options->flags, $this->options->context );
         }
 
         if ( is_resource( $this->connection ) )
