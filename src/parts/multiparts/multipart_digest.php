@@ -84,9 +84,9 @@ class ezcMailMultipartDigest extends ezcMailMultipart
     /**
      * Appends a part to the list of parts.
      *
-     * @param ezcMailRfc822Digest $part
+     * @param ezcMailPart $part
      */
-    public function appendPart( ezcMailRfc822Digest $part )
+    public function appendPart( ezcMailPart $part )
     {
         $this->parts[] = $part;
     }
