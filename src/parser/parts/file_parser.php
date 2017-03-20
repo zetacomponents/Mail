@@ -93,15 +93,6 @@ class ezcMailFileParser extends ezcMailPartParser
     private static $counter = 1;
 
     /**
-     * Holds if data has been written to the output file or not.
-     *
-     * This is used for delayed filter adding neccessary for quoted-printable.
-     *
-     * @var bool
-     */
-    private $dataWritten = false;
-
-    /**
      * Constructs a new ezcMailFileParser with maintype $mainType subtype $subType
      * and headers $headers.
      *
@@ -198,42 +189,6 @@ class ezcMailFileParser extends ezcMailPartParser
     }
 
     /**
-     * Sets the correct stream filters for the attachment.
-     *
-     * $line should contain one line of data that should be written to file.
-     * It is used to correctly determine the type of linebreak used in the mail.
-     *
-     * @param string $line
-     */
-    private function appendStreamFilters( $line )
-    {
-        // append the correct decoding filter
-        switch ( strtolower( $this->headers['Content-Transfer-Encoding'] ) )
-        {
-            case 'base64':
-                stream_filter_append( $this->fp, 'convert.base64-decode' );
-                break;
-            case 'quoted-printable':
-                // fetch the type of linebreak
-                preg_match( "/(\r\n|\r|\n)$/", $line, $matches );
-                $lb = count( $matches ) > 0 ? $matches[0] : ezcMailTools::lineBreak();
-
-                $param = array( 'line-break-chars' => $lb );
-                stream_filter_append( $this->fp, 'convert.quoted-printable-decode',
-                                      STREAM_FILTER_WRITE, $param );
-                break;
-            case '7bit':
-            case '8bit':
-                // do nothing here, file is already just binary
-                break;
-            default:
-                // 7bit default
-                break;
-        }
-    }
-
-
-    /**
      * Parse the body of a message line by line.
      *
      * This method is called by the parent part on a push basis. When there
@@ -249,17 +204,24 @@ class ezcMailFileParser extends ezcMailPartParser
     {
         if ( $line !== '' )
         {
-            if ( $this->dataWritten === false )
-            {
-                $this->appendStreamFilters( $line );
-                $this->dataWritten = true;
-            }
-
             try
             {
-                fwrite( $this->fp, $line );
+                switch ( strtolower( $this->headers['Content-Transfer-Encoding'] ) )
+                {
+                    case 'base64':
+                        $line = base64_decode($line);
+                        break;
+                    case 'quoted-printable':
+                        $line = quoted_printable_decode($line);
+                        break;
+                }
+
+                fwrite($this->fp, $line );
             }
-            catch (\Exception $e) {}
+            catch (\Exception $e)
+            {
+                // do nothing for now
+            }
         }
     }
 
