@@ -24,7 +24,7 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @access private
  */
-use Notion\Common\Arr;
+use Notion\Domain\Util\Arr;
 
 /**
  * This class parses header fields that conform to RFC2231.

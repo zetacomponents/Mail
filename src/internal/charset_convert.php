@@ -135,7 +135,7 @@ class ezcMailCharsetConverter
      */
     public static function convertToUTF8Iconv( $text, $originalCharset )
     {
-        return \Notion\Common\Str::convert_charset_to_utf8($originalCharset, $text);
+        return \Notion\Domain\Util\Str::convert_charset_to_utf8($originalCharset, $text);
     }
 }
 ?>
