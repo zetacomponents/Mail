@@ -495,7 +495,7 @@ class ezcMailComposer extends ezcMail
                                 (?# Match unquoted attribute, which may not contain spaces)
                             |   file://(?P<unquoted>[^>\\s]+)
                         )
-                    [^>]* >)ix', $this->htmlText, $matches );
+                    [^>]* >)ixU', $this->htmlText, $matches );
                 // pictures/files can be added multiple times. We only need them once.
                 $matches = array_filter( array_unique( array_merge( $matches['quoted'], $matches['unquoted'] ) ) );
             }
