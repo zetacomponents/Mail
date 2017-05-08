@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -165,6 +165,7 @@ class ezcMailMultipartTest extends ezcTestCase
         $part->addRelatedPart( new ezcMailText( 'a' ) );
         $part->addRelatedPart( new ezcMailText( 'a' ) );
         $this->assertEquals( 2, count( $part->getRelatedParts() ) );
+        $this->assertEquals( 3, count( $part->getParts() ) );
     }
 
     public function testGetMultipartRelatedPartsEmpty()
@@ -172,6 +173,7 @@ class ezcMailMultipartTest extends ezcTestCase
         $part = new ezcMailMultipartRelated();
         $this->assertEquals( null, $part->getMainPart() );
         $this->assertEquals( 0, count( $part->getRelatedParts() ) );
+        $this->assertEquals( 0, count( $part->getParts() ) );
         $this->assertEquals( false, $part->getRelatedPartByID( 'no such id' ) );
     }
 
@@ -189,6 +191,7 @@ class ezcMailMultipartTest extends ezcTestCase
         $part = new ezcMailMultipartRelated;
         $part->addRelatedPart( new ezcMailText( 'a' ) );
         $this->assertEquals( 1, count( $part->getRelatedParts() ) );
+        $this->assertEquals( 1, count( $part->getParts() ) );
     }
 
     public function testMultipartReportFetchParts()

@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -134,7 +134,7 @@ class ezcMailMultipartRelated extends ezcMailMultipart
     }
 
     /**
-     * Returns the mail parts associated with this multipart.
+     * Returns the mail parts associated with this multipart without main part.
      *
      * @return array(ezcMailPart)
      */
@@ -145,6 +145,20 @@ class ezcMailMultipartRelated extends ezcMailMultipart
             return array_slice( $this->parts, 0 );
         }
         return array_slice( $this->parts, 1 );
+    }
+
+    /**
+     * Returns the mail parts associated with this multipart.
+     *
+     * @return array(ezcMailPart)
+     */
+    public function getParts()
+    {
+        if ( is_null( $this->getMainPart() ) )
+        {
+            return array_slice( $this->parts, 0 );
+        }
+        return $this->parts;
     }
 
     /**
