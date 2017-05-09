@@ -216,6 +216,9 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
             if ( $this->currentPartParser !== null )
             {
                 $part = $this->currentPartParser->finish();
+                if (empty($part)) {
+                    $part = new ezcMailMultipartMixed([]);
+                }
                 $this->partDone( $part );
                 $this->currentPartParser = null;
             }
