@@ -268,20 +268,6 @@ class ezcMailFileParser extends ezcMailPartParser
     {
         fclose( $this->fp );
         $this->fp = null;
-
-
-        // FIXME: DIRTY PGP HACK
-        // When we have PGP support these lines should be removed. They are here now to hide
-        // PGP parts since they will show up as file attachments if not.
-        if ( $this->mainType == "application" &&
-            ( $this->subType == 'pgp-signature'
-              || $this->subType == 'pgp-keys'
-              || $this->subType == 'pgp-encrypted' ) )
-        {
-            return null;
-        }
-        // END DIRTY PGP HACK
-
         $filePart = new self::$fileClass( $this->fileName );
 
         // set content type
