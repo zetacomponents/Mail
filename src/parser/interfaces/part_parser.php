@@ -88,7 +88,7 @@ abstract class ezcMailPartParser
      *
      * @var string
      */
-    private $lastParsedHeader = null;
+    protected $lastParsedHeader = null;
 
     /**
      * Parse the body of a message line by line.

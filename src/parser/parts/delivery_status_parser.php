@@ -58,6 +58,20 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
     private $size;
 
     /**
+     * Holds the headers
+     *
+     * @var ezcMailHeadersHolder
+     */
+    private $headers;
+
+    /**
+     * Stores the value of the header
+     *
+     * @var string
+     */
+    private $headerValue = '';
+
+    /**
      * Constructs a new ezcMailDeliveryStatusParser with additional headers $headers.
      *
      * @param ezcMailHeadersHolder $headers
@@ -123,7 +137,8 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     public function finish()
     {
-        unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
+        if (isset($this->part->recipients[$this->section - 1]))
+            unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
         $this->part->size = $this->size;
         return $this->part;
     }
