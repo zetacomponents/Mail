@@ -189,7 +189,7 @@ class ezcMailFileParser extends ezcMailPartParser
     {
         // finish() was not called. The mail is completely broken.
         // we will clean up the mess
-        if ( $this->fp !== null )
+        if ( is_resource( $this->fp ) )
         {
             fclose( $this->fp );
             $this->fp = null;
