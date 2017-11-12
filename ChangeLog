@@ -1,4 +1,4 @@
-1.8.2 - [RELEASEDATE]
+1.8.2 - Sunday 12 November 2017
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added support for XOAUTH2 authentication method for SMTP transport (Ian
