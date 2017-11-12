@@ -3,6 +3,9 @@
 
 - Added support for XOAUTH2 authentication method for SMTP transport (Ian
   Berry).
+- Fixed issue #58: Restrict the set of characters that can be used as the email
+  address for the ezcMail returnPath property. (CVE-2017-15806, reported by
+  "Kay")
 
 
 1.8.1 - Tuesday 04 November 2014

@@ -89,7 +89,11 @@
  *                                       The date/time of when the message was
  *                                       sent as Unix Timestamp.
  * @property ezcMailAddress        $returnPath Contains the Return-Path address as an
- *                                             ezcMailAddress object.
+ *                                             ezcMailAddress object. The email
+ *                                             address embedded in the
+ *                                             ezcMailAddress object may only
+ *                                             contain letters from the
+ *                                             RETURN_PATH_CHARS set.
  * @property ezcMailOptions $options
  *           Options for generating mail. See {@link ezcMailOptions}.
  *
@@ -125,6 +129,11 @@ class ezcMail extends ezcMailPart
      * Base 64 encoding.
      */
     const BASE64 = "base64";
+
+    /**
+     * Characters allowed in the returnPath address
+     */
+    const RETURN_PATH_CHARS = 'A-Za-z0-9_.@=/+{}#~-';
 
     /**
      * Holds the options for this class.
@@ -173,8 +182,19 @@ class ezcMail extends ezcMailPart
     {
         switch ( $name )
         {
-            case 'from':
             case 'returnPath':
+                if ( $value !== null && !$value instanceof ezcMailAddress )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'ezcMailAddress or null' );
+                }
+                if ( preg_replace( '([' . self::RETURN_PATH_CHARS . '])', '', $value->email ) != '' )
+                {
+                    throw new ezcBaseValueException( $name, $value->email, 'the characters \'' . self::RETURN_PATH_CHARS . '\'' );
+                }
+                $this->properties[$name] = $value;
+                break;
+
+            case 'from':
                 if ( $value !== null && !$value instanceof ezcMailAddress )
                 {
                     throw new ezcBaseValueException( $name, $value, 'ezcMailAddress or null' );

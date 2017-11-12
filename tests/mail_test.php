@@ -494,6 +494,26 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( false, isset( $mail->no_such_property ) );
     }
 
+    public function testValidReturnPathChars()
+    {
+        $mail = new ezcMail();
+        $mail->returnPath = new ezcMailAddress( 'nospam@example.com' );
+        $this->assertEquals( 'nospam@example.com', $mail->returnPath->email );
+    }
+
+    public function testInvalidReturnPathChars()
+    {
+        $mail = new ezcMail();
+        try {
+            $mail->returnPath = new ezcMailAddress( 'with space@example.com' );
+            $this->fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            $this->assertEquals( "The value 'with space@example.com' that you were trying to assign to setting 'returnPath' is invalid. Allowed values are: the characters '" . ezcMail::RETURN_PATH_CHARS . "'.", $e->getMessage() );
+        }
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcMailTest" );

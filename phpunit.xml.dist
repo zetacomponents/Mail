@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Zeta Components Mail">
             <directory suffix="_test.php">./tests</directory>
+            <exclude>./tests/transports</exclude>
         </testsuite>
     </testsuites>
 
