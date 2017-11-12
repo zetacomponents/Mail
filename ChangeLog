@@ -3,6 +3,12 @@
 
 - Added support for XOAUTH2 authentication method for SMTP transport (Ian
   Berry).
+- Fixed a bug with a space around file names in Content-Disposition headers
+  (Alexey Alyoshin)
+- Allow ezcMailVirtualFile and ezcMailStreamFile to be handled in
+  ezcMail::walkParts (Brend Rathmanner)
+- Fixed empty filename in file_parser (Michael Kliewe)
+- Update STARTTLS parsing to allow "250 STARTTLS" (John Corser)/\t
 - Fixed issue #58: Restrict the set of characters that can be used as the email
   address for the ezcMail returnPath property. (CVE-2017-15806, reported by
   "Kay")
