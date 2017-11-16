@@ -187,7 +187,7 @@ class ezcMail extends ezcMailPart
                 {
                     throw new ezcBaseValueException( $name, $value, 'ezcMailAddress or null' );
                 }
-                if ( preg_replace( '([' . self::RETURN_PATH_CHARS . '])', '', $value->email ) != '' )
+                if ( $value !== null && preg_replace( '([' . self::RETURN_PATH_CHARS . '])', '', $value->email ) != '' )
                 {
                     throw new ezcBaseValueException( $name, $value->email, 'the characters \'' . self::RETURN_PATH_CHARS . '\'' );
                 }
