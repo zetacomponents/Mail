@@ -117,7 +117,7 @@ class ezcMailRfc2231Implementation
                     $result[1][$paramName]['language'] = $language;
                 }
 
-                if ( count( $parts > 1 ) )
+                if ( count( $parts ) > 1 )
                 {
                     for ( $i = 1; $i < count( $parts ); $i++ )
                     {
