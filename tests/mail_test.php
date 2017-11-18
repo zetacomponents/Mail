@@ -501,6 +501,13 @@ class ezcMailTest extends ezcTestCase
         $this->assertEquals( 'nospam@example.com', $mail->returnPath->email );
     }
 
+    public function testEmptyReturnPath()
+    {
+        $mail = new ezcMail();
+        $mail->returnPath = null;
+        $this->assertNull( $mail->returnPath );
+    }
+
     public function testInvalidReturnPathChars()
     {
         $mail = new ezcMail();
