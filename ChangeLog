@@ -1,3 +1,14 @@
+1.8.3 - Saturday 18 November 2017
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed 'Undefined offset: -1' notice when parsing Delivery Status parts
+  (Marcel Toben, Daniel Tschinder).
+- Fix error when trying to access email from null (Daniel Tschinder).
+- Checking if variable is resource mitigates against possible PHP Object
+  Injection exploits (Casper Langemeijer).
+- Fixed a code-bug when counting parts for RFC2231 reading (Derick Rethans).
+
+
 1.8.2 - Sunday 12 November 2017
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
