@@ -585,7 +585,10 @@ class ezcMailTools
         // Try to fix lower case hex digits
         $text = preg_replace_callback(
             '/=(([a-f][a-f0-9])|([a-f0-9][a-f]))/',
-            create_function( '$matches', 'return strtoupper($matches[0]);' ),
+            function( $matches )
+            {
+                return strtoupper( $matches[0] );
+            },
             $origtext
         );
         $text = @iconv_mime_decode( $text, 0, $charset );
