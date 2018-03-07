@@ -1089,7 +1089,7 @@ class ezcMailImapTransport
         }
 
         $sizes = array();
-        $ids = implode( $messages, ',' );
+        $ids = implode( ',', $messages );
 
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (RFC822.SIZE)" );
@@ -2035,7 +2035,7 @@ class ezcMailImapTransport
         }
 
         $flags = array();
-        $ids = implode( $messages, ',' );
+        $ids = implode( ',', $messages );
 
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}FETCH {$ids} (FLAGS)" );
