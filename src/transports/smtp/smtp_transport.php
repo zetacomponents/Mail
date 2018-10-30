@@ -316,7 +316,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
         $this->doAuthenticate = $user != '' ? true : false;
 
         $this->status = self::STATUS_NOT_CONNECTED;
-        $this->senderHost = 'localhost';
+        $hostName = gethostname();
+        $this->senderHost = ( $hostName === false ) ? 'localhost' : $hostName;
     }
 
     /**
