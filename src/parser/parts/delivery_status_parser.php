@@ -90,7 +90,7 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
     {
         $matches = array();
-        preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
+        preg_match_all( "/^([\w_-]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
             $this->lastParsedHeader = $matches[0][1];

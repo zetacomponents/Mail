@@ -225,7 +225,7 @@ abstract class ezcMailPartParser
     protected function parseHeader( $line, ezcMailHeadersHolder $headers )
     {
         $matches = array();
-        preg_match_all( "/^([\w-_]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
+        preg_match_all( "/^([\w_-]*):\s?(.*)/", $line, $matches, PREG_SET_ORDER );
         if ( count( $matches ) > 0 )
         {
             if ( !in_array( strtolower( $matches[0][1] ), self::$uniqueHeaders ) )
