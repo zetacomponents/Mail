@@ -42,6 +42,9 @@
  * @property bool $uidReferencing
  *           Specifies if the IMAP commands will operate with message unique
  *           IDs or with message numbers (default).
+ * @property int $listLimit
+ *           Specifies the maximum number of messages to be returned by the
+ *           listMessages() method, or 0 for no limit (default).
  *
  * @package Mail
  * @version //autogen//
@@ -60,6 +63,7 @@ class ezcMailImapTransportOptions extends ezcMailTransportOptions
     public function __construct( array $options = array() )
     {
         $this->uidReferencing = false;
+        $this->listLimit = 0;
 
         parent::__construct( $options );
     }
@@ -83,6 +87,14 @@ class ezcMailImapTransportOptions extends ezcMailTransportOptions
                 if ( !is_bool( $value ) )
                 {
                     throw new ezcBaseValueException( $name, $value, 'bool' );
+                }
+                $this->properties[$name] = $value;
+                break;
+
+            case 'listLimit':
+                if ( !is_int( $value ) || $value < 0 )
+                {
+                    throw new ezcBaseValueException( $name, $value, 'int >= 0' );
                 }
                 $this->properties[$name] = $value;
                 break;
