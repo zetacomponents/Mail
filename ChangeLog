@@ -1,7 +1,11 @@
-1.8.4 - [RELEASEDATE]
+1.8.4 - Thursday 17 October 2019
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Fixed #51: User names and passwords need to be escaped if they contain
+  spaces. (Mark Burdett)
 - Fixed #61: create_function() is deprecated in PHP 7.2. (Derick Rethans)
+- Fixed implode() argument order. (Michael Kliewe)
+- Fixed regexp patterns for PHP 7.3 and later. (Derick Rethans)
 
 
 1.8.3 - Saturday 18 November 2017
