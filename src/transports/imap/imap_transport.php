@@ -1012,6 +1012,11 @@ class ezcMailImapTransport
         {
             // get the sizes of the messages
             $tag = $this->getNextTag();
+            // The listLimit option will prevent fetch queries from exceeding
+            // the IMAP server's query size limit.
+            if ( $this->options->listLimit ) {
+                $messageList = array_slice( $messageList, 0, $this->options->listLimit );
+            }
             $query = trim( implode( ',', $messageList ) );
             $this->connection->sendData( "{$tag} FETCH {$query} RFC822.SIZE" );
             $response = $this->getResponse( 'FETCH (' );
