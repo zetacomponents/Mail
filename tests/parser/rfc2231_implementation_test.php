@@ -156,7 +156,7 @@ class ezcMailRfc2231ImplementationTest extends ezcTestCase
 
     public static function suite()
     {
-        return new PHPUnit_Framework_TestSuite( "ezcMailRfc2231ImplementationTest" );
+        return new PHPUnit\Framework\TestSuite( "ezcMailRfc2231ImplementationTest" );
     }
 }
 

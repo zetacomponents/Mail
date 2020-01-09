@@ -447,8 +447,8 @@ class ezcMailTest extends ezcTestCase
         $mail->from = new ezcMailAddress( "nospam@ez.no", "No Spam 1" );
         $mail->addTo( new ezcMailAddress( "alex.stanoi@gmail.com", "No Spam 2" ) );
         $mail->addBcc( new ezcMailAddress( "as@ez.no", "No Spam 3" ) );
-        $mail->subject = __FUNCTION__; 
- 
+        $mail->subject = __FUNCTION__;
+
         $source = $mail->generate();
 
         // Assert that the mail source contains the Bcc header
@@ -466,7 +466,7 @@ class ezcMailTest extends ezcTestCase
         $mail->from = new ezcMailAddress( "nospam@ez.no", "No Spam 1" );
         $mail->addTo( new ezcMailAddress( "alex.stanoi@gmail.com", "No Spam 2" ) );
         $mail->addBcc( new ezcMailAddress( "as@ez.no", "No Spam 3" ) );
-        $mail->subject = __FUNCTION__; 
+        $mail->subject = __FUNCTION__;
 
         $source = $mail->generate();
 
@@ -523,7 +523,7 @@ class ezcMailTest extends ezcTestCase
 
     public static function suite()
     {
-         return new PHPUnit_Framework_TestSuite( "ezcMailTest" );
+         return new PHPUnit\Framework\TestSuite( "ezcMailTest" );
     }
 }
 ?>

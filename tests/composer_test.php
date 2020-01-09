@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -313,10 +313,10 @@ class ezcMailComposerTest extends ezcTestCase
 
         $this->parseAndCheckParts( $this->mail->generate(), array( 'ezcMailText', 'ezcMailFile', 'ezcMailFile' ) );
     }
-    
-    
+
+
     /**
-     * Tests a mail with image tags with attributes after the src 
+     * Tests a mail with image tags with attributes after the src
      * https://github.com/zetacomponents/Mail/pull/21#issuecomment-44401526
      */
     public function testMailHtmlWithImagesWithAttributes()
@@ -1020,7 +1020,7 @@ class ezcMailComposerTest extends ezcTestCase
 
     public static function suite()
     {
-         return new PHPUnit_Framework_TestSuite( "ezcMailComposerTest" );
+         return new PHPUnit\Framework\TestSuite( "ezcMailComposerTest" );
     }
 }
 ?>

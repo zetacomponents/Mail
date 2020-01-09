@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -56,7 +56,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
             self::$ids[$i] = "{$messageNr}468e011a";
         }
 
-        return new PHPUnit_Framework_TestSuite( __CLASS__ );
+        return new PHPUnit\Framework\TestSuite( __CLASS__ );
     }
 
     public function testWrapperMockConnectionConstructResponseNotOk()
@@ -459,7 +459,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         $this->assertEquals( array( 0 => '1' ), $this->readAttribute( $message, 'messages' ) );
         $this->assertEquals( 'ezcMailPop3Set', get_class( $message ) );
     }
-    
+
     public function testfetchFromOffset1()
     {
         $pop3 = new ezcMailPop3Transport( self::$server );
@@ -572,7 +572,7 @@ class ezcMailTransportPop3Test extends ezcTestCase
         {
         }
     }
-    
+
     public function testListUniqueIdentifiersSingle()
     {
         $pop3 = new ezcMailPop3Transport( self::$server );
