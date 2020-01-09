@@ -138,7 +138,7 @@ class ezcMailToolsTest extends ezcTestCase
             $this->assertEquals( $reference, $result );
         }
     }
-        
+
     public function testComposeEmailAddressNameQuoted()
     {
         $addressesQuoted = array(
@@ -237,7 +237,7 @@ class ezcMailToolsTest extends ezcTestCase
         foreach ( $addresses as $address )
         {
             $address = trim( $address );
-            if ( strlen( $address ) > 1 && $address{0} !== '#' )
+            if ( strlen( $address ) > 1 && $address[0] !== '#' )
             {
                 $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is correct." );
             }
@@ -256,7 +256,7 @@ class ezcMailToolsTest extends ezcTestCase
         foreach ( $addresses as $address )
         {
             $address = trim( $address );
-            if ( strlen( $address ) > 1 && $address{0} !== '#' )
+            if ( strlen( $address ) > 1 && $address[0] !== '#' )
             {
                 $this->assertEquals( true, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is correct with MX." );
             }
@@ -270,7 +270,7 @@ class ezcMailToolsTest extends ezcTestCase
         foreach ( $addresses as $address )
         {
             $address = trim( $address );
-            if ( strlen( $address ) > 1 && $address{0} !== '#' )
+            if ( strlen( $address ) > 1 && $address[0] !== '#' )
             {
                 $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address ), "Failed asserting that {$address} is incorrect." );
             }
@@ -289,7 +289,7 @@ class ezcMailToolsTest extends ezcTestCase
         foreach ( $addresses as $address )
         {
             $address = trim( $address );
-            if ( strlen( $address ) > 1 && $address{0} !== '#' )
+            if ( strlen( $address ) > 1 && $address[0] !== '#' )
             {
                 $this->assertEquals( false, ezcMailTools::validateEmailAddress( $address, true ), "Failed asserting that {$address} is incorrect with MX." );
             }
@@ -363,7 +363,7 @@ class ezcMailToolsTest extends ezcTestCase
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'In-Reply-To' ) );
         $this->assertEquals( '<200602061533.27600.fh@ez.no>', $reply->getHeader( 'References' ) );
     }
-    
+
     public function testReplyToExtended()
     {
         $parser = new ezcMailParser();
