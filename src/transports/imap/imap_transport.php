@@ -245,6 +245,16 @@ class ezcMailImapTransport
     const SERVER_GIMAP = 'Gimap';
 
     /**
+     * Authenticate with 'AUTH LOGIN'.
+     */
+    const AUTH_LOGIN = 'LOGIN';
+
+    /**
+     * Authenticate with 'AUTH XOAUTH2'.
+     */
+    const AUTH_XOAUTH2 = 'XOAUTH2';
+
+    /**
      * Basic flags are used by {@link setFlag()} and {@link clearFlag()}
      *
      * Basic flags:
@@ -510,6 +520,23 @@ class ezcMailImapTransport
     }
 
     /**
+     * Returns an array with the authentication methods supported by the
+     * IMAP transport class (not by the IMAP server!).
+     *
+     * The returned array has the methods sorted by their relative strengths,
+     * so stronger methods are first in the array.
+     *
+     * @return array(string)
+     */
+    public static function getSupportedAuthMethods()
+    {
+        return array(
+            ezcMailImapTransport::AUTH_LOGIN,
+            ezcMailImapTransport::AUTH_XOAUTH2,
+        );
+    }
+
+    /**
      * Authenticates the user to the IMAP server with $user and $password.
      *
      * This method should be called directly after the construction of this
@@ -535,17 +562,28 @@ class ezcMailImapTransport
      * @param string $password
      * @return bool
      */
-    public function authenticate( $user, $password )
+    public function authenticate( $user, $password, $method = ezcMailImapTransport::AUTH_LOGIN )
     {
+        if ( !in_array($method, self::getSupportedAuthMethods() )
+        {
+            throw new ezcMailTransportException( "Unsupported Authentication method used" );
+        }
         if ( $this->state != self::STATE_NOT_AUTHENTICATED )
         {
             throw new ezcMailTransportException( "Tried to authenticate when there was no connection or when already authenticated." );
         }
 
-        $tag = $this->getNextTag();
-        $user = addcslashes($user, '\"');
-        $password = addcslashes($password, '\"');
-        $this->connection->sendData( "{$tag} LOGIN \"{$user}\" \"{$password}\"" );
+        switch ( $method ) {
+        {
+            case self::AUTH_LOGIN:
+                $this->sendLogin( $user, $password );
+                break;
+
+            case self::AUTH_XOAUTH2:
+                $this->sendXOAuth2( $user, $password );
+                break;
+
+        }
         $response = trim( $this->connection->getLine() );
         // hack for gmail, to fix issue #15837: imap.google.com (google gmail) changed IMAP response
         if ( $this->serverType === self::SERVER_GIMAP && strpos( $response, "* CAPABILITY" ) === 0 )
@@ -565,6 +603,14 @@ class ezcMailImapTransport
         }
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
+            // If we are using the XOAuth2 SASL mechanism we will get a base64 encoded response back to get standard
+            // response back we then need to send a blank response "\r\n" to the authentication response.
+            // @see https://developers.google.com/gmail/imap/xoauth2-protocol
+            if ( $method === self::AUTH_XOAUTH2 )
+            {
+                $this->connection->sendData( "\r\n" );
+                $response = trim( $this->connection->getLine() );
+            }
             throw new ezcMailTransportException( "The IMAP server did not accept the username and/or password: {$response}." );
         }
         else
@@ -573,6 +619,30 @@ class ezcMailImapTransport
             $this->selectedMailbox = null;
         }
         return true;
+    }
+
+    /**
+     * Tries to login to the SMTP server with 'AUTH LOGIN'
+     */
+    private function sendLogin( $user, $password )
+    {
+        $user = addcslashes( $user, '\"' );
+        $password = addcslashes( $password, '\"' );
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} LOGIN \"{$user}\" \"{$password}\"" );
+    }
+
+    /**
+     * Tries to login to the IMAP server with 'AUTH XOAUTH2'
+     * This is constructed as per the Google documentation on authenticating
+     * with XOAuth2
+     * @see https://developers.google.com/gmail/imap/xoauth2-protocol
+     */
+    private function sendXOAuth2( $user, $password )
+    {
+        $digest = base64_encode("user={$user}\1auth=Bearer {$password}\1\1");
+        $tag = $this->getNextTag();
+        $this->connection->sendData( "{$tag} AUTHENTICATE XOAUTH2 {$digest}" );
     }
 
     /**
