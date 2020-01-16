@@ -1,3 +1,13 @@
+1.9.0 - Thursday 16 January 2020
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #31: Provide a listLimit option to prevent fetch queries from exceeding
+  the server's query size limit. (Mark Burdett)
+- Fixed #77: Curly-brace syntax for array and string access is deprecated in
+  PHP 7.4
+- Add support for XOAUTH2 authentication method for IMAP. (Seamus Lee)
+
+
 1.8.4 - Thursday 17 October 2019
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
