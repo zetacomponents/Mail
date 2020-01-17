@@ -564,7 +564,7 @@ class ezcMailImapTransport
      */
     public function authenticate( $user, $password, $method = ezcMailImapTransport::AUTH_LOGIN )
     {
-        if ( !in_array($method, self::getSupportedAuthMethods() )
+        if ( !in_array($method, self::getSupportedAuthMethods() ) )
         {
             throw new ezcMailTransportException( "Unsupported Authentication method used" );
         }
@@ -573,7 +573,7 @@ class ezcMailImapTransport
             throw new ezcMailTransportException( "Tried to authenticate when there was no connection or when already authenticated." );
         }
 
-        switch ( $method ) {
+        switch ( $method )
         {
             case self::AUTH_LOGIN:
                 $this->sendLogin( $user, $password );
