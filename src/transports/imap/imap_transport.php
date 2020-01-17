@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -421,7 +421,7 @@ class ezcMailImapTransport
      */
     public function __destruct()
     {
-        try 
+        try
         {
             $this->disconnect();
         }
@@ -473,7 +473,7 @@ class ezcMailImapTransport
         {
             case 'options':
                 return $this->options;
-            
+
             default:
                 throw new ezcBasePropertyNotFoundException( $name );
         }
@@ -564,7 +564,7 @@ class ezcMailImapTransport
      */
     public function authenticate( $user, $password, $method = ezcMailImapTransport::AUTH_LOGIN )
     {
-        if ( !in_array($method, self::getSupportedAuthMethods() )
+        if ( !in_array( $method, self::getSupportedAuthMethods() ) )
         {
             throw new ezcMailTransportException( "Unsupported Authentication method used" );
         }
@@ -573,7 +573,7 @@ class ezcMailImapTransport
             throw new ezcMailTransportException( "Tried to authenticate when there was no connection or when already authenticated." );
         }
 
-        switch ( $method ) {
+        switch ( $method )
         {
             case self::AUTH_LOGIN:
                 $this->sendLogin( $user, $password );
@@ -811,7 +811,7 @@ class ezcMailImapTransport
 
         // if the mailbox selection will be successful, $state will be STATE_SELECTED
         // or STATE_SELECTED_READONLY, depending on the $readOnly parameter
-        if ( $readOnly !== true ) 
+        if ( $readOnly !== true )
         {
             $this->connection->sendData( "{$tag} SELECT \"{$mailbox}\"" );
             $state = self::STATE_SELECTED;
@@ -950,7 +950,7 @@ class ezcMailImapTransport
         return true;
     }
 
-    /** 
+    /**
      * Copies message(s) from the currently selected mailbox to mailbox
      * $destination.
      *
@@ -1000,10 +1000,10 @@ class ezcMailImapTransport
         {
             throw new ezcMailTransportException( "Can't call copyMessages() on the IMAP transport when a mailbox is not selected." );
         }
-    
+
         $tag = $this->getNextTag();
         $this->connection->sendData( "{$tag} {$uid}COPY {$messages} \"{$destination}\"" );
-        
+
         $response = trim( $this->getResponse( $tag ) );
         if ( $this->responseType( $response ) != self::RESPONSE_OK )
         {
@@ -1053,7 +1053,7 @@ class ezcMailImapTransport
 
         $messageList = array();
         $messages = array();
- 
+
         // get the numbers of the existing messages
         $tag = $this->getNextTag();
         $command = "{$tag} SEARCH UNDELETED";
@@ -2570,7 +2570,7 @@ class ezcMailImapTransport
      *
      * @param string $flag
      * @return string
-     */ 
+     */
     protected function normalizeFlag( $flag )
     {
         $flag = strtoupper( $flag );
