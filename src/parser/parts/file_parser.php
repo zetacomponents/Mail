@@ -173,7 +173,7 @@ class ezcMailFileParser extends ezcMailPartParser
         $this->fileName = $dirName . $fileName;
 
         $fp = fopen( $this->fileName, 'w' );
-        if ( $this->fp === false )
+        if ( $fp === false )
         {
             throw new ezcBaseFileNotFoundException( $this->fileName );
         }
