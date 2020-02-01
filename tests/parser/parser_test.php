@@ -903,6 +903,26 @@ END;
                              $parts[1]->contentDisposition->fileName, "Fails until I figure out what the RFC means." );
     }
 
+    public function testVarious12()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/attachment_with_long_filename.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $parts = $mail[0]->body->getParts();
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+    }
+
+    public function testVarious13()
+    {
+        $parser = new ezcMailParser();
+        $set = new SingleFileSet( 'various/attachment_only_horizontal_tab_in_filename.mail' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $parts = $mail[0]->body->getParts();
+        $this->assertEquals( true, $parts[1] instanceof ezcMailFile );
+    }
+
     public function testExtendedMailClass()
     {
         $parser = new ezcMailParser();
