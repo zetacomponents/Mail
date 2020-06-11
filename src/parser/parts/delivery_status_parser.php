@@ -123,7 +123,7 @@ class ezcMailDeliveryStatusParser extends ezcMailPartParser
      */
     public function finish()
     {
-        if ( array_key_exists( $this->section - 1, $this->part->recipients ) )
+        if ( array_key_exists( $this->section - 1, (array) $this->part->recipients ) )
         {
             unset( $this->part->recipients[$this->section - 1] ); // because one extra recipient is created in parseHeader()
         }
