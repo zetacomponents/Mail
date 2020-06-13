@@ -794,10 +794,6 @@ END;
         $this->assertEquals( 1, count( $mail[0]->body->getParts() ) );
     }
 
-    public function testPGPEncryptedMail()
-    {
-    }
-
     // This test tests that folding works correctly
     public function testVarious9()
     {
@@ -927,8 +923,8 @@ END;
     {
         $parser = new ezcMailParser();
         $set = new SingleFileSet( 'various/test-text-lineendings' );
-        $mail = $parser->parseMail( $set, "ExtendedMail" );
-        foreach ( $set as $mail )
+        $mails = $parser->parseMail( $set, "ExtendedMail" );
+        foreach ( $mails as $mail )
         {
             $this->assertInstanceOf(
                 "ExtendedMail",
@@ -936,7 +932,6 @@ END;
                 "Parser did not create instance of extended mail class."
             );
         }
-
     }
 
     public function testHeadersHolder()
@@ -1380,7 +1375,7 @@ END;
         $set = new SingleFileSet( 'various/test-broken-iconv-1' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
-        $this->assertEquals( 63, strlen( $mail->body->text ) );
+        $this->assertEquals( 0, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
 
@@ -1391,7 +1386,7 @@ END;
         $set = new SingleFileSet( 'various/test-broken-iconv-2' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
-        $this->assertEquals( 38, strlen( $mail->body->text ) );
+        $this->assertEquals( 0, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
 
@@ -1425,7 +1420,7 @@ END;
         $set = new SingleFileSet( 'various/test-broken-iconv-1' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
-        $this->assertEquals( 63, strlen( $mail->body->text ) );
+        $this->assertEquals( 0, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
 
@@ -1436,7 +1431,7 @@ END;
         $set = new SingleFileSet( 'various/test-broken-iconv-2' );
         $mail = $parser->parseMail( $set );
         $mail = $mail[0];
-        $this->assertEquals( 38, strlen( $mail->body->text ) );
+        $this->assertEquals( 0, strlen( $mail->body->text ) );
         ezcMailCharsetConverter::setConvertMethod( array( 'ezcMailCharsetConverter', 'convertToUTF8Iconv' ) );
     }
 
@@ -1662,7 +1657,7 @@ END;
         $this->assertEquals( 1, count( $mail ) );
         $mail = $mail[0];
         $this->assertEquals( 'Un Fax a été émis', $mail->getHeader( 'Subject' ) );
-        $this->assertEquals( 'Un Fax a t mis', $mail->subject );
+        $this->assertEquals( 'Un Fax a été émis', $mail->subject );
     }
 
     /**

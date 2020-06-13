@@ -9,5 +9,3 @@
 #
 # Comments are entered as "# comment", and comments are useful for disabling
 # an email address.
-
-nospam@ez.no
