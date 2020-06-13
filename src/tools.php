@@ -608,9 +608,15 @@ class ezcMailTools
 
         // Try it as latin 1 string
         $text = preg_replace( '/=\?([^?]+)\?/', '=?iso-8859-1?', $origtext );
-        $text = iconv_mime_decode( $text, 0, $charset );
+        $text = @iconv_mime_decode( $text, 0, $charset );
 
-        return $text;
+        if ( $text !== false )
+        {
+            return $text;
+        }
+
+        // Return text as-is
+        return $origtext;
     }
 
     /**

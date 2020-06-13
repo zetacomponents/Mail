@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -142,7 +142,12 @@ class ezcMailFileParser extends ezcMailPartParser
         }
 
         // clean file name (replace unsafe characters with underscores)
-        $fileName = strtr( $fileName, "/\\\0\"|?*<:;>+[]", '______________' );
+        $fileName = preg_replace( '/[^A-Za-z0-9-. ]/', '_', $fileName );
+
+        if ( strlen( $fileName ) > 200 )
+        {
+            $fileName = substr( $fileName, 0, 200 ) . '.' . pathinfo( $fileName, PATHINFO_EXTENSION );
+        }
 
         $this->fp = $this->openFile( $fileName ); // propagate exception
     }
@@ -172,8 +177,8 @@ class ezcMailFileParser extends ezcMailPartParser
         ezcMailParserShutdownHandler::registerForRemoval( $dirName );
         $this->fileName = $dirName . $fileName;
 
-        $fp = fopen( $this->fileName, 'w' );
-        if ( $this->fp === false )
+        $fp = @fopen( $this->fileName, 'w' );
+        if ( $fp === false )
         {
             throw new ezcBaseFileNotFoundException( $this->fileName );
         }

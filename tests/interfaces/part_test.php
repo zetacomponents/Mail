@@ -199,10 +199,9 @@ class ezcMailPartTest extends ezcTestCase
         $this->part->setHeader( "X-Related-Movie", 'James Bond - Шпион, который меня любил', 'iso-8859-5' );
         $this->assertEquals( 'James Bond - Шпион, который меня любил', $this->part->getHeader( 'X-Related-Movie' ) );
 
-        $expected = "X-Related-Movie: =?iso-8859-5?Q?James=20Bond?==?iso-8859-5?Q?=20?=" . ezcMailTools::lineBreak() .
-                    " =?iso-8859-5?Q?-=20=D0=A8=D0=BF=D0=B8=D0=BE=D0=BD,=20=D0=BA=D0=BE=D1?=" . ezcMailTools::lineBreak() .
-                    " =?iso-8859-5?Q?=82=D0=BE=D1=80=D1=8B=D0=B9=20=D0=BC=D0=B5=D0?=" . ezcMailTools::lineBreak() .
-                    " =?iso-8859-5?Q?=BD=D1=8F=20=D0=BB=D1=8E=D0=B1=D0=B8=D0=BB?=" . ezcMailTools::lineBreak();
+        $expected = "X-Related-Movie: =?iso-8859-5?Q?James=20Bond=20-=20=D0=A8=D0=BF=D0=B8=D0=BE=D0=BD,?=" . ezcMailTools::lineBreak() .
+                    " =?iso-8859-5?Q?=20=D0=BA=D0=BE=D1=82=D0=BE=D1=80=D1=8B=D0=B9=20=D0=BC=D0?=" . ezcMailTools::lineBreak() .
+                    " =?iso-8859-5?Q?=B5=D0=BD=D1=8F=20=D0=BB=D1=8E=D0=B1=D0=B8=D0=BB?=" . ezcMailTools::lineBreak();
 
         $this->assertEquals( $expected, $this->part->generateHeaders() );
     }
@@ -218,11 +217,9 @@ class ezcMailPartTest extends ezcTestCase
         $this->part->setHeader( 'X-Subject', $str, 'utf-8' );
         $this->assertSame( $str, $this->part->getHeader( 'X-Subject' ) );
 
-        $expected = "X-Subject: Folder =?UTF-8?Q?=22=C3=A3=C2=83=C2=AD=C3=A3=C2=82=C2=B0=C3=A3=C2=82?=" . ezcMailTools::lineBreak() .
-                    " =?UTF-8?Q?=C2=A4=C3=A3=C2=83=C2=B3=C3=A5=C2=89=C2=8D=C3=A3=C2=83=C2=88?=" . ezcMailTools::lineBreak() .
-                    " =?UTF-8?Q?=C3=A3=C2=83=C2=83=C3=A3=C2=83=C2=97=22=20=C3=A3=C2=81=C2=AF?=" . ezcMailTools::lineBreak() .
-                    " =?UTF-8?Q?=C3=A6=C2=9B=C2=B4=C3=A6=C2=96=C2=B0=C3=A3=C2=81=C2=95=C3=A3?=" . ezcMailTools::lineBreak() .
-                    " =?UTF-8?Q?=C2=82=C2=8C=C3=A3=C2=81=C2=BE?=" . ezcMailTools::lineBreak();
+        $expected = "X-Subject: =?utf-8?Q?Folder=20\"=E3=83=AD=E3=82=B0=E3=82=A4=E3=83=B3=E5=89=8D?=" . ezcMailTools::lineBreak() .
+                    " =?utf-8?Q?=E3=83=88=E3=83=83=E3=83=97\"=20=E3=81=AF=E6=9B=B4=E6=96=B0?=" . ezcMailTools::lineBreak() .
+                    " =?utf-8?Q?=E3=81=95=E3=82=8C=E3=81=BE?=" . ezcMailTools::lineBreak();
         $this->assertSame( $expected, $this->part->generateHeaders() );
     }
 
@@ -233,31 +230,11 @@ class ezcMailPartTest extends ezcTestCase
         $this->assertEquals( 'James Bond - Из России с любовью', $this->part->getHeader( 'X-Related-Movie' ) );
 
         $expected = "X-Related-City: Moscow" . ezcMailTools::lineBreak() .
-                    "X-Related-Movie: =?iso-8859-5?Q?James=20Bond=20-=20=D0=98=D0=B7=20?=" . ezcMailTools::lineBreak() .
-                    " =?iso-8859-5?Q?=D0=A0=D0=BE=D1=81=D1=81=D0=B8=D0=B8=20=D1=81?=" . ezcMailTools::lineBreak() .
-                    " =?iso-8859-5?Q?=20=D0=BB=D1=8E=D0=B1=D0=BE=D0=B2=D1=8C=D1=8E?=" . ezcMailTools::lineBreak();
+                    "X-Related-Movie: =?iso-8859-5?Q?James=20Bond=20-=20=D0=98=D0=B7=20=D0=A0=D0=BE=D1=81?=" . ezcMailTools::lineBreak() .
+                    " =?iso-8859-5?Q?=D1=81=D0=B8=D0=B8=20=D1=81=20=D0=BB=D1=8E=D0=B1=D0=BE=D0?=" . ezcMailTools::lineBreak() .
+                    " =?iso-8859-5?Q?=B2=D1=8C=D1=8E?=" . ezcMailTools::lineBreak();
 
         $this->assertEquals( $expected, $this->part->generateHeaders() );
-    }
-
-    public function testMockSetHeaderWithEncodingNoCharsetReturnDefault()
-    {
-        $part = $this->getMock( 'ezcMailPart', array( 'setHeaderCharset', 'generateBody' ), array() );
-
-        $part->expects( $this->any() )
-             ->method( 'setHeaderCharset' )
-             ->will( $this->returnValue( false ) );
-
-        $part->expects( $this->any() )
-             ->method( 'generateBody' )
-             ->will( $this->returnValue( false ) );
-
-        $part->setHeader( "X-Related-Movie", 'James Bond - Шпион, который меня любил', 'iso-8859-5' );
-        $this->assertEquals( 'James Bond - Шпион, который меня любил', $part->getHeader( 'X-Related-Movie' ) );
-
-        $expected = "X-Related-Movie: James Bond - Шпион, который меня любил" . ezcMailTools::lineBreak();
-
-        $this->assertEquals( $expected, $part->generateHeaders() );
     }
 
     public static function suite()

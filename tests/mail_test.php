@@ -323,9 +323,8 @@ class ezcMailTest extends ezcTestCase
         $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
         $this->mail->subject = "æøå";
         $this->mail->body = new ezcMailText( "Dette er body ßßæøååå" );
-
         $this->mail->generateHeaders();
-        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.7@ez.no>';
+        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.60@ez.no>';
         $this->assertEquals( $expected, $this->mail->getHeader( 'Message-Id' ) );
     }
 

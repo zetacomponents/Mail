@@ -410,7 +410,7 @@ class ezcMailComposerTest extends ezcTestCase
             $this->mail->addTo( new ezcMailAddress( 'fh@ez.no', 'Frederik Holljen' ) );
             $this->mail->subject = "HTML message with embeded files and images.";
             $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://"
-                                       . realpath( $fileName ) . " />Here is some text after the image. Here is the <a href=\"file://"
+                                       . realpath( $fileName ) . "\" />Here is some text after the image. Here is the <a href=\"file://"
                                        . dirname( __FILE__  )
                                        . "/parts/data/fly.jpg\">file.</a></html>";
             $this->mail->addAttachment( dirname( __FILE__) . "/parts/data/fly.jpg" );
@@ -733,7 +733,7 @@ class ezcMailComposerTest extends ezcTestCase
             $contentType = 'application/octet-stream';
         }
 
-        $this->assertEquals( $contentType . '; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
+        $this->assertEquals( $contentType . '; charset=binary; name="custom_attachment_name.jpg"', $parts[1]->getHeader( "Content-Type" ) );
         $this->assertEquals( $file->contentDisposition, $parts[1]->contentDisposition );
     }
 
@@ -908,7 +908,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://" . dirname( __FILE__  ) . "/parts/data/fly.jpg\" /> Here is the picture.";
         $this->mail->build();
-        $this->assertEquals( true, 62701 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 62733 );
+        $this->assertEquals( true, 62701 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 62740 );
     }
 
     /**
