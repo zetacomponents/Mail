@@ -1,3 +1,13 @@
+1.9.2 - Saturday 13 June 2020
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #45: File name too long when parsing attachments.
+- Fixed #66: Attachment filename too long.
+- Fixed #80: Fixed bug in openFile() function. (Michael Kliewe)
+- Fixed #82: Fix issue where using array_key_exists on an object is deprecated
+  in PHP 7.4. (Seamus Lee)
+
+
 1.9.1 - Friday 17 January 2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
