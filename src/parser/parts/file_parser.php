@@ -177,8 +177,8 @@ class ezcMailFileParser extends ezcMailPartParser
         ezcMailParserShutdownHandler::registerForRemoval( $dirName );
         $this->fileName = $dirName . $fileName;
 
-        $fp = fopen( $this->fileName, 'w' );
-        if ( $this->fp === false )
+        $fp = @fopen( $this->fileName, 'w' );
+        if ( $fp === false )
         {
             throw new ezcBaseFileNotFoundException( $this->fileName );
         }
