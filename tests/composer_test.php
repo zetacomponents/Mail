@@ -33,7 +33,7 @@ class ezcMailComposerTest extends ezcTestCase
 {
     private $mail;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
         $this->mail = new ezcMailComposer();
 	}

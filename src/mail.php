@@ -133,7 +133,7 @@ class ezcMail extends ezcMailPart
     /**
      * Characters allowed in the returnPath address
      */
-    const RETURN_PATH_CHARS = 'A-Za-z0-9_.@=/+{}#~-';
+    const RETURN_PATH_CHARS = 'A-Za-z0-9_.@=/+{}#~\-\'';
 
     /**
      * Holds the options for this class.
