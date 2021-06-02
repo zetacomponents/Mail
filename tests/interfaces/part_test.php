@@ -46,7 +46,7 @@ class ezcMailPartTest extends ezcTestCase
 {
     private $part;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
         $this->part = new MailPartTest();
 	}

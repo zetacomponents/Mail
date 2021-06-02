@@ -15,7 +15,7 @@ class ezcMailTest extends ezcTestCase
 {
     private $mail;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mail = new ezcMail();
     }
@@ -505,6 +505,13 @@ class ezcMailTest extends ezcTestCase
         $mail = new ezcMail();
         $mail->returnPath = null;
         $this->assertNull( $mail->returnPath );
+    }
+
+    public function testSingleQuoteReturnPath()
+    {
+        $mail = new ezcMail();
+        $mail->returnPath = new ezcMailAddress( 'TestEmailWith\'singlequote@example.com' );
+        $this->assertEquals( 'TestEmailWith\'singlequote@example.com', $mail->returnPath->email );
     }
 
     public function testInvalidReturnPathChars()

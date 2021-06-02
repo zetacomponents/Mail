@@ -55,7 +55,7 @@ class ezcMailMultipartTest extends ezcTestCase
 {
     private $multipart;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
         $this->multipart = new TestMultipart();
 	}
