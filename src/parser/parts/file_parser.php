@@ -120,9 +120,10 @@ class ezcMailFileParser extends ezcMailPartParser
         // figure out the base filename
         // search Content-Disposition first as specified by RFC 2183
         $matches = array();
-        if ( preg_match( '/\s*filename=\s?"?([^;"]*);?/i',
-                        $this->headers['Content-Disposition'], $matches ) )
-        {
+        if (
+            $this->headers['Content-Disposition'] &&
+            preg_match( '/\s*filename=\s?"?([^;"]*);?/i', $this->headers['Content-Disposition'], $matches )
+        ) {
             $fileName = trim( $matches[1], '"' );
         }
         // fallback to the name parameter in Content-Type as specified by RFC 2046 4.5.1
@@ -215,6 +216,11 @@ class ezcMailFileParser extends ezcMailPartParser
      */
     private function appendStreamFilters( $line )
     {
+        if ( ! is_string( $this->headers['Content-Transfer-Encoding'] ) )
+        {
+            return;
+        }
+
         // append the correct decoding filter
         switch ( strtolower( $this->headers['Content-Transfer-Encoding'] ) )
         {
@@ -318,15 +324,16 @@ class ezcMailFileParser extends ezcMailPartParser
 
         // set inline disposition mode if set.
         $matches = array();
-        if ( preg_match( '/^\s*inline;?/i',
-                        $this->headers['Content-Disposition'], $matches ) )
+        if ( $this->headers['Content-Disposition'] )
         {
-            $filePart->dispositionType = ezcMailFile::DISPLAY_INLINE;
-        }
-        if ( preg_match( '/^\s*attachment;?/i',
-                        $this->headers['Content-Disposition'], $matches ) )
-        {
-            $filePart->dispositionType = ezcMailFile::DISPLAY_ATTACHMENT;
+            if ( preg_match( '/^\s*inline;?/i', $this->headers['Content-Disposition'], $matches ) )
+            {
+                $filePart->dispositionType = ezcMailFile::DISPLAY_INLINE;
+            }
+            if ( preg_match( '/^\s*attachment;?/i', $this->headers['Content-Disposition'], $matches ) )
+            {
+                $filePart->dispositionType = ezcMailFile::DISPLAY_ATTACHMENT;
+            }
         }
         $filePart->size = filesize( $this->fileName );
         return $filePart;
