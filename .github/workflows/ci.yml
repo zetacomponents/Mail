@@ -16,11 +16,11 @@ jobs:
       # Keys:
       # - experimental: Whether the build is "allowed to fail".
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0']
+        php: ['7.3', '7.4', '8.0', '8.1']
         experimental: [false]
 
         include:
-          - php: '8.1'
+          - php: '8.2'
             experimental: true
 
     name: "PHP: ${{ matrix.php }}"
@@ -41,12 +41,12 @@ jobs:
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
-      - name: "Install Composer dependencies (PHP < 8.1)"
-        if: ${{ matrix.php < '8.1' }}
+      - name: "Install Composer dependencies (PHP < 8.2)"
+        if: ${{ matrix.php < '8.2' }}
         uses: "ramsey/composer-install@v1"
 
-      - name: "Install Composer dependencies (PHP 8.1)"
-        if: ${{ matrix.php >= '8.1' }}
+      - name: "Install Composer dependencies (PHP 8.2)"
+        if: ${{ matrix.php >= '8.2' }}
         uses: "ramsey/composer-install@v1"
         with:
           composer-options: --ignore-platform-reqs

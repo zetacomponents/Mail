@@ -54,7 +54,7 @@
             "zetacomponents/base": "~1.8"
         },
         "require-dev": {
-            "phpunit/phpunit": "~8.0",
+            "phpunit/phpunit": "~9.0",
             "zetacomponents/unit-test": "*"
         }
 }
