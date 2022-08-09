@@ -1,3 +1,11 @@
+1.9.3 - Tuesday 09 August 2022
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #88: Support for PHP 8.1/8.2 and PHPUnit 8.0 compatibility fixes.
+- Fixed: Update regex for return path to allow for a single quote to be
+  included in the email as permitted by the RFC. (Seamus Lee)
+
+
 1.9.2 - Saturday 13 June 2020
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
