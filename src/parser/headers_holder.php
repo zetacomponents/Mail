@@ -73,6 +73,7 @@ class ezcMailHeadersHolder implements ArrayAccess
      * @param string $key
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists( $key )
     {
         return array_key_exists( strtolower( $key ), $this->lookup );
@@ -84,6 +85,7 @@ class ezcMailHeadersHolder implements ArrayAccess
      * @param string $key
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet( $key )
     {
         $key = strtolower( $key );
@@ -103,6 +105,7 @@ class ezcMailHeadersHolder implements ArrayAccess
      * @param string $key
      * @param mixed $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet( $key, $value )
     {
         $lowerKey = strtolower( $key );
@@ -125,7 +128,7 @@ class ezcMailHeadersHolder implements ArrayAccess
         if (is_array($value)) {
             return array_map(array($this, 'trimRecursive'), $value);
         }
-        return trim($value);
+        return trim((string) $value);
     }
 
     /**
@@ -133,6 +136,7 @@ class ezcMailHeadersHolder implements ArrayAccess
      *
      * @param string $key
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset( $key )
     {
         $key = strtolower( $key );

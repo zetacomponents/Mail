@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -33,6 +33,27 @@
  */
 class ezcMailDeliveryStatusParser extends ezcMailPartParser
 {
+    /**
+     * Holds the headers
+     *
+     * @var ezcMailHeadersHolder
+     */
+    private $headers;
+
+    /**
+     * Holds the last parsed header value, used for folding
+     *
+     * @var string
+     */
+    private $headerValue;
+
+    /**
+     * Holds the last parsed header, used for folding
+     *
+     * @var string
+     */
+    private $lastParsedHeader;
+
     /**
      * This mail part will be returned by the method finish().
      *

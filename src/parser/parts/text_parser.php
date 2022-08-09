@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -104,14 +104,22 @@ class ezcMailTextParser extends ezcMailPartParser
             }
         }
 
-        $encoding = strtolower( $this->headers['Content-Transfer-Encoding'] );
-        if ( $encoding == ezcMail::QUOTED_PRINTABLE )
+        if ( $this->text === null )
         {
-            $this->text = quoted_printable_decode( $this->text );
+            $this->text = '';
         }
-        else if ( $encoding == ezcMail::BASE64 )
+
+        if ( $this->headers['Content-Transfer-Encoding'] )
         {
-            $this->text = base64_decode( $this->text );
+            $encoding = strtolower( $this->headers['Content-Transfer-Encoding'] );
+            if ( $encoding == ezcMail::QUOTED_PRINTABLE )
+            {
+                $this->text = quoted_printable_decode( $this->text );
+            }
+            else if ( $encoding == ezcMail::BASE64 )
+            {
+                $this->text = base64_decode( $this->text );
+            }
         }
 
         $this->text = ezcMailCharsetConverter::convertToUTF8( $this->text, $charset );

@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -108,11 +108,11 @@ class ezcMailRfc2231Implementation
                 }
 
                 $result[1][$paramName] = array( 'value' => $parts[0]['value'] );
-                if ( strlen( $charset ) > 0 )
+                if ( $charset && strlen( $charset ) > 0 )
                 {
                     $result[1][$paramName]['charset'] = $charset;
                 }
-                if ( strlen( $language ) > 0 )
+                if ( $language && strlen( $language ) > 0 )
                 {
                     $result[1][$paramName]['language'] = $language;
                 }
@@ -170,7 +170,7 @@ class ezcMailRfc2231Implementation
                         {
                             $cd->displayFileName = ezcMailTools::mimeDecode( $cd->displayFileName );
                         }
- 
+
                         if ( isset( $data['language'] ) )
                         {
                             $cd->fileNameLanguage = $data['language'];

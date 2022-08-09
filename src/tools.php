@@ -459,7 +459,9 @@ class ezcMailTools
 
                 for ( $i = 0; $i < $numberOfMx; $i++ )
                 {
-                    if ( $socket = @fsockopen( $mx[$i], 25, $errno = 0, $errstr = 0, $timeoutOpen ) )
+                    $errno = 0;
+                    $errstr = 0;
+                    if ( $socket = @fsockopen( $mx[$i], 25, $errno, $errstr, $timeoutOpen ) )
                     {
                         $response = fgets( $socket );
                         stream_set_timeout( $socket, $timeoutConnection );
