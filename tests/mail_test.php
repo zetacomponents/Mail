@@ -523,7 +523,7 @@ class ezcMailTest extends ezcTestCase
         }
         catch ( ezcBaseValueException $e )
         {
-            $this->assertEquals( "The value 'with space@example.com' that you were trying to assign to setting 'returnPath' is invalid. Allowed values are: the characters '" . ezcMail::RETURN_PATH_CHARS . "'.", $e->getMessage() );
+            $this->assertEquals( "The value 'with space@example.com' that you were trying to assign to setting 'returnPath' is invalid. Allowed values are: a valid email address or null.", $e->getMessage() );
         }
     }
 

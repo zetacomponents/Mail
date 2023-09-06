@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -93,7 +93,7 @@
  *                                             address embedded in the
  *                                             ezcMailAddress object may only
  *                                             contain letters from the
- *                                             RETURN_PATH_CHARS set.
+ *                                             function filter_var FILTER_VALIDATE_EMAIL.
  * @property ezcMailOptions $options
  *           Options for generating mail. See {@link ezcMailOptions}.
  *
@@ -129,11 +129,6 @@ class ezcMail extends ezcMailPart
      * Base 64 encoding.
      */
     const BASE64 = "base64";
-
-    /**
-     * Characters allowed in the returnPath address
-     */
-    const RETURN_PATH_CHARS = 'A-Za-z0-9_.@=/+{}#~\-\'';
 
     /**
      * Holds the options for this class.
@@ -187,9 +182,9 @@ class ezcMail extends ezcMailPart
                 {
                     throw new ezcBaseValueException( $name, $value, 'ezcMailAddress or null' );
                 }
-                if ( $value !== null && preg_replace( '([' . self::RETURN_PATH_CHARS . '])', '', $value->email ) != '' )
+                if ( $value !== null && !filter_var( $value->email, FILTER_VALIDATE_EMAIL ) )
                 {
-                    throw new ezcBaseValueException( $name, $value->email, 'the characters \'' . self::RETURN_PATH_CHARS . '\'' );
+                    throw new ezcBaseValueException( $name, $value->email, 'a valid email address or null' );
                 }
                 $this->properties[$name] = $value;
                 break;
