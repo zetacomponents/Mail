@@ -1,3 +1,10 @@
+1.9.6 - XXX XX XXX 2023
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #90: Allow longer email addresses than the SMTP spec allows for
+  Return-Path.
+
+
 1.9.5 - Wednesday 06 September 2023
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
