@@ -1,4 +1,4 @@
-1.9.6 - XXX XX XXX 2023
+1.9.6 - Thursday 14 September 2023
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Fixed #90: Allow longer email addresses than the SMTP spec allows for
