@@ -507,6 +507,13 @@ class ezcMailTest extends ezcTestCase
         $this->assertNull( $mail->returnPath );
     }
 
+    public function testLongReturnPath()
+    {
+        $mail = new ezcMail();
+        $mail->returnPath = new ezcMailAddress( "SRS0=z9mA=EY=donate-long-name.example.org=b.51907682.51575594.57daed525aaca713@example.org" );
+        $this->assertEquals( "SRS0=z9mA=EY=donate-long-name.example.org=b.51907682.51575594.57daed525aaca713@example.org", $mail->returnPath->email );
+    }
+
     public function testSingleQuoteReturnPath()
     {
         $mail = new ezcMail();
