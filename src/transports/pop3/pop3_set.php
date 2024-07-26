@@ -75,6 +75,13 @@ class ezcMailPop3Set implements ezcMailParserSet
     private $deleteFromServer = false;
 
     /**
+     * Holds the connection to the POP3 server.
+     *
+     * @var ezcMailTransportConnection
+     */
+    private $connection = null;
+
+    /**
      * Constructs a new POP3 parser set that will fetch the messages $messages.
      *
      * $connection must hold a valid connection to a POP3 server that is ready
