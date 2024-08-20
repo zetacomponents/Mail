@@ -166,9 +166,9 @@ class ezcMailComposer extends ezcMail
     /**
      * Constructs an empty ezcMailComposer object.
      *
-     * @param ezcMailComposerOptions $options
+     * @param ezcMailComposerOptions|null $options
      */
-    public function __construct( ezcMailComposerOptions $options = null )
+    public function __construct( ?ezcMailComposerOptions $options = null )
     {
         $this->properties['plainText'] = null;
         $this->properties['htmlText'] = null;
