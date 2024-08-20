@@ -1,3 +1,12 @@
+1.9.7 - Tuesday 20 August 2024
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #93: Define ezcMail{Pop3,Imap}Set::$connection property to avoid
+  deprecation notice.
+- Fixed #94: PHP 8.4: Fix the 'Implicitly marking parameter $ as nullable is
+  deprecated' warning. (Eileen McNaughton)
+
+
 1.9.6 - Thursday 14 September 2023
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
