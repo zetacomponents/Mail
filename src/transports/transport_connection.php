@@ -75,9 +75,9 @@ class ezcMailTransportConnection
      *         if $options contains a property with a value not allowed
      * @param string $server
      * @param int $port
-     * @param ezcMailTransportOptions $options
+     * @param ezcMailTransportOptions|null $options
      */
-    public function __construct( $server, $port, ezcMailTransportOptions $options = null )
+    public function __construct( $server, $port, ?ezcMailTransportOptions $options = null )
     {
         $errno = null;
         $errstr = null;

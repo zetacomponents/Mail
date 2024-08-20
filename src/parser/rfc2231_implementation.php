@@ -137,10 +137,10 @@ class ezcMailRfc2231Implementation
      * will not clear out any old values in the object.
      *
      * @param string $header
-     * @param ezcMailContentDispositionHeader $cd
+     * @param ezcMailContentDispositionHeader|null $cd
      * @return ezcMailContentDispositionHeader
      */
-    public static function parseContentDisposition( $header, ezcMailContentDispositionHeader $cd = null )
+    public static function parseContentDisposition( $header, ?ezcMailContentDispositionHeader $cd = null )
     {
         if ( $cd === null )
         {
