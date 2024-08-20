@@ -116,6 +116,13 @@ class ezcMailImapSet implements ezcMailParserSet
     private $bytesToRead = false;
 
     /**
+     * Holds the connection to the IMAP server.
+     *
+     * @var ezcMailTransportConnection
+     */
+    private $connection = null;
+
+    /**
      * Constructs a new IMAP parser set that will fetch the messages $messages.
      *
      * $connection must hold a valid connection to a IMAP server that is ready
