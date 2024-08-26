@@ -168,7 +168,11 @@ abstract class ezcMailPartParser
                 break;
 
             case 'text':
-                if ( ezcMailPartParser::$parseTextAttachmentsAsFiles === true )
+                if ( (ezcMailPartParser::$parseTextAttachmentsAsFiles === true) &&
+                     (preg_match('/\s*filename="?([^;"]*);?/i', $headers['Content-Disposition'] ?? '') ||
+                      preg_match( '/\s*name="?([^;"]*);?/i', $headers['Content-Type'] ?? '')
+                     )
+                   )
                 {
                     $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
                 }
