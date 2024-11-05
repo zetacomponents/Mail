@@ -1863,5 +1863,79 @@ END;
         }
     }
 
+    public function testVarious14a()
+    {
+        $parser = new ezcMailParser();
+        $parser->options->parseTextAttachmentsAsFiles = false;
+
+        $set = new SingleFileSet( 'various/test-html-text-and-text-attachment' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        $this->assertEquals( 4, count( $parts ) );
+        $this->assertEquals( 'ezcMailMultipartAlternative', get_class( $parts[0] ) );
+
+        $this->assertEquals( 'ezcMailText', get_class( $parts[1] ) );
+        $this->assertEquals( 'plain', $parts[1]->subType );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[2] ) );
+        $this->assertEquals( 'form_03.doc', basename( $parts[2]->fileName ) );
+        $this->assertEquals( 'application', $parts[2]->contentType );
+        $this->assertEquals( 'msword', $parts[2]->mimeType );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[3] ) );
+        $this->assertEquals( '2932_1 Ward Grouped Mayor-Lismore.pdf', basename( $parts[3]->fileName ) );
+        $this->assertEquals( 'application', $parts[3]->contentType );
+        $this->assertEquals( 'pdf', $parts[3]->mimeType );
+
+        $alternativeParts = $parts[0]->getParts();
+        $this->assertEquals( 2, count( $alternativeParts ) );
+        $this->assertEquals( 'ezcMailText', get_class( $alternativeParts[0] ) );
+        $this->assertEquals( 'plain', $alternativeParts[0]->subType );
+        $this->assertEquals( 'ezcMailText', get_class( $alternativeParts[1] ) );
+        $this->assertEquals( 'html', $alternativeParts[1]->subType );
+    }
+
+    public function testVarious14b()
+    {
+        $parser = new ezcMailParser();
+        $parser->options->parseTextAttachmentsAsFiles = true;
+
+        $set = new SingleFileSet( 'various/test-html-text-and-text-attachment' );
+        $mail = $parser->parseMail( $set );
+        $this->assertEquals( 1, count( $mail ) );
+        $mail = $mail[0];
+        $parts = $mail->body->getParts();
+
+        $this->assertEquals( 4, count( $parts ) );
+        $this->assertEquals( 'ezcMailMultipartAlternative', get_class( $parts[0] ) );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[1] ) );
+        $this->assertEquals( '2_load_xss.html.txt', basename( $parts[1]->fileName ) );
+        $this->assertEquals( 'text', $parts[1]->contentType );
+        $this->assertEquals( 'plain', $parts[1]->mimeType );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[2] ) );
+        $this->assertEquals( 'form_03.doc', basename( $parts[2]->fileName ) );
+        $this->assertEquals( 'application', $parts[2]->contentType );
+        $this->assertEquals( 'msword', $parts[2]->mimeType );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $parts[3] ) );
+        $this->assertEquals( '2932_1 Ward Grouped Mayor-Lismore.pdf', basename( $parts[3]->fileName ) );
+        $this->assertEquals( 'application', $parts[3]->contentType );
+        $this->assertEquals( 'pdf', $parts[3]->mimeType );
+
+        $alternativeParts = $parts[0]->getParts();
+        $this->assertEquals( 2, count( $alternativeParts ) );
+        $this->assertEquals( 'ezcMailFile', get_class( $alternativeParts[0] ) );
+        $this->assertEquals( 'text', $alternativeParts[0]->contentType );
+        $this->assertEquals( 'plain', $alternativeParts[0]->mimeType );
+
+        $this->assertEquals( 'ezcMailFile', get_class( $alternativeParts[1] ) );
+        $this->assertEquals( 'application', $alternativeParts[1]->contentType );
+        $this->assertEquals( 'html', $alternativeParts[1]->mimeType );
+    }
 }
 ?>
