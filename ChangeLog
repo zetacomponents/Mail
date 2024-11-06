@@ -1,3 +1,11 @@
+1.10.0 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #96: Add new option 'parseMultipartMixedTextAttachmentsAsFiles' to
+  ezcMailParserOptions to retrieve only text attachments, that are sub-parts of
+  multipart/mixed parts an ezcMailFile object, instead of the default ezcMailText
+  object.
+
 1.9.7 - Tuesday 20 August 2024
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

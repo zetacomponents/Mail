@@ -83,6 +83,15 @@
  * $parser->options->parseTextAttachmentsAsFiles = true;
  * </code>
  *
+ * In some cases, you might only want to create {@link ezcMailFile} objects
+ * for text attachments that are sub-parts of multipart/mixed parts.
+ * In that case, you can use the parseMultipartMixedTextAttachmentsAsFiles
+ * option. Example:
+ * <code>
+ * $parser = new ezcMailParser();
+ * $parser->options->parseMultipartMixedTextAttachmentsAsFiles = true;
+ * </code>
+ *
  * @property ezcMailParserOptions $options
  *           Holds the options you can set to the mail parser.
  *
