@@ -66,7 +66,7 @@ abstract class ezcMailPartParser
                                              'sender', 'subject', 'sender', 'to' );
 
     /**
-     * The default is to parse text attachments into ezcMailTextPart objects.
+     * The default is to parse text attachments into ezcMailText objects.
      *
      * Setting this to true before calling the parser will parse text attachments
      * into ezcMailFile objects. Use the parser options for this:
@@ -80,6 +80,23 @@ abstract class ezcMailPartParser
      * @var bool
      */
     public static $parseTextAttachmentsAsFiles = false;
+
+    /**
+     * The default is to parse text attachments into ezcMailText objects.
+     *
+     * Setting this to true before calling the parser will parse text attachments
+     * that are sub-parts of Multipart/Mixed parts into ezcMailFail objects.
+     * Use the parser options for this:
+     *
+     * <code>
+     * $parser = new ezcMailParser();
+     * $parser->options->parseMultipartMixedTextAttachmentsAsFiles = true;
+     * // call $parser->parseMail( $set );
+     * </code>
+     *
+     * @var bool
+     */
+    public static $parseMultipartMixedTextAttachmentsAsFiles = false;
 
     /**
      * The name of the last header parsed.
@@ -118,7 +135,7 @@ abstract class ezcMailPartParser
      * @param ezcMailHeadersHolder $headers
      * @return ezcMailPartParser
      */
-    static public function createPartParserForHeaders( ezcMailHeadersHolder $headers )
+    static public function createPartParserForHeaders( ezcMailHeadersHolder $headers, ?ezcMailPartParser $parentParser = null )
     {
         // default as specified by RFC2045 - #5.2
         $mainType = 'text';
@@ -168,7 +185,18 @@ abstract class ezcMailPartParser
                 break;
 
             case 'text':
-                if ( ezcMailPartParser::$parseTextAttachmentsAsFiles === true )
+                if ( ezcMailPartParser::$parseMultipartMixedTextAttachmentsAsFiles === true )
+                {
+                    if ( $parentParser instanceof ezcMailMultipartMixedParser )
+                    {
+                        $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
+                    }
+                    else
+                    {
+                        $bodyParser = new ezcMailTextParser( $subType, $headers );
+                    }
+                }
+                else if ( ezcMailPartParser::$parseTextAttachmentsAsFiles === true )
                 {
                     $bodyParser = new ezcMailFileParser( $mainType, $subType, $headers );
                 }

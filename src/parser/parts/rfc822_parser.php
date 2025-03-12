@@ -107,7 +107,7 @@ class ezcMailRfc822Parser extends ezcMailPartParser
             }
 
             // get the correct body type
-            $this->bodyParser = self::createPartParserForHeaders( $headers );
+            $this->bodyParser = self::createPartParserForHeaders( $headers, $this );
         }
         else if ( $this->parserState == self::PARSE_STATE_HEADERS )
         {

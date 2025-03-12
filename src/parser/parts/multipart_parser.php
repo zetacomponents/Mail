@@ -181,7 +181,7 @@ abstract class ezcMailMultipartParser extends ezcMailPartParser
         {
             if ( $this->parserState == self::PARSE_STATE_HEADERS && $line == '' )
             {
-                $this->currentPartParser = self::createPartParserForHeaders( $this->currentPartHeaders );
+                $this->currentPartParser = self::createPartParserForHeaders( $this->currentPartHeaders, $this );
                 $this->parserState = self::PARSE_STATE_BODY;
             }
             else if ( $this->parserState == self::PARSE_STATE_HEADERS )

@@ -33,6 +33,7 @@
  * $options->mailClass = 'myCustomMailClass'; // extends ezcMail
  * $options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
  * $options->parseTextAttachmentsAsFiles = true; // to get the text attachments in ezcMailFile objects
+ * $options->parseMultipartMixedTextAttachmentsAsFiles = true; // to get all text attachments that are sub-parts of multipart/mixed parts as ezcMailFile objects
  *
  * $parser = new ezcMailParser( $options );
  * </code>
@@ -43,6 +44,7 @@
  * $parser->options->mailClass = 'myCustomMailClass'; // extends ezcMail
  * $parser->options->fileClass = 'myCustomFileClass'; // extends ezcMailFile
  * $parser->options->parseTextAttachmentsAsFiles = true;
+ * $parser->options->parseMultipartMixedTextAttachmentsAsFiles = true;
  * </code>
  *
  * @property string $mailClass
@@ -54,7 +56,11 @@
  *           by the parser to handle file attachments. The default value is
  *           ezcMailFile.
  * @property string $parseTextAttachmentsAsFiles
- *           Specifies whether to parse the text attachments in an ezcMailTextPart
+ *           Specifies whether to parse the text attachments in an ezcMailText part
+ *           (default) or in an ezcMailFile (by setting the option to true).
+ * @property string $parseMultipartMixedTextAttachmentsAsFiles
+ *           Specifies whether to parse the text attachments that are sub-parts
+ *           of a multipart/mixed part as an ezcMailText part
  *           (default) or in an ezcMailFile (by setting the option to true).
  * @package Mail
  * @version //autogen//
@@ -74,7 +80,8 @@ class ezcMailParserOptions extends ezcBaseOptions
     {
         $this->mailClass = 'ezcMail'; // default value for mail class is 'ezcMail'
         $this->fileClass = 'ezcMailFile'; // default value for file attachment class is 'ezcMailFile'
-        $this->parseTextAttachmentsAsFiles = false; // default is to parse text attachments in ezcMailTextPart objects
+        $this->parseTextAttachmentsAsFiles = false; // default is to parse text attachments in ezcMailText objects
+        $this->parseMultipartMixedTextAttachmentsAsFiles = false; // default is to parse multiple/mixed text attachments in ezcMailText objects
 
         parent::__construct( $options );
     }
@@ -138,6 +145,16 @@ class ezcMailParserOptions extends ezcBaseOptions
                 }
                 $this->properties[$propertyName] = $propertyValue;
                 ezcMailPartParser::$parseTextAttachmentsAsFiles = $propertyValue;
+                break;
+
+
+            case 'parseMultipartMixedTextAttachmentsAsFiles':
+                if ( !is_bool( $propertyValue ) )
+                {
+                    throw new ezcBaseValueException( $propertyName, $propertyValue, 'bool' );
+                }
+                $this->properties[$propertyName] = $propertyValue;
+                ezcMailPartParser::$parseMultipartMixedTextAttachmentsAsFiles = $propertyValue;
                 break;
 
             default:
