@@ -1,3 +1,10 @@
+1.10.1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed #97: Zoho IMAP authentication fails, as there is an extra line in the
+  response, just like GMail does.
+
+
 1.10.0 - Wednesday 12 March 2025
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

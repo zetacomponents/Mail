@@ -245,6 +245,13 @@ class ezcMailImapTransport
     const SERVER_GIMAP = 'Gimap';
 
     /**
+     * The string returned by Zoho IMAP servers at connection time.
+     *
+     * @access private
+     */
+    const SERVER_ZOHO = 'Zoho Mail';
+
+    /**
      * Authenticate with 'AUTH LOGIN'.
      */
     const AUTH_LOGIN = 'LOGIN';
@@ -332,7 +339,8 @@ class ezcMailImapTransport
      * Holds the string which identifies the IMAP server type.
      *
      * Used for fixing problems with Google IMAP (see issue #14360). Possible
-     * values are {@link self::SERVER_GIMAP} or null for all other servers.
+     * values are {@link self::SERVER_GIMAP}, {@link self::SERVER_ZOHO}, or
+     * null for all other servers.
      *
      * @todo Add identification strings for each existing IMAP server?
      *
@@ -407,10 +415,16 @@ class ezcMailImapTransport
         {
             throw new ezcMailTransportException( "The connection to the IMAP server is ok, but a negative response from server was received. Try again later." );
         }
+
         if ( strpos( $response, self::SERVER_GIMAP ) !== false )
         {
             $this->serverType = self::SERVER_GIMAP; // otherwise it is null
         }
+        if ( strpos( $response, self::SERVER_ZOHO ) !== false )
+        {
+            $this->serverType = self::SERVER_ZOHO; // otherwise it is null
+        }
+
         $this->state = self::STATE_NOT_AUTHENTICATED;
     }
 
@@ -585,9 +599,12 @@ class ezcMailImapTransport
 
         }
         $response = trim( $this->connection->getLine() );
-        // hack for gmail, to fix issue #15837: imap.google.com (google gmail) changed IMAP response
-        if ( $this->serverType === self::SERVER_GIMAP && strpos( $response, "* CAPABILITY" ) === 0 )
-        {
+        // Hacks for Zoho Mail, and Gmail, to fix issue #15837: imap.google.com (google gmail) changed IMAP response
+        if (
+            ( $this->serverType === self::SERVER_GIMAP || $this->serverType === self::SERVER_ZOHO )
+            &&
+            strpos( $response, "* CAPABILITY" ) === 0
+        ) {
             $response = trim( $this->connection->getLine() );
         }
         if ( strpos( $response, '* OK' ) !== false )
