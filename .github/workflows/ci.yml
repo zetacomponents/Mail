@@ -22,6 +22,8 @@ jobs:
         include:
           - php: '8.4'
             experimental: true
+          - php: '8.5'
+            experimental: true
 
     name: "PHP: ${{ matrix.php }}"
 
