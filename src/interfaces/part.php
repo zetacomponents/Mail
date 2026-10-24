@@ -318,27 +318,27 @@ abstract class ezcMailPart
                 }
                 if ( $fileInfo !== null )
                 {
-                    $cd .= "; filename{$fileInfo}{$cdHeader->fileName}\"";
+                    $cd .= "; filename{$fileInfo}" . addcslashes( $cdHeader->fileName, '"\\' ) . "\"";
                 }
                 else
                 {
-                    $cd .= "; filename=\"{$cdHeader->fileName}\"";
+                    $cd .= "; filename=\"" . addcslashes( $cdHeader->fileName, '"\\' ) . "\"";
                 }
             }
 
             if ( $cdHeader->creationDate !== null )
             {
-                $cd .= "; creation-date=\"{$cdHeader->creationDate}\"";
+                $cd .= "; creation-date=\"" . addcslashes( $cdHeader->creationDate, '"\\' ) . "\"";
             }
 
             if ( $cdHeader->modificationDate !== null )
             {
-                $cd .= "; modification-date=\"{$cdHeader->modificationDate}\"";
+                $cd .= "; modification-date=\"" . addcslashes( $cdHeader->modificationDate, '"\\' ) . "\"";
             }
 
             if ( $cdHeader->readDate !== null )
             {
-                $cd .= "; read-date=\"{$cdHeader->readDate}\"";
+                $cd .= "; read-date=\"" . addcslashes( $cdHeader->readDate, '"\\' ) . "\"";
             }
 
             if ( $cdHeader->size !== null )
@@ -348,7 +348,7 @@ abstract class ezcMailPart
 
             foreach ( $cdHeader->additionalParameters as $addKey => $addValue )
             {
-                $cd .="; {$addKey}=\"{$addValue}\"";
+                $cd .= "; {$addKey}=\"" . addcslashes( $addValue, '"\\' ) . "\"";
             }
 
             $this->setHeader( 'Content-Disposition', $cd );
@@ -358,9 +358,28 @@ abstract class ezcMailPart
         $text = "";
         foreach ( $this->headers->getCaseSensitiveArray() as $header => $value )
         {
-            if ( is_array( $value ) )
+            // RFC 2822, section 2.2: a field name consists of printable
+            // US-ASCII characters except the colon. Anything else (most
+            // notably CR and LF) would allow to inject additional headers.
+            if ( !preg_match( '/^[\x21-\x39\x3B-\x7E]*$/D', $header ) )
+            {
+                throw new ezcMailException( "The header name '" . addcslashes( $header, "\0..\37\177" ) . "' contains characters which are not allowed in a header name." );
+            }
+
+            $isMultiple = is_array( $value );
+            if ( $isMultiple )
             {
                 $value = $value[0];
+            }
+
+            if ( is_string( $value ) && strpbrk( $value, "\r\n\0" ) !== false )
+            {
+                $value = self::neutralizeLineBreaks( $value );
+                if ( !$isMultiple )
+                {
+                    // so that transports reading the header see the same value
+                    $this->headers[$header] = $value;
+                }
             }
 
             // here we encode every header, even the ones that we don't add to
@@ -401,6 +420,29 @@ abstract class ezcMailPart
         }
 
         return $text;
+    }
+
+    /**
+     * Returns the header value $value with all line breaks removed which are
+     * not part of a valid folding.
+     *
+     * A line break followed by a space or a tab is a folding (RFC 2822,
+     * section 2.2.3) and is kept, normalised to ezcMailTools::lineBreak().
+     * Every other CR, LF or NUL character is replaced by a space, as it would
+     * otherwise end the header and allow to inject additional headers or to
+     * start the body of the message.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected static function neutralizeLineBreaks( $value )
+    {
+        $lines = preg_split( '/(?:\r\n|\r|\n)(?=[ \t])/', $value );
+        foreach ( $lines as $key => $line )
+        {
+            $lines[$key] = preg_replace( '/[\r\n\0]+/', ' ', $line );
+        }
+        return implode( ezcMailTools::lineBreak(), $lines );
     }
 
     /**

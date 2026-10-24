@@ -96,12 +96,23 @@ class ezcMailTools
      * The name part of $item will be surrounded by quotes if it contains any of
      * these characters: , @ < > : ; ' "
      *
+     * Line breaks and NUL characters in the name part are replaced by spaces,
+     * as they would end the header line.
+     *
+     * @throws ezcMailException
+     *         if the email part of $item contains a line break or a NUL
+     *         character
      * @param ezcMailAddress $item
      * @return string
      */
     public static function composeEmailAddress( ezcMailAddress $item )
     {
-        $name = trim( $item->name );
+        if ( strpbrk( (string) $item->email, "\r\n\0" ) !== false )
+        {
+            throw new ezcMailException( "The email address '" . addcslashes( $item->email, "\0..\37\177" ) . "' contains a line break or a NUL character." );
+        }
+
+        $name = trim( preg_replace( '/[\r\n\0]+/', ' ', (string) $item->name ) );
         if ( $name !== '' )
         {
             // remove the quotes around the name part if they are already there

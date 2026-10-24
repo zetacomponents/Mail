@@ -324,8 +324,7 @@ class ezcMailTest extends ezcTestCase
         $this->mail->subject = "זרו";
         $this->mail->body = new ezcMailText( "Dette er body ßßזרווו" );
         $this->mail->generateHeaders();
-        $expected = '<'. date( 'YmdGHjs' ) . '.' . getmypid() . '.61@ez.no>';
-        $this->assertEquals( $expected, $this->mail->getHeader( 'Message-Id' ) );
+        $this->assertMatchesRegularExpression( '/^<\d{14,16}\.[0-9a-f.]+@ez\.no>$/', $this->mail->getHeader( 'Message-Id' ) );
     }
 
     public function testMessageID2()

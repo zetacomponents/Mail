@@ -206,7 +206,7 @@ abstract class ezcMailFilePart extends ezcMailPart
         }
 
         $this->setHeader( 'Content-Type',
-                          $this->contentType . '/' . $this->mimeType . '; ' . 'name="' . $fileName . '"' );
+                          $this->contentType . '/' . $this->mimeType . '; ' . 'name="' . addcslashes( $fileName, '"\\' ) . '"' );
     }
 
     /**
