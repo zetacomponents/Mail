@@ -361,7 +361,7 @@ abstract class ezcMailPart
             // RFC 2822, section 2.2: a field name consists of printable
             // US-ASCII characters except the colon. Anything else (most
             // notably CR and LF) would allow to inject additional headers.
-            if ( !preg_match( '/^[\x21-\x39\x3B-\x7E]*$/D', $header ) )
+            if ( !preg_match( '/^[\x21-\x39\x3B-\x7E]+$/D', $header ) )
             {
                 throw new ezcMailException( "The header name '" . addcslashes( $header, "\0..\37\177" ) . "' contains characters which are not allowed in a header name." );
             }
@@ -432,17 +432,29 @@ abstract class ezcMailPart
      * otherwise end the header and allow to inject additional headers or to
      * start the body of the message.
      *
+     * A folding whose continuation line consists of whitespace only is
+     * replaced by a single space as well: RFC 5322, section 3.2.2 forbids such
+     * lines, and some parsers take them for the empty line which ends the
+     * header block.
+     *
      * @param string $value
      * @return string
      */
     protected static function neutralizeLineBreaks( $value )
     {
-        $lines = preg_split( '/(?:\r\n|\r|\n)(?=[ \t])/', $value );
-        foreach ( $lines as $key => $line )
+        $result = array();
+        foreach ( preg_split( '/(?:\r\n|\r|\n)(?=[ \t])/', $value ) as $line )
         {
-            $lines[$key] = preg_replace( '/[\r\n\0]+/', ' ', $line );
+            $line = preg_replace( '/[\r\n\0]+/', ' ', $line );
+            if ( $result !== array() && trim( $line, " \t" ) === '' )
+            {
+                $last = count( $result ) - 1;
+                $result[$last] = rtrim( $result[$last], " \t" ) . ' ';
+                continue;
+            }
+            $result[] = $line;
         }
-        return implode( ezcMailTools::lineBreak(), $lines );
+        return implode( ezcMailTools::lineBreak(), $result );
     }
 
     /**

@@ -100,16 +100,27 @@ class ezcMailTools
      * as they would end the header line.
      *
      * @throws ezcMailException
-     *         if the email part of $item contains a line break or a NUL
-     *         character
+     *         if the email part of $item contains whitespace (including line
+     *         breaks), a NUL character or one of the characters < > , ; "
+     *         (apart from one pair of enclosing angle brackets), which would
+     *         end the address or add further addresses to the header
      * @param ezcMailAddress $item
      * @return string
      */
     public static function composeEmailAddress( ezcMailAddress $item )
     {
-        if ( strpbrk( (string) $item->email, "\r\n\0" ) !== false )
+        // An address list header like To is passed to mail() or sendmail by
+        // ezcMailMtaTransport, so "a@example.com>, <b@example.com" would add a
+        // recipient even without a line break. One pair of enclosing angle
+        // brackets is accepted, as the transports accept "<a@example.com>".
+        $email = (string) $item->email;
+        if ( preg_match( '/^<(.*)>$/sD', $email, $matches ) )
         {
-            throw new ezcMailException( "The email address '" . addcslashes( $item->email, "\0..\37\177" ) . "' contains a line break or a NUL character." );
+            $email = $matches[1];
+        }
+        if ( preg_match( '/[\s\0<>,;"]/', $email ) )
+        {
+            throw new ezcMailException( "The email address '" . addcslashes( $item->email, "\0..\37\177" ) . "' contains characters which are not allowed in an email address." );
         }
 
         $name = trim( preg_replace( '/[\r\n\0]+/', ' ', (string) $item->name ) );
@@ -132,7 +143,7 @@ class ezcMailTools
             switch ( strtolower( $item->charset ) )
             {
                 case 'us-ascii':
-                    $text = $name . ' <' . $item->email . '>';
+                    $text = $name . ' <' . $email . '>';
                     break;
 
                 case 'iso-8859-1': case 'iso-8859-2': case 'iso-8859-3': case 'iso-8859-4':
@@ -143,13 +154,13 @@ class ezcMailTools
                 case 'utf-8':
                     if ( strpbrk( $name, "\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff" ) === false )
                     {
-                        $text = $name . ' <' . $item->email . '>';
+                        $text = $name . ' <' . $email . '>';
                         break;
                     }
                     // break intentionally missing
 
                 default:
-                    $text = self::mimeHeaderEncode( $name, $item->charset ) . ' <' . $item->email . '>';
+                    $text = self::mimeHeaderEncode( $name, $item->charset ) . ' <' . $email . '>';
                     break;
             }
         }

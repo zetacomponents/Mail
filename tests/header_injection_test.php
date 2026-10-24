@@ -112,6 +112,56 @@ class ezcMailHeaderInjectionTest extends ezcTestCase
         ezcMailTools::composeEmailAddress( new ezcMailAddress( "to@example.com\r\nX-Injected: 1", 'Name' ) );
     }
 
+    public static function addressesWithSeparators()
+    {
+        return array(
+            array( 'to@example.com>, <evil@example.com' ),
+            array( 'to@example.com, evil@example.com' ),
+            array( 'to@example.com; evil@example.com' ),
+            array( 'to@example.com <evil@example.com>' ),
+            array( '"to@example.com" evil@example.com' ),
+            array( "to@example.com\tevil@example.com" ),
+            array( 'to@example.com evil@example.com' ),
+        );
+    }
+
+    /**
+     * @dataProvider addressesWithSeparators
+     */
+    public function testToAddressWithSeparators( $email )
+    {
+        $mail = self::createMail();
+        $mail->to = array( new ezcMailAddress( $email, 'Name' ) );
+
+        $this->expectException( 'ezcMailException' );
+        $mail->generateHeaders();
+    }
+
+    /**
+     * @dataProvider addressesWithSeparators
+     */
+    public function testComposeEmailAddressWithSeparatorsWithoutName( $email )
+    {
+        $this->expectException( 'ezcMailException' );
+        ezcMailTools::composeEmailAddress( new ezcMailAddress( $email ) );
+    }
+
+    public function testComposeEmailAddressAcceptsCommonAddresses()
+    {
+        $this->assertSame( "john.o'doe+tag@sub.example.com", ezcMailTools::composeEmailAddress( new ezcMailAddress( "john.o'doe+tag@sub.example.com" ) ) );
+        $this->assertSame( 'Name <a_b-c@[127.0.0.1]>', ezcMailTools::composeEmailAddress( new ezcMailAddress( 'a_b-c@[127.0.0.1]', 'Name' ) ) );
+    }
+
+    public function testComposeEmailAddressAcceptsEnclosingAngleBrackets()
+    {
+        $this->assertSame( '<to@example.com>', ezcMailTools::composeEmailAddress( new ezcMailAddress( '<to@example.com>' ) ) );
+        $this->assertSame( 'Name <to@example.com>', ezcMailTools::composeEmailAddress( new ezcMailAddress( '<to@example.com>', 'Name' ) ) );
+        $this->assertSame( '<>', ezcMailTools::composeEmailAddress( new ezcMailAddress( '<>' ) ) );
+
+        $this->expectException( 'ezcMailException' );
+        ezcMailTools::composeEmailAddress( new ezcMailAddress( '<to@example.com>, <evil@example.com>' ) );
+    }
+
     public function testSubjectWithLineBreak()
     {
         $mail = self::createMail();
@@ -182,6 +232,35 @@ class ezcMailHeaderInjectionTest extends ezcTestCase
         $this->assertStringContainsString( "X-Custom: first line\r\n\tsecond line X-Injected: 1\r\n", $headers );
     }
 
+    public static function whitespaceOnlyContinuations()
+    {
+        return array(
+            array( "a\r\n \r\n Bcc: x", "X-Custom: a \r\n Bcc: x\r\n" ),
+            array( "a\n\t\n\tb", "X-Custom: a \r\n\tb\r\n" ),
+            array( "a\r\n \r\n\t\r\n b", "X-Custom: a \r\n b\r\n" ),
+            array( "a\r\n ", "X-Custom: a\r\n" ),
+        );
+    }
+
+    /**
+     * @dataProvider whitespaceOnlyContinuations
+     */
+    public function testCustomHeaderWithWhitespaceOnlyContinuation( $value, $expected )
+    {
+        $mail = self::createMail();
+        $mail->setHeader( 'X-Custom', $value );
+        $headers = $mail->generateHeaders();
+
+        $this->assertStringContainsString( $expected, $headers );
+        foreach ( preg_split( '/\r\n/', $headers ) as $line )
+        {
+            if ( $line !== '' )
+            {
+                $this->assertNotSame( '', trim( $line ), 'whitespace-only header line' );
+            }
+        }
+    }
+
     public function testFoldedAddressListIsKept()
     {
         $addresses = array();
@@ -206,6 +285,7 @@ class ezcMailHeaderInjectionTest extends ezcTestCase
             array( "X-Custom: 1\r\nX-Injected" ),
             array( "X Custom" ),
             array( "X-Custom\0" ),
+            array( "" ),
         );
     }
 
