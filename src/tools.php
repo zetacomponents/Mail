@@ -525,7 +525,10 @@ class ezcMailTools
      * The hostname $hostname will be added to the unique ID as required by RFC822.
      * If an e-mail address is provided instead, the hostname is extracted and used.
      *
-     * The formula to generate the message ID is: [time_and_date].[process_id].[counter]
+     * The formula to generate the message ID is: [time_and_date].[random]
+     * where [random] are 96 random bits in hexadecimal notation. Unlike the
+     * process ID used before, they do not reveal anything about the sending
+     * system and the ID can not be predicted.
      *
      * @param string $hostname
      * @return string
@@ -540,7 +543,7 @@ class ezcMailTools
         {
             $hostname = '@' . $hostname;
         }
-        return date( 'YmdGHjs' ) . '.' . getmypid() . '.' . self::$idCounter++ . $hostname;
+        return date( 'YmdGHjs' ) . '.' . bin2hex( random_bytes( 12 ) ) . $hostname;
     }
 
     /**

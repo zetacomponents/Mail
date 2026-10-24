@@ -1219,14 +1219,8 @@ class ezcMailSmtpTransport implements ezcMailTransport
      */
     protected function generateNonce( $length = 32 )
     {
-        $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $result = '';
-        for ( $i = 0; $i < $length; $i++ )
-        {
-            $result .= $chars[mt_rand( 0, strlen( $chars ) - 1 )];
-        }
-
-        return $result;
+        // the client nonce must not be predictable (RFC 2831, section 2.1.2)
+        return substr( bin2hex( random_bytes( (int) ceil( $length / 2 ) ) ), 0, $length );
     }
 
     /**

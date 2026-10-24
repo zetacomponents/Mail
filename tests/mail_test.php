@@ -533,6 +533,16 @@ class ezcMailTest extends ezcTestCase
         }
     }
 
+    public function testMessageIdIsRandom()
+    {
+        $id1 = ezcMailTools::generateMessageId( 'example.com' );
+        $id2 = ezcMailTools::generateMessageId( 'example.com' );
+
+        $this->assertMatchesRegularExpression( '/^\d{14,16}\.[0-9a-f]{24}@example\.com$/', $id1 );
+        $this->assertNotEquals( $id1, $id2 );
+        $this->assertStringNotContainsString( '.' . getmypid() . '.', $id1 );
+    }
+
     public static function suite()
     {
          return new PHPUnit\Framework\TestSuite( "ezcMailTest" );

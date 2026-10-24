@@ -260,6 +260,18 @@ class ezcMailMultipartTest extends ezcTestCase
         }
     }
 
+    public function testBoundaryIsRandom()
+    {
+        $part1 = new ezcMailMultipartMixed();
+        $part2 = new ezcMailMultipartMixed();
+
+        // RFC 2046, section 5.1.1: at most 70 characters out of bchars
+        $this->assertMatchesRegularExpression( '/^=_[0-9a-f]{32}$/', $part1->boundary );
+        $this->assertNotEquals( $part1->boundary, $part2->boundary );
+        $this->assertStringNotContainsString( (string) getmypid(), $part1->boundary );
+        $this->assertStringContainsString( 'boundary="' . $part1->boundary . '"', $part1->getHeader( 'Content-Type' ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit\Framework\TestSuite( "ezcMailMultipartTest" );

@@ -57,14 +57,6 @@ abstract class ezcMailMultipart extends ezcMailPart
     protected $parts = array();
 
     /**
-     * The counter is unique between all multipart types and is used to
-     * generate unique boundary strings.
-     *
-     * @var int
-     */
-    private static $counter = 0;
-
-    /**
      * Constructs a new ezcMailMultipart with the parts $parts.
      *
      * Subclasses typically accept an arbitrary number of parts in the
@@ -202,11 +194,16 @@ abstract class ezcMailMultipart extends ezcMailPart
     /**
      * Returns a unique boundary string.
      *
+     * The boundary contains 128 random bits, so that it can not be guessed
+     * by someone who controls the content of a part and wants to end the
+     * part early. The prefix "=_" can not occur in quoted-printable or
+     * base64 encoded content.
+     *
      * @return string
      */
     protected static function generateBoundary()
     {
-        return date( "YmdGHjs" ) . ':' . getmypid() . ':' . self::$counter++;
+        return '=_' . bin2hex( random_bytes( 16 ) );
     }
 }
 ?>
