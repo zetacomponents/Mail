@@ -501,6 +501,14 @@ EOFE;
         self::assertSame( $expected, $htmlBody );
     }
 
+    public function testValidateEmailAddressRejectsTrailingLineBreak()
+    {
+        $this->assertTrue( ezcMailTools::validateEmailAddress( "john@example.com" ) );
+        $this->assertFalse( ezcMailTools::validateEmailAddress( "john@example.com\n" ) );
+        $this->assertFalse( ezcMailTools::validateEmailAddress( "john@example.com\r\n" ) );
+        $this->assertFalse( ezcMailTools::validateEmailAddress( "john@example.com\nBcc: eve@example.com" ) );
+    }
+
     public static function suite()
     {
         return new PHPUnit\Framework\TestSuite( "ezcMailToolsTest" );
