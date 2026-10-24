@@ -65,13 +65,6 @@ class ezcMailTools
     public static $mxValidateAddress = 'postmaster@ez.no';
 
     /**
-     * Holds the unique ID's.
-     *
-     * @var int
-     */
-    private static $idCounter = 0;
-
-    /**
      * The characters to use for line-breaks in the mail.
      *
      * The default is \r\n which is the value specified in RFC822.
@@ -553,14 +546,16 @@ class ezcMailTools
      * for example, a file name of a part. $partName will be encoded with base64 to be
      * compliant with the RFCs.
      *
-     * The formula used is [base64( $partName )]."@".[time].[counter]
+     * The formula used is [base64( $partName )]."@".[time].[random], where
+     * [random] are 96 random bits in hexadecimal notation, like in
+     * {@link generateMessageId()}.
      *
      * @param string $partName
      * @return string
      */
     public static function generateContentId( $partName = "part" )
     {
-        return str_replace( array( '=', '+', '/' ), '', base64_encode( $partName ) ) . '@' .  date( 'His' ) . self::$idCounter++;
+        return str_replace( array( '=', '+', '/' ), '', base64_encode( $partName ) ) . '@' . date( 'His' ) . bin2hex( random_bytes( 12 ) );
     }
 
     /**

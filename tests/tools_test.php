@@ -325,6 +325,13 @@ class ezcMailToolsTest extends ezcTestCase
         }
     }
 
+    public function testGenerateContentIdIsRandom()
+    {
+        $id = ezcMailTools::generateContentId();
+        $this->assertMatchesRegularExpression( '/^cGFydA@\d{6}[0-9a-f]{24}$/', $id );
+        $this->assertStringNotContainsString( (string) getmypid(), substr( $id, 13 ) );
+    }
+
     // Tests if generateMessageId works as it should.
     // Somewhat hard to test since it is supposed to return a unique string.
     // We simply test if two calls return different strings.

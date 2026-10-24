@@ -908,7 +908,7 @@ class ezcMailComposerTest extends ezcTestCase
         $this->mail->subject = "HTML message with embeded files and images.";
         $this->mail->htmlText = "<html>Some text before the simage: <img src=\"file://" . dirname( __FILE__  ) . "/parts/data/fly.jpg\" /> Here is the picture.";
         $this->mail->build();
-        $this->assertEquals( true, 62758 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 62805, strlen( $this->mail->generate() ) );
+        $this->assertEquals( true, 62804 <= strlen( $this->mail->generate() ) && strlen( $this->mail->generate() ) <= 62851, strlen( $this->mail->generate() ) );
     }
 
     /**
