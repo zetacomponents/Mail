@@ -604,18 +604,17 @@ class ezcMailSmtpTransport implements ezcMailTransport
      */
     protected function login()
     {
-        if ( $this->doAuthenticate )
-        {
-            $this->sendData( 'EHLO ' . $this->senderHost );
-        }
-        else
-        {
-            $this->sendData( 'HELO ' . $this->senderHost );
-        }
-
+        // Always start with EHLO, as the extensions announced in the reply
+        // (STARTTLS, AUTH) are needed even if no user name is set. Servers
+        // which do not support ESMTP get HELO.
+        $this->sendData( 'EHLO ' . $this->senderHost );
         if ( $this->getReplyCode( $response ) !== '250' )
         {
-            throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: {$response}." );
+            $this->sendData( 'HELO ' . $this->senderHost );
+            if ( $this->getReplyCode( $response ) !== '250' )
+            {
+                throw new ezcMailTransportSmtpException( "HELO/EHLO failed with error: {$response}." );
+            }
         }
 
         // setup TLS connection before continuing with AUTH
