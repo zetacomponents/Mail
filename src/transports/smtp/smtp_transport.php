@@ -473,35 +473,35 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
         try
         {
+            $from = isset( $mail->returnPath ) ? $mail->returnPath->email : $mail->from->email;
+
+            // each recepient must be listed here.
+            // this controls where the mail is actually sent as SMTP does not
+            // read the headers itself
+            $recipients = array();
+            foreach ( array_merge( $mail->to, $mail->cc, $mail->bcc ) as $address )
+            {
+                $recipients[] = $address->email;
+            }
+
+            // check all envelope addresses before anything is sent, so that
+            // an invalid address does not leave a half-finished transaction
+            $this->composeSmtpMailAddress( $from, true );
+            foreach ( $recipients as $email )
+            {
+                $this->composeSmtpMailAddress( $email );
+            }
+
             // open connection unless we are connected already.
             if ( $this->status != self::STATUS_AUTHENTICATED )
             {
                 $this->connect();
             }
 
-            if ( isset( $mail->returnPath ) )
+            $this->cmdMail( $from );
+            foreach ( $recipients as $email )
             {
-                $this->cmdMail( $mail->returnPath->email );
-            }
-            else
-            {
-                $this->cmdMail( $mail->from->email );
-            }
-
-            // each recepient must be listed here.
-            // this controls where the mail is actually sent as SMTP does not
-            // read the headers itself
-            foreach ( $mail->to as $address )
-            {
-                $this->cmdRcpt( $address->email );
-            }
-            foreach ( $mail->cc as $address )
-            {
-                $this->cmdRcpt( $address->email );
-            }
-            foreach ( $mail->bcc as $address )
-            {
-                $this->cmdRcpt( $address->email );
+                $this->cmdRcpt( $email );
             }
             // done with the from and recipients, lets send the mail itself
             $this->cmdData();
@@ -1064,16 +1064,28 @@ class ezcMailSmtpTransport implements ezcMailTransport
      *
      * If $email is already enclosed within '< >' it is returned unmodified.
      *
+     * An empty $email is only accepted if $reversePath is true and results
+     * in the null reverse-path "<>" (RFC 5321, section 4.5.5), which is used
+     * by bounces and other notifications.
+     *
+     * @throws ezcMailTransportSmtpException
+     *         if $email contains whitespace (including line breaks), a NUL
+     *         character or angle brackets other than the enclosing ones,
+     *         which would allow to inject SMTP commands or parameters,
+     *         or if $email is empty and $reversePath is false
      * @param string $email
-     * $return string
+     * @param bool $reversePath
+     * @return string
      */
-    protected function composeSmtpMailAddress( $email )
+    protected function composeSmtpMailAddress( $email, $reversePath = false )
     {
-        if ( !preg_match( "/<.+>/", $email ) )
+        $email = (string) $email;
+        $address = preg_match( '/^<(.*)>$/sD', $email, $matches ) ? $matches[1] : $email;
+        if ( ( $address === '' && !$reversePath ) || preg_match( '/[\s\0<>]/', $address ) )
         {
-            $email = "<{$email}>";
+            throw new ezcMailTransportSmtpException( "Invalid envelope address '" . addcslashes( $email, "\0..\37\177" ) . "'." );
         }
-        return $email;
+        return "<{$address}>";
     }
 
     /**
@@ -1092,7 +1104,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
     {
         if ( $this->status === self::STATUS_AUTHENTICATED )
         {
-            $this->sendData( 'MAIL FROM:' . $this->composeSmtpMailAddress( $from ) . '' );
+            $this->sendData( 'MAIL FROM:' . $this->composeSmtpMailAddress( $from, true ) . '' );
             if ( $this->getReplyCode( $error ) !== '250' )
             {
                 throw new ezcMailTransportSmtpException( "MAIL FROM failed with error: $error." );
