@@ -509,7 +509,13 @@ class ezcMailSmtpTransport implements ezcMailTransport
             // A '.' on a line ends the mail. Make sure this does not happen in
             // the data we want to send.  also called transparancy in the RFC,
             // section 4.5.2
+            //
+            // SMTP requires CRLF line endings, whatever line break was set
+            // with ezcMailTools::setLineBreak(). Without normalising them a
+            // line consisting of a single dot and a bare LF would not be
+            // escaped, while many servers treat it as the end of the data.
             $data = $mail->generate();
+            $data = preg_replace( '/\r\n|\r|\n/', self::CRLF, $data );
             $data = str_replace( self::CRLF . '.', self::CRLF . '..', $data );
             if ( $data[0] == '.' )
             {
