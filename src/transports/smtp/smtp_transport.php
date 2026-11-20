@@ -246,6 +246,13 @@ class ezcMailSmtpTransport implements ezcMailTransport
     protected $keepConnection = false;
 
     /**
+     * Holds the reply code of the last reply read with getReplyCode().
+     *
+     * @var string
+     */
+    protected $lastReplyCode;
+
+    /**
      * Holds the properties of this class.
      *
      * @var array(string=>mixed)
@@ -656,23 +663,61 @@ class ezcMailSmtpTransport implements ezcMailTransport
                 }
 
                 $authenticated = false;
+                $errors = array();
                 $methods = $this->sortAuthMethods( $methods );
                 foreach ( $methods as $method )
                 {
-                    if ( $this->auth( $method ) === true )
+                    // the auth*() methods throw an exception on failure; try
+                    // the next (weaker) method only if the server rejected
+                    // the method itself, not the credentials
+                    $this->lastReplyCode = null;
+                    try
                     {
-                        $authenticated = true;
-                        break;
+                        if ( $this->auth( $method ) === true )
+                        {
+                            $authenticated = true;
+                            break;
+                        }
+                    }
+                    catch ( ezcMailTransportSmtpException $e )
+                    {
+                        if ( !self::isAuthMethodRejected( $this->lastReplyCode ) )
+                        {
+                            throw $e;
+                        }
+                        $errors[] = "{$method}: " . $e->getMessage();
                     }
                 }
 
                 if ( $authenticated === false )
                 {
-                    throw new ezcMailTransportSmtpException( 'SMTP server did not respond correctly to any of the authentication methods ' . implode( ', ', $methods ) . '.' );
+                    throw new ezcMailTransportSmtpException( 'SMTP server did not respond correctly to any of the authentication methods ' . implode( ', ', $methods ) . '.' . ( count( $errors ) ? ' ' . implode( ' ', $errors ) : '' ) );
                 }
             }
         }
         $this->status = self::STATUS_AUTHENTICATED;
+    }
+
+    /**
+     * Returns true if the SMTP reply code $replyCode to a failed AUTH exchange
+     * means that the server rejected the authentication method, so that the
+     * next method can be tried.
+     *
+     * This is the case for permanent errors (5xx) like 504 (mechanism not
+     * supported), 534 (mechanism too weak), 538 (encryption required) or 501
+     * (reply to a cancelled exchange), except for 535: the credentials are
+     * invalid, and trying them with every other method as well would only
+     * multiply the failed logins, which can lock the account or get the
+     * client blocked. Temporary errors (4xx, e.g. 454) are not related to the
+     * method either and end the login as well; the caller can try again
+     * later.
+     *
+     * @param string $replyCode
+     * @return bool
+     */
+    protected static function isAuthMethodRejected( $replyCode )
+    {
+        return is_string( $replyCode ) && strlen( $replyCode ) === 3 && $replyCode[0] === '5' && $replyCode !== '535';
     }
 
     /**
@@ -743,6 +788,13 @@ class ezcMailSmtpTransport implements ezcMailTransport
         $supportedAuthMethods = self::getSupportedAuthMethods();
         foreach ( $supportedAuthMethods as $method )
         {
+            // authNtlm() needs ext/mcrypt, which is not available since
+            // PHP 7.2; do not let it prevent the other methods from being used
+            if ( $method === self::AUTH_NTLM && !ezcBaseFeatures::hasExtensionSupport( 'mcrypt' ) )
+            {
+                continue;
+            }
+
             if ( in_array( $method, $methods ) )
             {
                 $result[] = $method;
@@ -823,6 +875,9 @@ class ezcMailSmtpTransport implements ezcMailTransport
         if ( !isset( $params['nonce'] ) ||
              !isset( $params['algorithm'] ) )
         {
+            // cancel the exchange, the server waits for a response
+            $this->sendData( '*' );
+            $this->getReplyCode( $serverResponse );
             throw new ezcMailTransportSmtpException( 'SMTP server did not send a correct DIGEST-MD5 challenge.' );
         }
 
@@ -877,6 +932,10 @@ class ezcMailSmtpTransport implements ezcMailTransport
 
         if ( $rspauthServer !== $rspauthClient )
         {
+            // the server waits for a response; cancel the exchange so that
+            // the connection can be used for another AUTH command
+            $this->sendData( '*' );
+            $this->getReplyCode( $serverResponse );
             throw new ezcMailTransportSmtpException( 'SMTP server did not responded correctly to the DIGEST-MD5 authentication.' );
         }
 
@@ -1030,7 +1089,15 @@ class ezcMailSmtpTransport implements ezcMailTransport
     {
         $digest = base64_encode("user={$this->user}\1auth=Bearer {$this->password}\1\1");
         $this->sendData( "AUTH XOAUTH2 {$digest}" );
-        if ( $this->getReplyCode( $error ) !== '235' )
+        $replyCode = $this->getReplyCode( $error );
+        if ( $replyCode === '334' )
+        {
+            // the server sent an error challenge (RFC 7628, section 3.2.2)
+            // and expects an empty response before it ends the exchange
+            $this->sendData( '' );
+            $replyCode = $this->getReplyCode( $response );
+        }
+        if ( $replyCode !== '235' )
         {
             throw new ezcMailTransportSmtpException( 'SMTP server did not accept the provided OAuth token.' );
         }
@@ -1206,7 +1273,7 @@ class ezcMailSmtpTransport implements ezcMailTransport
      */
     protected function getReplyCode( &$line )
     {
-        return substr( trim( $line = $this->getData() ), 0, 3 );
+        return $this->lastReplyCode = substr( trim( $line = $this->getData() ), 0, 3 );
     }
 
     /**
